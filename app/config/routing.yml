@@ -11,6 +11,6 @@ _demo:
     type:     annotation
     prefix:   /demo
     
-comppi_loader:    
-    resource: "@LoaderBundle/Resources/config/routing.yml"
-    prefix: /comppi/loader
+#comppi_loader:    
+#    resource: "@LoaderBundle/Resources/config/routing.yml"
+#    prefix: /comppi/loader
