@@ -5,10 +5,11 @@ namespace Comppi\LoaderBundle\Command;
 
 use Comppi\LoaderBundle\Service\EntityGenerator\EntityGenerator;
 
-use Symfony\Bundle\FrameworkBundle\Command\Command;
+//use Symfony\Bundle\FrameworkBundle\Command\Command;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-//use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputArgument;
 //use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Finder\Finder;
 
@@ -17,6 +18,12 @@ class EntityGeneratorCommand extends Command
     private $parsers = array();
     private $databases;
     private $generator;
+    
+    private $parser_dir;
+    private $parser_namespace;
+    private $database_dir;
+    private $output_dir;
+    
     
     public function __construct() {
         parent::__construct();
@@ -28,16 +35,23 @@ class EntityGeneratorCommand extends Command
         $this
             ->setName('comppi:load:entities')
             ->setDescription('Generates model entities from plaintext db headers')
+            ->setHelp('All option paths are relative to the LoaderBundle')
+            ->addOption('parser_dir', null, InputArgument::OPTIONAL, 'Path to the plaintext database header parsers')
+            ->addOption('parser_namespace', null, InputArgument::OPTIONAL, 'Namespace of header parsers')
+            ->addOption('database_dir', null, InputArgument::OPTIONAL, 'Path to the plaintext databases')
+            ->addOption('output_dir', null, InputArgument::OPTIONAL, 'Path to the dir of generated entities')
         ;
     }
     
     protected function execute(InputInterface $input, OutputInterface $output) {
+        $this->loadOptions($input);        
+        
         $this->loadParsers(
-            __DIR__ . '/../Service/EntityGenerator/Parser',
-            'Comppi\\LoaderBundle\\Service\\EntityGenerator\\Parser\\'
+            __DIR__ . '/../' . $this->parser_dir,
+            $this->parser_namespace
         );   
         
-        $this->loadDatabaseFiles(__DIR__ . '/../Resources/databases');
+        $this->loadDatabaseFiles(__DIR__ . '/../' . $this->database_dir);
         
         //parse databases
         foreach ($this->databases as $database) {
@@ -59,6 +73,24 @@ class EntityGeneratorCommand extends Command
             }
         }
         
+    }
+    
+    private function loadOptions(InputInterface $input) {
+        $container = $this->getApplication()->getKernel()->getContainer();
+        $keys = array(
+            'parser_dir',
+            'parser_namespace',
+            'database_dir',
+            'output_dir'
+        );
+        
+        foreach ($keys as $key) {
+            if (!$value = $input->getOption($key)) {
+                $value = $container->getParameter('loader.' . $key);
+            }
+            
+            $this->$key = $value;
+        }
     }
     
     private function loadParsers($parser_dir, $parser_namespace) {
@@ -86,7 +118,7 @@ class EntityGeneratorCommand extends Command
     
     private function generateEntity($name, array $fields) {
         file_put_contents(
-            __DIR__ . '/../Entity/' . ucfirst($name) . '.php',
+            __DIR__ . '/../' . $this->output_dir . '/' . ucfirst($name) . '.php',
             $this->generator->generate($name, $fields)
         );
     }
