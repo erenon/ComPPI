@@ -9,14 +9,14 @@
         <parameter key="loader.parser_namespace">Comppi\LoaderBundle\Service\EntityGenerator\Parser\</parameter>
         <parameter key="loader.database_dir">Resources/databases</parameter>
         <parameter key="loader.output_dir">Entity</parameter>
+        
+        <parameter key="loader.entity_generator.class">Comppi\LoaderBundle\Service\EntityGenerator\EntityGenerator</parameter>
+        <parameter key="loader.entity_generator.template_file">%kernel.root_dir%/../src/Comppi/LoaderBundle/Service/EntityGenerator/Entity.tpl</parameter>
     </parameters>
 
-    <!-- <services>
-        <service id="assetic.asset_factory" class="%assetic.asset_factory.class%" public="false">
-            <argument type="service" id="kernel" />
-            <argument>%assetic.read_from%</argument>
-            <argument>%assetic.debug%</argument>
-            <call method="setFilterManager"><argument type="service" id="assetic.filter_manager" /></call>
+    <services>
+        <service id="loader.entity_generator" class="%loader.entity_generator.class%">
+            <argument>%loader.entity_generator.template_file%</argument>
         </service>
-    </services>-->
+    </services>
 </container>

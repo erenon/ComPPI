@@ -15,20 +15,15 @@ use Symfony\Component\Finder\Finder;
 
 class EntityGeneratorCommand extends Command
 {
+    private $container;
+    private $generator;
     private $parsers = array();
     private $databases;
-    private $generator;
     
     private $parser_dir;
     private $parser_namespace;
     private $database_dir;
     private $output_dir;
-    
-    
-    public function __construct() {
-        parent::__construct();
-        $this->generator = new EntityGenerator();
-    }
     
     protected function configure()
     {
@@ -44,15 +39,6 @@ class EntityGeneratorCommand extends Command
     }
     
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $this->loadOptions($input);        
-        
-        $this->loadParsers(
-            __DIR__ . '/../' . $this->parser_dir,
-            $this->parser_namespace
-        );   
-        
-        $this->loadDatabaseFiles(__DIR__ . '/../' . $this->database_dir);
-        
         //parse databases
         foreach ($this->databases as $database) {
             //look for matching parser
@@ -75,8 +61,22 @@ class EntityGeneratorCommand extends Command
         
     }
     
+    protected function initialize(InputInterface $input, OutputInterface $output) {
+        $this->container = $this->getApplication()->getKernel()->getContainer();
+        $this->generator = $this->container->get('loader.entity_generator');
+        
+        $this->loadOptions($input);        
+        
+        $this->loadParsers(
+            __DIR__ . '/../' . $this->parser_dir,
+            $this->parser_namespace
+        );   
+        
+        $this->loadDatabaseFiles(__DIR__ . '/../' . $this->database_dir);
+    }
+    
     private function loadOptions(InputInterface $input) {
-        $container = $this->getApplication()->getKernel()->getContainer();
+        
         $keys = array(
             'parser_dir',
             'parser_namespace',
@@ -86,7 +86,7 @@ class EntityGeneratorCommand extends Command
         
         foreach ($keys as $key) {
             if (!$value = $input->getOption($key)) {
-                $value = $container->getParameter('loader.' . $key);
+                $value = $this->container->getParameter('loader.' . $key);
             }
             
             $this->$key = $value;
