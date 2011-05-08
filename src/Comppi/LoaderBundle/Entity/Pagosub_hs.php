@@ -245,3 +245,4 @@ class Pagosub_hs
      */
     protected $probability_Not_nucleotide_binding;
     
+}

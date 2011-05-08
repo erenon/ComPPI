@@ -68,6 +68,6 @@ class Esldb_ce
     /**
      * @orm:Column(type="string", length="512")
      */
-    protected $Common_mame
-;
+    protected $Common_mame;
     
+}

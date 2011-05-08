@@ -88,6 +88,6 @@ class Biogrid
     /**
      * @orm:Column(type="string", length="512")
      */
-    protected $Confidence_Values
-;
+    protected $Confidence_Values;
     
+}
