@@ -2,7 +2,7 @@
 
 namespace Comppi\LoaderBundle\Service\EntityGenerator\Parser;
 
-class Biogrid implements ParserInterface
+class Biogrid extends AbstractParser implements ParserInterface
 {
     public function isMatch($filename) {
         return ('biogrid' == $filename);
@@ -15,6 +15,8 @@ class Biogrid implements ParserInterface
         $header_field_filtered = substr($first_line, 1);
         
         $fields = explode("\t", $header_field_filtered);
+        
+        $fields = $this->cleanFieldArray($fields);
         
         return $fields;
     }

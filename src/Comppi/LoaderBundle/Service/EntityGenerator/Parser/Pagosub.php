@@ -2,7 +2,7 @@
 
 namespace Comppi\LoaderBundle\Service\EntityGenerator\Parser;
 
-class Pagosub implements ParserInterface
+class Pagosub extends AbstractParser implements ParserInterface
 {
     public function isMatch($filename) {
         return ('pagosub' == substr($filename, 0, 7));
@@ -22,6 +22,8 @@ class Pagosub implements ParserInterface
                 $fields[$key] = substr($field, 0, $brace_pos); 
             }
         }
+        
+        $fields = $this->cleanFieldArray($fields);
         
         return $fields;
     }
