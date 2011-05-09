@@ -16,7 +16,7 @@ class {ENTITY_NAME}
 
     {% GENERAL FIELD SEPARATOR %}
     /**
-     * @orm:Column(type="string", length="512")
+     * @orm:Column(type="string", length="255")
      */
     protected ${FIELD_NAME};
     {% GENERAL FIELD SEPARATOR %}
