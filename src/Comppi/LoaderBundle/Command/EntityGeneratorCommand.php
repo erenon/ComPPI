@@ -17,7 +17,6 @@ class EntityGeneratorCommand extends Command
     private $databases;
     private $parser;
 
-    private $database_dir;
     private $output_dir;
     
     protected function configure()
@@ -26,7 +25,6 @@ class EntityGeneratorCommand extends Command
             ->setName('comppi:load:entities')
             ->setDescription('Generates model entities from plaintext db headers')
             ->setHelp('All option paths are relative to the LoaderBundle')
-            ->addOption('database_dir', null, InputArgument::OPTIONAL, 'Path to the plaintext databases')
             ->addOption('output_dir', null, InputArgument::OPTIONAL, 'Path to the dir of generated entities')
         ;
     }
@@ -59,33 +57,24 @@ class EntityGeneratorCommand extends Command
         $this->container = $this->getApplication()->getKernel()->getContainer();
         $this->generator = $this->container->get('loader.entity_generator');
         $this->parser = $this->container->get('loader.database_parser');
+        $this->databases = $this->container->get('loader.databases')->getFilePaths();
         
         $this->loadOptions($input);        
-        
-        $this->loadDatabaseFiles(__DIR__ . '/../' . $this->database_dir);
     }
     
     private function loadOptions(InputInterface $input) {
-        
+        /** @todo simplify this if no more options arises */
         $keys = array(
-            'database_dir',
             'output_dir'
         );
         
         foreach ($keys as $key) {
             if (!$value = $input->getOption($key)) {
-                $value = $this->container->getParameter('loader.' . $key);
+                $value = $this->container->getParameter('loader.entity_generator_command.' . $key);
             }
             
             $this->$key = $value;
         }
-    }
-    
-    private function loadDatabaseFiles($database_dir) {
-        $dbs = new Finder();
-        $dbs->files()->in($database_dir);
-        
-        $this->databases = $dbs;     
     }
     
     private function generateEntity($name, array $fields) {
