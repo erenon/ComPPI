@@ -38,7 +38,7 @@ class DatabaseParser
         return false;
     }
     
-    public function getFieldArray($database_path) {
+    private function callParserFunc($database_path, $func) {
         $filename = basename($database_path);
         $parser = $this->getMatchingParser($filename);
 
@@ -46,10 +46,14 @@ class DatabaseParser
             //matching parser found
             $handle = fopen($database_path, "r");
             if ($handle) {
-                $fields = $parser->getFieldArray($handle);
+                $return = call_user_func(
+                    array($parser, $func),
+                    $handle
+                );
+                 
                 fclose($handle);
                 
-                return $fields;
+                return $return;
                 
             } else {
                 throw new \Exception("Can't open file '" . $database_path . "'");
@@ -58,5 +62,17 @@ class DatabaseParser
         } else {
             throw new \UnexpectedValueException("No parser found for database: '" . $database_path . "'");
         }        
+    }
+    
+    public function getFieldArray($database_path) {
+        return $this->callParserFunc($database_path, 'getFieldArray');       
+    }
+    
+    public function getContentArray($database_path) {
+        try {
+            return $this->callParserFunc($database_path, 'getContentArray');
+        } catch (\Exception $e) {
+            throw new \Exception("Failed to parse database: '" . $database_path . "'", 0, $e);
+        } 
     }
 }

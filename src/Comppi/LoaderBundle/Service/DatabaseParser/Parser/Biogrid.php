@@ -20,4 +20,21 @@ class Biogrid extends AbstractParser implements ParserInterface
         
         return $fields;
     }
+    
+    public function getContentArray($file_handle) {
+        //drop header
+        fgets($file_handle);
+        
+        $records = array();
+        
+        //read records
+        while (($record = fgets($file_handle)) !== false) {
+            $records[] = explode("\t", $record);
+        }
+        if (!feof($file_handle)) {
+            throw new \Exception("Unexpected error while reading database");
+        }
+        
+        return $records;
+    }
 }

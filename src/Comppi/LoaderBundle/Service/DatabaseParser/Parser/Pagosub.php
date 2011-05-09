@@ -27,4 +27,23 @@ class Pagosub extends AbstractParser implements ParserInterface
         
         return $fields;
     }
+    
+    public function getContentArray($file_handle) {
+        //drop header
+        fgets($file_handle); //header
+        fgets($file_handle); //field names
+        
+        $records = array();
+        
+        //read records
+        while (($line = fgets($file_handle)) !== false) {
+            $line = ltrim($line);
+            $records[] = explode(", ", $line);
+        }
+        if (!feof($file_handle)) {
+            throw new \Exception("Unexpected error while reading database");
+        }
+        
+        return $records;
+    }
 }
