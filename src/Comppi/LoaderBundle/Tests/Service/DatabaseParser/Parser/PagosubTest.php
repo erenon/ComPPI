@@ -1,8 +1,8 @@
 <?php
 
-namespace Comppi\LoaderBundle\Tests\Service\EntityGenerator\Parser;
+namespace Comppi\LoaderBundle\Tests\Service\DatabaseParser\Parser;
 
-use Comppi\LoaderBundle\Service\EntityGenerator\Parser\Pagosub;
+use Comppi\LoaderBundle\Service\DatabaseParser\Parser\Pagosub;
 
 require_once 'vfsStream/vfsStream.php';
 use vfsStream;

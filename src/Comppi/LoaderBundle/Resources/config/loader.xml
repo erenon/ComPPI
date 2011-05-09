@@ -5,18 +5,25 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="loader.parser_dir">Service/EntityGenerator/Parser</parameter>
-        <parameter key="loader.parser_namespace">Comppi\LoaderBundle\Service\EntityGenerator\Parser\</parameter>
         <parameter key="loader.database_dir">Resources/databases</parameter>
         <parameter key="loader.output_dir">Entity</parameter>
         
         <parameter key="loader.entity_generator.class">Comppi\LoaderBundle\Service\EntityGenerator\EntityGenerator</parameter>
         <parameter key="loader.entity_generator.template_file">%kernel.root_dir%/../src/Comppi/LoaderBundle/Service/EntityGenerator/Entity.tpl</parameter>
+        
+        <parameter key="loader.database_parser.class">Comppi\LoaderBundle\Service\DatabaseParser\DatabaseParser</parameter>
+        <parameter key="loader.database_parser.parser_dir">%kernel.root_dir%/../src/Comppi/LoaderBundle/Service/DatabaseParser/Parser</parameter>
+        <parameter key="loader.database_parser.parser_namespace">Comppi\LoaderBundle\Service\DatabaseParser\Parser\</parameter>
     </parameters>
 
     <services>
         <service id="loader.entity_generator" class="%loader.entity_generator.class%">
             <argument>%loader.entity_generator.template_file%</argument>
+        </service>
+        
+        <service id="loader.database_parser" class="%loader.database_parser.class%">
+            <argument>%loader.database_parser.parser_dir%</argument>
+            <argument>%loader.database_parser.parser_namespace%</argument>
         </service>
     </services>
 </container>

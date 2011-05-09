@@ -1,6 +1,6 @@
 <?php
 
-namespace Comppi\LoaderBundle\Service\EntityGenerator\Parser;
+namespace Comppi\LoaderBundle\Service\DatabaseParser\Parser;
 
 interface ParserInterface
 {
