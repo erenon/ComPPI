@@ -32,22 +32,13 @@ class EntityGeneratorCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output) {
         //parse databases
         foreach ($this->databases as $database) {
-            $filename = basename($database);
-            $cur_parser = $this->parser->getMatchingParser($filename);
-
-            if ($cur_parser) {
-                //matching parser found
-                $handle = fopen($database, "r");
-                if ($handle) {
-                    $fields = $cur_parser->getFieldArray($handle);
-                    fclose($handle);
-                    $this->generateEntity($filename, $fields);
-                } else {
-                    throw new \Exception("Can't open file '" . $database . "'");
-                }
+            try {
+                $filename = basename($database);
+                $fields = $this->parser->getFieldArray($database);
+                $this->generateEntity($filename, $fields);
                 
-            } else {
-                throw new \UnexpectedValueException("Can't parse database: '" . $database . "'");
+            } catch (Exception $e) {
+                throw $e;
             }
         }
         

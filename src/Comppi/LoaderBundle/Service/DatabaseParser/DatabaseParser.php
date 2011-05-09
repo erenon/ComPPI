@@ -28,7 +28,7 @@ class DatabaseParser
         }
     }
 
-    public function getMatchingParser($database_name) {
+    private function getMatchingParser($database_name) {
         foreach ($this->parsers as $parser) {
             if ($parser->isMatch($database_name)) {
                 return $parser;
@@ -36,5 +36,27 @@ class DatabaseParser
         }
         
         return false;
+    }
+    
+    public function getFieldArray($database_path) {
+        $filename = basename($database_path);
+        $parser = $this->getMatchingParser($filename);
+
+        if ($parser) {
+            //matching parser found
+            $handle = fopen($database_path, "r");
+            if ($handle) {
+                $fields = $parser->getFieldArray($handle);
+                fclose($handle);
+                
+                return $fields;
+                
+            } else {
+                throw new \Exception("Can't open file '" . $database_path . "'");
+            }
+            
+        } else {
+            throw new \UnexpectedValueException("No parser found for database: '" . $database_path . "'");
+        }        
     }
 }
