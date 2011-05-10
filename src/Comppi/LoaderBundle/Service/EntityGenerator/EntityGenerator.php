@@ -12,7 +12,6 @@ class EntityGenerator
     const PLACEHOLDER_ENTITY_NAME = '{ENTITY_NAME}';
     const PLACEHOLDER_FIELD_TYPE = '{FIELD_TYPE}';
     const PLACEHOLDER_FIELD_NAME = '{FIELD_NAME}';
-    const DEFAULT_FIELD_ANNOTATION = 'type="string", length="255"';
     
     public function __construct($template_file) {
         //get template pieces
@@ -28,21 +27,15 @@ class EntityGenerator
         $this->template_foot = $template_parts[2];        
     }
     
-    public function generate($name, array $fields) {
+    public function generate($name, array $fields, array $types) {
         $name = ucfirst($name);
         
         //insert head
         $output = str_replace(self::PLACEHOLDER_ENTITY_NAME, $name, $this->template_head);
         
         //insert fields
-        foreach ($fields as $field) {
-            if (is_array($field)) {
-                $field_name = $field['field_name'];
-                $field_type = $this->getOrmAnnotationByType($field['field_type']);
-            } else {
-                $field_type = self::DEFAULT_FIELD_ANNOTATION;
-                $field_name = $field;
-            }
+        foreach ($fields as $key => $field_name) {
+            $field_type = $this->getOrmAnnotationByType($types[$key]);
             
             /** @todo change str_replace to preg_replace, eliminate all invalid php variable char */
             $field_name = str_replace(array(' ', '-'), '_', $field_name);

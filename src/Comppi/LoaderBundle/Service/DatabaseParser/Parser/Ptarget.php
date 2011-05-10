@@ -16,7 +16,7 @@ class Ptarget extends AbstractParser implements ParserInterface
             'weight'
         );
         
-        $fields = $this->setFieldType($fields, $file_handle);
+        $fields = $this->camelizeFieldArray($fields);
         
         return $fields;
     }

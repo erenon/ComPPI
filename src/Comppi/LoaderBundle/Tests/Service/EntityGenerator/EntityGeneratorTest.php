@@ -35,14 +35,21 @@ class EntityGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         file_put_contents(
             vfsStream::url('templateDir') . '/EntityTest.tpl',
-            '{ENTITY_NAME}--{% GENERAL FIELD SEPARATOR %}{FIELD_NAME},{% GENERAL FIELD SEPARATOR %}--end'
+            '{ENTITY_NAME}--{% GENERAL FIELD SEPARATOR %}-{FIELD_TYPE}-{FIELD_NAME},{% GENERAL FIELD SEPARATOR %}--end'
         );
         
         $generator = new EntityGenerator(vfsStream::url('templateDir') . '/EntityTest.tpl');
-        $content = $generator->generate('name', array('foo', 'bar lol'));
+        $content = $generator->generate(
+        	'name', 
+            array('foo', 'bar lol'), 
+            array(
+                array('type' => 'string'),
+                array('length' => '1234')
+            )
+        );
         
         $this->assertEquals(
-            'Name--foo,bar_lol,--end',
+            'Name---type="string"-foo,-length="1234"-bar_lol,--end',
             $content
         );
     }

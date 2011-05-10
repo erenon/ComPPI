@@ -15,7 +15,7 @@ class Bacello extends AbstractParser implements ParserInterface
             'localization',
         );
         
-        $fields = $this->setFieldType($fields, $file_handle);
+        $fields = $this->camelizeFieldArray($fields);
         return $fields;
     }
     

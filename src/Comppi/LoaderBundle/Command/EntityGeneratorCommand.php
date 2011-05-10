@@ -35,7 +35,8 @@ class EntityGeneratorCommand extends Command
             try {
                 $entity_name = $this->parser->getEntityName($database);
                 $fields = $this->parser->getFieldArray($database);
-                $this->generateEntity($entity_name, $fields);
+                $field_types = $this->parser->getFieldTypeArray($database);
+                $this->generateEntity($entity_name, $fields, $field_types);
                 
             } catch (\Exception $e) {
                 throw $e;
@@ -68,10 +69,10 @@ class EntityGeneratorCommand extends Command
         }
     }
     
-    private function generateEntity($name, array $fields) {
+    private function generateEntity($name, array $fields, array $types) {
         file_put_contents(
             __DIR__ . '/../' . $this->output_dir . '/' . ucfirst($name) . '.php',
-            $this->generator->generate($name, $fields)
+            $this->generator->generate($name, $fields, $types)
         );
     }
 }

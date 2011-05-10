@@ -24,7 +24,7 @@ class Pagosub extends AbstractParser implements ParserInterface
         }
         
         $fields = $this->cleanFieldArray($fields);
-        $fields = $this->setFieldType($fields, $file_handle);
+        $fields = $this->camelizeFieldArray($fields);
         
         return $fields;
     }

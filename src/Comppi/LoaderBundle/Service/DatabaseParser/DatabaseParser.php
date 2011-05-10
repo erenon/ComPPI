@@ -68,6 +68,10 @@ class DatabaseParser
         return $this->callParserFunc($database_path, 'getFieldArray');       
     }
     
+    public function getFieldTypeArray($database_path) {
+        return $this->callParserFunc($database_path, 'getFieldTypeArray');
+    }
+    
     public function getContentArray($database_path) {
         try {
             return $this->callParserFunc($database_path, 'getContentArray');
