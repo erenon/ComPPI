@@ -51,4 +51,14 @@ abstract class AbstractParser
         
         return $fields;
     }
+    
+    public function getEntityName($filename) {
+        //camelize
+        return 
+        str_replace(' ', '', 
+            ucwords(
+                str_replace('_', ' ', $filename)
+            )
+        );
+    }
 }

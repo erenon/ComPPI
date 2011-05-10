@@ -28,9 +28,9 @@ class DatabaseParser
         }
     }
 
-    private function getMatchingParser($database_name) {
+    private function getMatchingParser($filename) {
         foreach ($this->parsers as $parser) {
-            if ($parser->isMatch($database_name)) {
+            if ($parser->isMatch($filename)) {
                 return $parser;
             }
         }
@@ -74,5 +74,11 @@ class DatabaseParser
         } catch (\Exception $e) {
             throw new \Exception("Failed to parse database: '" . $database_path . "'", 0, $e);
         } 
+    }
+    
+    public function getEntityName($database_path) {
+        $filename = basename($database_path);
+        $parser = $this->getMatchingParser($filename);
+        return $parser->getEntityName($filename);
     }
 }

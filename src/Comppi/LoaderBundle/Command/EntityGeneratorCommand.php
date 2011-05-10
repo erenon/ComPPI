@@ -33,11 +33,11 @@ class EntityGeneratorCommand extends Command
         //parse databases
         foreach ($this->databases as $database) {
             try {
-                $filename = basename($database);
+                $entity_name = $this->parser->getEntityName($database);
                 $fields = $this->parser->getFieldArray($database);
-                $this->generateEntity($filename, $fields);
+                $this->generateEntity($entity_name, $fields);
                 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 throw $e;
             }
         }
