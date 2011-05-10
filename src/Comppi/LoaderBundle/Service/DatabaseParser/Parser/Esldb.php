@@ -13,6 +13,7 @@ class Esldb extends AbstractParser implements ParserInterface
         $fields = explode("\t", $first_line);
         
         $fields = $this->cleanFieldArray($fields);
+        $fields = $this->setFieldType($fields, $file_handle);
         
         return $fields;
     }

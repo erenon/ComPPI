@@ -10,7 +10,9 @@ class EntityGenerator
     
     const FIELD_SEPARATOR = '{% GENERAL FIELD SEPARATOR %}';
     const PLACEHOLDER_ENTITY_NAME = '{ENTITY_NAME}';
+    const PLACEHOLDER_FIELD_TYPE = '{FIELD_TYPE}';
     const PLACEHOLDER_FIELD_NAME = '{FIELD_NAME}';
+    const DEFAULT_FIELD_ANNOTATION = 'type="string", length="255"';
     
     public function __construct($template_file) {
         //get template pieces
@@ -34,14 +36,37 @@ class EntityGenerator
         
         //insert fields
         foreach ($fields as $field) {
+            if (is_array($field)) {
+                $field_name = $field['field_name'];
+                $field_type = $this->getOrmAnnotationByType($field['field_type']);
+            } else {
+                $field_type = self::DEFAULT_FIELD_ANNOTATION;
+                $field_name = $field;
+            }
+            
             /** @todo change str_replace to preg_replace, eliminate all invalid php variable char */
-            $field = str_replace(array(' ', '-'), '_', $field);
-            $output .= str_replace(self::PLACEHOLDER_FIELD_NAME, $field, $this->template_field);
+            $field_name = str_replace(array(' ', '-'), '_', $field_name);
+            
+            $filled_field = str_replace(self::PLACEHOLDER_FIELD_TYPE, $field_type, $this->template_field);
+            $filled_field = str_replace(self::PLACEHOLDER_FIELD_NAME, $field_name, $filled_field);
+            $output .= $filled_field;
         }
         
         //insert foot
         $output .= $this->template_foot;
         
         return $output;
+    }
+    
+    private function getOrmAnnotationByType($type) {
+        $annotations = array();
+        
+        foreach ($type as $key => $value) {
+            $annotations[] = $key . '="' . $value . '"';
+        }
+        
+        $annotation = join(', ', $annotations);
+        
+        return $annotation;
     }
 }

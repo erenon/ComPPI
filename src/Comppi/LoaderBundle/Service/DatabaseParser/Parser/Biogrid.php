@@ -17,6 +17,7 @@ class Biogrid extends AbstractParser implements ParserInterface
         $fields = explode("\t", $header_field_filtered);
         
         $fields = $this->cleanFieldArray($fields);
+        $fields = $this->setFieldType($fields, $file_handle);
         
         return $fields;
     }
