@@ -2,7 +2,8 @@
 
 #Builds database
 
-console="../app/console"
+dir="$( cd "$( dirname "$0" )" && pwd )"
+console=$dir"/../app/console"
 
 echo "Generatre entities"
 php $console comppi:load:entities
@@ -10,7 +11,7 @@ php $console comppi:load:entities
 echo "Add set/get methods..."
 php $console doctrine:generate:entities LoaderBundle
 echo "..remove backup entities"
-find ../src/Comppi/LoaderBundle/Entity -name "~*" | xargs rm
+find $dir/../src/Comppi/LoaderBundle/Entity -name "~*" | xargs rm
 
 echo "Drop database schema"
 php $console doctrine:schema:drop --force
