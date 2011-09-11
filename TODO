@@ -1,1 +1,0 @@
-Add original database names, update isMatch/getEntityName.: AbstractParser reads key=>value from concrete parsers
