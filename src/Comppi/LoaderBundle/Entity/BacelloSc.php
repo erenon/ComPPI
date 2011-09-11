@@ -16,7 +16,7 @@ class BacelloSc
 
     
     /**
-     * @orm:Column(type="string", length="7")
+     * @orm:Column(type="string", length="9")
      */
     protected $name;
     

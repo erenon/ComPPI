@@ -4,9 +4,14 @@ namespace Comppi\LoaderBundle\Service\DatabaseParser\Parser;
 
 class Pagosub extends AbstractParser implements ParserInterface
 {
-    public function isMatch($filename) {
-        return ('pagosub' == substr($filename, 0, 7));
-    }
+    protected $matching_files = array(
+        'pagosub_ce' => 'PagosubCeTest',
+        'pagosub_dm' => 'PagosubDmTest',
+        'pagosub_hs' => 'PagosubHsTest',
+        'caenorhabditis_elegans.csv' => 'PagosubCe',
+        'drosophila_melanogaster.csv' => 'PagosubDm',
+        'homo_sapiens.csv' => 'PagosubHs'
+    );
     
     public function getFieldArray($file_handle) {
         //drop first useless line

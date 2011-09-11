@@ -5,7 +5,7 @@ namespace Comppi\LoaderBundle\Entity;
 /**
  * @orm:Entity
  */
-class BacelloCe
+class PtargetScTest
 {
     /**
      * @orm:Id
@@ -16,14 +16,19 @@ class BacelloCe
 
     
     /**
-     * @orm:Column(type="string", length="14")
+     * @orm:Column(type="string", length="11")
      */
     protected $name;
     
     /**
-     * @orm:Column(type="string", length="13")
+     * @orm:Column(type="string", length="12")
      */
     protected $localization;
+    
+    /**
+     * @orm:Column(type="string", length="5")
+     */
+    protected $weight;
     
 
     /**
@@ -74,5 +79,25 @@ class BacelloCe
     public function getLocalization()
     {
         return $this->localization;
+    }
+
+    /**
+     * Set weight
+     *
+     * @param string $weight
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
+    }
+
+    /**
+     * Get weight
+     *
+     * @return string $weight
+     */
+    public function getWeight()
+    {
+        return $this->weight;
     }
 }

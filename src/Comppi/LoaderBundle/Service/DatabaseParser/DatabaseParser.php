@@ -83,6 +83,11 @@ class DatabaseParser
     public function getEntityName($database_path) {
         $filename = basename($database_path);
         $parser = $this->getMatchingParser($filename);
-        return $parser->getEntityName($filename);
+        
+        if ($parser) { 
+            return $parser->getEntityName($filename);
+        } else {
+            throw new \UnexpectedValueException("No parser found for database: '" . $database_path . "'");
+        }
     }
 }

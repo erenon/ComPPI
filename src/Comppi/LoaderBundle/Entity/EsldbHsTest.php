@@ -5,7 +5,7 @@ namespace Comppi\LoaderBundle\Entity;
 /**
  * @orm:Entity
  */
-class EsldbSc
+class EsldbHsTest
 {
     /**
      * @orm:Id
@@ -21,37 +21,37 @@ class EsldbSc
     protected $eSLDBCode;
     
     /**
-     * @orm:Column(type="string", length="9")
+     * @orm:Column(type="string", length="15")
      */
     protected $originalDatabaseCode;
     
     /**
-     * @orm:Column(type="string", length="62")
+     * @orm:Column(type="string", length="4")
      */
     protected $experimentalAnnotation;
     
     /**
-     * @orm:Column(type="text")
+     * @orm:Column(type="string", length="4")
      */
     protected $swissProtFulltextAnnotation;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="4")
      */
     protected $swissProtEntry;
     
     /**
-     * @orm:Column(type="string", length="62")
+     * @orm:Column(type="string", length="13")
      */
     protected $similarityBasedAnnotation;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="10")
      */
     protected $swissProtHomologue;
     
     /**
-     * @orm:Column(type="string", length="6")
+     * @orm:Column(type="string", length="4")
      */
     protected $eValue;
     
@@ -66,7 +66,7 @@ class EsldbSc
     protected $aminoacidicSequence;
     
     /**
-     * @orm:Column(type="string", length="208")
+     * @orm:Column(type="string", length="5")
      */
     protected $commonMame;
     
@@ -144,7 +144,7 @@ class EsldbSc
     /**
      * Set swissProtFulltextAnnotation
      *
-     * @param text $swissProtFulltextAnnotation
+     * @param string $swissProtFulltextAnnotation
      */
     public function setSwissProtFulltextAnnotation($swissProtFulltextAnnotation)
     {
@@ -154,7 +154,7 @@ class EsldbSc
     /**
      * Get swissProtFulltextAnnotation
      *
-     * @return text $swissProtFulltextAnnotation
+     * @return string $swissProtFulltextAnnotation
      */
     public function getSwissProtFulltextAnnotation()
     {

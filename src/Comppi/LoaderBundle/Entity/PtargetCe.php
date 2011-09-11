@@ -16,12 +16,12 @@ class PtargetCe
 
     
     /**
-     * @orm:Column(type="string", length="10")
+     * @orm:Column(type="string", length="11")
      */
     protected $name;
     
     /**
-     * @orm:Column(type="string", length="15")
+     * @orm:Column(type="string", length="23")
      */
     protected $localization;
     

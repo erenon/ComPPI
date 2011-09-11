@@ -5,7 +5,7 @@ namespace Comppi\LoaderBundle\Entity;
 /**
  * @orm:Entity
  */
-class PagosubHs
+class PagosubDmTest
 {
     /**
      * @orm:Id
@@ -16,12 +16,12 @@ class PagosubHs
 
     
     /**
-     * @orm:Column(type="string", length="5")
+     * @orm:Column(type="string", length="1")
      */
     protected $proteinNumber;
     
     /**
-     * @orm:Column(type="text")
+     * @orm:Column(type="string", length="143")
      */
     protected $annotation;
     
@@ -31,7 +31,7 @@ class PagosubHs
     protected $probabilityGolgi;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="8")
      */
     protected $probabilityNotGolgi;
     
@@ -51,7 +51,7 @@ class PagosubHs
     protected $probabilityExtracellular;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="8")
      */
     protected $probabilityNotExtracellular;
     
@@ -71,7 +71,7 @@ class PagosubHs
     protected $probabilityCytoplasm;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="10")
      */
     protected $probabilityNotCytoplasm;
     
@@ -81,7 +81,7 @@ class PagosubHs
     protected $probabilityPlasmaMembrane;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="8")
      */
     protected $probabilityNotPlasmaMembrane;
     
@@ -91,7 +91,7 @@ class PagosubHs
     protected $probabilityLysosome;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="3")
      */
     protected $probabilityNotLysosome;
     
@@ -101,7 +101,7 @@ class PagosubHs
     protected $probabilityPeroxisome;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="3")
      */
     protected $probabilityNotPeroxisome;
     
@@ -111,7 +111,7 @@ class PagosubHs
     protected $probabilityEndoplasmicReticulum;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="8")
      */
     protected $probabilityNotEndoplasmicReticulum;
     
@@ -121,17 +121,17 @@ class PagosubHs
     protected $probabilityIonBinding;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="8")
      */
     protected $probabilityNotIonBinding;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="10")
      */
     protected $probabilityProteinBinding;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="10")
      */
     protected $probabilityNotProteinBinding;
     
@@ -141,7 +141,7 @@ class PagosubHs
     protected $probabilitySignalTransducerActivity;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="8")
      */
     protected $probabilityNotSignalTransducerActivity;
     
@@ -151,7 +151,7 @@ class PagosubHs
     protected $probabilityHydrolaseActivity;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="10")
      */
     protected $probabilityNotHydrolaseActivity;
     
@@ -161,12 +161,12 @@ class PagosubHs
     protected $probabilityLyaseActivity;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="8")
      */
     protected $probabilityNotLyaseActivity;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="10")
      */
     protected $probabilityBinding;
     
@@ -181,7 +181,7 @@ class PagosubHs
     protected $probabilityStructuralMoleculeActivity;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="8")
      */
     protected $probabilityNotStructuralMoleculeActivity;
     
@@ -201,7 +201,7 @@ class PagosubHs
     protected $probabilityCatalyticActivity;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="10")
      */
     protected $probabilityNotCatalyticActivity;
     
@@ -211,7 +211,7 @@ class PagosubHs
     protected $probabilityTransferaseActivity;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="8")
      */
     protected $probabilityNotTransferaseActivity;
     
@@ -231,7 +231,7 @@ class PagosubHs
     protected $probabilityOxidoreductaseActivity;
     
     /**
-     * @orm:Column(type="string", length="11")
+     * @orm:Column(type="string", length="8")
      */
     protected $probabilityNotOxidoreductaseActivity;
     
@@ -279,7 +279,7 @@ class PagosubHs
     /**
      * Set annotation
      *
-     * @param text $annotation
+     * @param string $annotation
      */
     public function setAnnotation($annotation)
     {
@@ -289,7 +289,7 @@ class PagosubHs
     /**
      * Get annotation
      *
-     * @return text $annotation
+     * @return string $annotation
      */
     public function getAnnotation()
     {

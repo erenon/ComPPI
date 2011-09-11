@@ -21,7 +21,7 @@ class PtargetSc
     protected $name;
     
     /**
-     * @orm:Column(type="string", length="12")
+     * @orm:Column(type="string", length="23")
      */
     protected $localization;
     

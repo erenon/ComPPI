@@ -4,9 +4,14 @@ namespace Comppi\LoaderBundle\Service\DatabaseParser\Parser;
 
 class Bacello extends AbstractParser implements ParserInterface
 {
-    public function isMatch($filename) {
-        return ('bacello' == substr($filename, 0, 7));
-    }
+    protected $matching_files = array (
+        'bacello_ce' => 'BacelloCeTest',
+        'bacello_hs' => 'BacelloHsTest',
+        'bacello_sc' => 'BacelloScTest',
+        'pred_cel'	 => 'BacelloCe',
+        'pred_homo'  => 'BacelloHs',
+        'pred_sce'   => 'BacelloSc'
+    );
     
     public function getFieldArray($file_handle) {
         /** @todo improve field names */

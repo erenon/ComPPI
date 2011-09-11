@@ -30,14 +30,15 @@ class LoadDatabaseCommand extends Command
     
     protected function execute(InputInterface $input, OutputInterface $output) { 
         foreach ($this->databases as $database) {
-            $entity_name = 'Comppi\\LoaderBundle\\Entity\\' . $this->parser->getEntityName($database);
+            $entity_name = $this->parser->getEntityName($database);
+            $entity_full_name = 'Comppi\\LoaderBundle\\Entity\\' . $entity_name;
 
             $field_names = $this->parser->getFieldArray($database);
             $records = $this->parser->getContentArray($database);
             
             foreach ($records as $record) {
                 reset($field_names);
-                $entity = new $entity_name();
+                $entity = new $entity_full_name();
                 foreach ($record as $field_value) {
                     $method = 'set' . ucfirst(current($field_names));
                     call_user_func(
@@ -53,8 +54,9 @@ class LoadDatabaseCommand extends Command
                 
                 $this->entity_manager->persist($entity);
             }
+            $this->entity_manager->flush();
+            $output->writeln("  > Entity " . $entity_name . ' loaded');
+            $output->writeln('    ' . join(', ', $field_names));
         }
-        
-        $this->entity_manager->flush();
     }  
 }

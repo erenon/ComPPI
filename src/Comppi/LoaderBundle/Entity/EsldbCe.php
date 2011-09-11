@@ -21,27 +21,27 @@ class EsldbCe
     protected $eSLDBCode;
     
     /**
-     * @orm:Column(type="string", length="8")
+     * @orm:Column(type="string", length="14")
      */
     protected $originalDatabaseCode;
     
     /**
-     * @orm:Column(type="string", length="4")
+     * @orm:Column(type="string", length="50")
      */
     protected $experimentalAnnotation;
     
     /**
-     * @orm:Column(type="string", length="4")
+     * @orm:Column(type="text")
      */
     protected $swissProtFulltextAnnotation;
     
     /**
-     * @orm:Column(type="string", length="4")
+     * @orm:Column(type="string", length="11")
      */
     protected $swissProtEntry;
     
     /**
-     * @orm:Column(type="string", length="9")
+     * @orm:Column(type="string", length="88")
      */
     protected $similarityBasedAnnotation;
     
@@ -51,7 +51,7 @@ class EsldbCe
     protected $swissProtHomologue;
     
     /**
-     * @orm:Column(type="string", length="5")
+     * @orm:Column(type="string", length="6")
      */
     protected $eValue;
     
@@ -66,7 +66,7 @@ class EsldbCe
     protected $aminoacidicSequence;
     
     /**
-     * @orm:Column(type="string", length="5")
+     * @orm:Column(type="string", length="84")
      */
     protected $commonMame;
     
@@ -144,7 +144,7 @@ class EsldbCe
     /**
      * Set swissProtFulltextAnnotation
      *
-     * @param string $swissProtFulltextAnnotation
+     * @param text $swissProtFulltextAnnotation
      */
     public function setSwissProtFulltextAnnotation($swissProtFulltextAnnotation)
     {
@@ -154,7 +154,7 @@ class EsldbCe
     /**
      * Get swissProtFulltextAnnotation
      *
-     * @return string $swissProtFulltextAnnotation
+     * @return text $swissProtFulltextAnnotation
      */
     public function getSwissProtFulltextAnnotation()
     {

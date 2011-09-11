@@ -21,7 +21,7 @@ class PtargetDm
     protected $name;
     
     /**
-     * @orm:Column(type="string", length="15")
+     * @orm:Column(type="string", length="23")
      */
     protected $localization;
     

@@ -4,6 +4,8 @@ namespace Comppi\LoaderBundle\Service\DatabaseParser\Parser;
 
 abstract class AbstractParser
 {
+    protected $matching_files = array();
+    
     protected function camelize($name) {
         return
         lcfirst(
@@ -13,6 +15,10 @@ abstract class AbstractParser
                 )
             )
         ); 
+    }
+    
+    public function isMatch($filename) {
+        return array_key_exists($filename, $this->matching_files);
     }
     
     protected function cleanFieldArray(array $fields) {
@@ -61,6 +67,11 @@ abstract class AbstractParser
     }
     
     public function getEntityName($filename) {
+        if (array_key_exists($filename, $this->matching_files)) {
+            return $this->matching_files[$filename];
+        }
+        
+        /** @todo should log here */
         return ucfirst($this->camelize($filename)); 
     }
 }

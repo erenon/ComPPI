@@ -4,9 +4,14 @@ namespace Comppi\LoaderBundle\Service\DatabaseParser\Parser;
 
 class Esldb extends AbstractParser implements ParserInterface
 {
-    public function isMatch($filename) {
-        return ('esldb' == substr($filename, 0, 5));
-    }
+    protected $matching_files = array(
+        'esldb_ce' => 'EsldbCeTest',
+        'esldb_hs' => 'EsldbHsTest',
+        'esldb_sc' => 'ElsdbScTest',
+        'eSLDB_Caenorhabditis_elegans.txt' => 'EsldbCe',
+        'eSLDB_Homo_sapiens.txt' => 'EsldbHs',
+        'eSLDB_Saccharomyces_cerevisiae.txt' => 'EsldbSc'
+    );
     
     public function getFieldArray($file_handle) {
         $first_line = fgets($file_handle);

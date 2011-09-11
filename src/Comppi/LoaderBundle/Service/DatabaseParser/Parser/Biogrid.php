@@ -4,9 +4,10 @@ namespace Comppi\LoaderBundle\Service\DatabaseParser\Parser;
 
 class Biogrid extends AbstractParser implements ParserInterface
 {
-    public function isMatch($filename) {
-        return ('biogrid' == $filename);
-    }
+    protected $matching_files = array(
+        'biogrid' => 'BiogridTest',
+        'BIOGRID-ALL-3.1.76.mitab.txt' => 'Biogrid'
+    );
     
     public function getFieldArray($file_handle) {
         $first_line = fgets($file_handle);

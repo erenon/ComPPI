@@ -4,9 +4,16 @@ namespace Comppi\LoaderBundle\Service\DatabaseParser\Parser;
 
 class Ptarget extends AbstractParser implements ParserInterface
 {
-    public function isMatch($filename) {
-        return ('ptarget' == substr($filename, 0, 7));
-    }
+    protected $matching_files = array(
+        'ptarget_ce' => 'PtargetCeTest',
+        'ptarget_dm' => 'PtargetDmTest',
+        'ptarget_hs' => 'PtargetHsTest',
+        'ptarget_sc' => 'PtargetScTest',
+        'nematode_preds.txt' => 'PtargetCe',
+        'drosophila_preds.txt' => 'PtargetDm',
+        'human_preds.txt' => 'PtargetHs',
+        'yeast_preds.txt' => 'PtargetSc'
+    );
     
     public function getFieldArray($file_handle) {
         /** @todo improve field names */

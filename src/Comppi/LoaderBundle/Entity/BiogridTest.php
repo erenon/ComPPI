@@ -5,7 +5,7 @@ namespace Comppi\LoaderBundle\Entity;
 /**
  * @orm:Entity
  */
-class Biogrid
+class BiogridTest
 {
     /**
      * @orm:Id

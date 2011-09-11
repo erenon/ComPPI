@@ -5,7 +5,7 @@ namespace Comppi\LoaderBundle\Entity;
 /**
  * @orm:Entity
  */
-class BacelloCe
+class BacelloCeTest
 {
     /**
      * @orm:Id
@@ -16,12 +16,12 @@ class BacelloCe
 
     
     /**
-     * @orm:Column(type="string", length="14")
+     * @orm:Column(type="string", length="10")
      */
     protected $name;
     
     /**
-     * @orm:Column(type="string", length="13")
+     * @orm:Column(type="string", length="9")
      */
     protected $localization;
     
