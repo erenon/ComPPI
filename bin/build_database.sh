@@ -9,9 +9,7 @@ echo "Generatre entities"
 php $console comppi:load:entities
 
 echo "Add set/get methods..."
-php $console doctrine:generate:entities LoaderBundle
-echo "..remove backup entities"
-find $dir/../src/Comppi/LoaderBundle/Entity -name "~*" | xargs rm
+php $console doctrine:generate:entities LoaderBundle --no-backup
 
 echo "Drop database schema"
 php $console doctrine:schema:drop --force
