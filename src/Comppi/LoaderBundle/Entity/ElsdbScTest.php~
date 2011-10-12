@@ -1,0 +1,75 @@
+<?php
+
+namespace Comppi\LoaderBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ */
+class ElsdbScTest
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    
+    /**
+     * @ORM\Column(type="string", length="11")
+     */
+    protected $eSLDBCode;
+    
+    /**
+     * @ORM\Column(type="string", length="7")
+     */
+    protected $originalDatabaseCode;
+    
+    /**
+     * @ORM\Column(type="string", length="36")
+     */
+    protected $experimentalAnnotation;
+    
+    /**
+     * @ORM\Column(type="string", length="122")
+     */
+    protected $swissProtFulltextAnnotation;
+    
+    /**
+     * @ORM\Column(type="string", length="11")
+     */
+    protected $swissProtEntry;
+    
+    /**
+     * @ORM\Column(type="string", length="36")
+     */
+    protected $similarityBasedAnnotation;
+    
+    /**
+     * @ORM\Column(type="string", length="11")
+     */
+    protected $swissProtHomologue;
+    
+    /**
+     * @ORM\Column(type="string", length="5")
+     */
+    protected $eValue;
+    
+    /**
+     * @ORM\Column(type="string", length="13")
+     */
+    protected $prediction;
+    
+    /**
+     * @ORM\Column(type="text")
+     */
+    protected $aminoacidicSequence;
+    
+    /**
+     * @ORM\Column(type="string", length="5")
+     */
+    protected $commonMame;
+    
+}

@@ -1,0 +1,95 @@
+<?php
+
+namespace Comppi\LoaderBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ */
+class BiogridTest
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    
+    /**
+     * @ORM\Column(type="string", length="39")
+     */
+    protected $iDInteractorA;
+    
+    /**
+     * @ORM\Column(type="string", length="39")
+     */
+    protected $iDInteractorB;
+    
+    /**
+     * @ORM\Column(type="string", length="63")
+     */
+    protected $altIDsInteractorA;
+    
+    /**
+     * @ORM\Column(type="string", length="28")
+     */
+    protected $altIDsInteractorB;
+    
+    /**
+     * @ORM\Column(type="text")
+     */
+    protected $aliasesInteractorA;
+    
+    /**
+     * @ORM\Column(type="text")
+     */
+    protected $aliasesInteractorB;
+    
+    /**
+     * @ORM\Column(type="string", length="28")
+     */
+    protected $interactionDetectionMethod;
+    
+    /**
+     * @ORM\Column(type="string", length="24")
+     */
+    protected $publication1stAuthor;
+    
+    /**
+     * @ORM\Column(type="string", length="15")
+     */
+    protected $publicationIdentifiers;
+    
+    /**
+     * @ORM\Column(type="string", length="10")
+     */
+    protected $taxidInteractorA;
+    
+    /**
+     * @ORM\Column(type="string", length="10")
+     */
+    protected $taxidInteractorB;
+    
+    /**
+     * @ORM\Column(type="string", length="36")
+     */
+    protected $interactionTypes;
+    
+    /**
+     * @ORM\Column(type="string", length="22")
+     */
+    protected $sourceDatabase;
+    
+    /**
+     * @ORM\Column(type="string", length="8")
+     */
+    protected $interactionIdentifiers;
+    
+    /**
+     * @ORM\Column(type="string", length="2")
+     */
+    protected $confidenceValues;
+    
+}

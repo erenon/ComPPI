@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="comppi.loader.entity_generator_command.output_dir">Entity</parameter>
+    
+        <parameter key="comppi.loader.entity_generator.class">Comppi\LoaderBundle\Service\EntityGenerator\EntityGenerator</parameter>
+        <parameter key="comppi.loader.entity_generator.template_file">%kernel.root_dir%/../src/Comppi/LoaderBundle/Service/EntityGenerator/Entity.tpl</parameter>
+        
+        <parameter key="comppi.loader.databases.class">Comppi\LoaderBundle\Service\Databases\Databases</parameter>
+        <parameter key="comppi.loader.databases.database_dir">%kernel.root_dir%/../src/Comppi/LoaderBundle/Resources/databases</parameter>
+ 
+        <parameter key="comppi.loader.database_parser.class">Comppi\LoaderBundle\Service\DatabaseParser\DatabaseParser</parameter>
+        <parameter key="comppi.loader.database_parser.parser_dir">%kernel.root_dir%/../src/Comppi/LoaderBundle/Service/DatabaseParser/Parser</parameter>
+        <parameter key="comppi.loader.database_parser.parser_namespace">Comppi\LoaderBundle\Service\DatabaseParser\Parser\</parameter>
+    </parameters>
+
+    <services>
+        <service id="comppi.loader.entity_generator" class="%comppi.loader.entity_generator.class%">
+            <argument>%comppi.loader.entity_generator.template_file%</argument>
+        </service>
+        
+        <service id="comppi.loader.databases" class="%comppi.loader.databases.class%">
+            <argument>%comppi.loader.databases.database_dir%</argument>
+        </service>
+        
+        <service id="comppi.loader.database_parser" class="%comppi.loader.database_parser.class%">
+            <argument>%comppi.loader.database_parser.parser_dir%</argument>
+            <argument>%comppi.loader.database_parser.parser_namespace%</argument>
+        </service>
+    </services>
+</container>

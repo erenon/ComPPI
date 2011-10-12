@@ -1,0 +1,12 @@
+app/cache
+app/logs
+app/config/parameters.ini
+
+src/Acme
+vendor
+web/bundles
+
+#eclipse
+.buildpath
+.project
+.settings
