@@ -4,7 +4,7 @@ README
 What is ComPPI?
 ---------------
 
-Comppi is a Compartmentalized Protein-Protein Interaction Network
+Comppi is a Compartmentalized Protein-Protein Interaction database
 
 Requirements
 ------------
