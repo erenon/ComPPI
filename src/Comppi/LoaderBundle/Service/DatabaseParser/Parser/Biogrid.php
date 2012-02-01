@@ -6,37 +6,53 @@ class Biogrid extends AbstractParser implements ParserInterface
 {
     protected $matching_files = array(
         'biogrid' => 'BiogridTest',
-        'BIOGRID-ALL-3.1.76.mitab.txt' => 'Biogrid'
+        'BIOGRID-ORGANISM-Caenorhabditis_elegans-3.1.81.tab2.txt' => 'BiogridCe',
+        'BIOGRID-ORGANISM-Drosophila_melanogaster-3.1.81.tab2.txt' => 'BiogridDm',
+    	'BIOGRID-ORGANISM-Homo_sapiens-3.1.81.tab2.txt' => 'BiogridHs',
+    	'BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.1.81.tab2.txt' => 'BiogridSc'
+    );
+    
+    protected $field_blacklist = array(
+        '#BioGRID Interaction ID',
+        'Entrez Gene Interactor A',
+        'Entrez Gene Interactor B',
+        'BioGRID ID Interactor A',
+        'BioGRID ID Interactor B',
+        'Experimental System Type',
+        'Author',
+        'Organism Interactor A',
+        'Organism Interactor B',
+        'Throughput',
+        'Score',
+        'Modification',
+        'Phenotypes',
+        'Qualifications',
+        'Tags'        
     );
     
     public function getFieldArray($file_handle) {
         $first_line = fgets($file_handle);
         
-        //strip leading #
-        $header_field_filtered = substr($first_line, 1);
+        $fields = explode("\t", $first_line);
         
-        $fields = explode("\t", $header_field_filtered);
-        
+        $fields = $this->filterFieldArray($fields);
         $fields = $this->cleanFieldArray($fields);
         $fields = $this->camelizeFieldArray($fields);
         
         return $fields;
     }
     
-    public function getContentArray($file_handle) {
-        //drop header
-        fgets($file_handle);
-        
-        $records = array();
-        
-        //read records
-        while (($record = fgets($file_handle)) !== false) {
-            $records[] = explode("\t", $record);
-        }
-        if (!feof($file_handle)) {
-            throw new \Exception("Unexpected error while reading database");
+    /**
+     * @todo Make Experimental System Type index dynamic
+     * @param array $record
+     * @return true if record MUST NOT inserted to the db.
+     */
+    protected function isRecordFiltered(array $record) {
+        // 12: index of Experimental System Type field
+        if ($record[12] == 'genetic') {
+            return true;
         }
         
-        return $records;
+        return false;
     }
 }

@@ -20,7 +20,6 @@ class Bacello extends AbstractParser implements ParserInterface
             'localization',
         );
         
-        $fields = $this->camelizeFieldArray($fields);
         return $fields;
     }
     
@@ -39,5 +38,27 @@ class Bacello extends AbstractParser implements ParserInterface
         }
         
         return $records;
+    }
+    
+    public function next() {
+        do {
+            $record = fgets($this->file_handle);
+            
+            // end of file
+            if (!$record) {
+                if (!feof($this->file_handle)) {
+                    throw new \Exception("Unexpected error while reading database");
+                }
+                return;
+            }
+            
+            $record = trim($record);
+            $record = preg_split("/[\s]+/", $record);
+        } while ($this->isRecordFiltered($record));
+
+        $record = $this->filterRecordArray($record);
+        
+        $this->current_line = $record; 
+        $this->current_index++;
     }
 }

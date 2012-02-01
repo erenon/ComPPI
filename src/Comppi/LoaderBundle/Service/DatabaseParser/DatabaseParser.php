@@ -51,7 +51,8 @@ class DatabaseParser
                     $handle
                 );
                  
-                fclose($handle);
+                // TODO can't close the file becouse of the iterators
+                // fclose($handle);
                 
                 return $return;
                 
@@ -78,6 +79,14 @@ class DatabaseParser
         } catch (\Exception $e) {
             throw new \Exception("Failed to parse database: '" . $database_path . "'", 0, $e);
         } 
+    }
+    
+    public function getRecordIterator($database_path) {
+        try {
+            return $this->callParserFunc($database_path, 'getRecordIterator');
+        } catch (\Exception $e) {
+            throw new \Exception("Failed to parse database: '" . $database_path . "'", 0, $e);
+        }        
     }
     
     public function getEntityName($database_path) {

@@ -28,35 +28,47 @@ class LoadDatabaseCommand extends ContainerAwareCommand
         $this->entity_manager = $container->get('doctrine.orm.default_entity_manager');
     }
     
-    protected function execute(InputInterface $input, OutputInterface $output) { 
+    protected function execute(InputInterface $input, OutputInterface $output) {
+        $connection = $this->entity_manager->getConnection();
+        
         foreach ($this->databases as $database) {
             $entity_name = $this->parser->getEntityName($database);
-            $entity_full_name = 'Comppi\\LoaderBundle\\Entity\\' . $entity_name;
 
             $field_names = $this->parser->getFieldArray($database);
-            $records = $this->parser->getContentArray($database);
+            $iterator = $this->parser->getRecordIterator($database);
             
-            foreach ($records as $record) {
+            $record_count_per_transaction = 1000;
+            $record_index = 0;
+            
+            $connection->beginTransaction();
+            foreach ($iterator as $record) {
+                $data = array();
                 reset($field_names);
-                $entity = new $entity_full_name();
+                
                 foreach ($record as $field_value) {
-                    $method = 'set' . ucfirst(current($field_names));
-                    call_user_func(
-                        array(
-                            $entity,
-                    		$method
-                        ),
-                        $field_value
-                    );
+                    $data[current($field_names)] = $field_value;
                     
                     next($field_names);
-                }
+                }                
                 
-                $this->entity_manager->persist($entity);
+                $connection->insert($entity_name, $data);
+                
+                $record_index++;
+                if ($record_index % $record_count_per_transaction == 0) {
+                    $connection->commit();
+                    $connection->beginTransaction();
+                    
+                    if ($record_index % ($record_count_per_transaction*2) == 0) {
+                        $sign = '  / ';
+                    } else {
+                        $sign = '  \ ';
+                    }
+                    $output->writeln($sign . $record_count_per_transaction . ' records loaded');
+                }
             }
-            $this->entity_manager->flush();
-            $output->writeln("  > Entity " . $entity_name . ' loaded');
-            $output->writeln('    ' . join(', ', $field_names));
+            $connection->commit();
+            
+            $output->writeln("  > Entity " . $entity_name . ' loaded (' . $record_index . ' records)');
         }
     } 
 }
