@@ -158,6 +158,7 @@ abstract class AbstractParser implements \Iterator
                 return;
             }
             
+            $record = trim($record);
             $record = explode("\t", $record);
         } while ($this->isRecordFiltered($record));
 
