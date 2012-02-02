@@ -1,0 +1,7 @@
+<h2>{% trans with {'%species%': 'Caenorhabditis elegans'}%}Download %species%' PPIs by localization:{% endtrans %}</h2>
+
+<ul>
+    {% for local in locals %}
+        <li><a href="{{ path('comppi_download_download_download', { 'local': local }) }}">{{ local }}</a></li>
+    {% endfor %}
+</ul>

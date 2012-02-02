@@ -1,3 +1,12 @@
+dev_home:
+    pattern:   /
+    defaults:  { _controller: DownloadBundle:Download:list }    
+
+DownloadBundle:
+    resource: "@DownloadBundle/Controller/"
+    type:     annotation
+    prefix:   /download/
+
 #LoaderBundle:
 #    resource: "@LoaderBundle/Controller/"
 #    type:     annotation
