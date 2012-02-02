@@ -51,6 +51,7 @@ class LoadDatabaseCommand extends ContainerAwareCommand
                     next($field_names);
                 }                
                 
+                // TODO may use multiinsert here
                 $connection->insert($entity_name, $data);
                 
                 $record_index++;
