@@ -7,8 +7,8 @@
                 <target>Download %species%s PPIs by localization:</target>
             </trans-unit>
             <trans-unit id="2">
-                <source>Download %species%s PPIs by localization:</source>
-                <target>Download %species%s PPIs by localization:</target>
+                <source>Interactions in %localization% in %species%:</source>
+                <target>Interactions in %localization% in %species%:</target>
             </trans-unit>
         </body>
     </file>
