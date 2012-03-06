@@ -8,17 +8,12 @@
     <parameters>
     	<parameter key="comppi.build.databaseProvider.class">Comppi\BuildBundle\Service\DatabaseProvider\DatabaseProvider</parameter>
     	<parameter key="comppi.build.databaseProvider.databaseRootDir">%kernel.root_dir%/../src/Comppi/BuildBundle/Resources/databases</parameter>
-    	<parameter key="comppi.build.mapLoader.class">Comppi\BuildBundle\Service\MapLoader\MapLoader</parameter>
     </parameters>
 
     <services>
     	<service id="comppi.build.databaseProvider" class="%comppi.build.databaseProvider.class%">
     		<argument>%comppi.build.databaseProvider.databaseRootDir%</argument>
     	</service>
-    
-        <service id="comppi.build.mapLoader" class="%comppi.build.mapLoader.class%">
-        	<argument type="service" id="doctrine.orm.default_entity_manager" />
-        </service>
     </services>
     
 </container>
