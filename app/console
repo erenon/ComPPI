@@ -13,4 +13,5 @@ $debug = !$input->hasParameterOption(array('--no-debug', ''));
 
 $kernel = new AppKernel($env, $debug);
 $application = new Application($kernel);
+$application->setCatchExceptions(false);
 $application->run();
