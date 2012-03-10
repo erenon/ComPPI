@@ -11,7 +11,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class LoadMapsCommand extends ContainerAwareCommand
 {
     private $maps;
-    private $mapLoader;
     private $specie;
 
     protected function configure() {
