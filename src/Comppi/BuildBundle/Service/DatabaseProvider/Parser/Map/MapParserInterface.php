@@ -4,7 +4,7 @@ namespace Comppi\BuildBundle\Service\DatabaseProvider\Parser\Map;
 
 interface MapParserInterface extends \Iterator
 {
-    static function canParseFilename($filename);
+    static function canParseFilename($fileName);
     /*function getProteinNameA();
     function getProteinNameB();
     function getNamingConventionA();

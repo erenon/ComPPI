@@ -35,6 +35,32 @@ class DatabaseProvider
         return $maps;
     }
     
+    /**
+     * @TODO merge this and getMapsBySpecie
+     */
+    public function getInteractionsBySpecie($specie) {
+        // get interaction database paths
+        $interactionRoot = $this->rootDir . '/' . $specie . '/interaction/';
+        $interactionFiles = new Finder();
+        $interactionFiles->files()->in($interactionRoot);
+
+        // available parsers
+        $interactionParsers = $this->getInteractionParsers();
+        
+        // pass filenames to matching parsers
+        $interactions = array();
+        foreach ($interactionFiles as $interactionFileInfo) {
+            $interactionFile = $interactionFileInfo->getPathname();
+            foreach ($interactionParsers as $interactionParser) {
+                if ($interactionParser::canParseFilename(basename($interactionFile))) {
+                    $interactions[] = new $interactionParser($interactionFile);
+                }
+            }
+        }
+        
+        return $interactions;        
+    }
+    
     private function getMapParsers() {
         $mapParsers = $this->getParsers(
             __DIR__ . '/Parser/Map', 
@@ -43,6 +69,16 @@ class DatabaseProvider
         );
         
         return $mapParsers;
+    }
+    
+    private function getInteractionParsers() {
+        $interactionParsers = $this->getParsers(
+            __DIR__ . '/Parser/Interaction', 
+            __NAMESPACE__ . '\Parser\Interaction\\', 
+            __NAMESPACE__ . '\Parser\Interaction\InteractionParserInterface'
+        );
+        
+        return $interactionParsers;
     }
     
     private function getParsers($parserDir, $parserNamespace, $parserInterface) {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Comppi\BuildBundle\Service\DatabaseProvider\Parser\Map;
+namespace Comppi\BuildBundle\Service\DatabaseProvider\Parser\Interaction;
 
-class GeneidToUniprot implements MapParserInterface
+class Biogrid implements InteractionParserInterface
 {
     private $fileName;
     private $fileHandle = null;
@@ -13,13 +13,21 @@ class GeneidToUniprot implements MapParserInterface
         $this->fileName = $fileName;
     }
     
-    static function canParseFilename($fileName) {
+    public static function canParseFilename($fileName) {
         $parsable = array(
-            'YEAST_559292_idmapping_selected.tab'
+            'BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.1.81.tab2.txt'
         );
         
         return in_array($fileName, $parsable);
     }
+    
+    public function getDatabaseIdentifier() {
+        return basename($this->fileName);
+    }
+    
+    public function getDatabaseNamingConvention() {
+        return 'EntrezGene';
+    } 
     
     private function readline() {
         $record = fgets($this->fileHandle);
@@ -35,7 +43,7 @@ class GeneidToUniprot implements MapParserInterface
         $this->currentIdx++;
         $this->currentLine = $record;
     }
-    
+
     /* Iterator methods */
     
     public function rewind() {
@@ -46,13 +54,16 @@ class GeneidToUniprot implements MapParserInterface
             rewind($this->fileHandle);
         }
         
+        // drop header
+        fgets($this->fileHandle);
+        
         $this->readline();
     }
     
     public function current() {
         $recordArray = explode("\t", $this->currentLine);
         
-        if (count($recordArray) != 23) {
+        if (count($recordArray) != 24) {
             throw new \Exception(
             	"Parsed records field count is invalid (" .
                 count($recordArray)
@@ -61,10 +72,10 @@ class GeneidToUniprot implements MapParserInterface
         }
         
         return array(
-            'namingConventionA' => 'EntrezGene',
-            'namingConventionB'	=> 'UniProt',
-            'proteinNameA'	=> $recordArray[2],
-            'proteinNameB'	=> $recordArray[0]    // UniProtKB-AC
+            'proteinAName' => $recordArray[1],
+            'proteinBName' => $recordArray[2],
+            'pubmedId' => $recordArray[15],
+            'experimentalSystemType' => $recordArray[13]
         );
     }
     
