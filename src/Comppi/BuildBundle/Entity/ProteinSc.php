@@ -15,4 +15,14 @@ class ProteinSc
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+    
+    /**
+     * @ORM\Column(type="string", length="255")
+     */
+    protected $proteinName;
+    
+    /**
+     * @ORM\Column(type="string", length="255")
+     */
+    protected $proteinNamingConvention;
 }

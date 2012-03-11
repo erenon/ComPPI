@@ -12,23 +12,12 @@ class ProteinToDatabaseCe
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
-
-
-    /**
-     * @ORM\Column(type="integer")
      * @ORM\ManyToOne(targetEntity="ProteinCe")
      */
     protected $proteinId;
 
     /**
-     * @ORM\Column(type="string", length="255")
-     */
-    protected $sourceId;
-
-    /**
+     * @ORM\Id
      * @ORM\Column(type="string", length="255")
      */
     protected $sourceDb;

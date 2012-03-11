@@ -35,6 +35,10 @@ class ProteinTranslator
         $translation = $this->getStrongestTranslation($namingConvention, $originalName, $specie);
         $comppiId = $this->getExistingComppiId($translation[0], $translation[1], $specie);
         
+        if ($comppiId === false) {
+            $comppiId = $this->insertProtein($translation[0], $translation[1], $specie); 
+        }
+        
         return $comppiId;
     }
     
@@ -93,25 +97,38 @@ class ProteinTranslator
     }
     
     private function getExistingComppiId($namingConvention, $proteinName, $specie) {
-        $proteinToDatabaseTableName = 'ProteinToDatabase' . ucfirst($specie);
+        $proteinTableName = 'Protein' . ucfirst($specie);
         /**
          * @var \Doctrine\DBAL\Driver\Statement
          */
         $getIdStatement = $this->connection->prepare(
-            'SELECT proteinId FROM ' . $proteinToDatabaseTableName .
-            ' WHERE sourceNamingConvention = ? AND sourceId = ?' .
+            'SELECT id FROM ' . $proteinTableName .
+            ' WHERE proteinName = ? AND proteinNamingConvention = ?' .
             ' LIMIT 1'
         );
-        $getIdStatement->execute(array($namingConvention, $proteinName));
+        $getIdStatement->execute(array($proteinName, $namingConvention));
         
         if ($getIdStatement->rowCount() > 0) {
             $result = $getIdStatement->fetch();
             
-            echo 'Existing comppiid found: ' . $result['proteinId'] . "\n";
+            /** @TODO remove next debug info line */
+            //echo 'Existing comppiid found: ' . $result['id'] . "\n";
             
-            return $result['proteinId'];
+            return $result['id'];
         } else {
             return false;
         }
+    }
+    
+    private function insertProtein($namingConvention, $proteinName, $specie) {
+        $proteinTableName = 'Protein' . ucfirst($specie);
+        
+        $this->connection->executeQuery(
+            'INSERT INTO ' .$proteinTableName.
+            ' VALUES ("", ?, ?)',
+            array($proteinName, $namingConvention)
+        );
+        
+        return $this->connection->lastInsertId();
     }
 }

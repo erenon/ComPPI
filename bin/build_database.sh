@@ -28,3 +28,6 @@ php $console doctrine:schema:update --force
 
 echo "Load SacCe maps"
 php $console comppi:build:map sc
+
+echo "Load SacCe interactions"
+php $console comppi:build:interactions sc

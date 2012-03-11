@@ -76,30 +76,8 @@ class LoadInteractionsCommand extends ContainerAwareCommand
                     $sourceNamingConvention, $proteinBOriginalName, $this->specie
                 );
                 
-                /**
-                 * @TODO This insert is wrong
-                 * If the protein is translatable, the ComppiId lookup
-                 * will fail continuously becouse it will try it with
-                 * stronger convention.
-                 * 
-                 * Restructure the table schema, and use
-                 * translated names in the following two inserts. 
-                 */
-                $this->insertProtein(
-                    $this->specie,
-                    $proteinAComppiId, 
-                    $proteinAOriginalName, 
-                    $sourceNamingConvention, 
-                    $sourceDb
-                );
-                
-                $this->insertProtein(
-                    $this->specie,
-                    $proteinBComppiId, 
-                    $proteinBOriginalName, 
-                    $sourceNamingConvention, 
-                    $sourceDb
-                );
+                $this->addDatabaseRefToId($sourceDb, $proteinAComppiId, $this->specie);
+                $this->addDatabaseRefToId($sourceDb, $proteinBComppiId, $this->specie);
                 
                 $connection->insert($interactionEntityName, array(
                     'actorAId' => $proteinAComppiId,
@@ -125,25 +103,23 @@ class LoadInteractionsCommand extends ContainerAwareCommand
         }            
     }
     
-    private function insertProtein($specie, $comppiId, $sourceId, $sourceNamingConvention, $sourceDb) {
-        if ($comppiId === false) {
-            $comppiId = $this->getNewComppiId($specie);
-        }
-        
+    /**
+     * @TODO This method uses a mysql specific ON DUPLICATE KEY UPDATE clause
+     * This could be substituted with a select and a conditional insert
+     * 
+     * @param string $sourceDb
+     * @param string $comppiId
+     * @param string $specie
+     */
+    private function addDatabaseRefToId($sourceDb, $comppiId, $specie) {
         $proteinToDatabaseTable = 'ProteinToDatabase' . ucfirst($specie);
+        
+        // insert ref only if not yet inserted
         $this->connection->executeQuery(
             'INSERT INTO ' .$proteinToDatabaseTable.
-            ' VALUES ("", ?, ?, ?, ?)',
-            array($comppiId, $sourceId, $sourceNamingConvention, $sourceDb)
+            ' VALUES (?, ?)'.
+            ' ON DUPLICATE KEY UPDATE proteinId=proteinId',
+            array($comppiId, $sourceDb)
         );
-    }
-    
-    private function getNewComppiId($specie) {
-        $proteinTable = 'Protein' . ucfirst($specie);
-        $this->connection->executeQuery(
-        	'INSERT INTO ' . $proteinTable . ' VALUES ("")'
-        );
-        
-        return $this->connection->lastInsertId();
     }
 }
