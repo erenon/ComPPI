@@ -57,3 +57,8 @@ doctrine:
 jms_security_extra:
     secure_controllers:  true
     secure_all_services: false
+    
+
+#ComPPI BuildBundle configuration
+comppi_build:
+    database_path: "%kernel.root_dir%/../databases"

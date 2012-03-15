@@ -24,5 +24,22 @@ class BuildExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
+
+        if ($container->getParameter('kernel.environment') == 'test') {
+            $databaseRootPath = $container->getParameter('comppi.build.databaseProvider.testDatabaseRootDir');
+        } else {
+            if (!isset($config['database_path'])) {
+                throw new \InvalidArgumentException('Please set the database_path option in the application config');
+            }
+
+            $databaseRootPath = $config['database_path'];
+        }
+
+        $container->setParameter('comppi.build.databaseProvider.databaseRootDir', $databaseRootPath);
+    }
+
+    public function getNamespace()
+    {
+        return 'comppi_build';
     }
 }

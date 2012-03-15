@@ -7,7 +7,8 @@
     
     <parameters>
     	<parameter key="comppi.build.databaseProvider.class">Comppi\BuildBundle\Service\DatabaseProvider\DatabaseProvider</parameter>
-    	<parameter key="comppi.build.databaseProvider.databaseRootDir">%kernel.root_dir%/../src/Comppi/BuildBundle/Resources/databases</parameter>
+    	<parameter key="comppi.build.databaseProvider.databaseRootDir" />
+    	<parameter key="comppi.build.databaseProvider.testDatabaseRootDir">%kernel.root_dir%/../src/Comppi/BuildBundle/Test/databases</parameter>
     	
     	<parameter key="comppi.build.proteinTranslator.class">Comppi\BuildBundle\Service\ProteinTranslator\ProteinTranslator</parameter>
     </parameters>
