@@ -11,6 +11,7 @@
     	<parameter key="comppi.build.databaseProvider.testDatabaseRootDir">%kernel.root_dir%/../src/Comppi/BuildBundle/Test/databases</parameter>
     	
     	<parameter key="comppi.build.proteinTranslator.class">Comppi\BuildBundle\Service\ProteinTranslator\ProteinTranslator</parameter>
+    	<parameter key="comppi.build.localizationTranslator.class">Comppi\BuildBundle\Service\LocalizationTranslator\LocalizationTranslator</parameter>
     </parameters>
 
     <services>
@@ -20,6 +21,9 @@
     	
     	<service id="comppi.build.proteinTranslator" class="%comppi.build.proteinTranslator.class%">
             <argument type="service" id="doctrine.orm.default_entity_manager" />
+        </service>
+        
+        <service id="comppi.build.localizationTranslator" class="%comppi.build.localizationTranslator.class%">
         </service>
     </services>
     
