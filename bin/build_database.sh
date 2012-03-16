@@ -3,7 +3,7 @@
 #Builds database
 
 dir="$( cd "$( dirname "$0" )" && pwd )"
-console=$dir"/../app/console"
+console=$dir"/../app/console --env=test"
 
 #echo "Generatre entities"
 #php $console comppi:load:entities
@@ -31,3 +31,6 @@ php $console comppi:build:map sc
 
 echo "Load SacCe interactions"
 php $console comppi:build:interactions sc
+
+echo "Load SacCe localizations"
+php $console comppi:build:localizations sc
