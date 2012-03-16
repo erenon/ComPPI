@@ -20,24 +20,15 @@ class DatabaseProvider
         $mapFiles->files()->in($mapRoot);
 
         // available parsers
-        $mapParsers = $this->getMapParsers();
+        $mapParsers = $this->getParsers(
+            __DIR__ . '/Parser/Map', 
+            __NAMESPACE__ . '\Parser\Map\\', 
+            __NAMESPACE__ . '\Parser\Map\MapParserInterface'
+        );
         
-        // pass filenames to matching parsers
-        $maps = array();
-        foreach ($mapFiles as $mapFile) {
-            foreach ($mapParsers as $mapParser) {
-                if ($mapParser::canParseFilename(basename($mapFile))) {
-                    $maps[] = new $mapParser($mapFile);
-                }
-            }
-        }
-        
-        return $maps;
+        return $this->getParsersInstancesWithFiles($mapParsers, $mapFiles);
     }
     
-    /**
-     * @TODO merge this and getMapsBySpecie
-     */
     public function getInteractionsBySpecie($specie) {
         // get interaction database paths
         $interactionRoot = $this->rootDir . '/' . $specie . '/interaction/';
@@ -45,40 +36,29 @@ class DatabaseProvider
         $interactionFiles->files()->in($interactionRoot);
 
         // available parsers
-        $interactionParsers = $this->getInteractionParsers();
-        
-        // pass filenames to matching parsers
-        $interactions = array();
-        foreach ($interactionFiles as $interactionFileInfo) {
-            $interactionFile = $interactionFileInfo->getPathname();
-            foreach ($interactionParsers as $interactionParser) {
-                if ($interactionParser::canParseFilename(basename($interactionFile))) {
-                    $interactions[] = new $interactionParser($interactionFile);
-                }
-            }
-        }
-        
-        return $interactions;        
-    }
-    
-    private function getMapParsers() {
-        $mapParsers = $this->getParsers(
-            __DIR__ . '/Parser/Map', 
-            __NAMESPACE__ . '\Parser\Map\\', 
-            __NAMESPACE__ . '\Parser\Map\MapParserInterface'
-        );
-        
-        return $mapParsers;
-    }
-    
-    private function getInteractionParsers() {
         $interactionParsers = $this->getParsers(
             __DIR__ . '/Parser/Interaction', 
             __NAMESPACE__ . '\Parser\Interaction\\', 
             __NAMESPACE__ . '\Parser\Interaction\InteractionParserInterface'
         );
         
-        return $interactionParsers;
+        return $this->getParsersInstancesWithFiles($interactionParsers, $interactionFiles);        
+    }
+    
+    public function getLocalizationsBySpecie($specie) {
+        // get localization database paths
+        $localizationRoot = $this->rootDir . '/' . $specie . '/localization/';
+        $localizationFiles = new Finder();
+        $localizationFiles->files()->in($localizationRoot);
+        
+        // available parsers
+        $localizationParsers = $this->getParsers(
+            __DIR__ . '/Parser/Localization', 
+            __NAMESPACE__ . '\Parser\Localization\\', 
+            __NAMESPACE__ . '\Parser\Localization\LocalizationParserInterface'
+        );
+        
+        return $this->getParsersInstancesWithFiles($localizationParsers, $localizationFiles);
     }
     
     private function getParsers($parserDir, $parserNamespace, $parserInterface) {
@@ -100,5 +80,20 @@ class DatabaseProvider
         }
         
         return $parsers;
+    }
+    
+    
+    private function getParsersInstancesWithFiles($parsers, $files) {
+        // pass filenames to matching parsers
+        $instances = array();
+        foreach ($files as $file) {
+            foreach ($parsers as $parser) {
+                if ($parser::canParseFilename(basename($file))) {
+                    $instances[] = new $parser($file);
+                }
+            }
+        }
+        
+        return $instances;        
     }
 }
