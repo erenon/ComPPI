@@ -1,0 +1,10 @@
+#BioGRID Interaction ID	Entrez Gene Interactor A	Entrez Gene Interactor B	BioGRID ID Interactor A	BioGRID ID Interactor B	Systematic Name Interactor A	Systematic Name Interactor B	Official Symbol Interactor A	Official Symbol Interactor B	Synonymns Interactor A	Synonyms Interactor B	Experimental System	Experimental System Type	Author	Pubmed ID	Organism Interactor A	Organism Interactor B	Throughput	Score	Modification	Phenotypes	Qualifications	Tags	Source Database
+68770	851136	854020	31676	34272	YLR418C	YOL145C	CDC73	CTR9	-	CDP1	Affinity Capture-MS	physical	Krogan NJ (2004)	14759368	559292	559292	High Throughput	-	-	-	-	-	BioGRID
+68771	854020	851136	34272	31676	YOL145C	YLR418C	CTR9	CDC73	CDP1	-	Affinity Capture-MS	physical	Krogan NJ (2004)	14759368	559292	559292	High Throughput	-	-	-	-	-	BioGRID
+68774	851136	854290	31676	34518	YLR418C	YOR123C	CDC73	LEO1	-	-	Affinity Capture-MS	physical	Krogan NJ (2004)	14759368	559292	559292	High Throughput	-	-	-	-	-	BioGRID
+68775	854290	851136	34518	31676	YOR123C	YLR418C	LEO1	CDC73	-	-	Affinity Capture-MS	physical	Krogan NJ (2004)	14759368	559292	559292	High Throughput	-	-	-	-	-	BioGRID
+68778	851136	852582	31676	32973	YLR418C	YBR279W	CDC73	PAF1	-	-	Affinity Capture-MS	physical	Krogan NJ (2004)	14759368	559292	559292	High Throughput	-	-	-	-	-	BioGRID
+68779	852582	851136	32973	31676	YBR279W	YLR418C	PAF1	CDC73	-	-	Affinity Capture-MS	physical	Krogan NJ (2004)	14759368	559292	559292	High Throughput	-	-	-	-	-	BioGRID
+68782	851136	854933	31676	35097	YLR418C	YML069W	CDC73	POB3	-	-	Affinity Capture-MS	physical	Krogan NJ (2004)	14759368	559292	559292	High Throughput	-	-	-	-	-	BioGRID
+68783	854933	851136	35097	31676	YML069W	YLR418C	POB3	CDC73	-	-	Affinity Capture-MS	physical	Krogan NJ (2004)	14759368	559292	559292	High Throughput	-	-	-	-	-	BioGRID
+68786	851136	852607	31676	32996	YLR418C	YGL244W	CDC73	RTF1	-	CSL3	Affinity Capture-MS	physical	Krogan NJ (2004)	14759368	559292	559292	High Throughput	-	-	-	-	-	BioGRID
