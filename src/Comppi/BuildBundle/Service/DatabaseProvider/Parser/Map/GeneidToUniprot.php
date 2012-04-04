@@ -7,7 +7,23 @@ class GeneidToUniprot implements MapParserInterface
     private $fileName;
     private $fileHandle = null;
     private $currentIdx;
-    private $currentLine;
+    private $currentRecord;
+    
+    private $currentCursorIndex;
+    private $recordCursors = array(
+        array(
+        	'namingConventionA' => 'EntrezGene',
+            'namingConventionB'	=> 'UniProtKB-AC',
+            'proteinNameA'	=> 2,
+            'proteinNameB'	=> 0
+        ),
+        array(
+        	'namingConventionA' => 'UniProtKB-ID',
+            'namingConventionB'	=> 'UniProtKB-AC',
+            'proteinNameA'	=> 1,
+            'proteinNameB'	=> 0
+        ),
+    );
     
     public function __construct($fileName) {
         $this->fileName = $fileName;
@@ -32,8 +48,28 @@ class GeneidToUniprot implements MapParserInterface
             return;
         }
         
+        $recordArray = explode("\t", $record);
+        
+        if (count($recordArray) != 23) {
+            throw new \Exception(
+            	"Parsed records field count is invalid (" .
+                count($recordArray)
+                . ")"
+            );
+        }
+        
+        $this->currentRecord = $recordArray;
+    }
+    
+    private function advanceCursor() {
+        if ($this->currentCursorIndex == count($this->recordCursors) - 1) {
+            $this->currentCursorIndex = 0;
+            $this->readline();
+        } else {
+            $this->currentCursorIndex++;
+        }
+        
         $this->currentIdx++;
-        $this->currentLine = $record;
     }
     
     /* Iterator methods */
@@ -46,25 +82,19 @@ class GeneidToUniprot implements MapParserInterface
             rewind($this->fileHandle);
         }
         
-        $this->readline();
+        $this->currentCursorIndex = count($this->recordCursors) - 1;
+        $this->advanceCursor();
     }
     
     public function current() {
-        $recordArray = explode("\t", $this->currentLine);
-        
-        if (count($recordArray) != 23) {
-            throw new \Exception(
-            	"Parsed records field count is invalid (" .
-                count($recordArray)
-                . ")"
-            );
-        }
+        $recordArray = $this->currentRecord;
+        $cursor = $this->recordCursors[$this->currentCursorIndex];
         
         return array(
-            'namingConventionA' => 'EntrezGene',
-            'namingConventionB'	=> 'UniProt',
-            'proteinNameA'	=> $recordArray[2],
-            'proteinNameB'	=> $recordArray[0]    // UniProtKB-AC
+            'namingConventionA' => $cursor['namingConventionA'],
+            'namingConventionB'	=> $cursor['namingConventionB'],
+            'proteinNameA'	=> $recordArray[$cursor['proteinNameA']],
+            'proteinNameB'	=> $recordArray[$cursor['proteinNameB']]
         );
     }
     
@@ -73,7 +103,7 @@ class GeneidToUniprot implements MapParserInterface
     }
     
     public function next() {
-        $this->readline();
+        $this->advanceCursor();
     }
     
     public function valid() {
