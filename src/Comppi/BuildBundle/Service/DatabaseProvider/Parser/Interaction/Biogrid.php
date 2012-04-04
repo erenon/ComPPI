@@ -7,7 +7,7 @@ class Biogrid implements InteractionParserInterface
     private $fileName;
     private $fileHandle = null;
     private $currentIdx;
-    private $currentLine;
+    private $currentRecord;
     
     public function __construct($fileName) {
         $this->fileName = $fileName;
@@ -40,8 +40,25 @@ class Biogrid implements InteractionParserInterface
             return;
         }
         
-        $this->currentIdx++;
-        $this->currentLine = $record;
+        $recordArray = explode("\t", $record);
+        
+        if (count($recordArray) != 24) {
+            throw new \Exception(
+            	"Parsed records field count is invalid (" .
+                count($recordArray)
+                . ")"
+            );
+        }
+        
+        // 12: Experimental System type column index
+        if ($recordArray[12] == 'genetic') {
+            // drop record
+            return $this->readline();
+        } else {
+            $this->currentIdx++;
+            $this->currentRecord = $recordArray;
+        }
+        
     }
 
     /* Iterator methods */
@@ -61,21 +78,13 @@ class Biogrid implements InteractionParserInterface
     }
     
     public function current() {
-        $recordArray = explode("\t", $this->currentLine);
-        
-        if (count($recordArray) != 24) {
-            throw new \Exception(
-            	"Parsed records field count is invalid (" .
-                count($recordArray)
-                . ")"
-            );
-        }
+        $recordArray = $this->currentRecord;
         
         return array(
             'proteinAName' => $recordArray[1],
             'proteinBName' => $recordArray[2],
-            'pubmedId' => $recordArray[15],
-            'experimentalSystemType' => $recordArray[13]
+            'pubmedId' => $recordArray[14],
+            'experimentalSystemType' => $recordArray[12]
         );
     }
     
