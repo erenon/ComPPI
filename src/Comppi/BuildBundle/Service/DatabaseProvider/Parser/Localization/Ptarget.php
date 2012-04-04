@@ -32,6 +32,18 @@ class Ptarget implements LocalizationParserInterface
      */
     private $currentRecord;
     
+    private $localizationToGoCode = array(
+        'cytoplasm' => 'GO:0005737',
+        'Endoplasmic_Reticulum' => 'GO:0005783',
+        'Extracellular/Secretory' => 'secretory_pathway',
+        'Golgi' => 'GO:0005794',
+        'Lysosomes' => 'GO:0005764',
+        'Mitochondria' => 'GO:0005739',
+        'Nucleus' => 'GO:0005634',
+        'Peroxysomes' => 'GO:0005777',
+        'Plasma_Membrane' => 'GO:0005886',
+    );
+    
     public function __construct($fileName) {
         $this->fileName = $fileName;
         $this->setupUniprotSuffix(basename($fileName));
@@ -87,12 +99,12 @@ class Ptarget implements LocalizationParserInterface
         
         if (!is_numeric($recordArray[2]) || $recordArray[2] < Ptarget::$minimumProbability) {
             // invalid localization
-            $this->readline();
-            return;
+            return $this->readline();
+        } else {
+            $this->currentIdx++;
+            $this->currentRecord = $recordArray;
         }
         
-        $this->currentIdx++;
-        $this->currentRecord = $recordArray;
     }
     
     private function getNamingConventionByName($proteinName) {
@@ -103,7 +115,15 @@ class Ptarget implements LocalizationParserInterface
             return 'UniProtKB-AC';
         }
     }
-
+    
+    private function getGoCodeByLocalizationName($localization) {
+        if (isset($this->localizationToGoCode[$localization])) {
+            return $this->localizationToGoCode[$localization];
+        } else {
+            throw new \InvalidArgumentException("No GO code found for localization: '" . $localization . "'");
+        }
+    }
+    
     /* Iterator methods */
     
     public function rewind() {
@@ -131,7 +151,7 @@ class Ptarget implements LocalizationParserInterface
         return array(
             'proteinId' => $record[0],
             'namingConvention' => $this->getNamingConventionByName($record[0]),
-            'localization' => $record[1],
+            'localization' => $this->getGoCodeByLocalizationName($record[1]),
             'pubmedId' => 16144808,
             'experimentalSystemType' => 'domain projection method'
         );
