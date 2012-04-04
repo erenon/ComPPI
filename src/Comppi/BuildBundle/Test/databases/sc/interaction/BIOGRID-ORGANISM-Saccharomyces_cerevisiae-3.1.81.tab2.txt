@@ -8,3 +8,4 @@
 68782	851136	854933	31676	35097	YLR418C	YML069W	CDC73	POB3	-	-	Affinity Capture-MS	physical	Krogan NJ (2004)	14759368	559292	559292	High Throughput	-	-	-	-	-	BioGRID
 68783	854933	851136	35097	31676	YML069W	YLR418C	POB3	CDC73	-	-	Affinity Capture-MS	physical	Krogan NJ (2004)	14759368	559292	559292	High Throughput	-	-	-	-	-	BioGRID
 68786	851136	852607	31676	32996	YLR418C	YGL244W	CDC73	RTF1	-	CSL3	Affinity Capture-MS	physical	Krogan NJ (2004)	14759368	559292	559292	High Throughput	-	-	-	-	-	BioGRID
+195227	850367	852796	30988	33166	YCR009C	YGL084C	RVS161	GUP1	FUS7|END6|SPE161	-	Synthetic Lethality	genetic	Friesen H (2006)	16394103	559292	559292	High Throughput|Low Throughput	-	-	inviable	High Throughput: Synthetic Genetic Array (SGA) analysis|Low Throughput: Confirmed by tetrad analysis.	-	BioGRID
