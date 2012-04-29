@@ -245,7 +245,7 @@ class LocalizationTranslator
     }
     
     public function getSecondaryIdByLocalization($localization) {
-        throw new BadMethodCallException("getSecondaryIdByLocalization method not implemented");
+        throw new \BadMethodCallException("getSecondaryIdByLocalization method not implemented");
     }
     
     public function getLocalizationById($id) {
