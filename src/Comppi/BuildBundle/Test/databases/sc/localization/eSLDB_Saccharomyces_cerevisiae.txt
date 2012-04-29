@@ -1,0 +1,10 @@
+eSLDB code	Original Database Code	Experimental annotation	Prediction
+SC000003821	YJL062W	Transmembrane, Endoplasmic reticulum	Transmembrane
+SC000002052	YPL032C	Cytoplasm	Cytoplasm
+SC000006008	YGR137W	None	Transmembrane
+SC000006046	YDR100W	Transmembrane, Golgi	Transmembrane
+SC000005400	YPR152C	Nucleus	Mitochondrion
+SC000000818	YMR137C	Nucleus	Nucleus
+SC000003462	YIL065C	None	Nucleus
+SC000004107	YLR053C	None	Nucleus
+SC000002000	YMR106C	Nucleus	Cytoplasm
