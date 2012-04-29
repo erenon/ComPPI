@@ -2,11 +2,13 @@
 
 namespace Comppi\BuildBundle\Service\DatabaseProvider\Parser\Localization;
 
-class Ptarget implements LocalizationParserInterface
+class Ptarget extends AbstractLocalizationParser
 {
-    private static $minimumProbability = 95;
+    protected static $parsableFileNames = array(
+        'yeast_preds.txt'
+    );
     
-    private $fileName;
+    private static $minimumProbability = 95;
     
     /**
      * UniProtKB-ID specie specific ending
@@ -24,15 +26,7 @@ class Ptarget implements LocalizationParserInterface
      */
     private $uniprotIdSuffix;
     
-    private $fileHandle = null;
-    private $currentIdx;
-    
-    /**
-     * @var array
-     */
-    private $currentRecord;
-    
-    private $localizationToGoCode = array(
+    protected $localizationToGoCode = array(
         'cytoplasm' => 'GO:0005737',
         'Endoplasmic_Reticulum' => 'GO:0005783',
         'Extracellular/Secretory' => 'secretory_pathway',
@@ -44,8 +38,10 @@ class Ptarget implements LocalizationParserInterface
         'Plasma_Membrane' => 'GO:0005886',
     );
     
+    protected $hasHeader = false;
+    
     public function __construct($fileName) {
-        $this->fileName = $fileName;
+        parent::__construct($fileName);
         $this->setupUniprotSuffix(basename($fileName));
     }
     
@@ -63,31 +59,12 @@ class Ptarget implements LocalizationParserInterface
         }
     }
     
-    public static function canParseFilename($fileName) {
-        $parsable = array(
-            'yeast_preds.txt'
-        );
-        
-        return in_array($fileName, $parsable);
-    }
-    
-    public function getDatabaseIdentifier() {
-        return basename($this->fileName);
-    }
-    
-    private function readline() {
-        $record = fgets($this->fileHandle);
-        
-        // end of file
-        if (!$record) {
-            if (!feof($this->fileHandle)) {
-                throw new \Exception("Unexpected error while reading database");
-            }
+    protected function readRecord(){
+        $line = $this->readLine();
+        if ($line === false) {
+            // EOF
             return;
         }
-        
-        $record = trim($record);
-        
         /**
          * 0 => proteinId
          * 1 => localization
@@ -95,16 +72,21 @@ class Ptarget implements LocalizationParserInterface
          * 
          * @var array
          */
-        $recordArray = preg_split('/ +/', $record);
+        $recordArray = preg_split('/ +/', $line);
+        $this->checkRecordFieldCount($recordArray, 3);
         
         if (!is_numeric($recordArray[2]) || $recordArray[2] < Ptarget::$minimumProbability) {
             // invalid localization
-            return $this->readline();
+            return $this->readRecord();
         } else {
-            $this->currentIdx++;
-            $this->currentRecord = $recordArray;
+            $this->currentRecord = array(
+                'proteinId' => $recordArray[0],
+                'namingConvention' => $this->getNamingConventionByName($recordArray[0]),
+                'localization' => $this->getGoCodeByLocalizationName($recordArray[1]),
+                'pubmedId' => 16144808,
+                'experimentalSystemType' => 'domain projection method'
+            );
         }
-        
     }
     
     private function getNamingConventionByName($proteinName) {
@@ -115,63 +97,4 @@ class Ptarget implements LocalizationParserInterface
             return 'UniProtKB-AC';
         }
     }
-    
-    private function getGoCodeByLocalizationName($localization) {
-        if (isset($this->localizationToGoCode[$localization])) {
-            return $this->localizationToGoCode[$localization];
-        } else {
-            throw new \InvalidArgumentException("No GO code found for localization: '" . $localization . "'");
-        }
-    }
-    
-    /* Iterator methods */
-    
-    public function rewind() {
-        if ($this->fileHandle == null) {
-            $this->fileHandle = fopen($this->fileName, 'r');
-            $this->currentIdx = -1;
-        } else {
-            rewind($this->fileHandle);
-        }
-        
-        $this->readline();
-    }
-    
-    public function current() {
-        $record = $this->currentRecord;
-        
-        if (count($record) != 3) {
-            throw new \Exception(
-            	"Parsed records field count is invalid (" .
-                count($record)
-                . ")"
-            );
-        }
-        
-        return array(
-            'proteinId' => $record[0],
-            'namingConvention' => $this->getNamingConventionByName($record[0]),
-            'localization' => $this->getGoCodeByLocalizationName($record[1]),
-            'pubmedId' => 16144808,
-            'experimentalSystemType' => 'domain projection method'
-        );
-    }
-    
-    public function key() {
-        return $this->currentIdx;
-    }
-    
-    public function next() {
-        $this->readline();
-    }
-    
-    public function valid() {
-        $valid = !feof($this->fileHandle);
-        if (!$valid) {
-            fclose($this->fileHandle);
-        }
-        
-        return $valid;
-    }
-    
 }
