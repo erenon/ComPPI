@@ -57,7 +57,9 @@ class LoadLocalizationsCommand extends ContainerAwareCommand
         $connection = $this->connection;
         
         foreach ($this->databases as $database) {
-            $output->writeln('  > loading localization database: ' . get_class($database));
+            $parserName = explode('\\', get_class($database));
+            $parserName = array_pop($parserName);
+            $output->writeln('  > loading localization database: ' . $parserName);
         
             $sourceDb = $database->getDatabaseIdentifier();
             
@@ -72,7 +74,11 @@ class LoadLocalizationsCommand extends ContainerAwareCommand
                     $this->specie
                 );
                 
-                $localizationId = $this->localizationTranslator->getIdByLocalization($localization['localization']);
+                try {
+                    $localizationId = $this->localizationTranslator->getIdByLocalization($localization['localization']);
+                } catch (\InvalidArgumentException $e) {
+                    $output->writeln('  - '. $localization['localization'] . ' not found');
+                } 
                 
                 $this->addDatabaseRefToId($sourceDb, $proteinComppiId, $this->specie);
                 
