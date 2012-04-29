@@ -1,0 +1,10 @@
+Localization ID	HPRD ID|Database ID	Lab ID	Localization	Experiment Type	Experiment ID
+1	06109	17	Cytoplasm	Fusion proteins for subcellular localization	24
+2	08495	17	Golgi apparatus	Fusion proteins for subcellular localization	24
+3	09155	17	Cytoplasm	Fusion proteins for subcellular localization	24
+4	10910	17	Plasma membrane	Fusion proteins for subcellular localization	24
+5	15663	17	Cytoplasm	Fusion proteins for subcellular localization	24
+6	13908	17	Cytoplasm	Fusion proteins for subcellular localization	24
+7	06599	17	Nucleus	Fusion proteins for subcellular localization	24
+8	07685	17	Mitochondrion	Fusion proteins for subcellular localization	24
+9	12501	17	Endoplasmic reticulum	Fusion proteins for subcellular localization	24

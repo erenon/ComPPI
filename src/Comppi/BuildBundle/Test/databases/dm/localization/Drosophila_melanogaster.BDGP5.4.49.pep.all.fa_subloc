@@ -1,0 +1,10 @@
+FBpp0073167 pep:known chromosome:BDGP5.4:3L:4556087:4592300:1 gene:FBgn0052245 transcript:FBtr0073311	Transmembrane
+FBpp0085887 pep:known chromosome:BDGP5.4:2R:14509050:14510475:1 gene:FBgn0034365 transcript:FBtr0086708	Secretory	(Secretory)
+FBpp0083849 pep:known chromosome:BDGP5.4:3R:19593434:19594704:1 gene:FBgn0039116 transcript:FBtr0084458	Nucleus	(Not Secretory -> Not Mitochondrion -> Nucleus)
+FBpp0077888 pep:known chromosome:BDGP5.4:3L:20421062:20423584:-1 gene:FBgn0036988 transcript:FBtr0078230	Transmembrane
+FBpp0073129 pep:known chromosome:BDGP5.4:3L:4094339:4102697:-1 gene:FBgn0035497 transcript:FBtr0073273	Nucleus	(Not Secretory -> Not Mitochondrion -> Nucleus)
+FBpp0086969 pep:known chromosome:BDGP5.4:2R:8668049:8689515:1 gene:FBgn0003326 transcript:FBtr0087856	Cytoplasm	(Not Secretory -> Not Mitochondrion -> Cytoplasm)
+FBpp0087319 pep:known chromosome:BDGP5.4:2R:6707469:6708685:1 gene:FBgn0029134 transcript:FBtr0088224	Cytoplasm	(Not Secretory -> Not Mitochondrion -> Cytoplasm)
+FBpp0072601 pep:known chromosome:BDGP5.4:3L:1342490:1350665:-1 gene:FBgn0003138 transcript:FBtr0072717	Nucleus	(Not Secretory -> Not Mitochondrion -> Nucleus)
+FBpp0088391 pep:known chromosome:BDGP5.4:2R:6369712:6430767:-1 gene:FBgn0005630 transcript:FBtr0089357	Cytoplasm	(Not Secretory -> Not Mitochondrion -> Cytoplasm)
+FBpp0075395 pep:known chromosome:BDGP5.4:3L:15152183:15154238:1 gene:FBgn0036487 transcript:FBtr0075642	Cytoplasm	(Not Secretory -> Not Mitochondrion -> Cytoplasm)

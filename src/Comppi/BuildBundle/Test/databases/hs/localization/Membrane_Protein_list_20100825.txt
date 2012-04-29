@@ -1,0 +1,10 @@
+UniProt Accession Number	Common name
+A0A5B9	T-cell receptor beta-2 chain C region
+A0AV02	Solute carrier family 12 member 8
+A0AVI2	Fer-1-like protein 5
+A0AVI4	Transmembrane protein 129
+A0FGR8	Extended synaptotagmin-2
+A0FGR9	Extended synaptotagmin-3
+A0PJK1	Sodium/glucose cotransporter 5
+A0PJW6	Transmembrane protein 223
+A0PJX4	Protein shisa-3 homolog

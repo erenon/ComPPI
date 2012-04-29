@@ -60,7 +60,6 @@ abstract class AbstractLocalizationParser implements LocalizationParserInterface
         }
     }
     
-    //protected abstract function parseLine();
     protected abstract function readRecord();
     
     /* Iterator methods */

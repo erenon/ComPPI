@@ -1,0 +1,10 @@
+UniProt Accession Number	Common name
+A4D0S4	Laminin subunit beta-4
+A6NMY6	Putative annexin A2-like protein
+A6NMZ7	Collagen alpha-6(VI) chain
+A8TX70	Collagen alpha-5(VI) chain
+O00339	Matrilin-2
+O00468	Agrin
+O00515	Ladinin-1
+O00533	Neural cell adhesion molecule L1-like protein
+O00634	Netrin-3
