@@ -1,0 +1,10 @@
+eSLDB code	Original Database Code	Experimental annotation	Prediction
+CE000000073	T21H3.1a	None	None
+CE000002973	F42G9.2	None	Cytoplasm
+CE000025628	C17H11.5	None	Secretory
+CE000023361	W02B8.4	None	Secretory
+CE000016153	W08D2.4	None	Transmembrane
+CE000006867	F11A5.12	None	Transmembrane
+CE000023769	Y54E2A.6	None	Cytoplasm
+CE000023769	Y54E2A.6	None	Cytoplasm
+CE000020873	T19E7.2b	None	Cytoplasm

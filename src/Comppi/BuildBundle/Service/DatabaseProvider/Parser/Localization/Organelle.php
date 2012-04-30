@@ -66,7 +66,8 @@ class Organelle extends AbstractLocalizationParser
         'vacuolar membrane' => 'GO:0005774'
     );
 
-    protected $hasHeader = true;
+    // has double header
+    protected $hasHeader = false;
 
     protected function readRecord() {
         $line = $this->readLine();
