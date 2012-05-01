@@ -48,7 +48,10 @@ class LoadMapsCommand extends ContainerAwareCommand
         $connection->getConfiguration()->setSQLLogger(null);
 
         foreach ($this->maps as $map) {
-            $output->writeln('  > loading map: ' . get_class($map));
+            $parserName = explode('\\', get_class($map));
+            $parserName = array_pop($parserName);
+            $output->writeln('  > loading map: ' . $parserName);
+
             $recordIdx = 0;
             $connection->beginTransaction();
             foreach ($map as $entry) {

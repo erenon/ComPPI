@@ -59,7 +59,9 @@ class LoadInteractionsCommand extends ContainerAwareCommand
         $connection->getConfiguration()->setSQLLogger(null);
 
         foreach ($this->databases as $database) {
-            $output->writeln('  > loading interaction database: ' . get_class($database));
+            $parserName = explode('\\', get_class($database));
+            $parserName = array_pop($parserName);
+            $output->writeln('  > loading interaction database: ' . $parserName);
 
             $sourceDb = $database->getDatabaseIdentifier();
 
