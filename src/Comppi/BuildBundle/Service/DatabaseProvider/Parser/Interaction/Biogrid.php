@@ -2,106 +2,39 @@
 
 namespace Comppi\BuildBundle\Service\DatabaseProvider\Parser\Interaction;
 
-class Biogrid implements InteractionParserInterface
+class Biogrid extends AbstractInteractionParser
 {
-    private $fileName;
-    private $fileHandle = null;
-    private $currentIdx;
-    private $currentRecord;
-    
-    public function __construct($fileName) {
-        $this->fileName = $fileName;
-    }
-    
-    public static function canParseFilename($fileName) {
-        $parsable = array(
-            'BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.1.81.tab2.txt'
-        );
-        
-        return in_array($fileName, $parsable);
-    }
-    
-    public function getDatabaseIdentifier() {
-        return basename($this->fileName);
-    }
-    
-    public function getDatabaseNamingConvention() {
-        return 'EntrezGene';
-    } 
-    
-    private function readline() {
-        $record = fgets($this->fileHandle);
-        
-        // end of file
-        if (!$record) {
-            if (!feof($this->fileHandle)) {
-                throw new \Exception("Unexpected error while reading database");
-            }
-            return;
-        }
-        
-        $recordArray = explode("\t", $record);
-        
-        if (count($recordArray) != 24) {
-            throw new \Exception(
-            	"Parsed records field count is invalid (" .
-                count($recordArray)
-                . ")"
-            );
-        }
-        
-        // 12: Experimental System type column index
-        if ($recordArray[12] == 'genetic') {
-            // drop record
-            return $this->readline();
-        } else {
-            $this->currentIdx++;
-            $this->currentRecord = $recordArray;
-        }
-        
-    }
+    protected static $parsableFileNames = array(
+        'BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.1.81.tab2.txt'
+    );
 
-    /* Iterator methods */
-    
-    public function rewind() {
-        if ($this->fileHandle == null) {
-            $this->fileHandle = fopen($this->fileName, 'r');
-            $this->currentIdx = -1;
-        } else {
-            rewind($this->fileHandle);
+    protected function readRecord() {
+        $validRead = false;
+
+        while (!$validRead && !feof($this->fileHandle)) {
+            $line = $this->readLine();
+
+            if ($line === false) {
+                // EOF
+                return;
+            }
+
+            $recordArray = explode("\t", $line);
+
+            $this->checkRecordFieldCount($recordArray, 24);
+
+            // 12: Experimental System type column index
+            if ($recordArray[12] != 'genetic') {
+                $validRead = true;
+                $this->currentRecord = array(
+                    'proteinANamingConvention' => 'EntrezGene',
+                    'proteinAName' => $recordArray[1],
+                	'proteinBNamingConvention' => 'EntrezGene',
+                    'proteinBName' => $recordArray[2],
+                    'pubmedId' => $recordArray[14],
+                    'experimentalSystemType' => $recordArray[12]
+                );
+            } // else continue reading
         }
-        
-        // drop header
-        fgets($this->fileHandle);
-        
-        $this->readline();
-    }
-    
-    public function current() {
-        $recordArray = $this->currentRecord;
-        
-        return array(
-            'proteinAName' => $recordArray[1],
-            'proteinBName' => $recordArray[2],
-            'pubmedId' => $recordArray[14],
-            'experimentalSystemType' => $recordArray[12]
-        );
-    }
-    
-    public function key() {
-        return $this->currentIdx;
-    }
-    
-    public function next() {
-        $this->readline();
-    }
-    
-    public function valid() {
-        $valid = !feof($this->fileHandle);
-        if (!$valid) {
-            fclose($this->fileHandle);
-        }
-        
-        return $valid;
     }
 }
