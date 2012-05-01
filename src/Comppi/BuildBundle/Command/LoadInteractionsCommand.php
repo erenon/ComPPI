@@ -50,7 +50,7 @@ class LoadInteractionsCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $interactionEntityName = 'Interaction' . ucfirst($this->specie);
-        $recordsPerTransaction = 100;
+        $recordsPerTransaction = 500;
 
         $connection = $this->connection;
         $translator = $this->translator;
@@ -62,7 +62,6 @@ class LoadInteractionsCommand extends ContainerAwareCommand
             $output->writeln('  > loading interaction database: ' . get_class($database));
 
             $sourceDb = $database->getDatabaseIdentifier();
-            $sourceNamingConvention = $database->getDatabaseNamingConvention();
 
             $recordIdx = 0;
             $connection->beginTransaction();
@@ -70,13 +69,16 @@ class LoadInteractionsCommand extends ContainerAwareCommand
             foreach ($database as $interaction) {
                 // get proteinA name
                 $proteinAOriginalName = $interaction['proteinAName'];
+                $proteinANamingConvention = $interaction['proteinANamingConvention'];
                 $proteinAComppiId = $translator->getComppiId(
-                    $sourceNamingConvention, $proteinAOriginalName, $this->specie
+                    $proteinANamingConvention, $proteinAOriginalName, $this->specie
                 );
 
+                // get proteinB name
                 $proteinBOriginalName = $interaction['proteinBName'];
+                $proteinBNamingConvention = $interaction['proteinBNamingConvention'];
                 $proteinBComppiId = $translator->getComppiId(
-                    $sourceNamingConvention, $proteinBOriginalName, $this->specie
+                    $proteinBNamingConvention, $proteinBOriginalName, $this->specie
                 );
 
                 $this->addDatabaseRefToId($sourceDb, $proteinAComppiId, $this->specie);
