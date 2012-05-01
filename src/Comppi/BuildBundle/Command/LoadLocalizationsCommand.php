@@ -48,6 +48,9 @@ class LoadLocalizationsCommand extends ContainerAwareCommand
             ->getContainer()
             ->get('doctrine.orm.default_entity_manager')
             ->getConnection();
+
+        // avoid memory leak
+        $this->connection->getConfiguration()->setSQLLogger(null);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {

@@ -24,7 +24,7 @@ class LoadMapsCommand extends ContainerAwareCommand
         $container = $this->getContainer();
 
         $databaseProvider = $container->get('comppi.build.databaseProvider');
-        
+
         $specie = $input->getArgument('specie');
         if (!$specie) {
             throw new \Exception("Please specify a specie");
@@ -36,29 +36,32 @@ class LoadMapsCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $entityName = 'ProteinNameMap' . ucfirst($this->specie);
-    
+
         $recordsPerTransaction = 1000;
-        
+
         $connection = $this
             ->getContainer()
             ->get('doctrine.orm.default_entity_manager')
             ->getConnection();
-        
+
+        // avoid memory leak
+        $connection->getConfiguration()->setSQLLogger(null);
+
         foreach ($this->maps as $map) {
             $output->writeln('  > loading map: ' . get_class($map));
             $recordIdx = 0;
             $connection->beginTransaction();
             foreach ($map as $entry) {
-                
+
                 $connection->insert($entityName, $entry);
-                
+
                 $recordIdx++;
                 if ($recordIdx == $recordsPerTransaction) {
                     $recordIdx = 0;
-                    
+
                     $connection->commit();
                     $connection->beginTransaction();
-                    
+
                     $output->writeln('  > ' . $recordsPerTransaction . ' records loaded');
                 }
             }
