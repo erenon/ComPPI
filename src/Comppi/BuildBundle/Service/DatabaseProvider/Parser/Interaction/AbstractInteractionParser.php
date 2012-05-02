@@ -11,6 +11,7 @@ abstract class AbstractInteractionParser implements InteractionParserInterface
     protected $currentRecord;
 
     protected static $parsableFileNames = array();
+    protected $headerCount = 0;
 
     public function __construct($fileName) {
         $this->fileName = $fileName;
@@ -62,8 +63,8 @@ abstract class AbstractInteractionParser implements InteractionParserInterface
             rewind($this->fileHandle);
         }
 
-        if ($this->hasHeader) {
-            // drop header
+        // drop headers
+        for ($i = 0; $i < $this->headerCount; $i++) {
             fgets($this->fileHandle);
         }
 

@@ -11,7 +11,7 @@ class Biogrid extends AbstractInteractionParser
         'BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.1.81.tab2.txt'
     );
 
-    protected $hasHeader = true;
+    protected $headerCount = 1;
 
     protected function readRecord() {
         $validRead = false;

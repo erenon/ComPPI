@@ -1,0 +1,10 @@
+#IDA	IDB	WI2004	WI2007	BPMAPS
+AC3.10	AC3.3			core
+AC3.3	C03A7.14			core
+AC3.3	C03A7.4	core		
+AC3.3	C05D2.1			core
+AC3.3	C37C3.6			core
+AC3.3	F29G6.3		core	
+AC3.3	R05F9.10		core	
+AC3.3	T01D1.6	core		
+AC3.3	Y39B6A.1			core

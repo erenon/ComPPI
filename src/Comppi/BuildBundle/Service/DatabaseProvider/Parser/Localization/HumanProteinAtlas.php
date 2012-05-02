@@ -88,7 +88,7 @@ class HumanProteinAtlas extends AbstractLocalizationParser
 
         $this->currentRecord = array(
             'proteinId' => $recordArray[0],
-            'namingConvention' => 'EnsemblGeneID',
+            'namingConvention' => 'EnsemblGeneId',
             'localization' => $this->getGoCodeByLocalizationName(
                 $this->currentLine['localization'][0]
             ),
