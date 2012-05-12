@@ -41,13 +41,17 @@ class Dip extends AbstractInteractionParser
 
             $isValidRead = true;
 
+            $expSysTypeRaw = $recordArray[6] . $recordArray[11];
+            preg_match_all("/MI\:\d+\((.+?)\)/", $expSysTypeRaw, $expSysTypes);
+            $expSysType = implode(', ', $expSysTypes[1]);
+
             $this->currentRecord = array(
                 'proteinANamingConvention' => $proteinA['namingConvention'],
                 'proteinAName' => $proteinA['name'],
                 'proteinBNamingConvention' => $proteinB['namingConvention'],
                 'proteinBName' => $proteinB['name'],
                 'pubmedId' => $this->getPubmedFromField($recordArray[8]),
-                'experimentalSystemType' => $recordArray[6] . ' ' . $recordArray[11]
+                'experimentalSystemType' => $expSysType
             );
         }
 
