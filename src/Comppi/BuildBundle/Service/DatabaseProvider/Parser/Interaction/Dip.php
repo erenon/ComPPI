@@ -63,18 +63,26 @@ class Dip extends AbstractInteractionParser
             assert(substr($names[0], 0, 4) == 'DIP-');
             // only DIP id found, drop record
             return false;
-        } else if (count($names) == 2) {
-            $name = substr($names[1], strlen('refseq:'));
-            return array (
-                'name' => $name,
-                'namingConvention' => 'refseq'
-            );
         } else {
-            $name = substr($names[2], strlen('uniprotkb:'));
-            return array (
-                'name' => $name,
-                'namingConvention' => 'UniProtKB-AC'
-            );
+            $refseqName = false;
+            foreach ($names as $name) {
+                // 10: "uniprotkb:"
+                if (substr($name, 0, 10) === "uniprotkb:") {
+                    return array (
+                        'name' => substr($name, 10),
+                        'namingConvention' => 'UniProtKB-AC'
+                    );
+
+                // 7: "refseq:"
+                } else if (substr($name, 0, 7) === "refseq:") {
+                    $refseqName = array (
+                        'name' => substr($name, 7),
+                        'namingConvention' => 'refseq'
+                    );
+                }
+            }
+
+            return $refseqName;
         }
     }
 
