@@ -68,9 +68,9 @@ class ConsensusPathDb extends AbstractInteractionParser
         $this->currentLine['proteinPair'] = $proteinPairArray;
 
         $this->currentRecord = array(
-            'proteinANamingConvention' => 'UniprotSwissprot',
+            'proteinANamingConvention' => 'UniProtKB-ID',
             'proteinAName' => $this->currentLine['proteinPair'][0][0],
-        	'proteinBNamingConvention' => 'UniprotSwissprot',
+        	'proteinBNamingConvention' => 'UniProtKB-ID',
             'proteinBName' => $this->currentLine['proteinPair'][0][1],
             'pubmedId' => $pubmedId,
             'experimentalSystemType' => $recordArray[0]
