@@ -178,7 +178,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <method>pTarget</method>
         <location>endoplasmic reticulum</location>
         <goid>GO:0005783</goid>
-        <evaluation>81.40</evaluation>
+        <evaluation>95.1</evaluation>
       </source>
       <source source_id="37">
         <method>WoLFPSORT</method>
