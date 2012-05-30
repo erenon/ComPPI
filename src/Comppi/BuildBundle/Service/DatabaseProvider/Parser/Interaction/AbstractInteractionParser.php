@@ -6,6 +6,7 @@ abstract class AbstractInteractionParser implements InteractionParserInterface
 {
     protected $fileName;
     protected $fileHandle = null;
+    /** TODO remove $hasHeader */
     protected $hasHeader = false;
     protected $currentIdx;
     protected $currentRecord;
@@ -58,6 +59,11 @@ abstract class AbstractInteractionParser implements InteractionParserInterface
     public function rewind() {
         if ($this->fileHandle == null) {
             $this->fileHandle = fopen($this->fileName, 'r');
+
+            if ($this->fileHandle === false) {
+                throw new \Exception('Failed to open file: ' . $this->fileName);
+            }
+
             $this->currentIdx = -1;
         } else {
             rewind($this->fileHandle);
