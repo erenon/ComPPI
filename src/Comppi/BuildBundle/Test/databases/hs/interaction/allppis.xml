@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entrySet xmlns="net:sf:psidev:mi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="net:sf:psidev:mi http://psidev.sourceforge.net/mi/xml/src/MIF.xsd" version="1" level="1">
+    <entry>
+        <source>
+            <names>
+                <shortLabel>MIPS</shortLabel>
+                <fullName>Munich Information Center for Protein Sequences</fullName>
+            </names>
+            <bibref>
+                <xref>
+                    <primaryRef db="Pubmed" id="9399795" />
+                </xref>
+            </bibref>
+        </source>
+        <interactionList>
+            <interaction>
+                <experimentList>
+                    <experimentDescription>
+                        <bibref>
+                            <xref>
+                                <primaryRef db="PubMed" id="9867828" />
+                            </xref>
+                        </bibref>
+                        <interactionDetection>
+                            <names>
+                                <shortLabel>two hybrid</shortLabel>
+                            </names>
+                            <xref>
+                                <primaryRef db="MI" id="0018" />
+                            </xref>
+                        </interactionDetection>
+                    </experimentDescription>
+                </experimentList>
+                <participantList>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>1</shortLabel>
+                                <fullName>S100A8;CAGA;MRP8; calgranulin A (migration inhibitory factor-related protein 8)</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="SP" id="P27005" />
+                            </xref>
+                            <organism ncbiTaxId="10090" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>2</shortLabel>
+                                <fullName>S100A9;CAGB;MRP14; calgranulin B (migration inhibitory factor-related protein 14)</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="SP" id="P31725" />
+                            </xref>
+                            <organism ncbiTaxId="10090" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                </participantList>
+            </interaction>
+            <interaction>
+                <experimentList>
+                    <experimentDescription>
+                        <bibref>
+                            <xref>
+                                <primaryRef db="PubMed" id="9867828" />
+                            </xref>
+                        </bibref>
+                        <interactionDetection>
+                            <names>
+                                <shortLabel>two hybrid</shortLabel>
+                            </names>
+                            <xref>
+                                <primaryRef db="MI" id="0018" />
+                            </xref>
+                        </interactionDetection>
+                    </experimentDescription>
+                </experimentList>
+                <participantList>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>2</shortLabel>
+                                <fullName>S100A9;CAGB;MRP14; calgranulin B (migration inhibitory factor-related protein 14)</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="SP" id="P31725" />
+                            </xref>
+                            <organism ncbiTaxId="10090" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>1</shortLabel>
+                                <fullName>S100A8;CAGA;MRP8; calgranulin A (migration inhibitory factor-related protein 8)</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="SP" id="P27005" />
+                            </xref>
+                            <organism ncbiTaxId="10090" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                </participantList>
+            </interaction>
+            <interaction>
+                <experimentList>
+                    <experimentDescription>
+                        <bibref>
+                            <xref>
+                                <primaryRef db="PubMed" id="9867828" />
+                            </xref>
+                        </bibref>
+                        <interactionDetection>
+                            <names>
+                                <shortLabel>two hybrid</shortLabel>
+                            </names>
+                            <xref>
+                                <primaryRef db="MI" id="0018" />
+                            </xref>
+                        </interactionDetection>
+                    </experimentDescription>
+                </experimentList>
+                <participantList>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>3</shortLabel>
+                                <fullName>S100A8;CAGA;MRP8; calgranulin A (migration inhibitory factor-related protein 8)</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="SP" id="P05109" />
+                            </xref>
+                            <organism ncbiTaxId="9606" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>4</shortLabel>
+                                <fullName>S100A9;CAGB;MRP14; calgranulin B (migration inhibitory factor-related protein 14)</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="SP" id="P06702" />
+                            </xref>
+                            <organism ncbiTaxId="9606" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                </participantList>
+            </interaction>
+            <interaction>
+                <experimentList>
+                    <experimentDescription>
+                        <bibref>
+                            <xref>
+                                <primaryRef db="PubMed" id="9867828" />
+                            </xref>
+                        </bibref>
+                        <interactionDetection>
+                            <names>
+                                <shortLabel>two hybrid</shortLabel>
+                            </names>
+                            <xref>
+                                <primaryRef db="MI" id="0018" />
+                            </xref>
+                        </interactionDetection>
+                    </experimentDescription>
+                </experimentList>
+                <participantList>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>4</shortLabel>
+                                <fullName>S100A9;CAGB;MRP14; calgranulin B (migration inhibitory factor-related protein 14)</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="SP" id="P06702" />
+                            </xref>
+                            <organism ncbiTaxId="9606" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>3</shortLabel>
+                                <fullName>S100A8;CAGA;MRP8; calgranulin A (migration inhibitory factor-related protein 8)</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="SP" id="P05109" />
+                            </xref>
+                            <organism ncbiTaxId="9606" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                </participantList>
+            </interaction>
+            <interaction>
+                <experimentList>
+                    <experimentDescription>
+                        <bibref>
+                            <xref>
+                                <primaryRef db="PubMed" id="10611319" />
+                            </xref>
+                        </bibref>
+                        <interactionDetection>
+                            <names>
+                                <shortLabel>copurification</shortLabel>
+                            </names>
+                            <xref>
+                                <primaryRef db="MI" id="0025" />
+                            </xref>
+                        </interactionDetection>
+                    </experimentDescription>
+                </experimentList>
+                <participantList>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>5</shortLabel>
+                                <fullName>TRP3; calcium influx channel protein</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="GB" id="U47050" />
+                            </xref>
+                            <organism ncbiTaxId="9606" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>6</shortLabel>
+                                <fullName>IP3R-3; inositol 1,4,5-trisphosphate receptor, type 3</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="GB" id="D26351" />
+                            </xref>
+                            <organism ncbiTaxId="9606" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                </participantList>
+            </interaction>
+            <interaction>
+                <experimentList>
+                    <experimentDescription>
+                        <bibref>
+                            <xref>
+                                <primaryRef db="PubMed" id="10611319" />
+                            </xref>
+                        </bibref>
+                        <interactionDetection>
+                            <names>
+                                <shortLabel>copurification</shortLabel>
+                            </names>
+                            <xref>
+                                <primaryRef db="MI" id="0025" />
+                            </xref>
+                        </interactionDetection>
+                    </experimentDescription>
+                </experimentList>
+                <participantList>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>6</shortLabel>
+                                <fullName>IP3R-3; inositol 1,4,5-trisphosphate receptor, type 3</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="GB" id="D26351" />
+                            </xref>
+                            <organism ncbiTaxId="9606" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>5</shortLabel>
+                                <fullName>TRP3; calcium influx channel protein</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="GB" id="U47050" />
+                            </xref>
+                            <organism ncbiTaxId="9606" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                </participantList>
+            </interaction>
+            <interaction>
+                <experimentList>
+                    <experimentDescription>
+                        <bibref>
+                            <xref>
+                                <primaryRef db="PubMed" id="10611319" />
+                            </xref>
+                        </bibref>
+                        <interactionDetection>
+                            <names>
+                                <shortLabel>coip: coimmunoprecipitation</shortLabel>
+                            </names>
+                            <xref>
+                                <primaryRef db="MI" id="0019" />
+                            </xref>
+                        </interactionDetection>
+                    </experimentDescription>
+                </experimentList>
+                <participantList>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>5</shortLabel>
+                                <fullName>TRP3; calcium influx channel protein</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="GB" id="U47050" />
+                            </xref>
+                            <organism ncbiTaxId="9606" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>6</shortLabel>
+                                <fullName>IP3R-3; inositol 1,4,5-trisphosphate receptor, type 3</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="GB" id="D26351" />
+                            </xref>
+                            <organism ncbiTaxId="9606" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                </participantList>
+            </interaction>
+            <interaction>
+                <experimentList>
+                    <experimentDescription>
+                        <bibref>
+                            <xref>
+                                <primaryRef db="PubMed" id="8649853" />
+                            </xref>
+                        </bibref>
+                        <interactionDetection>
+                            <names>
+                                <shortLabel>coip: coimmunoprecipitation</shortLabel>
+                            </names>
+                            <xref>
+                                <primaryRef db="MI" id="0019" />
+                            </xref>
+                        </interactionDetection>
+                    </experimentDescription>
+                </experimentList>
+                <participantList>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>7</shortLabel>
+                                <fullName>ARG;ABL2;ABLL; nonreceptor protein-tyrosine kinase Arg (Abelson family)</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="SP" id="P42684" />
+                            </xref>
+                            <organism ncbiTaxId="9606" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="0" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>8</shortLabel>
+                                <fullName>ArgBP1A; Arg protein tyrosine kinase binding protein</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="GB" id="X95632" />
+                            </xref>
+                            <organism ncbiTaxId="9606" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                </participantList>
+            </interaction>
+            <interaction>
+                <experimentList>
+                    <experimentDescription>
+                        <bibref>
+                            <xref>
+                                <primaryRef db="PubMed" id="10409740" />
+                            </xref>
+                        </bibref>
+                        <interactionDetection>
+                            <names>
+                                <shortLabel>coip: coimmunoprecipitation</shortLabel>
+                            </names>
+                            <xref>
+                                <primaryRef db="MI" id="0019" />
+                            </xref>
+                        </interactionDetection>
+                    </experimentDescription>
+                </experimentList>
+                <participantList>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>193</shortLabel>
+                                <fullName>SP1;TSFP1; transcription factor Sp1</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="SP" id="P08047" />
+                            </xref>
+                            <organism ncbiTaxId="9606" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>12</shortLabel>
+                                <fullName>HDAC1; histone deacetylase 1</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="SP" id="O09106" />
+                            </xref>
+                            <organism ncbiTaxId="10090" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="0" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                </participantList>
+            </interaction>
+            <interaction>
+                <experimentList>
+                    <experimentDescription>
+                        <bibref>
+                            <xref>
+                                <primaryRef db="PubMed" id="10409740" />
+                            </xref>
+                        </bibref>
+                        <interactionDetection>
+                            <names>
+                                <shortLabel>copurification</shortLabel>
+                            </names>
+                            <xref>
+                                <primaryRef db="MI" id="0025" />
+                            </xref>
+                        </interactionDetection>
+                    </experimentDescription>
+                </experimentList>
+                <participantList>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>193</shortLabel>
+                                <fullName>SP1;TSFP1; transcription factor Sp1</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="SP" id="P08047" />
+                            </xref>
+                            <organism ncbiTaxId="9606" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>12</shortLabel>
+                                <fullName>HDAC1; histone deacetylase 1</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="SP" id="O09106" />
+                            </xref>
+                            <organism ncbiTaxId="10090" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="0" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                </participantList>
+            </interaction>
+            <interaction>
+                <experimentList>
+                    <experimentDescription>
+                        <bibref>
+                            <xref>
+                                <primaryRef db="PubMed" id="10409740" />
+                            </xref>
+                        </bibref>
+                        <interactionDetection>
+                            <names>
+                                <shortLabel>copurification</shortLabel>
+                            </names>
+                            <xref>
+                                <primaryRef db="MI" id="0025" />
+                            </xref>
+                        </interactionDetection>
+                    </experimentDescription>
+                </experimentList>
+                <participantList>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>12</shortLabel>
+                                <fullName>HDAC1; histone deacetylase 1</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="SP" id="O09106" />
+                            </xref>
+                            <organism ncbiTaxId="10090" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="0" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                    <proteinParticipant>
+                        <proteinInteractor>
+                            <names>
+                                <shortLabel>193</shortLabel>
+                                <fullName>SP1;TSFP1; transcription factor Sp1</fullName>
+                            </names>
+                            <xref>
+                                <primaryRef db="SP" id="P08047" />
+                            </xref>
+                            <organism ncbiTaxId="9606" />
+                        </proteinInteractor>
+                        <confidence unit="boolean" value="1" />
+                        <isTaggedProtein>false</isTaggedProtein>
+                        <isOverexpressedProtein>false</isOverexpressedProtein>
+                    </proteinParticipant>
+                </participantList>
+            </interaction>        
+        </interactionList>
+    </entry>
+</entrySet>
