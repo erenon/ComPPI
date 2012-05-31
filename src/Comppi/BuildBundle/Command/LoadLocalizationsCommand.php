@@ -2,55 +2,28 @@
 
 namespace Comppi\BuildBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * @TODO create AbstractLoadCommand for the sake of DRY
- */
-class LoadLocalizationsCommand extends ContainerAwareCommand
+class LoadLocalizationsCommand extends AbstractLoadCommand
 {
-    private $specie;
-    private $databases;
-    private $proteinTranslator;
-    private $localizationTranslator;
+    protected $commandName = 'localizations';
 
-    /**
-     * @var Doctrine\DBAL\Connection
-     */
-    private $connection;
-
-    protected function configure() {
-        $this
-            ->setName('comppi:build:localizations')
-            ->addArgument('specie', InputArgument::REQUIRED, 'Specie abbreviation to load')
-        ;
-    }
+    protected $usedEntities = array(
+        'ProteinToLocalization' => 'WRITE',
+        'Protein' => 'WRITE',
+        'ProteinToDatabase' => 'WRITE',
+        'ProteinNameMap' => 'READ'
+    );
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
-        $container = $this->getContainer();
+        parent::initialize($input, $output);
 
-        $specie = $input->getArgument('specie');
-        if (!$specie) {
-            throw new \Exception("Please specify a specie");
-        }
-        $this->specie = $specie;
-
-        $databaseProvider = $container->get('comppi.build.databaseProvider');
-        $this->databases = $databaseProvider->getLocalizationsBySpecie($specie);
-
-        $this->proteinTranslator = $container->get('comppi.build.proteinTranslator');
-        $this->localizationTranslator = $container->get('comppi.build.localizationTranslator');
-        $this->connection = $this
-            ->getContainer()
-            ->get('doctrine.orm.default_entity_manager')
-            ->getConnection();
-
-        // avoid memory leak
-        $this->connection->getConfiguration()->setSQLLogger(null);
+        $this->databases = $this
+            ->databaseProvider
+            ->getLocalizationsBySpecie($this->specie);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -58,6 +31,8 @@ class LoadLocalizationsCommand extends ContainerAwareCommand
         $recordsPerTransaction = 500;
 
         $connection = $this->connection;
+
+        $this->openConnection();
 
         foreach ($this->databases as $database) {
             $parserName = explode('\\', get_class($database));
@@ -108,25 +83,7 @@ class LoadLocalizationsCommand extends ContainerAwareCommand
 
             $connection->commit();
         }
-    }
 
-    /**
-     * @TODO This method uses a mysql specific ON DUPLICATE KEY UPDATE clause
-     * This could be substituted with a select and a conditional insert
-     *
-     * @param string $sourceDb
-     * @param string $comppiId
-     * @param string $specie
-     */
-    private function addDatabaseRefToId($sourceDb, $comppiId, $specie) {
-        $proteinToDatabaseTable = 'ProteinToDatabase' . ucfirst($specie);
-
-        // insert ref only if not yet inserted
-        $this->connection->executeQuery(
-            'INSERT INTO ' .$proteinToDatabaseTable.
-            ' VALUES (?, ?)'.
-            ' ON DUPLICATE KEY UPDATE proteinId=proteinId',
-            array($comppiId, $sourceDb)
-        );
+        $this->closeConnection();
     }
 }

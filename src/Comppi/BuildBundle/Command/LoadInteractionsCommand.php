@@ -2,50 +2,28 @@
 
 namespace Comppi\BuildBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class LoadInteractionsCommand extends ContainerAwareCommand
+class LoadInteractionsCommand extends AbstractLoadCommand
 {
-    /**
-     * Collection of interaction databases
-     */
-    private $databases;
-    private $translator;
-    private $specie;
+    protected $commandName = 'interactions';
 
-    /**
-     * @var Doctrine\DBAL\Connection
-     */
-    private $connection;
-
-    protected function configure() {
-        $this
-            ->setName('comppi:build:interactions')
-            ->addArgument('specie', InputArgument::REQUIRED, 'Specie abbreviation to load')
-        ;
-    }
+    protected $usedEntities = array(
+        'Interaction' => 'WRITE',
+        'Protein' => 'WRITE',
+        'ProteinToDatabase' => 'WRITE',
+        'ProteinNameMap' => 'READ'
+    );
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
-        $container = $this->getContainer();
+        parent::initialize($input, $output);
 
-        $specie = $input->getArgument('specie');
-        if (!$specie) {
-            throw new \Exception("Please specify a specie");
-        }
-        $this->specie = $specie;
-
-        $databaseProvider = $container->get('comppi.build.databaseProvider');
-        $this->databases = $databaseProvider->getInteractionsBySpecie($specie);
-
-        $this->translator = $container->get('comppi.build.proteinTranslator');
-        $this->connection = $this
-            ->getContainer()
-            ->get('doctrine.orm.default_entity_manager')
-            ->getConnection();
+        $this->databases = $this
+            ->databaseProvider
+            ->getInteractionsBySpecie($this->specie);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -53,10 +31,9 @@ class LoadInteractionsCommand extends ContainerAwareCommand
         $recordsPerTransaction = 500;
 
         $connection = $this->connection;
-        $translator = $this->translator;
+        $translator = $this->proteinTranslator;
 
-        // avoid memory leak
-        $connection->getConfiguration()->setSQLLogger(null);
+        $this->openConnection();
 
         foreach ($this->databases as $database) {
             $parserName = explode('\\', get_class($database));
@@ -108,25 +85,7 @@ class LoadInteractionsCommand extends ContainerAwareCommand
 
             $connection->commit();
         }
-    }
 
-    /**
-     * @TODO This method uses a mysql specific ON DUPLICATE KEY UPDATE clause
-     * This could be substituted with a select and a conditional insert
-     *
-     * @param string $sourceDb
-     * @param string $comppiId
-     * @param string $specie
-     */
-    private function addDatabaseRefToId($sourceDb, $comppiId, $specie) {
-        $proteinToDatabaseTable = 'ProteinToDatabase' . ucfirst($specie);
-
-        // insert ref only if not yet inserted
-        $this->connection->executeQuery(
-            'INSERT INTO ' .$proteinToDatabaseTable.
-            ' VALUES (?, ?)'.
-            ' ON DUPLICATE KEY UPDATE proteinId=proteinId',
-            array($comppiId, $sourceDb)
-        );
+        $this->closeConnection();
     }
 }

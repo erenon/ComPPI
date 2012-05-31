@@ -2,36 +2,26 @@
 
 namespace Comppi\BuildBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class LoadMapsCommand extends ContainerAwareCommand
+class LoadMapsCommand extends AbstractLoadCommand
 {
-    private $maps;
-    private $specie;
+    protected $commandName = 'maps';
 
-    protected function configure() {
-        $this
-            ->setName('comppi:build:maps')
-            ->addArgument('specie', InputArgument::REQUIRED, 'Specie abbreviation to load')
-        ;
-    }
+    protected $usedEntities = array(
+        'Protein' => 'WRITE',
+        'ProteinNameMap' => 'WRITE'
+    );
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
-        $container = $this->getContainer();
+        parent::initialize($input, $output);
 
-        $databaseProvider = $container->get('comppi.build.databaseProvider');
-
-        $specie = $input->getArgument('specie');
-        if (!$specie) {
-            throw new \Exception("Please specify a specie");
-        }
-        $this->specie = $specie;
-        //$this->maps = $databaseProvider->getMaps();
-        $this->maps = $databaseProvider->getMapsBySpecie($specie);
+        $this->databases = $this
+            ->databaseProvider
+            ->getMapsBySpecie($this->specie);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -39,22 +29,18 @@ class LoadMapsCommand extends ContainerAwareCommand
 
         $recordsPerTransaction = 1000;
 
-        $connection = $this
-            ->getContainer()
-            ->get('doctrine.orm.default_entity_manager')
-            ->getConnection();
+        $connection = $this->connection;
 
-        // avoid memory leak
-        $connection->getConfiguration()->setSQLLogger(null);
+        $this->openConnection();
 
-        foreach ($this->maps as $map) {
-            $parserName = explode('\\', get_class($map));
+        foreach ($this->databases as $database) {
+            $parserName = explode('\\', get_class($database));
             $parserName = array_pop($parserName);
             $output->writeln('  > loading map: ' . $parserName);
 
             $recordIdx = 0;
             $connection->beginTransaction();
-            foreach ($map as $entry) {
+            foreach ($database as $entry) {
 
                 $connection->insert($entityName, $entry);
 
@@ -70,5 +56,7 @@ class LoadMapsCommand extends ContainerAwareCommand
             }
             $connection->commit();
         }
+
+        $this->closeConnection();
     }
 }
