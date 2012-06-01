@@ -141,7 +141,20 @@ class Locate extends AbstractLocalizationParser
     public function cdataHandler($parser, $data) {
         switch ($this->status) {
             case self::ST_READ_NAMING_CONVENTION:
-                $this->currentProtein['namingConvention'] = $data;
+                $namingConvention = $data;
+                switch ($namingConvention) {
+                    case 'Entrez Protein':
+                        $namingConvention = 'EntrezProtein';
+                        break;
+                    case 'RefSeq Protein':
+                        $namingConvention = 'refseq';
+                        break;
+                    case 'Ensembl-Peptide Human':
+                        $namingConvention = 'EnsemblPeptideId';
+                        break;
+                }
+
+                $this->currentProtein['namingConvention'] = $namingConvention;
                 $this->status = self::ST_PROTEIN;
                 break;
             case self::ST_READ_NAME:
