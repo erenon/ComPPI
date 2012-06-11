@@ -2,7 +2,6 @@ app/cache
 app/logs
 app/config/parameters.ini
 
-src/Acme
 vendor
 web/bundles
 
@@ -10,3 +9,10 @@ web/bundles
 .buildpath
 .project
 .settings
+
+databases/ce
+databases/dm
+databases/hs
+databases/sc
+
+databases2
