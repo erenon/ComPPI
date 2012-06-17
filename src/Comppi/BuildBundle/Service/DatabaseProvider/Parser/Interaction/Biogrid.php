@@ -5,10 +5,10 @@ namespace Comppi\BuildBundle\Service\DatabaseProvider\Parser\Interaction;
 class Biogrid extends AbstractInteractionParser
 {
     protected static $parsableFileNames = array(
-        'BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.1.81.tab2.txt',
-        'BIOGRID-ORGANISM-Drosophila_melanogaster-3.1.81.tab2.txt',
         'BIOGRID-ORGANISM-Homo_sapiens-3.1.81.tab2.txt',
-        'BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.1.81.tab2.txt'
+        'BIOGRID-ORGANISM-Drosophila_melanogaster-3.1.81.tab2.txt',
+        'BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.1.81.tab2.txt',
+        'BIOGRID-ORGANISM-Caenorhabditis_elegans-3.1.81.tab2.txt'
     );
 
     protected $headerCount = 1;
