@@ -18,16 +18,27 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
         'ProteinNameMap' => 'READ'
     );
 
+    /**
+     * @see execute
+     * @var Doctrine\DBAL\Driver\Statement
+     */
+    protected $insertLocalizationStatement = null;
+
     protected function initialize(InputInterface $input, OutputInterface $output) {
         parent::initialize($input, $output);
 
         $this->databases = $this
             ->databaseProvider
             ->getLocalizationsBySpecie($this->specie);
+
+        // init insert statement
+        $localizationEntityName = 'ProteinToLocalization' . ucfirst($this->specie);
+        $statement = "INSERT INTO " . $localizationEntityName .
+        	" VALUES ('', ?, ?, ?, ?, ?)";
+        $this->insertLocalizationStatement = $this->connection->prepare($statement);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $localizationEntityName = 'ProteinToLocalization' . ucfirst($this->specie);
         $recordsPerTransaction = 500;
 
         $connection = $this->connection;
@@ -43,6 +54,9 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
 
             $recordIdx = 0;
             $connection->beginTransaction();
+
+            // bind source name
+            $this->insertLocalizationStatement->bindValue(3, $sourceDb);
 
             foreach ($database as $localization) {
                 // get translated protein name
@@ -61,13 +75,11 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
 
                 $this->addDatabaseRefToId($sourceDb, $proteinComppiId, $this->specie);
 
-                $connection->insert($localizationEntityName, array(
-                    'proteinId' => $proteinComppiId,
-                    'localizationId' => $localizationId,
-                    'sourceDb' => $sourceDb,
-                    'pubmedId' => $localization['pubmedId'],
-                    'experimentalSystemType' => $localization['experimentalSystemType']
-                ));
+                $this->insertLocalizationStatement->bindValue(1, $proteinComppiId);
+                $this->insertLocalizationStatement->bindValue(2, $localizationId);
+                $this->insertLocalizationStatement->bindValue(4, $localization['pubmedId']);
+                $this->insertLocalizationStatement->bindValue(5, $localization['experimentalSystemType']);
+                $this->insertLocalizationStatement->execute();
 
                 // flush transaction
                 $recordIdx++;

@@ -96,6 +96,12 @@ abstract class AbstractLoadCommand extends ContainerAwareCommand
     }
 
     /**
+     * @see addDatabaseRefToId
+     * @var Doctrine\DBAL\Driver\Statement
+     */
+    protected $addDatababaseRefStatement = null;
+
+    /**
      * @TODO This method uses a mysql specific ON DUPLICATE KEY UPDATE clause
      * This could be substituted with a select and a conditional insert
      *
@@ -104,15 +110,21 @@ abstract class AbstractLoadCommand extends ContainerAwareCommand
      * @param string $specie
      */
     protected function addDatabaseRefToId($sourceDb, $comppiId, $specie) {
-        $proteinToDatabaseTable = 'ProteinToDatabase' . ucfirst($specie);
 
-        // insert ref only if not yet inserted
-        $this->connection->executeQuery(
-            'INSERT INTO ' .$proteinToDatabaseTable.
-            ' VALUES (?, ?)'.
-            ' ON DUPLICATE KEY UPDATE proteinId=proteinId',
-            array($comppiId, $sourceDb)
-        );
+        if ($this->addDatababaseRefStatement == null) { // init statement
+            $proteinToDatabaseTable = 'ProteinToDatabase' . ucfirst($specie);
+
+            // insert ref only if not yet inserted
+            $statement = 'INSERT INTO ' .$proteinToDatabaseTable.
+                ' VALUES (?, ?)'.
+                ' ON DUPLICATE KEY UPDATE proteinId=proteinId';
+
+            $this->addDatababaseRefStatement = $this->connection->prepare($statement);
+        }
+
+        $this->addDatababaseRefStatement->bindValue(1, $comppiId);
+        $this->addDatababaseRefStatement->bindValue(2, $sourceDb);
+        $this->addDatababaseRefStatement->execute();
     }
 
     protected function openConnection() {

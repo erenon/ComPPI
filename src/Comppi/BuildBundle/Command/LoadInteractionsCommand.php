@@ -18,16 +18,27 @@ class LoadInteractionsCommand extends AbstractLoadCommand
         'ProteinNameMap' => 'READ'
     );
 
+    /**
+     * @see execute
+     * @var Doctrine\DBAL\Driver\Statement
+     */
+    protected $insertInteractionStatement = null;
+
     protected function initialize(InputInterface $input, OutputInterface $output) {
         parent::initialize($input, $output);
 
         $this->databases = $this
             ->databaseProvider
             ->getInteractionsBySpecie($this->specie);
+
+        // init insert statement
+        $interactionEntityName = 'Interaction' . ucfirst($this->specie);
+        $statement = "INSERT INTO " . $interactionEntityName .
+        	" VALUES ('', ?, ?, ?, ?, ?)";
+        $this->insertInteractionStatement = $this->connection->prepare($statement);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $interactionEntityName = 'Interaction' . ucfirst($this->specie);
         $recordsPerTransaction = 500;
 
         $connection = $this->connection;
@@ -44,6 +55,9 @@ class LoadInteractionsCommand extends AbstractLoadCommand
 
             $recordIdx = 0;
             $connection->beginTransaction();
+
+            // bind source name
+            $this->insertInteractionStatement->bindValue(3, $sourceDb);
 
             foreach ($database as $interaction) {
                 // get proteinA name
@@ -63,13 +77,11 @@ class LoadInteractionsCommand extends AbstractLoadCommand
                 $this->addDatabaseRefToId($sourceDb, $proteinAComppiId, $this->specie);
                 $this->addDatabaseRefToId($sourceDb, $proteinBComppiId, $this->specie);
 
-                $connection->insert($interactionEntityName, array(
-                    'actorAId' => $proteinAComppiId,
-                    'actorBId' => $proteinBComppiId,
-                    'sourceDb' => $sourceDb,
-                    'pubmedId' => $interaction['pubmedId'],
-                    'experimentalSystemType' => $interaction['experimentalSystemType']
-                ));
+                $this->insertInteractionStatement->bindValue(1, $proteinAComppiId);
+                $this->insertInteractionStatement->bindValue(2, $proteinBComppiId);
+                $this->insertInteractionStatement->bindValue(4, $interaction['pubmedId']);
+                $this->insertInteractionStatement->bindValue(5, $interaction['experimentalSystemType']);
+                $this->insertInteractionStatement->execute();
 
                 // flush transaction
                 $recordIdx++;
