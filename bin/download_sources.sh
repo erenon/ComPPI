@@ -48,7 +48,10 @@ then
 fi
 
 # GO
-# TODO
+if [ ! -f mart_export.txt ]
+then
+    echo "HS GO database missing, please upload it manually"
+fi    
 
 # Human proteinpedia
 if [ ! -f HUPA_Localization_Data.txt ]
@@ -114,7 +117,7 @@ fi
 cd ../interaction
 
 # Biogrid
-# TODO
+# @see at the end of this file
 
 # CCSB
 if [ ! -f HI2_2011.tsv ]
@@ -131,7 +134,7 @@ then
 fi
 
 # DiP
-# TODO
+# @see at the end of this file
 
 # HomoMINT
 if [ ! -f homomint-full.mitab25.txt-binary.mitab26.txt ]
@@ -140,15 +143,25 @@ then
 fi
 
 # HPRD
-# TODO
+if [ ! -f BINARY_PROTEIN_PROTEIN_INTERACTIONS.txt ]
+then
+    # download zip
+    wget \
+    -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
+    http://www.hprd.org/edownload/HPRD_Release9_041310 \
+    -O ./hprd.tar.gz
+    
+    tar xvfz hprd.tar.gz HPRD_Release9_062910/BINARY_PROTEIN_PROTEIN_INTERACTIONS.txt
+    
+    mv HPRD_Release9_062910/BINARY_PROTEIN_PROTEIN_INTERACTIONS.txt ./BINARY_PROTEIN_PROTEIN_INTERACTIONS.txt
+    rm -r HPRD_Release9_062910
+    
+    # cleanup
+    rm hprd.tar.gz
+fi
 
 # IntAct
-# TODO @see intact-filter.sh
-#if [ ! -f ]
-#    wget ftp://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact.zip -O ./intact.zip
-#    unzip ./intact.zip
-#    rm ./intact.zip
-#fi   
+# @see at the end of this file   
 
 # Matrix
 if [ ! -f MatrixDB_20120420.txt ]
@@ -161,7 +174,7 @@ fi
 # MINT
 if [ ! -f 2012-02-06-mint-human-binary.mitab26.txt ]
 then
-    wget "ftp://mint.bio.uniroma2.it/pub/release/mitab26/current/2012-02-06-mint-human-binary.mitab26.txt"
+    wget "ftp://mint.bio.uniroma2.it/pub/release/mitab26/2012-02-06/2012-02-06-mint-human-binary.mitab26.txt"
 fi
 
 # MIPS
@@ -207,7 +220,10 @@ then
 fi  
 
 # GO
-# TODO 
+if [ ! -f mart_export.txt ]
+then
+    echo "DM GO database missing, please upload it manually"
+fi  
 
 # PaGOSUB
 if [ ! -f drosophila_melanogaster.csv ]
@@ -233,10 +249,10 @@ fi
 cd ../interaction 
 
 # Biogrid
-# TODO 
+# @see at the end of this file 
 
 # DiP
-# TODO
+# @see at the end of this file
 
 # DroID
 if [ ! -f finley_yth.txt ]
@@ -265,12 +281,12 @@ then
 fi
 
 # IntAct
-# TODO @see intact-filter.sh
+# @see at the end of this file
 
 # MINT
 if [ ! -f 2012-02-06-mint-Drosophila-binary.mitab26.txt ]
 then
-    wget ftp://mint.bio.uniroma2.it/pub/release/mitab26/current/2012-02-06-mint-Drosophila-binary.mitab26.txt
+    wget "ftp://mint.bio.uniroma2.it/pub/release/mitab26/2012-02-06/2012-02-06-mint-Drosophila-binary.mitab26.txt"
 fi
 
 cd ../../
@@ -311,6 +327,12 @@ then
     -O ./eSLDB_Caenorhabditis_elegans.txt
 fi
 
+# GO
+if [ ! -f mart_export.txt ]
+then
+    echo "CE GO database missing, please upload it manually"
+fi
+
 # Organelle
 if [ ! -f organelle_ce.txt ]
 then
@@ -335,7 +357,7 @@ fi
 cd ../interaction
 
 # Biogrid
-# TODO
+# @see at the end of this file
 
 # CCSB
 if [ ! -f wi8.txt ]
@@ -344,15 +366,15 @@ then
 fi
 
 # DiP
-# TODO
+# @see at the end of this file
 
 # IntAct
-# TODO @see intact-filter.sh
+# @see at the end of this file
 
 # MINT
 if [ ! -f 2012-02-06-mint-Caenorhabditis-binary.mitab26.txt ]
 then
-    wget ftp://mint.bio.uniroma2.it/pub/release/mitab26/current/2012-02-06-mint-Caenorhabditis-binary.mitab26.txt
+    wget "ftp://mint.bio.uniroma2.it/pub/release/mitab26/2012-02-06/2012-02-06-mint-Caenorhabditis-binary.mitab26.txt"
 fi
 
 cd ../../
@@ -394,7 +416,10 @@ then
 fi
 
 # GO
-# TODO
+if [ ! -f mart_export.txt ]
+then
+    echo "SC GO database missing, please upload it manually"
+fi  
 
 # Organelle
 if [ ! -f organelle_sc.txt ]
@@ -423,7 +448,7 @@ fi
 cd ../interaction
 
 # Biogrid
-# TODO
+# @see at the end of this file
 
 # CCSB
 if [ ! -f Y2H_union.txt ]
@@ -440,15 +465,115 @@ then
 fi
 
 # DiP
-# TODO
+# @see at the end of this file
 
 # IntAct
-# TODO @see intact-filter.sh
+# @see at the end of this file
 
 # MINT
 if [ ! -f 2012-02-06-mint-Saccharomyces-binary.mitab26.txt ]
 then
-    wget "ftp://mint.bio.uniroma2.it/pub/release/mitab26/current/2012-02-06-mint-Saccharomyces-binary.mitab26.txt"
+    wget "ftp://mint.bio.uniroma2.it/pub/release/mitab26/2012-02-06/2012-02-06-mint-Saccharomyces-binary.mitab26.txt"
 fi
 
 cd ../../
+
+# Biogrid
+if [ ! -f ./hs/interaction/BIOGRID-ORGANISM-Homo_sapiens-3.1.81.tab2.txt ] \
+|| [ ! -f ./dm/interaction/BIOGRID-ORGANISM-Drosophila_melanogaster-3.1.81.tab2.txt ] \
+|| [ ! -f ./sc/interaction/BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.1.81.tab2.txt ] \
+|| [ ! -f ./ce/interaction/BIOGRID-ORGANISM-Caenorhabditis_elegans-3.1.81.tab2.txt ]
+then
+    # download zip
+    if [ ! -f BIOGRID-ORGANISM-3.1.81.tab2.zip ]
+    then
+        wget "http://thebiogrid.org/downloads/archives/Release%20Archive/BIOGRID-3.1.81/BIOGRID-ORGANISM-3.1.81.tab2.zip"
+    fi
+    
+    # extract files
+    unzip BIOGRID-ORGANISM-3.1.81.tab2.zip BIOGRID-ORGANISM-Homo_sapiens-3.1.81.tab2.txt BIOGRID-ORGANISM-Drosophila_melanogaster-3.1.81.tab2.txt BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.1.81.tab2.txt BIOGRID-ORGANISM-Caenorhabditis_elegans-3.1.81.tab2.txt
+    
+    mv BIOGRID-ORGANISM-Homo_sapiens-3.1.81.tab2.txt ./hs/interaction/
+    mv BIOGRID-ORGANISM-Drosophila_melanogaster-3.1.81.tab2.txt ./dm/interaction/
+    mv BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.1.81.tab2.txt ./sc/interaction/
+    mv BIOGRID-ORGANISM-Caenorhabditis_elegans-3.1.81.tab2.txt ./ce/interaction/
+    
+    # remove zip
+    rm BIOGRID-ORGANISM-3.1.81.tab2.zip     
+fi
+
+# DiP
+if [ ! -f ./hs/interaction/Hsapi20120228.txt ] \
+|| [ ! -f ./dm/interaction/Dmela20120228.txt ] \
+|| [ ! -f ./sc/interaction/Scere20120228.txt ] \
+|| [ ! -f ./ce/interaction/Celeg20120228.txt ]
+then
+    # login
+    wget --save-cookies dip-cookies.txt \
+     --keep-session-cookies \
+     --post-data 'login=vAirDa99&pass=522QQ&lgn=1&Login=Login' \
+     -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
+     http://dip.doe-mbi.ucla.edu/dip/Login.cgi \
+     -O /dev/null
+     
+    # hs
+    if [ ! -f ./hs/interaction/Hsapi20120228.txt ]
+    then
+        wget --load-cookies dip-cookies.txt \
+        -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
+        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Hsapi20120228.txt \
+        -O ./hs/interaction/Hsapi20120228.txt
+    fi
+    
+    # dm
+    if [ ! -f ./dm/interaction/Dmela20120228.txt ]
+    then
+        wget --load-cookies dip-cookies.txt \
+        -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
+        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Dmela20120228.txt \
+        -O ./dm/interaction/Dmela20120228.txt
+    fi
+    
+    # sc
+    if [ ! -f ./sc/interaction/Scere20120228.txt ]
+    then
+        wget --load-cookies dip-cookies.txt \
+        -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
+        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Scere20120228.txt \
+        -O ./sc/interaction/Scere20120228.txt
+    fi
+    
+    # ce
+    if [ ! -f ./ce/interaction/Celeg20120228.txt ]
+    then
+        wget --load-cookies dip-cookies.txt \
+        -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
+        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Celeg20120228.txt \
+        -O ./ce/interaction/Celeg20120228.txt
+    fi
+    
+    # cleanup
+    rm dip-cookies.txt
+fi
+
+# IntAct
+if [ ! -f ./hs/interaction/intact-hs.txt ] \
+|| [ ! -f ./dm/interaction/intact-dm.txt ] \
+|| [ ! -f ./sc/interaction/intact-sc.txt ] \
+|| [ ! -f ./ce/interaction/intact-ce.txt ]
+then
+    if [ ! -f ./intact.zip ]
+    then
+        wget ftp://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact.zip -O ./intact.zip
+        unzip intact.zip
+    fi     
+    
+    grep "taxid:9606(Human)	taxid:9606(Human)" intact.txt > ./hs/interaction/intact-hs.txt
+    grep "taxid:7227(Fruit fly)	taxid:7227(Fruit fly)" intact.txt > ./dm/interaction/intact-dm.txt  
+    grep "taxid:559292(Saccharomyces cerevisiae S288c)	taxid:559292(Saccharomyces cerevisiae S288c)" intact.txt > ./sc/interaction/intact-sc.txt
+    grep "taxid:6239(Caenorhabditis elegans)	taxid:6239(Caenorhabditis elegans)" intact.txt > ./ce/interaction/intact-ce.txt
+    
+    # cleanup
+    rm intact.txt
+    rm intact.zip 
+fi
