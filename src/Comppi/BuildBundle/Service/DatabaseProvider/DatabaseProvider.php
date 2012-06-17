@@ -7,10 +7,17 @@ use Symfony\Component\Finder\Finder;
 class DatabaseProvider
 {
     private $rootDir;
+
+    /**
+     * Logger instance
+     * @var Symfony\Component\HttpKernel\Log\LoggerInterface
+     */
+    private $logger;
     private $mapParsers;
 
-    public function __construct($databaseRootDir) {
+    public function __construct($databaseRootDir, $logger) {
         $this->rootDir = $databaseRootDir;
+        $this->logger = $logger;
     }
 
     public function getMapsBySpecie($specie) {
@@ -21,14 +28,14 @@ class DatabaseProvider
 
         // available parsers
         $mapParsers = $this->getParsers(
-            __DIR__ . '/Parser/Map', 
-            __NAMESPACE__ . '\Parser\Map\\', 
+            __DIR__ . '/Parser/Map',
+            __NAMESPACE__ . '\Parser\Map\\',
             __NAMESPACE__ . '\Parser\Map\MapParserInterface'
         );
-        
+
         return $this->getParsersInstancesWithFiles($mapParsers, $mapFiles);
     }
-    
+
     public function getInteractionsBySpecie($specie) {
         // get interaction database paths
         $interactionRoot = $this->rootDir . '/' . $specie . '/interaction/';
@@ -37,63 +44,70 @@ class DatabaseProvider
 
         // available parsers
         $interactionParsers = $this->getParsers(
-            __DIR__ . '/Parser/Interaction', 
-            __NAMESPACE__ . '\Parser\Interaction\\', 
+            __DIR__ . '/Parser/Interaction',
+            __NAMESPACE__ . '\Parser\Interaction\\',
             __NAMESPACE__ . '\Parser\Interaction\InteractionParserInterface'
         );
-        
-        return $this->getParsersInstancesWithFiles($interactionParsers, $interactionFiles);        
+
+        return $this->getParsersInstancesWithFiles($interactionParsers, $interactionFiles);
     }
-    
+
     public function getLocalizationsBySpecie($specie) {
         // get localization database paths
         $localizationRoot = $this->rootDir . '/' . $specie . '/localization/';
         $localizationFiles = new Finder();
         $localizationFiles->files()->in($localizationRoot);
-        
+
         // available parsers
         $localizationParsers = $this->getParsers(
-            __DIR__ . '/Parser/Localization', 
-            __NAMESPACE__ . '\Parser\Localization\\', 
+            __DIR__ . '/Parser/Localization',
+            __NAMESPACE__ . '\Parser\Localization\\',
             __NAMESPACE__ . '\Parser\Localization\LocalizationParserInterface'
         );
-        
+
         return $this->getParsersInstancesWithFiles($localizationParsers, $localizationFiles);
     }
-    
+
     private function getParsers($parserDir, $parserNamespace, $parserInterface) {
         $parsers = array();
         $parserFiles = new Finder();
         $parserFiles->files()->name('*.php')->in($parserDir);
-        
+
         foreach ($parserFiles as $parserFile) {
             $classname = $parserNamespace . basename($parserFile->getRealpath(), '.php');
-            
+
             if (class_exists($classname)) {
                 $reflection = new \ReflectionClass($classname);
-                
+
                 if ($reflection->isInstantiable()
                 &&  $reflection->implementsInterface($parserInterface)) {
                     $parsers[] = $classname;
                 }
             }
         }
-        
+
         return $parsers;
     }
-    
-    
+
+
     private function getParsersInstancesWithFiles($parsers, $files) {
         // pass filenames to matching parsers
         $instances = array();
         foreach ($files as $file) {
+            $parserFound = false;
+
             foreach ($parsers as $parser) {
                 if ($parser::canParseFilename(basename($file))) {
                     $instances[] = new $parser($file);
+                    $parserFound = true;
                 }
             }
+
+            if ($parserFound === false) {
+                $this->logger->notice('No parser found for source: \'' . $file . '\'');
+            }
         }
-        
-        return $instances;        
+
+        return $instances;
     }
 }
