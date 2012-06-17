@@ -56,10 +56,11 @@ fi
 # Human proteinpedia
 if [ ! -f HUPA_Localization_Data.txt ]
 then
-    wget http://www.humanproteinpedia.org/HuPA_Download/FULL/HUPA_RELEASE_2.0.zip -O ./humanProteinpedia.zip
-    unzip humanProteinpedia.zip
-    rm humanProteinpedia.zip
+    wget http://www.humanproteinpedia.org/HuPA_Download/FULL/HUPA_Localization_Data.txt.gz -O ./hupa.gz
+    gzip -d -N ./hupa.gz
+    rm ./hupa.gz
 fi
+
 
 # LOCATE
 if [ ! -f LOCATE_human_v6_20081121.xml ]   
