@@ -39,7 +39,7 @@ class HumanProteinpedia extends AbstractLocalizationParser
 
         $this->currentRecord = array(
             'proteinId' => $recordArray[1],
-            'namingConvention' => 'Hrpd',
+            'namingConvention' => 'Hprd',
             'localization' => $this->getGoCodeByLocalizationName($recordArray[3]),
             'pubmedId' => 19718509,
             'experimentalSystemType' => 'Experiment Type (experimental)'
