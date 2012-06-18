@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>No interaction source found</source>
+                <target>No interaction source found</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>Database Name</source>
+                <target>Database Name-trans</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>Protein Count</source>
+                <target>Protein Count</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>Interaction Count</source>
+                <target>Interaction Count</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>Localization Count</source>
+                <target>Localization Count</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>No localization source found</source>
+                <target>No localization source found</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>Localizations</source>
+                <target>Localizations</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>Localization</source>
+                <target>Localization</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>No localization found</source>
+                <target>No localization found</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>Available species</source>
+                <target>Available species</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>Naming Conventions</source>
+                <target>Naming Conventions</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>Naming Convention</source>
+                <target>Naming Convention</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>No naming convention found</source>
+                <target>No naming convention found</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source></source>
+                <target></target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source></source>
+                <target></target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source></source>
+                <target></target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source></source>
+                <target></target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source></source>
+                <target></target>
+            </trans-unit>
+            
+            <trans-unit id="19">
+                <source></source>
+                <target></target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source></source>
+                <target></target>
+            </trans-unit>
+            
+        </body>
+    </file>
+</xliff>

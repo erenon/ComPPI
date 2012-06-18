@@ -1,0 +1,15 @@
+{% extends 'StatBundle::base.html.twig' %}
+
+{% block title %}Sources{% endblock %}
+
+{% block body %}
+
+<h2>{% trans %}Available species{% endtrans %}</h2>
+
+<ul>
+{% for abbr, specie in species %}
+    <li><a href="{{ path('stat_source_specie', { 'specie': abbr }) }}">{{ specie }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

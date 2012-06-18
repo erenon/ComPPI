@@ -1,0 +1,38 @@
+{% extends 'StatBundle::base.html.twig' %}
+
+{% block title %}Localizations{% endblock %}
+
+{% block body %}
+
+{% for localizations in specieLocalizationStats %}
+
+<div class="headline">
+<h2>{{ localizations.specieName }}</h2><h3> - {% trans %}Localizations{% endtrans %}</h3>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <td>{% trans %}Localization{% endtrans %}</td>
+            <td class="tcell-numeric">{% trans %}Protein Count{% endtrans %}</td>
+        </tr> 
+    </thead>
+    <tbody>
+{% for localization in localizations.stat %}
+    <tr>
+        <td>{{ localization.localizationName }}</td>
+        <td class="tcell-numeric">{{ localization.proteinCount }}</td>
+    </tr>    
+{% else %}
+<div class="message message-notice">
+{% trans %}
+No localization found
+{% endtrans %}
+</div>
+{% endfor %}
+    </tbody>
+</table>
+
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>{% block title %}Stat{% endblock %} | Stat | ComPPI</title>
+        {% stylesheets
+            '@StatBundle/Resources/public/css/*'
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+        <div id="head">
+            <h1>ComPPI<span>Stat</span></h1>
+            <ul id="site-nav">
+                <li><a href="{{ path('stat_source_index') }}">Sources</a></li>
+                <li><a href="#">Interactions</a></li>
+                <li><a href="{{ path('stat_localization_index') }}">Localizations</a></li>
+                <li><a href="{{ path('stat_naming_index') }}">Naming conventions</a></li>
+                <li><a href="#">Visualization</a></li>
+            </ul>
+        </div>
+        <div id="content">
+        {% block body %}{% endblock %}
+        </div>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>
