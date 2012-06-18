@@ -192,6 +192,15 @@ then
     wget http://www.compbio.dundee.ac.uk/www-pips/downloads/PredictedInteractions1000.txt
 fi 
 
+### Maps
+
+if [ ! -d ../map ] 
+then
+    mkdir -p ../map
+fi
+
+cd ../map
+
 cd ../../
 
 ###
@@ -290,6 +299,15 @@ then
     wget "ftp://mint.bio.uniroma2.it/pub/release/mitab26/2012-02-06/2012-02-06-mint-Drosophila-binary.mitab26.txt"
 fi
 
+### Maps
+
+if [ ! -d ../map ] 
+then
+    mkdir -p ../map
+fi
+
+cd ../map
+
 cd ../../
 
 ###
@@ -377,6 +395,15 @@ if [ ! -f 2012-02-06-mint-Caenorhabditis-binary.mitab26.txt ]
 then
     wget "ftp://mint.bio.uniroma2.it/pub/release/mitab26/2012-02-06/2012-02-06-mint-Caenorhabditis-binary.mitab26.txt"
 fi
+
+### Maps
+
+if [ ! -d ../map ] 
+then
+    mkdir -p ../map
+fi
+
+cd ../map
 
 cd ../../
 
@@ -477,7 +504,18 @@ then
     wget "ftp://mint.bio.uniroma2.it/pub/release/mitab26/2012-02-06/2012-02-06-mint-Saccharomyces-binary.mitab26.txt"
 fi
 
+### Maps
+
+if [ ! -d ../map ] 
+then
+    mkdir -p ../map
+fi
+
+cd ../map
+
 cd ../../
+
+### Other sources
 
 # Biogrid
 if [ ! -f ./hs/interaction/BIOGRID-ORGANISM-Homo_sapiens-3.1.81.tab2.txt ] \
