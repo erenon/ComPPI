@@ -59,3 +59,8 @@
     git=http://github.com/symfony/AsseticBundle.git
     target=/bundles/Symfony/Bundle/AsseticBundle
     version=v1.0.1
+    
+[lessphp]
+    git=https://github.com/leafo/lessphp.git
+    target=/lessphp
+    version=v0.3.2
