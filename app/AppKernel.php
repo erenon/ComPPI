@@ -19,7 +19,9 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new Comppi\DownloadBundle\DownloadBundle(),
             new Comppi\BuildBundle\BuildBundle(),
-            new Comppi\StatBundle\StatBundle(),
+			new Comppi\ProteinSearchBundle\ComppiProteinSearchBundle(),
+            new Comppi\DescriptionBundle\ComppiDescriptionBundle(),            
+			new Comppi\StatBundle\StatBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

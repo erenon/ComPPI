@@ -1,0 +1,7 @@
+parameters:
+#    comppi_protein_search.example.class: Comppi\ProteinSearchBundle\Example
+
+services:
+#    comppi_protein_search.example:
+#        class: %comppi_protein_search.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

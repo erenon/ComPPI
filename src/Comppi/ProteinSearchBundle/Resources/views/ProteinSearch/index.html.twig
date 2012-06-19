@@ -1,0 +1,15 @@
+{# src/Comppi/ProteinSearchBundle/Resources/views/index.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %}ComPPI - Search Protein Interactions{% endblock %}
+
+{% block bundlecontent %}
+	{# protein A - protein B #}
+	<table>
+		{% for p in ls %}
+		<tr><td>{{ p.name }}</td></tr>
+		{% endfor %}
+	</table>
+	
+
+{% endblock %}

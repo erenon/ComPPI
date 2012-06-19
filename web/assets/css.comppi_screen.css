@@ -1,0 +1,15 @@
+html {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+body {
+    background: url("") repeat-x scroll left top #2A2A2A;
+    font-family: arial,sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+
+#MainMenu {}
+#MainMenu li {}

@@ -1,3 +1,12 @@
+ComppiDescriptionBundle:
+    resource: "@ComppiDescriptionBundle/Resources/config/routing.yml"
+    prefix:   /
+    defaults: { _controller: DescriptionBundle:Description:About }
+
+ComppiProteinSearchBundle:
+    resource: "@ComppiProteinSearchBundle/Resources/config/routing.yml"
+    prefix:   /protein_search/
+
 StatBundle:
     resource: "@StatBundle/Controller/"
     type:     annotation
