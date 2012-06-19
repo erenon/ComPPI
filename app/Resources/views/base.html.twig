@@ -4,22 +4,35 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>{% block title %}ComPPI - The Compartmentalized Protein-Protein Interaction Database{% endblock %}</title>
         {% block stylesheets %}
-		<link href="{{ asset('css/css.comppi_screen.css') }}" type="text/css" rel="stylesheet" />
+		<link href="http://fonts.googleapis.com/css?family=Cuprum:regular" rel="stylesheet" type="text/css" />
+		<link href="{{ asset('assets/css.comppi_screen.css') }}" type="text/css" rel="stylesheet" />
+		{% endblock %}
+		{% block javascripts %}
+		<script type="text/javascript" src="{{ asset('assets/jquery-1.5.2.min.js') }}"></script>
 		{% endblock %}
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
 		<!-- <base href="http://linkgroup.hu/comppi/" /> -->
     </head>
     <body>
-		{% block menu %}                    
-		<ul id="MainMenu">
-			<li><a href="{{ path('ComppiProteinSearchBundle_index') }}">Protein Search</a></li>
-			<li><a href="#">Download DB</a></li>
-			<li><a href="{{ path('ComppiDescriptionBundle_about') }}">About</a></li>
-			<li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li>
-		</ul>
+		{% block header %}
+		<div id="Header">
+		<h1 id="Logo">ComPPI</h1>
+		<div id="MainMenu">
+			<a href="{{ path('ComppiProteinSearchBundle_index') }}">Protein Search</a> |
+			<a href="#">Download DB</a></li> |
+			<a href="{{ path('ComppiDescriptionBundle_about') }}">About</a> |
+			<a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a>
+		</div>
+		</div>
 		{% endblock %}
-		
+
+		<div id="Content">
         {% block bundlecontent %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+		</div>
+		
+		<div class="btn">AAAA</div>
+        
+		
+		
     </body>
 </html>
