@@ -1,13 +1,37 @@
-{# src/Comppi/ProteinSearchBundle/Resources/views/index.html.twig #}
+{# src/Comppi/ProteinSearchBundle/Resources/views/proteinsearch.html.twig #}
 {% extends '::base.html.twig' %}
 
-{% block title %}ComPPI - Search Protein Interactions{% endblock %}
+{% block title %}ComPPI - Search Protein Interactions - The Compartmentalized Protein-Protein Interaction Database{% endblock %}
 
 {% block bundlecontent %}
+	<p>{{ sql }}</p>
+	
+	<form>
+		<label>Protein Name:</label><input type="text" name="fProteinSearchKeyword" id="fProteinSearchKeyword" value="" />
+		<input class="btn" type="submit" value="Submit Search" />
+		<input class="btn" id="AdvSearchBtn" type="button" value="Open Advanced" />
+		<div id="AdvSearchFrame">
+			<label>Species:</label>
+			<input type="button" name="fSpeciesHuman" id="fSpeciesHuman" class="btn" value="H. sapiens" />
+			<input type="button" name="fSpeciesDrosophila" id="fSpeciesDrosophila" class="btn" value="D. melanogaster" />
+			<input type="button" name="fSpeciesElegans" id="fSpeciesElegans" class="btn" value="C. elegans" />
+			<input type="button" name="fSpeciesYeast" id="fSpeciesYeast" class="btn" value="S. cerevisiae" />
+			
+			<br /><label>Localization:</label>
+			<select>
+				<option>Nucleus</option>
+			</select>
+
+			<br /><label>Multiple protein names (each in a new row):</label>
+			<br /><textarea cols="50" rows="10"></textarea>
+		</div>
+	</form>
+	
 	{# protein A - protein B #}
-	<table>
+	<table id="ProteinSearchResultsTbl" class="hovered_list">
+		<tr class="not_hovered_line"><th>Protein A</th><th>Localization A</th><th>Protein B</th><th>Localization B</th></tr>
 		{% for p in ls %}
-		<tr><td>{{ p.name }}</td></tr>
+		<tr><td>{{ p.protA }}</td><td>{{ p.locA }}</td><td>{{ p.protB }}</td><td>{{ p.locB }}</td></tr>
 		{% endfor %}
 	</table>
 	
