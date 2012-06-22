@@ -1,7 +1,10 @@
-@dark_bg_color: #4E4D4A;
-@light_fg_color: #2790B0;
-@fg_color_a: #94BA65;
-@fg_color_b: #648A35;
+@color_grey: #444;
+@color_grey_dark: #4E4D4A;
+@color_grey_light: #F0F0F0;
+
+@color_green: #94BA65;
+@color_green_dark: #648A35;
+@color_green_light: #B4DA85;
 
 body {
     font-family: "Avant Garde";
@@ -15,7 +18,7 @@ body {
 }
 
 a {
-    color: @fg_color_b;
+    color: @color_green_dark;
 }
 
 /*
@@ -23,10 +26,10 @@ a {
  */
  
 #head {
-    background: @fg_color_a;
+    background: @color_green;
     color: #fff;
     padding: 1px 15px; 
-    border-bottom: 1px solid @fg_color_b;
+    border-bottom: 1px solid @color_green_dark;
 
 	h1 {
 	    font-size: 2em;
@@ -35,25 +38,31 @@ a {
 	
 		span {
 		    font-weight: 200;
-		    color: @fg_color_b;    
+		    color: @color_green_dark;    
 		}
 	}
 }
 
 /*
- * SITE NAV
+ * NAVIGATION / SITE NAV / SUB NAV
  */
+ 
+ul.navigation {
+    padding: 0; 
+    list-style: none;
+    
+    li {
+        display: inline;
+    }    
+}
 
 #site-nav {
     margin: 0 0 10px 0;
-    padding: 0; 
-    list-style: none;
     font-size: 1.2em;
 
 
 	li {
 	    /*float: left;*/
-	    display: inline;
 	    padding: 0 5px 0 0;
 	    
         a {
@@ -69,11 +78,41 @@ a {
 	
 	li:before {
 	    content: '|   ';
-	    color: @dark_bg_color;
+	    color: @color_grey_dark;
 	}
 	
 	li:first-child:before {
 	    content: '';
+	}
+}
+
+#sub-nav {
+    background: @color_green_dark;
+    margin: 0 -15px;
+    padding: 0.3em 0 0.3em 15px;
+    border-top: 1px solid @color_grey;
+
+    li {
+        margin: 0.2em 0 0 0;
+        a {
+            color: @color_green_light;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            color: #fff;
+        }
+    }
+    
+	li:before {
+	    content: " · ";
+	    color: @color_grey;
+	    margin: 0 0.3em;
+	}
+	
+	li:first-child:before {
+	    content: '';
+	    margin: 0;
 	}
 }
     
@@ -98,7 +137,7 @@ h3 {
     font-size: 1.8em;
     font-weight: 200;
     font-family: "Trebuchet MS", sans;
-    color: #444;
+    color: @color_grey;
 }
 
 /*
@@ -112,7 +151,7 @@ table {
 thead {
     font-weight: 700;
     color: #fff;
-    background: @dark_bg_color;   
+    background: @color_grey_dark;   
 }
 
 td {
@@ -125,9 +164,9 @@ td.tcell-numeric {
 }
 
 tbody tr:nth-child(2n) {
-    background: #f0f0f0;    
+    background: @color_grey_light;    
 }
 
 tbody tr:hover {
-    background: @fg_color_a;   
+    background: @color_green_light;   
 }
