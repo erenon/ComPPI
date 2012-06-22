@@ -25,6 +25,10 @@ body  {
 	line-height: 150%;
 	color:  #000;
 }
+a { color: #007000; text-decoration: none; font-weight: bold; }
+a:hover { color: #CC0000; }
+a:visited { text-decoration: underline; }
+.hovered_listline { background-color: #e0e0e0; }
 
 .btn, .btn_green {
 	margin: 2px;
@@ -38,6 +42,22 @@ body  {
 .btn_green { color: #E1FFCE; background: url("btn_bg_green.png") #307500; border: 1px solid #228800; }
 .btn a { color: #E0DFDC; text-decoration: none; }
 .btn a:hover, .btn:hover, .btn_green:hover { color: #fff; }
+
+.help {}
+.help_details {}
+.infobtn {
+	/*display: block;
+	float: right;
+	width: 22px;
+	height: 22px;
+	background: url("btn_bg.png") #3c3b37; color: #E0DFDC;
+	border-radius: 11px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;*/
+}
+.infobtn a { color: #E0DFDC; text-decoration: none; }
+.infobtn a:hover { color: #fff; }
+
 label { margin: 2px; width: 180px; }
 input, select, textarea {
 	margin: 2px;
@@ -48,9 +68,9 @@ input, select, textarea {
 	-khtml-border-radius: 5px;
 }
 /*input[type='checkbox'] { padding: 8px; }*/
-#fProteinSearchKeyword { width: 505px; }
 
-.hovered_listline { background-color: #e0e0e0; }
+/* PROTEIN SEARCH */
+#fProteinSearchKeyword { width: 505px; }
 
 #ProteinSearchResultsTbl {
 	margin-top: 1em;
@@ -64,3 +84,6 @@ input, select, textarea {
 	border-bottom: 1px solid #909090;
 }
 #ProteinSearchResultsTbl td { padding: 0 5px; }
+
+/* DOWNLOAD DB */
+#DownloadForm { text-align: center; }

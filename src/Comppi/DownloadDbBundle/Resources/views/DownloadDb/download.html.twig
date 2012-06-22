@@ -1,1 +1,25 @@
-Hello!
+{# src/Comppi/DownloadDbBundle/Resources/views/download.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %}ComPPI - Search Protein Interactions - The Compartmentalized Protein-Protein Interaction Database{% endblock %}
+
+{% block bundlecontent %}
+	<p class="help">The compartmentalized protein-protein interaction database can be downloaded here. [<a href="">Details</a>]</p>
+	
+	<form id="DownloadForm">
+		<input type="button" name="fDownloadSpecHs" id="fDownloadSpecHs" class="btn" value="H. sapiens" />
+		<input type="button" name="fDownloadSpecDm" id="fDownloadSpecDm" class="btn" value="D. melanogaster" />
+		<input type="button" name="fDownloadSpecCe" id="fDownloadSpecCe" class="btn" value="C. elegans" />
+		<input type="button" name="fDownloadSpecSc" id="fDownloadSpecSc" class="btn" value="S. cerevisiae" />
+		
+		<br />
+		<input type="button" name="fDownloadIntByLoc" id="fDownloadIntByLoc" class="btn" value="Interactions By Localizations" />
+		<input type="button" name="fDownloadInts" id="fDownloadInts" class="btn" value="Interactions" />
+		<input type="button" name="fDownloadLocs" id="fDownloadLocs" class="btn" value="Localizations" />
+		<input type="button" name="fDownloadFull" id="fDownloadFull" class="btn" value="Full DB" />
+
+		<br /><input type="submit" name="fDownloadSubmit" id="fDownloadSubmit" class="btn" value="Start Download" />
+	</form>
+	
+
+{% endblock %}
