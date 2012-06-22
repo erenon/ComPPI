@@ -1,0 +1,3 @@
+ComppiDownloadDbBundle_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: ComppiDownloadDbBundle:Default:index }
