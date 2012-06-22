@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class ProteinSearchController extends Controller
 {
 
-    public function IndexAction($protein_name = '')
+    public function proteinSearchAction($protein_name = '')
     {
         // the less the array dimensions, the less the memory consumption is
         $Hs_ids = array(); // comppi ID for H. sapiens proteins
