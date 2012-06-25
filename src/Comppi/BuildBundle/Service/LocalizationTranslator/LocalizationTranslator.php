@@ -15,6 +15,7 @@ class LocalizationTranslator
 
     private function loadLocalizations($fileName) {
         $handle = fopen($fileName, 'r');
+        $lineIndex = 0;
 
         if ($handle === false) {
             throw new \Exception("Failed to open localization tree file: '" . $fileName . "'");
@@ -27,6 +28,7 @@ class LocalizationTranslator
         $currentIdent = 0;
 
         while (($line = fgets($handle)) !== false) {
+            $lineIndex++;
             $line = trim($line);
             if (empty($line)) {
                 continue;
@@ -45,7 +47,9 @@ class LocalizationTranslator
                 $nextId++;
 
             } else if ($ident > $currentIdent) {
-                assert($currentIdent + 1 == $ident);
+                if ($currentIdent + 1 != $ident) {
+                    throw new \InvalidArgumentException('Invalid ident in loc tree at line: ' . $lineIndex);
+                }
 
                 $this->addLocalization($goCode, $nextId, $humanReadable);
                 $nextId++;
