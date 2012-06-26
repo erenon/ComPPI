@@ -2,8 +2,11 @@
 
 #Builds database
 
+defaultEnv="test"
+env=${1:-$defaultEnv}
+
 dir="$( cd "$( dirname "$0" )" && pwd )"
-console=$dir"/../app/console --env=test"
+console=$dir"/../app/console --env=$env"
 
 echo "Drop database schema"
 php $console doctrine:schema:drop --force
