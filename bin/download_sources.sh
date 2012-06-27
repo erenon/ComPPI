@@ -48,9 +48,9 @@ then
 fi
 
 # GO
-if [ ! -f mart_export.txt ]
+if [ ! -f go_hs.csv ]
 then
-    echo "HS GO database missing, please upload it manually"
+    echo "HS GO database missing, please upload it manually as go_hs.csv"
 fi    
 
 # Human proteinpedia
@@ -230,9 +230,9 @@ then
 fi  
 
 # GO
-if [ ! -f mart_export.txt ]
+if [ ! -f go_dm.csv ]
 then
-    echo "DM GO database missing, please upload it manually"
+    echo "DM GO database missing, please upload it manually as go_dm.csv"
 fi  
 
 # PaGOSUB
@@ -347,9 +347,9 @@ then
 fi
 
 # GO
-if [ ! -f mart_export.txt ]
+if [ ! -f go_ce.csv ]
 then
-    echo "CE GO database missing, please upload it manually"
+    echo "CE GO database missing, please upload it manually as go_ce.csv"
 fi
 
 # Organelle
@@ -444,9 +444,9 @@ then
 fi
 
 # GO
-if [ ! -f mart_export.txt ]
+if [ ! -f go_sc.csv ]
 then
-    echo "SC GO database missing, please upload it manually"
+    echo "SC GO database missing, please upload it manually as go_sc.csv"
 fi  
 
 # Organelle
