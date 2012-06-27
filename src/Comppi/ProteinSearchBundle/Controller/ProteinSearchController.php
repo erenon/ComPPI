@@ -35,9 +35,9 @@ class ProteinSearchController extends Controller
 				while ( $p = $results->fetch() ) {
 					$T['ls'][] = array(
 						'protA' => $p['protA'],
-						'locA' => (empty($p['locAId']) ? 'N/A' : $locs->getLocalizationById($p['locAId'])),
+						'locA' => (empty($p['locAId']) ? 'N/A' : $locs->getHumanReadableLocalizationById($p['locAId'])),
 						'protB' => $p['protB'],
-						'locB' => (empty($p['locBId']) ? 'N/A' : $locs->getLocalizationById($p['locBId'])),
+						'locB' => (empty($p['locBId']) ? 'N/A' : $locs->getHumanReadableLocalizationById($p['locBId'])),
 					);
 				}
             }
