@@ -4,12 +4,12 @@
 
 bin_dir="$( cd "$( dirname "$0" )" && pwd )"
 
-if [ ! -d $bin_dir/../databases2 ] 
+if [ ! -d $bin_dir/../databases ] 
 then
-    mkdir -p $bin_dir/../databases2
+    mkdir -p $bin_dir/../databases
 fi
 
-cd $bin_dir/../databases2
+cd $bin_dir/../databases
 
 ###
 # Homo Sapiens
