@@ -57,6 +57,7 @@ a:visited { text-decoration: underline; }
 }
 .infobtn a { color: #E0DFDC; text-decoration: none; }
 .infobtn a:hover { color: #fff; }
+.btn_src { font-size: 12px; padding: 0 8px; }
 
 label { margin: 2px; width: 180px; }
 input, select, textarea {
