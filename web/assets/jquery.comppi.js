@@ -20,7 +20,7 @@ $(document).ready(function(){
 	
 	// ToggleButtons
 	// @TODO: create an abstract solution for this
-	$("#fDownloadSpecHsBtn, #fDownloadSpecDmBtn, #fDownloadSpecCeBtn, #fDownloadSpecScBtn, .toggleButton").click(function() {
+	$(".toggleButton").click(function() {
 		var field_name = "#" + $(this).attr("id").replace("Btn", "");
 		if ( $(this).hasClass('btn_green') ) {
 			$(this).removeClass('btn_green');
