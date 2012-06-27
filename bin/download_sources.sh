@@ -347,9 +347,9 @@ then
 fi
 
 # GO
-if [ ! -f go_ce.csv ]
+if [ ! -f go_ce.tsv ]
 then
-    echo "CE GO database missing, please upload it manually as go_ce.csv"
+    echo "CE GO database missing, please upload it manually as go_ce.tsv"
 fi
 
 # Organelle
