@@ -7,20 +7,34 @@
 	<p>{{ sql }}</p>
 	
 	<form>
+		<input type="hidden" name="fProtSearchSpecHs" id="fProtSearchSpecHs" value="0" />
+		<input type="hidden" name="fProtSearchSpecDm" id="fProtSearchSpecDm" value="0" />
+		<input type="hidden" name="fProtSearchSpecCe" id="fProtSearchSpecCe" value="0" />
+		<input type="hidden" name="fProtSearchSpecSc" id="fProtSearchSpecSc" value="0" />
+		<input type="hidden" name="fProtSearchLocCytoplasm" id="fProtSearchLocCytoplasm" value="0" />
+		<input type="hidden" name="fProtSearchLocMito" id="fProtSearchLocMito" value="0" />
+		<input type="hidden" name="fProtSearchLocNucleus" id="fProtSearchLocNucleus" value="0" />
+		<input type="hidden" name="fProtSearchLocEC" id="fProtSearchLocEC" value="0" />
+		<input type="hidden" name="fProtSearchLocSecr" id="fProtSearchLocSecr" value="0" />
+		<input type="hidden" name="fProtSearchLocPlasMembr" id="fProtSearchLocPlasMembr" value="0" />
+		
 		<label>Protein Name:</label><input type="text" name="fProtSearchKeyword" id="fProtSearchKeyword" value="" />
 		<input class="btn" type="submit" value="Submit Search" />
 		<input class="btn" id="AdvSearchBtn" type="button" value="Open Advanced Search" />
 		<div id="AdvSearchFrame">
 			<label>Species:</label>
-			<input type="button" name="fProtSearchSpecHs" id="fProtSearchSpecHs" class="btn" value="H. sapiens" />
-			<input type="button" name="fProtSearchSpecDm" id="fProtSearchSpecDm" class="btn" value="D. melanogaster" />
-			<input type="button" name="fProtSearchSpecCe" id="fProtSearchSpecCe" class="btn" value="C. elegans" />
-			<input type="button" name="fProtSearchSpecSc" id="fProtSearchSpecSc" class="btn" value="S. cerevisiae" />
+			<input type="button" name="fProtSearchSpecHsBtn" id="fProtSearchSpecHsBtn" class="btn toggleButton" value="H. sapiens" />
+			<input type="button" name="fProtSearchSpecDmBtn" id="fProtSearchSpecDmBtn" class="btn toggleButton" value="D. melanogaster" />
+			<input type="button" name="fProtSearchSpecCeBtn" id="fProtSearchSpecCeBtn" class="btn toggleButton" value="C. elegans" />
+			<input type="button" name="fProtSearchSpecScBtn" id="fProtSearchSpecScBtn" class="btn toggleButton" value="S. cerevisiae" />
 			
 			<br /><label>Localization:</label>
-			<select name="fProtSearchLoc" id="fProtSearchLoc">
-				<option>Nucleus</option>
-			</select>
+			<input type="button" name="fProtSearchLocCytoplasmBtn" id="fProtSearchLocCytoplasmBtn" class="btn toggleButton" value="Cytoplasm" />
+			<input type="button" name="fProtSearchLocMitoBtn" id="fProtSearchLocMitoBtn" class="btn toggleButton" value="Mitochondrion" />
+			<input type="button" name="fProtSearchLocNucleusBtn" id="fProtSearchLocNucleusBtn" class="btn toggleButton" value="Nucleus" />
+			<input type="button" name="fProtSearchLocECBtn" id="fProtSearchLocECBtn" class="btn toggleButton" value="Extracellular" />
+			<input type="button" name="fProtSearchLocSecrBtn" id="fProtSearchLocSecrBtn" class="btn toggleButton" value="Secretory Pathway" />
+			<input type="button" name="fProtSearchLocPlasMembrBtn" id="fProtSearchLocPlasMembrBtn" class="btn toggleButton" value="Plasma Membrane" />
 
 			<br /><label>Multiple protein names (each in a new row):</label>
 			<br /><textarea name="fProtSearchMultiNames" cols="50" rows="10"></textarea>
