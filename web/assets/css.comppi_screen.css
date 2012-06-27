@@ -3,13 +3,87 @@ html {
     padding: 0;
     text-align: center;
 }
-body {
-    background: url("") repeat-x scroll left top #2A2A2A;
-    font-family: arial,sans-serif;
-    margin: 0;
+body  {
+	width: 1000px;
+	margin: 0 auto;
     padding: 0;
+    background: url("header_bg.png") repeat-x scroll left top #ffffff;
+    font-family: arial,sans-serif;
     text-align: left;
 }
+#Header  {
+	width: 1000px;
+	margin: 0 auto;
+    padding: 0;
+}
+#MainMenu { margin: 20px 0 0 0; padding: 0; list-style-type: none; text-align: right; color: #E0DFDC; }
+#MainMenu a { padding-top: 10px; color: #E0DFDC; text-decoration: none; font-weight: bold; font-family: 'Cuprum',serif; }
+#MainMenu a:hover { color: #ffffff; }
+#Logo { float: left; margin: -10px 0 0 0; padding: 0; width: 200px; font-size: 40px; font-weight: normal; font-family:'Cuprum',serif; color: #E0DFDC; }
+#Content {
+	margin-top: 10px;
+	line-height: 150%;
+	color:  #000;
+}
+a { color: #007000; text-decoration: none; font-weight: bold; }
+a:hover { color: #CC0000; }
+a:visited { text-decoration: underline; }
+.hovered_listline { background-color: #e0e0e0; }
 
-#MainMenu {}
-#MainMenu li {}
+.btn, .btn_green {
+	margin: 2px;
+	padding: 8px;
+	border: 1px solid #000;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+}
+.btn { background: url("btn_bg.png") #3c3b37; color: #E0DFDC; }
+.btn_green { color: #E1FFCE; background: url("btn_bg_green.png") #307500; border: 1px solid #228800; }
+.btn a { color: #E0DFDC; text-decoration: none; }
+.btn a:hover, .btn:hover, .btn_green:hover { color: #fff; }
+
+.help {}
+.help_details {}
+.infobtn {
+	/*display: block;
+	float: right;
+	width: 22px;
+	height: 22px;
+	background: url("btn_bg.png") #3c3b37; color: #E0DFDC;
+	border-radius: 11px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;*/
+}
+.infobtn a { color: #E0DFDC; text-decoration: none; }
+.infobtn a:hover { color: #fff; }
+
+label { margin: 2px; width: 180px; }
+input, select, textarea {
+	margin: 2px;
+	padding: 8px;
+	border: 1px solid #000;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+}
+/*input[type='checkbox'] { padding: 8px; }*/
+
+/* PROTEIN SEARCH */
+#fProteinSearchKeyword { width: 505px; }
+
+#ProteinSearchResultsTbl {
+	margin-top: 1em;
+	width: 100%;
+	border: 0;
+	border-collapse: collapse;
+	text-align: center;
+}
+#ProteinSearchResultsTbl th {
+	font-weight: bold;
+	border-bottom: 1px solid #909090;
+}
+#ProteinSearchResultsTbl td { padding: 0 5px; }
+
+/* DOWNLOAD DB */
+#DownloadForm { text-align: center; }
