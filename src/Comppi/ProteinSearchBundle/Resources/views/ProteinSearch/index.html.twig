@@ -7,23 +7,23 @@
 	<p>{{ sql }}</p>
 	
 	<form>
-		<label>Protein Name:</label><input type="text" name="fProteinSearchKeyword" id="fProteinSearchKeyword" value="" />
+		<label>Protein Name:</label><input type="text" name="fProtSearchKeyword" id="fProtSearchKeyword" value="" />
 		<input class="btn" type="submit" value="Submit Search" />
 		<input class="btn" id="AdvSearchBtn" type="button" value="Open Advanced" />
 		<div id="AdvSearchFrame">
 			<label>Species:</label>
-			<input type="button" name="fSpeciesHuman" id="fSpeciesHuman" class="btn" value="H. sapiens" />
-			<input type="button" name="fSpeciesDrosophila" id="fSpeciesDrosophila" class="btn" value="D. melanogaster" />
-			<input type="button" name="fSpeciesElegans" id="fSpeciesElegans" class="btn" value="C. elegans" />
-			<input type="button" name="fSpeciesYeast" id="fSpeciesYeast" class="btn" value="S. cerevisiae" />
+			<input type="button" name="fProtSearchSpecHs" id="fProtSearchSpecHs" class="btn" value="H. sapiens" />
+			<input type="button" name="fProtSearchSpecDm" id="fProtSearchSpecDm" class="btn" value="D. melanogaster" />
+			<input type="button" name="fProtSearchSpecCe" id="fProtSearchSpecCe" class="btn" value="C. elegans" />
+			<input type="button" name="fProtSearchSpecSc" id="fProtSearchSpecSc" class="btn" value="S. cerevisiae" />
 			
 			<br /><label>Localization:</label>
-			<select>
+			<select name="fProtSearchLoc" id="fProtSearchLoc">
 				<option>Nucleus</option>
 			</select>
 
 			<br /><label>Multiple protein names (each in a new row):</label>
-			<br /><textarea cols="50" rows="10"></textarea>
+			<br /><textarea name="fProtSearchMultiNames" cols="50" rows="10"></textarea>
 		</div>
 	</form>
 	

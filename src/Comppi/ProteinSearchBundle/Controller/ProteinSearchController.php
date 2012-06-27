@@ -10,35 +10,10 @@ class ProteinSearchController extends Controller
 
     public function proteinSearchAction($protein_name = '')
     {
-        // the less the array dimensions, the less the memory consumption is
-        $Hs_ids = array(); // comppi ID for H. sapiens proteins
-        $Hs_protAs = array(); // proteinName as interactor A
-        $Hs_protBs = array(); // proteinName as interactor B
-        $Hs_locAs = array(); // proteinName as location A
-        $Hs_locBs = array(); // proteinName as location B
-        $Dm_ids = array(); // etc...
-        $Dm_protAs = array();
-        $Dm_protBs = array();
-        $Dm_locAs = array();
-        $Dm_locBs = array();
-        $Ce_ids = array();
-        $Ce_protAs = array();
-        $Ce_protBs = array();
-        $Ce_locAs = array();
-        $Ce_locBs = array();
-        $Sc_ids = array();
-        $Sc_protAs = array();
-        $Sc_protBs = array();
-        $Sc_locAs = array();
-        $Sc_locBs = array();
-
         $T = array(
             'ls' => array()
         );
 
-		
-		
-        
 		$name = '143';
         $species_requested = array(
             'Hs' => 1,
