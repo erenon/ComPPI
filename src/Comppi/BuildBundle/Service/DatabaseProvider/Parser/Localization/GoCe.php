@@ -2,12 +2,10 @@
 
 namespace Comppi\BuildBundle\Service\DatabaseProvider\Parser\Localization;
 
-class Go extends AbstractLocalizationParser
+class GoCe extends AbstractLocalizationParser
 {
     protected static $parsableFileNames = array(
-        'go_hs.csv',
-        'go_dm.csv',
-        'go_sc.csv'
+        'go_ce.tsv',
     );
 
     protected $hasHeader = true;
@@ -20,18 +18,18 @@ class Go extends AbstractLocalizationParser
         }
 
         /**
-         * 0 => Ensembl Protein ID
-         * 1 => GO Term Accession (localization)
+         * 0 => GO Term Accession (localization)
+         * 1 => WB Gene ID
          *
          * @var array
          */
-        $recordArray = explode(',', $line);
+        $recordArray = explode("\t", $line);
         $this->checkRecordFieldCount($recordArray, 2);
 
         $this->currentRecord = array(
-            'proteinId' => $recordArray[0],
-            'namingConvention' => 'EnsemblPeptideId',
-            'localization' => $recordArray[1],
+            'proteinId' => $recordArray[1],
+            'namingConvention' => 'WBGeneId',
+            'localization' => $recordArray[0],
             'pubmedId' => 10802651,
             'experimentalSystemType' => 'not available'
         );

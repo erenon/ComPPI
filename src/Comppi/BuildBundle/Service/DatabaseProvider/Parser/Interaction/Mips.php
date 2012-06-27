@@ -67,8 +67,27 @@ class Mips extends AbstractInteractionParser
                 break;
             case 'primaryRef':
                 if ($this->status == self::ST_BIBREF) {
-                    $this->nextInteraction['pubmedId'] = $attributes['id'];
+                    $pubmedId = 0;
+                    if (isset($attributes['id'])) {
+                        if (!is_numeric($attributes['id'])) {
+                            // multiple pubmed
+                            $pubmedId = substr(
+                                $attributes['id'],
+                                0,
+                                strpos($attributes['id'], ';')
+                            );
+                        } else {
+                            $pubmedId = $attributes['id'];
+                        }
+                    } // else no pubmed specified
+                    $this->nextInteraction['pubmedId'] = $pubmedId;
                 } elseif ($this->status == self::ST_XREF) {
+                    if (!isset($attributes['id'])) {
+                        // participant not specified, drop interaction
+                        $this->status = self::ST_START;
+                        break;
+                    }
+
                     $interactor = $attributes['id'];
                     if (!isset($this->nextInteraction['proteinAName'])) {
                         $this->nextInteraction['proteinAName'] = $interactor;

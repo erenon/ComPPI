@@ -1,10 +1,10 @@
-{% extends 'StatBundle::base.html.twig' %}
+{% extends 'StatBundle:NamingStat:container.html.twig' %}
 
 {% block title %}Naming Conventions{% endblock %}
 
 {% block body %}
 
-{% for specieStat in namingStats %}
+{% for specieAbbr, specieStat in namingStats %}
 
 <div class="headline">
 <h2>{{ specieStat.specieName }}</h2><h3> - {% trans %}Naming Conventions{% endtrans %}</h3>
@@ -15,6 +15,9 @@
         <tr>
             <td>{% trans %}Naming Convention{% endtrans %}</td>
             <td class="tcell-numeric">{% trans %}Protein Count{% endtrans %}</td>
+            {% if specieAbbr != 'total' %}
+                <td class="tcell-numeric">{% trans %}View Proteins{% endtrans %}</td>
+            {% endif %}
         </tr> 
     </thead>
     <tbody>
@@ -22,6 +25,13 @@
     <tr>
         <td>{{ conventionStat.namingConvention }}</td>
         <td class="tcell-numeric">{{ conventionStat.proteinCount }}</td>
+        {% if specieAbbr != 'total' %}
+            <td class="tcell-numeric">
+                <a href="{{  path('stat_naming_proteins', {'specie': specieAbbr, 'convention': conventionStat.namingConvention }) }}">
+                    {% trans %}proteins{% endtrans %}
+                </a>
+            </td>
+        {% endif %}
     </tr>    
 {% else %}
 <div class="message message-notice">
