@@ -96,12 +96,12 @@ class DownloadDbController extends Controller
 		
 		foreach($this->species_requested as $sp => $specie_needed) {
 			if ( $specie_needed ) {
-				$sql = "SELECT proteinName, localizationId FROM Protein$sp p, ProteinToLocalization$sp ptl WHERE p.id=ptl.proteinId";
+				$sql = "SELECT proteinName, localizationId, experimentalSystemType FROM Protein$sp p, ProteinToLocalization$sp ptl WHERE p.id=ptl.proteinId";
 				$results = $DB->query( $sql );
 				// @TODO: exception handling here
-				echo '"protein","localization"'."\n";
+				echo '"protein","localization","type"'."\n";
 				while ( $r = $results->fetch() ) {
-					echo '"'.$r['proteinName'].'","'.$locs->getHumanReadableLocalizationById($r['localizationId']).'"'."\n";
+					echo '"'.$r['proteinName'].'","'.$locs->getHumanReadableLocalizationById($r['localizationId']).'","'.$r['experimentalSystemType'].'"'."\n";
 				}
             }
         }
