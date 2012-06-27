@@ -1,5 +1,5 @@
 ComppiDescriptionBundle_about:
-    pattern:  /about
+    pattern:  /home
     defaults: { _controller: ComppiDescriptionBundle:Description:About }
 
 ComppiDescriptionBundle_help:
