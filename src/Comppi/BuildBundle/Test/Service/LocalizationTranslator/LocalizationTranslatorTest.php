@@ -113,4 +113,8 @@ class LocalizationTranslatorTest extends \PHPUnit_Framework_TestCase
             $this->translator->getHumanReadableLocalizationById(23)
         );
     }
+
+    public function testGetLocalizationTree() {
+        $this->markTestIncomplete('Implement this');
+    }
 }

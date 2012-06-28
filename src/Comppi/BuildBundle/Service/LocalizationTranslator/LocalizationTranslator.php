@@ -4,10 +4,12 @@ namespace Comppi\BuildBundle\Service\LocalizationTranslator;
 
 class LocalizationTranslator
 {
-    private $localizations = array();
+    public $localizations = array();
 
     private $idToIndex = array();
     private $localizationToIndex = array();
+
+    private $localizationTree = null;
 
     public function __construct($localizationFile) {
         $this->loadLocalizations($localizationFile);
@@ -142,5 +144,49 @@ class LocalizationTranslator
         } else {
            throw new \InvalidArgumentException("Given id ('".$id."') is not valid primary localization id");
         }
+    }
+
+    public function getLocalizationTree() {
+        if ($this->localizationTree == null) {
+            $this->localizationTree = $this->getBranchForId(0);
+        }
+
+        return $this->localizationTree;
+    }
+
+    /**
+     * This is an ugly hack used by getBranchForId
+     * to persist state of iteration.
+     *
+     * @var int
+     */
+    private $maxBranchIndex;
+
+    private function getBranchForId($id) {
+        $this->maxBranchIndex = 0;
+        $children = array();
+
+        $index = $this->idToIndex[$id];
+        $rootSid = $this->localizations[$index]['sid'];
+        for ($i = $index + 1; $i < count($this->localizations) && $this->localizations[$i]['sid'] < $rootSid; $i++) {
+            $loc = $this->localizations[$i];
+
+            $child = $loc;
+
+            if ($loc['id'] + 1 != $loc['sid']) {
+                $child['children'] = $this->getBranchForId($loc['id']);
+
+                // skip children
+                $i = $this->maxBranchIndex;
+            }
+
+            if ($this->maxBranchIndex < $i) {
+                $this->maxBranchIndex = $i;
+            }
+
+            $children[] = $child;
+        }
+
+        return $children;
     }
 }
