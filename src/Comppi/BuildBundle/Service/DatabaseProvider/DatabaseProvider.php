@@ -22,9 +22,8 @@ class DatabaseProvider
 
     public function getMapsBySpecie($specie) {
         // get map database paths
-        $mapRoot = $this->rootDir . '/' . $specie . '/map/';
-        $mapFiles = new Finder();
-        $mapFiles->files()->in($mapRoot);
+        $mapDir = $this->rootDir . '/' . $specie . '/map/';
+        $mapFiles = $this->getFilesInDir($mapDir);
 
         // available parsers
         $mapParsers = $this->getParsers(
@@ -38,9 +37,8 @@ class DatabaseProvider
 
     public function getInteractionsBySpecie($specie) {
         // get interaction database paths
-        $interactionRoot = $this->rootDir . '/' . $specie . '/interaction/';
-        $interactionFiles = new Finder();
-        $interactionFiles->files()->in($interactionRoot);
+        $interactionDir = $this->rootDir . '/' . $specie . '/interaction/';
+        $interactionFiles = $this->getFilesInDir($interactionDir);
 
         // available parsers
         $interactionParsers = $this->getParsers(
@@ -54,9 +52,8 @@ class DatabaseProvider
 
     public function getLocalizationsBySpecie($specie) {
         // get localization database paths
-        $localizationRoot = $this->rootDir . '/' . $specie . '/localization/';
-        $localizationFiles = new Finder();
-        $localizationFiles->files()->in($localizationRoot);
+        $localizationDir = $this->rootDir . '/' . $specie . '/localization/';
+        $localizationFiles = $this->getFilesInDir($localizationDir);
 
         // available parsers
         $localizationParsers = $this->getParsers(
@@ -66,6 +63,19 @@ class DatabaseProvider
         );
 
         return $this->getParsersInstancesWithFiles($localizationParsers, $localizationFiles);
+    }
+
+    private function getFilesInDir($dir) {
+        $finder = new Finder();
+        try {
+            $finder->files()->in($dir);
+        } catch (\InvalidArgumentException $e) {
+            $this->logger->notice('Source directory not found: ' . $dir);
+
+            return array();
+        }
+
+        return $finder;
     }
 
     private function getParsers($parserDir, $parserNamespace, $parserInterface) {

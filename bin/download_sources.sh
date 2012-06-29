@@ -4,12 +4,12 @@
 
 bin_dir="$( cd "$( dirname "$0" )" && pwd )"
 
-if [ ! -d $bin_dir/../databases2 ] 
+if [ ! -d $bin_dir/../databases ] 
 then
-    mkdir -p $bin_dir/../databases2
+    mkdir -p $bin_dir/../databases
 fi
 
-cd $bin_dir/../databases2
+cd $bin_dir/../databases
 
 ###
 # Homo Sapiens
@@ -48,9 +48,9 @@ then
 fi
 
 # GO
-if [ ! -f mart_export.txt ]
+if [ ! -f go_hs.csv ]
 then
-    echo "HS GO database missing, please upload it manually"
+    echo "HS GO database missing, please upload it manually as go_hs.csv"
 fi    
 
 # Human proteinpedia
@@ -127,12 +127,12 @@ then
 fi   
 
 # ConsensusPathDB
-if [ ! -f ConsensusPathDB_human_PPI ]
-then
-    wget http://cpdb.molgen.mpg.de/download/ConsensusPathDB_human_PPI.gz -O ./consensus.gz
-    gzip -d -N ./consensus.gz
-    rm ./consensus.gz
-fi
+#if [ ! -f ConsensusPathDB_human_PPI ]
+#then
+#    wget http://cpdb.molgen.mpg.de/download/ConsensusPathDB_human_PPI.gz -O ./consensus.gz
+#    gzip -d -N ./consensus.gz
+#    rm ./consensus.gz
+#fi
 
 # DiP
 # @see at the end of this file
@@ -201,6 +201,32 @@ fi
 
 cd ../map
 
+# Uniprot
+if [ ! -f HUMAN_9606_idmapping_selected.tab ]
+then
+    wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/HUMAN_9606_idmapping_selected.tab.gz" -O ./uniprot.gz
+    gzip -d -N uniprot.gz
+    rm uniprot.gz
+fi 
+
+# Hprd
+if [ ! -f HPRD_ID_MAPPINGS.txt ]
+then
+     # download zip
+     wget \
+    -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
+    http://www.hprd.org/edownload/HPRD_FLAT_FILES_041310 \
+    -O ./hprd.tar.gz
+    
+    tar xvfz hprd.tar.gz FLAT_FILES_072010/HPRD_ID_MAPPINGS.txt
+    
+    mv FLAT_FILES_072010/HPRD_ID_MAPPINGS.txt ./HPRD_ID_MAPPINGS.txt
+    rm -r FLAT_FILES_072010
+    
+    # cleanup
+    rm hprd.tar.gz
+fi
+
 cd ../../
 
 ###
@@ -230,9 +256,9 @@ then
 fi  
 
 # GO
-if [ ! -f mart_export.txt ]
+if [ ! -f go_dm.csv ]
 then
-    echo "DM GO database missing, please upload it manually"
+    echo "DM GO database missing, please upload it manually as go_dm.csv"
 fi  
 
 # PaGOSUB
@@ -308,6 +334,14 @@ fi
 
 cd ../map
 
+# Uniprot
+if [ ! -f DROME_7227_idmapping_selected.tab ]
+then
+    wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/DROME_7227_idmapping_selected.tab.gz" -O ./uniprot.gz
+    gzip -d -N uniprot.gz
+    rm uniprot.gz
+fi 
+
 cd ../../
 
 ###
@@ -347,9 +381,9 @@ then
 fi
 
 # GO
-if [ ! -f mart_export.txt ]
+if [ ! -f go_ce.tsv ]
 then
-    echo "CE GO database missing, please upload it manually"
+    echo "CE GO database missing, please upload it manually as go_ce.tsv"
 fi
 
 # Organelle
@@ -405,6 +439,14 @@ fi
 
 cd ../map
 
+# Uniprot
+if [ ! -f CAEEL_6239_idmapping_selected.tab ]
+then
+    wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/CAEEL_6239_idmapping_selected.tab.gz" -O ./uniprot.gz
+    gzip -d -N uniprot.gz
+    rm uniprot.gz
+fi   
+
 cd ../../
 
 ###
@@ -444,9 +486,9 @@ then
 fi
 
 # GO
-if [ ! -f mart_export.txt ]
+if [ ! -f go_sc.csv ]
 then
-    echo "SC GO database missing, please upload it manually"
+    echo "SC GO database missing, please upload it manually as go_sc.csv"
 fi  
 
 # Organelle
@@ -485,12 +527,12 @@ then
 fi
 
 # ConsensusPathDB
-if [ ! -f ConsensusPathDB_yeast_PPI ]
-then
-    wget http://cpdb.molgen.mpg.de/download/ConsensusPathDB_yeast_PPI.gz -O ./consensus.gz
-    gzip -d -N ./consensus.gz
-    rm ./consensus.gz
-fi
+#if [ ! -f ConsensusPathDB_yeast_PPI ]
+#then
+#    wget http://cpdb.molgen.mpg.de/download/ConsensusPathDB_yeast_PPI.gz -O ./consensus.gz
+#    gzip -d -N ./consensus.gz
+#    rm ./consensus.gz
+#fi
 
 # DiP
 # @see at the end of this file
@@ -512,6 +554,14 @@ then
 fi
 
 cd ../map
+
+# Uniprot
+if [ ! -f YEAST_559292_idmapping_selected.tab ]
+then
+    wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/YEAST_559292_idmapping_selected.tab.gz" -O ./uniprot.gz
+    gzip -d -N uniprot.gz
+    rm uniprot.gz
+fi
 
 cd ../../
 

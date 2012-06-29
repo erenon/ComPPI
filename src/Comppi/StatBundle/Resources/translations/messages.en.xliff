@@ -8,7 +8,7 @@
             </trans-unit>
             <trans-unit id="2">
                 <source>Database Name</source>
-                <target>Database Name-trans</target>
+                <target>Database Name</target>
             </trans-unit>
             <trans-unit id="3">
                 <source>Protein Count</source>

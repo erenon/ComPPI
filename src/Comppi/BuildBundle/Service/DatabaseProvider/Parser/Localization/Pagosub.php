@@ -53,6 +53,12 @@ class Pagosub extends AbstractLocalizationParser
         $this->checkRecordFieldCount($recordArray, 46);
 
         $annotationParts = explode("|", $recordArray[1]);
+
+        if (!isset($annotationParts[1])) {
+            // malformed line, skip it.
+            return $this->readRecord();
+        }
+
         $annotation = $annotationParts[1];
 
         $locals = array();

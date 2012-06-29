@@ -71,7 +71,7 @@ class Esldb extends AbstractLocalizationParser
         $recordArray = explode("\t", $line);
         $this->checkRecordFieldCount($recordArray, 4);
 
-        if ($recordArray[2] == 'None') {
+        if ($recordArray[2] == 'None' || $recordArray[2] == '') {
             // No experimental annotation, use prediction
             if ($recordArray[3] == 'None') {
                 // no prediction, skip record
@@ -87,7 +87,12 @@ class Esldb extends AbstractLocalizationParser
             'localization' => explode(', ', $recordArray[2])
         );
 
-        $local = $this->getGoCodeByLocalizationName($this->currentLine['localization'][0]);
+        try {
+            $local = $this->getGoCodeByLocalizationName($this->currentLine['localization'][0]);
+        } catch (\InvalidArgumentException $e) {
+            var_dump($recordArray);
+            echo count($recordArray) . "\n";
+        }
 
         $this->currentRecord = array(
             'proteinId' => $recordArray[1],

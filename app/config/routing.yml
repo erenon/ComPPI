@@ -14,17 +14,7 @@ ComppiDescriptionBundle:
 StatBundle:
     resource: "@StatBundle/Controller/"
     type:     annotation
-    prefix:   /stat/  
-
-DownloadBundle:
-    resource: "@DownloadBundle/Controller/"
-    type:     annotation
-    prefix:   /download/
-
-#LoaderBundle:
-#    resource: "@LoaderBundle/Controller/"
-#    type:     annotation
-#    prefix:   /
+    prefix:   /stat/
 
 # Internal routing configuration to handle ESI
 #_internal:

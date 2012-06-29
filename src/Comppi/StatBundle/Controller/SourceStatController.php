@@ -59,7 +59,8 @@ class SourceStatController extends Controller
         return array(
         	'specieName' => $specieName,
             'interactions' => $interactionSourceStat,
-            'localizations' => $locaizationSourceStat
+            'localizations' => $locaizationSourceStat,
+        	'species' => $this->species // subnav menu entries
         );
     }
 }

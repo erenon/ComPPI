@@ -15,11 +15,18 @@ class NamingStatController extends Controller
         'sc' => 'Saccaromicies Cervisae'
     );
 
-   /**
+    /**
      * @Route("/naming", name="stat_naming_index")
-     * @Template()
      */
     public function indexAction()  {
+        return $this->forward('StatBundle:NamingStat:distribution');
+    }
+
+    /**
+     * @Route("/naming/distribution", name="stat_naming_distribution")
+     * @Template()
+     */
+    public function distributionAction()  {
         $namingStats = array();
 
         // init total
@@ -69,5 +76,45 @@ class NamingStatController extends Controller
         }
 
         return ($a['proteinCount'] < $b['proteinCount']) ? 1 : -1;
+    }
+
+    /**
+     * @Route("/naming/proteins/{specie}/{convention}", name="stat_naming_proteins", requirements={"convention" = ".+"})
+     * @Template()
+     */
+    public function proteinsByConventionAction($specie, $convention) {
+        if (!array_key_exists($specie, $this->species)) {
+            // invalid specie abbr.
+            throw $this->createNotFoundException('Invalid specie specified');
+        }
+
+        $connection = $this->getDoctrine()->getConnection();
+        $table = 'Protein' . ucfirst($specie);
+        $selProteins = $connection->executeQuery(
+            "SELECT proteinName FROM " . $table . " WHERE proteinNamingConvention = ?",
+            array($convention)
+        );
+
+        $proteins = $selProteins->fetchAll(\PDO::FETCH_COLUMN);
+
+        return array (
+            'proteins' => $proteins
+        );
+    }
+
+    /**
+     * @Route("/naming/mapping", name="stat_naming_mapping")
+     * @Template()
+     */
+    public function mappingAction() {
+        return array();
+    }
+
+    /**
+     * @Route("/naming/conventions", name="stat_naming_conventions")
+     * @Template()
+     */
+    public function conventionsAction() {
+        return array();
     }
 }
