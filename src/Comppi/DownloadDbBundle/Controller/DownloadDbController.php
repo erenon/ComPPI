@@ -25,6 +25,8 @@ class DownloadDbController extends Controller
     
 	public function downloadAction()
     {
+		$this->buildLocTree();
+		
 		$T = array(
 			//'need_hs' => $request->request->get('fDownloadSpecHs')
 			'need_hs' => ( $this->species_requested['Hs'] ? 0 : 1 ),
@@ -136,4 +138,12 @@ class DownloadDbController extends Controller
 		$response->headers->set('Content-Disposition', 'attachment; filename="comppi-'.date("Y-m-d").'.csv"');
 		// filesize: we don't know it, we are streaming...
     }
+	
+	private function buildLocTree()
+	{
+		$locs = $this->get('comppi.build.localizationTranslator');
+		$loctree = $locs->getLocalizationTree();
+		
+		die( var_dump( $loctree ) );
+	}
 }

@@ -28,17 +28,7 @@
 			<input type="button" name="fProtSearchSpecDmBtn" id="fProtSearchSpecDmBtn" class="btn toggleButton{% if need_dm==1 %} btn_green{% endif %}" value="D. melanogaster" />
 			<input type="button" name="fProtSearchSpecCeBtn" id="fProtSearchSpecCeBtn" class="btn toggleButton{% if need_ce==1 %} btn_green{% endif %}" value="C. elegans" />
 			<input type="button" name="fProtSearchSpecScBtn" id="fProtSearchSpecScBtn" class="btn toggleButton{% if need_sc==1 %} btn_green{% endif %}" value="S. cerevisiae" />
-			
-			{# <br />
-			<label>Localization:</label>
-			<input type="button" name="fProtSearchLocCytoplasmBtn" id="fProtSearchLocCytoplasmBtn" class="btn toggleButton" value="Cytoplasm" />
-			<input type="button" name="fProtSearchLocMitoBtn" id="fProtSearchLocMitoBtn" class="btn toggleButton" value="Mitochondrion" />
-			<input type="button" name="fProtSearchLocNucleusBtn" id="fProtSearchLocNucleusBtn" class="btn toggleButton" value="Nucleus" />
 
-			<input type="button" name="fProtSearchLocECBtn" id="fProtSearchLocECBtn" class="btn toggleButton" value="Extracellular" />
-			<input type="button" name="fProtSearchLocSecrBtn" id="fProtSearchLocSecrBtn" class="btn toggleButton" value="Secretory Pathway" />
-			<input type="button" name="fProtSearchLocPlasMembrBtn" id="fProtSearchLocPlasMembrBtn" class="btn toggleButton" value="Plasma Membrane" />
-#}
 			<br />
 			<label>Multiple protein names (each in a new row):</label>
 			<textarea name="fProtSearchMultiNames" id="fProtSearchMultiNames" cols="50" rows="10">{{ protein_names }}</textarea>

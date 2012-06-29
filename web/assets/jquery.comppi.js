@@ -11,11 +11,11 @@ $(document).ready(function(){
 		function() { $(this).addClass('hovered_listline'); },
 		function() { $(this).removeClass('hovered_listline'); }
 	);
-	
-	// Protein Advanced Search
-	$("#AdvSearchFrame").hide();
-	$("#AdvSearchBtn").click(function() {
-		$("#AdvSearchFrame").slideToggle(500);
+
+	// Search / Download Advanced Parameters
+	$("#AdvSearchFrame, #AdvDownloadBtn").hide();
+	$("#AdvSearchBtn, #AdvDownloadBtn").click(function() {
+		$(this).slideToggle(500);
 	});
 	
 	// ToggleButtons

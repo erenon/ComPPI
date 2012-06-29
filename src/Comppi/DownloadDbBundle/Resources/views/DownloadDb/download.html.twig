@@ -14,12 +14,33 @@
 		<input type="hidden" name="fDownloadSpecSc" id="fDownloadSpecSc" value="{{ need_sc }}" />
 		<input type="hidden" name="fDownloadDataset" id="fDownloadDataset" value="{{ dataset }}" />
 		
+		<br />
+		<label>Species:</label>
 		<input type="button" name="fDownloadSpecHsBtn" id="fDownloadSpecHsBtn" class="btn toggleButton{% if need_hs==1 %} btn_green{% endif %}" value="H. sapiens" />
 		<input type="button" name="fDownloadSpecDmBtn" id="fDownloadSpecDmBtn" class="btn toggleButton{% if need_dm==1 %} btn_green{% endif %}" value="D. melanogaster" />
 		<input type="button" name="fDownloadSpecCeBtn" id="fDownloadSpecCeBtn" class="btn toggleButton{% if need_ce==1 %} btn_green{% endif %}" value="C. elegans" />
 		<input type="button" name="fDownloadSpecScBtn" id="fDownloadSpecScBtn" class="btn toggleButton{% if need_sc==1 %} btn_green{% endif %}" value="S. cerevisiae" />
+				
+		<br />
+		<label>Localization:</label>
+		<input type="button" name="fDownloadLocCytoplasmBtn" id="fProtSearchLocCytoplasmBtn" class="btn toggleButton" value="Cytoplasm" />
+		<input type="button" name="fDownloadLocMitoBtn" id="fProtSearchLocMitoBtn" class="btn toggleButton" value="Mitochondrion" />
+		<input type="button" name="fDownloadLocNucleusBtn" id="fProtSearchLocNucleusBtn" class="btn toggleButton" value="Nucleus" />
+
+		<input type="button" name="fDownloadLocECBtn" id="fProtSearchLocECBtn" class="btn toggleButton" value="Extracellular" />
+		<input type="button" name="fDownloadLocSecrBtn" id="fProtSearchLocSecrBtn" class="btn toggleButton" value="Secretory Pathway" />
+		<input type="button" name="fDownloadLocPlasMembrBtn" id="fProtSearchLocPlasMembrBtn" class="btn toggleButton" value="Plasma Membrane" />
+		
+		<input class="btn toggleButton" id="AdvDownloadBtn" type="button" value="Open Advanced Search" />
+		<div id="AdvDownloadFrame">
+			<label>High-definition Localization:</label>
+			<select name="fDownloadLocFine">
+				
+			</select>
+		</div>
 		
 		<br />
+		<label>Data Presets:</label>
 		<input type="button" name="fDownloadIntByLoc" id="fDownloadIntByLoc" class="btn" value="Interactions By Localizations" />
 		<input type="button" name="fDownloadInts" id="fDownloadInts" class="btn" value="Interactions" />
 		<input type="button" name="fDownloadLocs" id="fDownloadLocs" class="btn" value="Localizations" />
