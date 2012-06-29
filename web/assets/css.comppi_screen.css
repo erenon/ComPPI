@@ -75,7 +75,7 @@ input, select, textarea {
 /*input[type='checkbox'] { padding: 8px; }*/
 
 /* PROTEIN SEARCH */
-#ProteinSearchForm { text-align: left; margin-top: 2em; }
+#ProteinSearchForm { text-align: left; }
 #fProtSearchKeyword { width: 412px; }
 #fProtSearchMultiNames { width: 412px; }
 
