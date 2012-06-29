@@ -127,12 +127,12 @@ then
 fi   
 
 # ConsensusPathDB
-if [ ! -f ConsensusPathDB_human_PPI ]
-then
-    wget http://cpdb.molgen.mpg.de/download/ConsensusPathDB_human_PPI.gz -O ./consensus.gz
-    gzip -d -N ./consensus.gz
-    rm ./consensus.gz
-fi
+#if [ ! -f ConsensusPathDB_human_PPI ]
+#then
+#    wget http://cpdb.molgen.mpg.de/download/ConsensusPathDB_human_PPI.gz -O ./consensus.gz
+#    gzip -d -N ./consensus.gz
+#    rm ./consensus.gz
+#fi
 
 # DiP
 # @see at the end of this file
@@ -527,12 +527,12 @@ then
 fi
 
 # ConsensusPathDB
-if [ ! -f ConsensusPathDB_yeast_PPI ]
-then
-    wget http://cpdb.molgen.mpg.de/download/ConsensusPathDB_yeast_PPI.gz -O ./consensus.gz
-    gzip -d -N ./consensus.gz
-    rm ./consensus.gz
-fi
+#if [ ! -f ConsensusPathDB_yeast_PPI ]
+#then
+#    wget http://cpdb.molgen.mpg.de/download/ConsensusPathDB_yeast_PPI.gz -O ./consensus.gz
+#    gzip -d -N ./consensus.gz
+#    rm ./consensus.gz
+#fi
 
 # DiP
 # @see at the end of this file
