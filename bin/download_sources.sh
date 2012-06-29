@@ -201,12 +201,31 @@ fi
 
 cd ../map
 
+# Uniprot
 if [ ! -f HUMAN_9606_idmapping_selected.tab ]
 then
     wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/HUMAN_9606_idmapping_selected.tab.gz" -O ./uniprot.gz
     gzip -d -N uniprot.gz
     rm uniprot.gz
 fi 
+
+# Hprd
+if [ ! -f HPRD_ID_MAPPINGS.txt ]
+then
+     # download zip
+     wget \
+    -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
+    http://www.hprd.org/edownload/HPRD_FLAT_FILES_041310 \
+    -O ./hprd.tar.gz
+    
+    tar xvfz hprd.tar.gz FLAT_FILES_072010/HPRD_ID_MAPPINGS.txt
+    
+    mv FLAT_FILES_072010/HPRD_ID_MAPPINGS.txt ./HPRD_ID_MAPPINGS.txt
+    rm -r FLAT_FILES_072010
+    
+    # cleanup
+    rm hprd.tar.gz
+fi
 
 cd ../../
 
@@ -315,6 +334,7 @@ fi
 
 cd ../map
 
+# Uniprot
 if [ ! -f DROME_7227_idmapping_selected.tab ]
 then
     wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/DROME_7227_idmapping_selected.tab.gz" -O ./uniprot.gz
@@ -419,6 +439,7 @@ fi
 
 cd ../map
 
+# Uniprot
 if [ ! -f CAEEL_6239_idmapping_selected.tab ]
 then
     wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/CAEEL_6239_idmapping_selected.tab.gz" -O ./uniprot.gz
@@ -534,6 +555,7 @@ fi
 
 cd ../map
 
+# Uniprot
 if [ ! -f YEAST_559292_idmapping_selected.tab ]
 then
     wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/YEAST_559292_idmapping_selected.tab.gz" -O ./uniprot.gz
