@@ -16,20 +16,6 @@ StatBundle:
     type:     annotation
     prefix:   /stat/
 
-dev_home:
-    pattern:   /
-    defaults:  { _controller: DownloadBundle:Download:list }    
-
-DownloadBundle:
-    resource: "@DownloadBundle/Controller/"
-    type:     annotation
-    prefix:   /download/
-
-#LoaderBundle:
-#    resource: "@LoaderBundle/Controller/"
-#    type:     annotation
-#    prefix:   /
-
 # Internal routing configuration to handle ESI
 #_internal:
 #   resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
