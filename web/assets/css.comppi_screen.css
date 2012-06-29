@@ -16,10 +16,11 @@ body  {
 	margin: 0 auto;
     padding: 0;
 }
-#MainMenu { margin: 20px 0 0 0; padding: 0; list-style-type: none; text-align: right; color: #E0DFDC; }
+#MainMenu { margin: 22px 0 0 0; padding: 0; list-style-type: none; text-align: right; color: #E0DFDC; }
 #MainMenu a { padding-top: 10px; color: #E0DFDC; text-decoration: none; font-weight: bold; font-family: 'Cuprum',serif; }
 #MainMenu a:hover { color: #ffffff; }
-#Logo { float: left; margin: -10px 0 0 0; padding: 0; width: 200px; font-size: 40px; font-weight: normal; font-family:'Cuprum',serif; color: #E0DFDC; }
+#Logo { float: left; padding: 0; margin: -17px 0 0 0; /*margin: -10px 0 0 0; padding: 0; width: 200px; font-size: 40px; font-weight: normal; font-family:'Cuprum',serif; color: #E0DFDC;*/ }
+#HeaderSlogan { float: left; margin: 0; padding: 0 0 0 10px; color: #E0DFDC; }
 #Content {
 	margin-top: 10px;
 	line-height: 150%;
