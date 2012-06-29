@@ -1,21 +1,15 @@
+dev_home:
+    pattern:   /
+    defaults:  { _controller: StatBundle:SourceStat:index } 
+    
+stat_home:
+    pattern:   /stat    
+    defaults:  { _controller: StatBundle:SourceStat:index } 
+
 StatBundle:
     resource: "@StatBundle/Controller/"
     type:     annotation
     prefix:   /stat/
-
-dev_home:
-    pattern:   /
-    defaults:  { _controller: DownloadBundle:Download:list }    
-
-DownloadBundle:
-    resource: "@DownloadBundle/Controller/"
-    type:     annotation
-    prefix:   /download/
-
-#LoaderBundle:
-#    resource: "@LoaderBundle/Controller/"
-#    type:     annotation
-#    prefix:   /
 
 # Internal routing configuration to handle ESI
 #_internal:
