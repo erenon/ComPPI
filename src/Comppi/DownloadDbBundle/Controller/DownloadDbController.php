@@ -15,6 +15,12 @@ class DownloadDbController extends Controller
 		'Ce' => 0,
 		'Sc' => 0
 	);
+	private $species_ncbi_taxids = array(
+		'Hs' => '9606', // H. sapiens
+		'Dm' => '7227', // D. melanogaster
+		'Ce' => '6239', // C. elegans
+		'Sc' => '4932' // S. cerevisiae
+	);
 	private $selected_dataset = 0; // serveFullDb: 0, serveInteractionsByLocalizations: 1, serveInteractions: 2, serveLocalizations: 3
     
 	public function downloadAction()
@@ -77,9 +83,9 @@ class DownloadDbController extends Controller
 				$sql = "SELECT p1.proteinName AS protA, p1.proteinNamingConvention AS convA, p2.proteinName AS protB, p2.proteinNamingConvention AS convB FROM Interaction$sp i LEFT JOIN Protein$sp p1 ON i.actorAId=p1.id LEFT JOIN Protein$sp p2 ON i.actorBId=p2.id";
 				$results = $DB->query( $sql );
 				// @TODO: exception handling here
-				echo '"protein A","naming convention A","protein B","naming convention B","genus"'."\n";
+				echo '"protein A","naming convention A","protein B","naming convention B","NCBI TaxID"'."\n";
 				while ( $r = $results->fetch() ) {
-					echo '"'.$r['protA'].'","'.$r['convA'].'","'.$r['protB'].'","'.$r['convB'].'","'.$sp.'"'."\n";
+					echo '"'.$r['protA'].'","'.$r['convA'].'","'.$r['protB'].'","'.$r['convB'].'","'.$species_ncbi_taxids[$sp].'"'."\n";
 				}
             }
         }
@@ -96,12 +102,12 @@ class DownloadDbController extends Controller
 		
 		foreach($this->species_requested as $sp => $specie_needed) {
 			if ( $specie_needed ) {
-				$sql = "SELECT proteinName, localizationId FROM Protein$sp p, ProteinToLocalization$sp ptl WHERE p.id=ptl.proteinId";
+				$sql = "SELECT proteinName, localizationId, experimentalSystemType FROM Protein$sp p, ProteinToLocalization$sp ptl WHERE p.id=ptl.proteinId";
 				$results = $DB->query( $sql );
 				// @TODO: exception handling here
-				echo '"protein","localization"'."\n";
+				echo '"protein","localization","type"'."\n";
 				while ( $r = $results->fetch() ) {
-					echo '"'.$r['proteinName'].'","'.$locs->getHumanReadableLocalizationById($r['localizationId']).'"'."\n";
+					echo '"'.$r['proteinName'].'","'.$locs->getHumanReadableLocalizationById($r['localizationId']).'","'.$r['experimentalSystemType'].'"'."\n";
 				}
             }
         }

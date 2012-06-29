@@ -17,11 +17,12 @@
     <body>
 		{% block header %}
 		<div id="Header">
-		<h1 id="Logo">ComPPI</h1>
+		<img src="{{ asset('assets/logo.png') }}" id="Logo" width="89" height="42" alt="ComPPI logo" title="ComPPI welcome page" />
+		<div id="HeaderSlogan">The <b>Com</b>partmentalized <b>P</b>rotein-<b>P</b>rotein <b>I</b>nteraction Database</div>
 		<div id="MainMenu">
+			<a href="{{ path('ComppiDescriptionBundle_about') }}">Home</a> |
 			<a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}">Protein Search</a> |
 			<a href="{{ path('ComppiDownloadDbBundle_download') }}">Download DB</a> |
-			<a href="{{ path('ComppiDescriptionBundle_about') }}">About</a> |
 			<a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a>
 		</div>
 		</div>

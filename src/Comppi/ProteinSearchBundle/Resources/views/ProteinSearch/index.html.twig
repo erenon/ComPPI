@@ -4,35 +4,53 @@
 {% block title %}ComPPI - Search Protein Interactions - The Compartmentalized Protein-Protein Interaction Database{% endblock %}
 
 {% block bundlecontent %}
-	<p>{{ sql }}</p>
-	
-	<form>
-		<label>Protein Name:</label><input type="text" name="fProtSearchKeyword" id="fProtSearchKeyword" value="" />
-		<input class="btn" type="submit" value="Submit Search" />
-		<input class="btn" id="AdvSearchBtn" type="button" value="Open Advanced" />
+	<form id="ProteinSearchForm" action="" method="post">
+		<input type="hidden" name="fProtSearchSpecHs" id="fProtSearchSpecHs" value="0" />
+		<input type="hidden" name="fProtSearchSpecDm" id="fProtSearchSpecDm" value="0" />
+		<input type="hidden" name="fProtSearchSpecCe" id="fProtSearchSpecCe" value="0" />
+		<input type="hidden" name="fProtSearchSpecSc" id="fProtSearchSpecSc" value="0" />
+		<input type="hidden" name="fProtSearchLocCytoplasm" id="fProtSearchLocCytoplasm" value="0" />
+		<input type="hidden" name="fProtSearchLocMito" id="fProtSearchLocMito" value="0" />
+		<input type="hidden" name="fProtSearchLocNucleus" id="fProtSearchLocNucleus" value="0" />
+		<input type="hidden" name="fProtSearchLocEC" id="fProtSearchLocEC" value="0" />
+		<input type="hidden" name="fProtSearchLocSecr" id="fProtSearchLocSecr" value="0" />
+		<input type="hidden" name="fProtSearchLocPlasMembr" id="fProtSearchLocPlasMembr" value="0" />
+
+		<label for="fProtSearchKeyword">Protein Name:</label>
+		<input type="text" name="fProtSearchKeyword" id="fProtSearchKeyword" value="" />
+		<input class="btn toggleButton" id="AdvSearchBtn" type="button" value="Open Advanced Search" />
+		<input class="btn btn_submit" type="submit" value="Submit Search" />
 		<div id="AdvSearchFrame">
 			<label>Species:</label>
-			<input type="button" name="fProtSearchSpecHs" id="fProtSearchSpecHs" class="btn" value="H. sapiens" />
-			<input type="button" name="fProtSearchSpecDm" id="fProtSearchSpecDm" class="btn" value="D. melanogaster" />
-			<input type="button" name="fProtSearchSpecCe" id="fProtSearchSpecCe" class="btn" value="C. elegans" />
-			<input type="button" name="fProtSearchSpecSc" id="fProtSearchSpecSc" class="btn" value="S. cerevisiae" />
+			<input type="button" name="fProtSearchSpecHsBtn" id="fProtSearchSpecHsBtn" class="btn toggleButton" value="H. sapiens" />
+			<input type="button" name="fProtSearchSpecDmBtn" id="fProtSearchSpecDmBtn" class="btn toggleButton" value="D. melanogaster" />
+			<input type="button" name="fProtSearchSpecCeBtn" id="fProtSearchSpecCeBtn" class="btn toggleButton" value="C. elegans" />
+			<input type="button" name="fProtSearchSpecScBtn" id="fProtSearchSpecScBtn" class="btn toggleButton" value="S. cerevisiae" />
 			
-			<br /><label>Localization:</label>
-			<select name="fProtSearchLoc" id="fProtSearchLoc">
-				<option>Nucleus</option>
-			</select>
+			<br />
+			<label>Localization:</label>
+			<input type="button" name="fProtSearchLocCytoplasmBtn" id="fProtSearchLocCytoplasmBtn" class="btn toggleButton" value="Cytoplasm" />
+			<input type="button" name="fProtSearchLocMitoBtn" id="fProtSearchLocMitoBtn" class="btn toggleButton" value="Mitochondrion" />
+			<input type="button" name="fProtSearchLocNucleusBtn" id="fProtSearchLocNucleusBtn" class="btn toggleButton" value="Nucleus" />
 
-			<br /><label>Multiple protein names (each in a new row):</label>
-			<br /><textarea name="fProtSearchMultiNames" cols="50" rows="10"></textarea>
+			<input type="button" name="fProtSearchLocECBtn" id="fProtSearchLocECBtn" class="btn toggleButton" value="Extracellular" />
+			<input type="button" name="fProtSearchLocSecrBtn" id="fProtSearchLocSecrBtn" class="btn toggleButton" value="Secretory Pathway" />
+			<input type="button" name="fProtSearchLocPlasMembrBtn" id="fProtSearchLocPlasMembrBtn" class="btn toggleButton" value="Plasma Membrane" />
+
+			<br />
+			<label>Multiple protein names (each in a new row):</label>
+			<textarea name="fProtSearchMultiNames" id="fProtSearchMultiNames" cols="50" rows="10"></textarea>
+			<br />
 		</div>
 	</form>
 	
-	{# protein A - protein B #}
+	{% if ls %}
 	<table id="ProteinSearchResultsTbl" class="hovered_list">
 		<tr class="not_hovered_line"><th>Protein A</th><th>Localization A</th><th>Protein B</th><th>Localization B</th></tr>
 		{% for p in ls %}
-		<tr><td>{{ p.protA }}</td><td>{{ p.locA }}</td><td>{{ p.protB }}</td><td>{{ p.locB }}</td></tr>
+		<tr><td>{{ p.protA }}</td><td>{{ p.locA }} <a href="{{ p.locASrcUrl }}" target="_blank" class="btn btn_src">src</a></td><td>{{ p.protB }}</td><td>{{ p.locB }} <a href="{{ p.locBSrcUrl }}" target="_blank" class="btn btn_src">src</a></td></tr>
 		{% endfor %}
 	</table>
+	{% endif %}
 
 {% endblock %}

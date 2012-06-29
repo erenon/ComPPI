@@ -14,10 +14,10 @@
 		<input type="hidden" name="fDownloadSpecSc" id="fDownloadSpecSc" value="{{ need_sc }}" />
 		<input type="hidden" name="fDownloadDataset" id="fDownloadDataset" value="{{ dataset }}" />
 		
-		<input type="button" name="fDownloadSpecHsBtn" id="fDownloadSpecHsBtn" class="btn{% if need_hs==1 %} btn_green{% endif %}" value="H. sapiens" />
-		<input type="button" name="fDownloadSpecDmBtn" id="fDownloadSpecDmBtn" class="btn{% if need_dm==1 %} btn_green{% endif %}" value="D. melanogaster" />
-		<input type="button" name="fDownloadSpecCeBtn" id="fDownloadSpecCeBtn" class="btn{% if need_ce==1 %} btn_green{% endif %}" value="C. elegans" />
-		<input type="button" name="fDownloadSpecScBtn" id="fDownloadSpecScBtn" class="btn{% if need_sc==1 %} btn_green{% endif %}" value="S. cerevisiae" />
+		<input type="button" name="fDownloadSpecHsBtn" id="fDownloadSpecHsBtn" class="btn toggleButton{% if need_hs==1 %} btn_green{% endif %}" value="H. sapiens" />
+		<input type="button" name="fDownloadSpecDmBtn" id="fDownloadSpecDmBtn" class="btn toggleButton{% if need_dm==1 %} btn_green{% endif %}" value="D. melanogaster" />
+		<input type="button" name="fDownloadSpecCeBtn" id="fDownloadSpecCeBtn" class="btn toggleButton{% if need_ce==1 %} btn_green{% endif %}" value="C. elegans" />
+		<input type="button" name="fDownloadSpecScBtn" id="fDownloadSpecScBtn" class="btn toggleButton{% if need_sc==1 %} btn_green{% endif %}" value="S. cerevisiae" />
 		
 		<br />
 		<input type="button" name="fDownloadIntByLoc" id="fDownloadIntByLoc" class="btn" value="Interactions By Localizations" />
@@ -27,7 +27,7 @@
 		<br /><br /><label>E-mail:</label><input type="text" name="fProtSearchKeyword" id="fProtSearchKeyword" value="" />
 		<br />Filling in your e-mail is <b>optional</b> and secure. It would <b>help us enhance</b> our services by knowing better our userbase. [<a href="">Details</a>]
 		
-		<br /><br /><input type="submit" name="fDownloadSubmit" id="fDownloadSubmit" class="btn" value="Start Download" />
+		<br /><br /><input type="submit" name="fDownloadSubmit" id="fDownloadSubmit" class="btn btn_submit" value="Start Download" />
 	</form>
 	
 
