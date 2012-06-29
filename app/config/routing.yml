@@ -14,11 +14,7 @@ ComppiDescriptionBundle:
 StatBundle:
     resource: "@StatBundle/Controller/"
     type:     annotation
-    prefix:   /stat/
-
-dev_home:
-    pattern:   /
-    defaults:  { _controller: DownloadBundle:Download:list }    
+    prefix:   /stat/  
 
 DownloadBundle:
     resource: "@DownloadBundle/Controller/"
