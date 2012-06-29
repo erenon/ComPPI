@@ -2,7 +2,7 @@
 
 #Builds database
 
-defaultEnv="test"
+defaultEnv="prod"
 env=${1:-$defaultEnv}
 
 dir="$( cd "$( dirname "$0" )" && pwd )"
