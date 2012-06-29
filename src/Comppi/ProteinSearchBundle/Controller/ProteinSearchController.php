@@ -43,8 +43,6 @@ class ProteinSearchController extends Controller
 				}
             }
         }
-//var_dump($T['ls']);
-		$T['sql'] = '';
 		
 		//var_dump( $Hs_ids );
 		

@@ -42,6 +42,9 @@ a:visited { text-decoration: underline; }
 .btn_green { color: #E1FFCE; background: url("btn_bg_green.png") #307500; border: 1px solid #228800; }
 .btn a { color: #E0DFDC; text-decoration: none; }
 .btn a:hover, .btn:hover, .btn_green:hover { color: #fff; }
+.btn_src { font-size: 12px; padding: 0 8px; }
+.btn_submit { color: #000; background: #E49E32 url("btn_bg_orange.png") repeat-x top left; border: 1px solid #E49E32; }
+.btn_submit:hover { color: #800000; }
 
 .help {}
 .help_details {}
@@ -57,9 +60,9 @@ a:visited { text-decoration: underline; }
 }
 .infobtn a { color: #E0DFDC; text-decoration: none; }
 .infobtn a:hover { color: #fff; }
-.btn_src { font-size: 12px; padding: 0 8px; }
 
-label { margin: 2px; width: 180px; }
+label { display: block; float: left; width: 200px; margin: 2px; }
+/*#fProtSearchLocECBtn { margin-left: 206px; }  properly align as a label was before it */
 input, select, textarea {
 	margin: 2px;
 	padding: 8px;
@@ -71,8 +74,9 @@ input, select, textarea {
 /*input[type='checkbox'] { padding: 8px; }*/
 
 /* PROTEIN SEARCH */
-#ProteinSearchForm { text-align: left; }
-#fProteinSearchKeyword { width: 505px; }
+#ProteinSearchForm { text-align: left; margin-top: 2em; }
+#fProtSearchKeyword { width: 412px; }
+#fProtSearchMultiNames { width: 412px; }
 
 #ProteinSearchResultsTbl {
 	margin-top: 1em;
