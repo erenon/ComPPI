@@ -201,6 +201,13 @@ fi
 
 cd ../map
 
+if [ ! -f HUMAN_9606_idmapping_selected.tab ]
+then
+    wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/HUMAN_9606_idmapping_selected.tab.gz" -O ./uniprot.gz
+    gzip -d -N uniprot.gz
+    rm uniprot.gz
+fi 
+
 cd ../../
 
 ###
@@ -308,6 +315,13 @@ fi
 
 cd ../map
 
+if [ ! -f DROME_7227_idmapping_selected.tab ]
+then
+    wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/DROME_7227_idmapping_selected.tab.gz" -O ./uniprot.gz
+    gzip -d -N uniprot.gz
+    rm uniprot.gz
+fi 
+
 cd ../../
 
 ###
@@ -404,6 +418,13 @@ then
 fi
 
 cd ../map
+
+if [ ! -f CAEEL_6239_idmapping_selected.tab ]
+then
+    wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/CAEEL_6239_idmapping_selected.tab.gz" -O ./uniprot.gz
+    gzip -d -N uniprot.gz
+    rm uniprot.gz
+fi   
 
 cd ../../
 
@@ -512,6 +533,13 @@ then
 fi
 
 cd ../map
+
+if [ ! -f YEAST_559292_idmapping_selected.tab ]
+then
+    wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/YEAST_559292_idmapping_selected.tab.gz" -O ./uniprot.gz
+    gzip -d -N uniprot.gz
+    rm uniprot.gz
+fi
 
 cd ../../
 
