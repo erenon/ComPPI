@@ -10,10 +10,10 @@
 		{% block javascripts %}
 		<script type="text/javascript" src="{{ asset('assets/jquery-1.7.2.min.js') }}"></script>
 		<script type="text/javascript" src="{{ asset('assets/jquery.comppi.js') }}"></script>
-		<script type="text/javascript" src="{{ asset('assets/google_analytics.js') }}"></script>
 		{% endblock %}
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
 		<!-- <base href="http://linkgroup.hu/comppi/" /> -->
+		{% include '::google_analytics.html.twig' %}
     </head>
     <body>
 		{% block header %}
