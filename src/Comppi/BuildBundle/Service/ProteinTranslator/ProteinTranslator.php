@@ -12,7 +12,8 @@ class ProteinTranslator
     private $namingConventionOrder = array(
         'UniProtKB-AC',
         'UniProtKB-ID',
-        'EntrezGene'
+        'EntrezGene',
+        'Hprd'
     );
 
     /**
@@ -78,8 +79,15 @@ class ProteinTranslator
         $translatedNames = $translateStatement->fetchAll();
 
         // get strongest translated name
-        $strongestOrder = array_search($namingConvention, $this->namingConventionOrder);
+        // init strongest translation as the current one
         $strongestTranslation = array($namingConvention, $proteinName);
+        $strongestOrder = array_search($namingConvention, $this->namingConventionOrder);
+
+        // convention not found in the order
+        // the fixed weakest order (100) is necessary
+        if ($strongestOrder === false) {
+            $strongestOrder = 100;
+        }
 
         foreach ($translatedNames as $translatedName) {
             $translatedNameOrder = array_search(
