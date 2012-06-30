@@ -2,7 +2,7 @@
 
 namespace Comppi\BuildBundle\Service\DatabaseProvider\Parser\Map;
 
-class GeneidToUniprot implements MapParserInterface
+class Uniprot implements MapParserInterface
 {
     private $fileName;
     private $fileHandle = null;
