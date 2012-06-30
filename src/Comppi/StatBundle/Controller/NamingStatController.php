@@ -111,7 +111,19 @@ class NamingStatController extends Controller
      * @Template()
      */
     public function mappingAction() {
-        return array();
+        /**
+         * @var $statistics Comppi\StatBundle\Service\Statistics\Statistics
+         */
+        $statistics = $this->get('comppi.stat.statistics');
+        $mapStats = array();
+
+        foreach ($this->species as $specie => $specieName) {
+            $mapStats[$specieName] = $statistics->getMapStats($specie);
+        }
+
+        return array(
+            'mapStats' => $mapStats
+        );
     }
 
     /**
