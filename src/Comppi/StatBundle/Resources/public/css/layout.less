@@ -8,6 +8,8 @@
 
 @color_blue: #2790B0;
 
+@color_orange: #F58723;
+
 body {
     font-family: "Avant Garde";
     margin: 0;
@@ -180,4 +182,22 @@ tbody tr:nth-child(2n) {
 
 tbody tr:hover {
     background: @color_green_light;   
+}
+
+/*
+ * MESSAGES
+ */
+ 
+.message {
+    display: block;
+    padding: 0.4em 1em;
+    width: 50%;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.message-notice {
+    background: @color_orange;
+    font-weight: 700;
+    color: #fff;
 }
