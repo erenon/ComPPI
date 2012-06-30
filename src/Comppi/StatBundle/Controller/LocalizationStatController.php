@@ -54,4 +54,46 @@ class LocalizationStatController extends Controller
             'specieLocalizationStats' => $locStats
         );
     }
+
+    /**
+     * @Route("/localization/majorloc", name="stat_localization_majorloc")
+     * @Template()
+     */
+    public function majorlocAction() {
+        $majorlocGo = array (
+            'GO:0043226',
+    		'GO:0005739',
+    		'GO:0005634',
+    		'GO:0005576',
+    		'secretory_pathway',
+    		'GO:0016020'
+        );
+
+        $translator = $this->get('comppi.build.localizationTranslator');
+        $majorLocs = array();
+        foreach ($majorlocGo as $go) {
+            $id = $translator->getIdByLocalization($go);
+            $loc = array(
+                'go' => $go,
+                'id' => $id,
+                'humanReadable' => $translator->getHumanReadableLocalizationById($id)
+            );
+
+            $majorLocs[] = $loc;
+        }
+
+        usort($majorLocs, array($this, 'sortByIdCallback'));
+
+        return array (
+            'majorLocs' => $majorLocs
+        );
+    }
+
+    private function sortByIdCallback($a, $b) {
+        if ($a['id'] == $b['id']) {
+            return 0;
+        }
+
+        return ($a['id'] < $b['id']) ? -1 : 1;
+    }
 }
