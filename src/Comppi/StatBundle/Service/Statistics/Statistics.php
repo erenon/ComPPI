@@ -21,7 +21,7 @@ class Statistics
     public function getInteractionSourceStats($specie) {
         $table = 'Interaction' . ucfirst($specie);
         $selInteractionStats = $this->connection->executeQuery(
-            "SELECT sourceDb as 'database', COUNT(sourceDb) as interactionCount FROM ".$table." GROUP BY sourceDb;"
+            "SELECT sourceDb as 'database', COUNT(sourceDb) as interactionCount FROM ".$table." GROUP BY sourceDb ORDER BY interactionCount DESC;"
         );
         $interactionStats = $selInteractionStats->fetchAll();
 
@@ -31,7 +31,7 @@ class Statistics
     public function getLocalizationSourceStats($specie) {
         $table = 'ProteinToLocalization' . ucfirst($specie);
         $selLocalizationStats = $this->connection->executeQuery(
-            "SELECT sourceDb as 'database', COUNT(sourceDb) as localizationCount FROM ".$table." GROUP BY sourceDb;"
+            "SELECT sourceDb as 'database', COUNT(sourceDb) as localizationCount FROM ".$table." GROUP BY sourceDb ORDER BY localizationCount DESC;"
         );
         $localizationStats = $selLocalizationStats->fetchAll();
 
