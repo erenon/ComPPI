@@ -1,0 +1,3 @@
+ComppiProteinSearchBundle_proteinsearch:
+    pattern:  /
+    defaults: { _controller: ComppiProteinSearchBundle:ProteinSearch:proteinSearch }
