@@ -13,9 +13,9 @@ $(document).ready(function(){
 	);
 
 	// Search / Download Advanced Parameters
-	$("#AdvSearchFrame, #AdvDownloadBtn").hide();
-	$("#AdvSearchBtn, #AdvDownloadBtn").click(function() {
-		$(this).slideToggle(500);
+	$("#AdvSearchFrame").hide();
+	$("#AdvSearchBtn").click(function() {
+		$("#AdvSearchFrame").slideToggle(500);
 	});
 	
 	// ToggleButtons

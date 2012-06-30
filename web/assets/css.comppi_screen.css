@@ -63,6 +63,7 @@ a:visited { text-decoration: underline; }
 .infobtn a:hover { color: #fff; }
 
 label { display: block; float: left; width: 200px; margin: 2px; }
+br { clear: left; }
 /*#fProtSearchLocECBtn { margin-left: 206px; }  properly align as a label was before it */
 input, select, textarea {
 	margin: 2px;
@@ -93,5 +94,5 @@ input, select, textarea {
 #ProteinSearchResultsTbl td { padding: 0 5px; }
 
 /* DOWNLOAD DB */
-#DownloadForm { text-align: left; }
+#DownloadForm { text-align: left; margin-top: 1em; }
 #fDownloadLocFine { width: 780px; height: 10em; background: #505050; }
