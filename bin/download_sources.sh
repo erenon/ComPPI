@@ -437,12 +437,12 @@ then
     mkdir -p ../map
 fi
 
+cd ../map
+
 if [ ! -f "comppi_wbgeneid_uniprot.csv" ]
 then
     echo "netbiol WBGeneId -> UniProtKB-AC mapping not found, upload it manually as 'comppi_wbgeneid_uniprot.csv'"
 fi
-
-cd ../map
 
 # Uniprot
 if [ ! -f CAEEL_6239_idmapping_selected.tab ]
