@@ -39,13 +39,12 @@ class DownloadDbController extends Controller
 		
 		$T = array(
 			//'need_hs' => $request->request->get('fDownloadSpecHs')
-			'need_hs' => ( $this->species_requested['Hs'] ? 0 : 1 ),
-			'need_dm' => ( $this->species_requested['Dm'] ? 0 : 1 ),
-			'need_ce' => ( $this->species_requested['Ce'] ? 0 : 1 ),
-			'need_sc' => ( $this->species_requested['Sc'] ? 0 : 1 ),
+			'need_hs' => ( empty($this->species_requested['Hs']) ? 0 : 1 ),
+			'need_dm' => ( empty($this->species_requested['Dm']) ? 0 : 1 ),
+			'need_ce' => ( empty($this->species_requested['Ce']) ? 0 : 1 ),
+			'need_sc' => ( empty($this->species_requested['Sc']) ? 0 : 1 ),
 			//'dataset' => ( !empty($this->selected_dataset) ? $this->selected_dataset : 0 ),
 		);
-		
 		$T['locs'] = $this->buildLocTree();
 		
 		return $this->render('ComppiDownloadDbBundle:DownloadDb:download.html.twig', $T);
