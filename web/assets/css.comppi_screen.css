@@ -47,7 +47,7 @@ a:visited { text-decoration: underline; }
 .btn_submit { color: #000; background: #E49E32 url("btn_bg_orange.png") repeat-x top left; border: 1px solid #E49E32; }
 .btn_submit:hover { color: #800000; }
 
-.help {}
+.help { margin: 0; }
 .help_details {}
 .infobtn {
 	/*display: block;
@@ -93,4 +93,5 @@ input, select, textarea {
 #ProteinSearchResultsTbl td { padding: 0 5px; }
 
 /* DOWNLOAD DB */
-#DownloadForm { text-align: center; }
+#DownloadForm { text-align: left; }
+#fDownloadLocFine { width: 780px; height: 10em; background: #505050; }

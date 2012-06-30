@@ -31,8 +31,21 @@ $(document).ready(function(){
 		}
 	});
 	
+	// download low-definition locations select the high-definition counterparts
+	// @TODO: select the branch below the loc -> feed into the sql query as exact id set (IN())
+	$("#fDownloadLocCytoplasmBtn, #fDownloadLocMitoBtn, #fDownloadLocNucleusBtn, #fDownloadLocECBtn, #fDownloadLocSecrBtn, #fDownloadLocPlasMembrBtn").click(function() {
+		id = $(this).attr("rel");
+		if ( $(this).hasClass('btn_green') ) {
+			$(this).removeClass('btn_green');
+			$('#fDownloadLocFine option[value="' + id + '"]').prop('selected', false);
+		} else {
+			$(this).addClass('btn_green');
+			$('#fDownloadLocFine option[value="' + id + '"]').prop('selected', true);
+		}
+	});
+	
 	// dataset buttons can be toggled: only one button can be active, and 0 means no active button
-	$("#fDownloadIntByLoc, #fDownloadInts, #fDownloadLocs").click(function() {
+	/*$("#fDownloadIntByLoc, #fDownloadInts, #fDownloadLocs").click(function() {
 		current_is_active = $(this).hasClass('btn_green');
 		
 		switch($(this).attr("id")) {
@@ -50,7 +63,7 @@ $(document).ready(function(){
 			$(this).addClass('btn_green');
 			$("#fDownloadDataset").attr('value', value);
 		}
-	});
+	});*/
 	
 	$("#fDownloadSubmit").click(function(){
 		// no dataset or no species is selected -> error
