@@ -25,10 +25,19 @@ class ProteinSearchController extends Controller
 		
 		$request = $this->getRequest();
 		if ($request->getMethod() == 'POST') {
-			$this->species_requested['Hs'] = intval($request->request->get('fProtSearchSpecHs'));
-			$this->species_requested['Dm'] = intval($request->request->get('fProtSearchSpecDm'));
-			$this->species_requested['Ce'] = intval($request->request->get('fProtSearchSpecCe'));
-			$this->species_requested['Sc'] = intval($request->request->get('fProtSearchSpecSc'));
+			$this->species_requested['Hs'] = $T['need_hs'] = intval($request->request->get('fProtSearchSpecHs'));
+			$this->species_requested['Dm'] = $T['need_dm'] = intval($request->request->get('fProtSearchSpecDm'));
+			$this->species_requested['Ce'] = $T['need_ce'] = intval($request->request->get('fProtSearchSpecCe'));
+			$this->species_requested['Sc'] = $T['need_sc'] = intval($request->request->get('fProtSearchSpecSc'));
+
+			// the default species are all turned off -> if no species is selected, we need all of them
+			if ( array_sum($this->species_requested)==0 ) {
+				$species_to_query = $this->species_requested;
+				foreach($this->species_requested as $sp => $needed) {
+					$species_to_query[$sp] = 1;
+				}
+			}
+			
 			$keywords = array();
 			if ($request->request->get('fProtSearchKeyword')) {
 				$keywords[] = mysql_real_escape_string($request->request->get('fProtSearchKeyword'));
@@ -52,7 +61,7 @@ class ProteinSearchController extends Controller
 				$locs = $this->get('comppi.build.localizationTranslator');
 				$one_sp_at_least = false;
 
-				foreach($this->species_requested as $sp => $specie_needed) {
+				foreach($species_to_query as $sp => $specie_needed) {
 					$one_sp_at_least = true;
 					if ( $specie_needed ) {
 						$sql = "SELECT p1.proteinName AS protA, p2.proteinName AS protB, i.actorAId, i.actorBId, ptl1.localizationId AS locAId, ptl1.pubmedId AS locASrc, ptl2.localizationId AS locBId, ptl1.pubmedId AS locBSrc FROM Interaction$sp i LEFT JOIN Protein$sp p1 ON i.actorAId=p1.id LEFT JOIN Protein$sp p2 ON i.actorBId=p2.id LEFT JOIN ProteinToLocalization$sp ptl1 ON actorAId=ptl1.proteinId LEFT JOIN ProteinToLocalization$sp ptl2 ON actorBId=ptl2.proteinId WHERE ".join(' OR ', $name_cond);
@@ -80,11 +89,6 @@ class ProteinSearchController extends Controller
 				$this->get('session')->setFlash('notice', 'Please fill in at least one protein name!');
 			}
 		}
-		
-		$T['need_hs'] = $this->species_requested['Hs'];
-		$T['need_dm'] = $this->species_requested['Dm'];
-		$T['need_ce'] = $this->species_requested['Ce'];
-		$T['need_sc'] = $this->species_requested['Sc'];
 		
 		return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
 	}
