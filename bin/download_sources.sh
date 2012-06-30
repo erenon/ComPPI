@@ -227,6 +227,12 @@ then
     rm hprd.tar.gz
 fi
 
+# Netbiol refseq->uniprot
+if [ ! -f comppi_refseq_uniprot.csv ]
+then
+    echo "RefSeq->UniProtKB-AC map not found, upload manually as comppi_refseq_uniprot.csv"
+fi 
+
 cd ../../
 
 ###
@@ -342,6 +348,12 @@ then
     rm uniprot.gz
 fi 
 
+# Netbiol refseq->uniprot
+if [ ! -f comppi_refseq_uniprot.csv ]
+then
+    echo "RefSeq->UniProtKB-AC map not found, upload manually as comppi_refseq_uniprot.csv"
+fi 
+
 cd ../../
 
 ###
@@ -439,18 +451,25 @@ fi
 
 cd ../map
 
-if [ ! -f "comppi_wbgeneid_uniprot.csv" ]
-then
-    echo "netbiol WBGeneId -> UniProtKB-AC mapping not found, upload it manually as 'comppi_wbgeneid_uniprot.csv'"
-fi
-
 # Uniprot
 if [ ! -f CAEEL_6239_idmapping_selected.tab ]
 then
     wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/CAEEL_6239_idmapping_selected.tab.gz" -O ./uniprot.gz
     gzip -d -N uniprot.gz
     rm uniprot.gz
-fi   
+fi
+
+# NetBiol WBGeneId -> uniprot
+if [ ! -f "comppi_wbgeneid_uniprot.csv" ]
+then
+    echo "netbiol WBGeneId -> UniProtKB-AC mapping not found, upload it manually as 'comppi_wbgeneid_uniprot.csv'"
+fi  
+
+# Netbiol refseq->uniprot
+if [ ! -f comppi_refseq_uniprot.csv ]
+then
+    echo "RefSeq->UniProtKB-AC map not found, upload manually as comppi_refseq_uniprot.csv"
+fi 
 
 cd ../../
 
@@ -566,6 +585,12 @@ then
     wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/YEAST_559292_idmapping_selected.tab.gz" -O ./uniprot.gz
     gzip -d -N uniprot.gz
     rm uniprot.gz
+fi
+
+# Netbiol refseq->uniprot
+if [ ! -f comppi_refseq_uniprot.csv ]
+then
+    echo "RefSeq->UniProtKB-AC map not found, upload manually as comppi_refseq_uniprot.csv"
 fi
 
 cd ../../

@@ -13,6 +13,7 @@ class ProteinTranslator
         'UniProtKB-AC',
         'UniProtKB-ID',
         'EntrezGene',
+        'refseq',
         'Hprd',
         'WBGeneId'
     );
