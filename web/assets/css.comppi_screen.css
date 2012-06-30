@@ -79,6 +79,7 @@ input, select, textarea {
 #ProteinSearchForm { text-align: left; }
 #fProtSearchKeyword { width: 412px; }
 #fProtSearchMultiNames { width: 412px; }
+#fProtSearchSpecHsBtn, #fProtSearchSpecDmBtn, #fProtSearchSpecCeBtn, #fProtSearchSpecScBtn { font-style: italic; }
 
 #ProteinSearchResultsTbl {
 	margin-top: 1em;
