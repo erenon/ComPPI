@@ -1,0 +1,7 @@
+parameters:
+#    comppi_download_db.example.class: Comppi\DownloadDbBundle\Example
+
+services:
+#    comppi_download_db.example:
+#        class: %comppi_download_db.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

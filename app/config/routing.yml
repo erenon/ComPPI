@@ -1,10 +1,15 @@
-dev_home:
-    pattern:   /
-    defaults:  { _controller: StatBundle:SourceStat:index } 
-    
-stat_home:
-    pattern:   /stat    
-    defaults:  { _controller: StatBundle:SourceStat:index } 
+ComppiProteinSearchBundle:
+    resource: "@ComppiProteinSearchBundle/Resources/config/routing.yml"
+    prefix:   /protein_search/
+
+ComppiDownloadDbBundle:
+    resource: "@ComppiDownloadDbBundle/Resources/config/routing.yml"
+    prefix:   /download/
+
+ComppiDescriptionBundle:
+    resource: "@ComppiDescriptionBundle/Resources/config/routing.yml"
+    prefix:   /
+    defaults: { _controller: DescriptionBundle:Description:About }
 
 StatBundle:
     resource: "@StatBundle/Controller/"
