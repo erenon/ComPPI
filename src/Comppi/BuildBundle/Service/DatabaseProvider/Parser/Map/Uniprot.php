@@ -9,22 +9,6 @@ class Uniprot implements MapParserInterface
     private $currentIdx;
     private $currentRecord;
 
-    private $currentCursorIndex;
-    private $recordCursors = array(
-        array(
-        	'namingConventionA' => 'EntrezGene',
-            'namingConventionB'	=> 'UniProtKB-AC',
-            'proteinNameA'	=> 2,
-            'proteinNameB'	=> 0
-        ),
-        array(
-        	'namingConventionA' => 'UniProtKB-ID',
-            'namingConventionB'	=> 'UniProtKB-AC',
-            'proteinNameA'	=> 1,
-            'proteinNameB'	=> 0
-        ),
-    );
-
     public function __construct($fileName) {
         $this->fileName = $fileName;
     }
@@ -40,39 +24,95 @@ class Uniprot implements MapParserInterface
         return in_array($fileName, $parsable);
     }
 
+    private $currentLine;
+
     private function readline() {
-        $record = fgets($this->fileHandle);
+        $line = fgets($this->fileHandle);
 
         // end of file
-        if (!$record) {
+        if (!$line) {
             if (!feof($this->fileHandle)) {
                 throw new \Exception("Unexpected error while reading database");
             }
-            return;
+            return false;
         }
 
-        $recordArray = explode("\t", $record);
+        // trim EOL
+        $line = trim($line);
 
-        if (count($recordArray) != 23) {
-            throw new \Exception(
-            	"Parsed records field count is invalid (" .
-                count($recordArray)
-                . ")"
+        // don't feed empty lines
+        if ($line == "") {
+            return $this->readLine();
+        }
+
+        return $line;
+    }
+
+    private function readRecord() {
+        if (isset($this->currentLine['maps'])) {
+            // advance cursor
+            $nextMap = each($this->currentLine['maps']);
+
+            if ($nextMap !== false) {
+                $this->currentRecord['namingConventionA'] = $nextMap['value']['convention'];
+                $this->currentRecord['proteinNameA'] = $nextMap['value']['name'];
+
+                return;
+            }
+        }
+
+        // current line done
+        // read next line
+
+        $line = $this->readLine();
+        if ($line === false) {
+            // EOF
+            return;
+        }
+        $recordArray = explode("\t", $line);
+
+        $maps = array();
+
+        $maps[] = array(
+            'convention' => 'UniProtKB-ID',
+            'name' => $recordArray[1]
+        );
+
+        $maps[] = array(
+            'convention' => 'EntrezGene',
+            'name' => $recordArray[2]
+        );
+
+        $names = explode('; ', $recordArray[19]);
+
+        foreach ($names as $name) {
+            $maps[] = array(
+                'convention' => 'EnsemblGeneId',
+                'name' => $name
             );
         }
 
-        $this->currentRecord = $recordArray;
-    }
+        $names = explode('; ', $recordArray[21]);
 
-    private function advanceCursor() {
-        if ($this->currentCursorIndex == count($this->recordCursors) - 1) {
-            $this->currentCursorIndex = 0;
-            $this->readline();
-        } else {
-            $this->currentCursorIndex++;
+        foreach ($names as $name) {
+            $maps[] = array(
+                'convention' => 'EnsemblPeptideId',
+                'name' => $name
+            );
         }
 
-        $this->currentIdx++;
+        $this->currentLine = array(
+            'maps' => $maps
+        );
+
+        $this->currentRecord = array(
+            'namingConventionA' => $this->currentLine['maps'][0]['convention'],
+            'namingConventionB'	=> 'UniProtKB-AC',
+            'proteinNameA'	=> $this->currentLine['maps'][0]['name'],
+            'proteinNameB'	=> $recordArray[0]
+        );
+
+        next($this->currentLine['maps']);
     }
 
     /* Iterator methods */
@@ -85,20 +125,11 @@ class Uniprot implements MapParserInterface
             rewind($this->fileHandle);
         }
 
-        $this->currentCursorIndex = count($this->recordCursors) - 1;
-        $this->advanceCursor();
+        $this->readRecord();
     }
 
     public function current() {
-        $recordArray = $this->currentRecord;
-        $cursor = $this->recordCursors[$this->currentCursorIndex];
-
-        return array(
-            'namingConventionA' => $cursor['namingConventionA'],
-            'namingConventionB'	=> $cursor['namingConventionB'],
-            'proteinNameA'	=> $recordArray[$cursor['proteinNameA']],
-            'proteinNameB'	=> $recordArray[$cursor['proteinNameB']]
-        );
+        return $this->currentRecord;
     }
 
     public function key() {
@@ -106,7 +137,8 @@ class Uniprot implements MapParserInterface
     }
 
     public function next() {
-        $this->advanceCursor();
+        $this->currentIdx++;
+        $this->readRecord();
     }
 
     public function valid() {
