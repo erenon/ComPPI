@@ -31,6 +31,15 @@ No interaction source found
 </div>
 {% endfor %}
     </tbody>
+    {% if interactionTotal %}
+    <tfoot>
+        <tr>
+            <td>{% trans %}TOTAL{% endtrans %}</td>
+            <td class="tcell-numeric">{{ interactionTotal.proteinCount }}</td>
+            <td class="tcell-numeric">{{ interactionTotal.interactionCount }}</td>
+        </tr>
+    </tfoo>
+    {% endif %}
 </table>
 
 <div class="headline">
@@ -60,6 +69,15 @@ No localization source found
 </div>
 {% endfor %}
     </tbody>
+    {% if localizationTotal %}
+    <tfoot>
+        <tr>
+            <td>{% trans %}TOTAL{% endtrans %}</td>
+            <td class="tcell-numeric">{{ localizationTotal.proteinCount }}</td>
+            <td class="tcell-numeric">{{ localizationTotal.localizationCount }}</td>
+        </tr>
+    </tfoo>
+    {% endif %}
 </table>
 
 {% endblock %}

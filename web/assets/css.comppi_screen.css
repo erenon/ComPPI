@@ -47,7 +47,7 @@ a:visited { text-decoration: underline; }
 .btn_submit { color: #000; background: #E49E32 url("btn_bg_orange.png") repeat-x top left; border: 1px solid #E49E32; }
 .btn_submit:hover { color: #800000; }
 
-.help {}
+.help { margin: 0; }
 .help_details {}
 .infobtn {
 	/*display: block;
@@ -63,6 +63,7 @@ a:visited { text-decoration: underline; }
 .infobtn a:hover { color: #fff; }
 
 label { display: block; float: left; width: 200px; margin: 2px; }
+br { clear: left; }
 /*#fProtSearchLocECBtn { margin-left: 206px; }  properly align as a label was before it */
 input, select, textarea {
 	margin: 2px;
@@ -75,7 +76,7 @@ input, select, textarea {
 /*input[type='checkbox'] { padding: 8px; }*/
 
 /* PROTEIN SEARCH */
-#ProteinSearchForm { text-align: left; margin-top: 2em; }
+#ProteinSearchForm { text-align: left; }
 #fProtSearchKeyword { width: 412px; }
 #fProtSearchMultiNames { width: 412px; }
 
@@ -93,4 +94,5 @@ input, select, textarea {
 #ProteinSearchResultsTbl td { padding: 0 5px; }
 
 /* DOWNLOAD DB */
-#DownloadForm { text-align: center; }
+#DownloadForm { text-align: left; margin-top: 1em; }
+#fDownloadLocFine { width: 780px; height: 10em; background: #505050; }
