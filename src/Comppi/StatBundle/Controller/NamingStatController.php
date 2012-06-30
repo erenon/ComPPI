@@ -32,6 +32,7 @@ class NamingStatController extends Controller
         // init total
         $namingStats['total'] = array();
         $namingStats['total']['specieName'] = 'TOTAL';
+        $namingStats['total']['totalProteinCount'] = 0;
 
         $totalCounts = array();
 
@@ -44,6 +45,7 @@ class NamingStatController extends Controller
 
             $namingStats[$specie]['stat'] = $specieStats;
             $namingStats[$specie]['specieName'] = $specieName;
+            $namingStats[$specie]['totalProteinCount'] = 0;
 
             // add to total
             foreach ($specieStats as $stat) {
@@ -52,6 +54,8 @@ class NamingStatController extends Controller
                 }
 
                 $totalCounts[$stat['namingConvention']] += $stat['proteinCount'];
+                $namingStats['total']['totalProteinCount'] += $stat['proteinCount'];
+                $namingStats[$specie]['totalProteinCount'] += $stat['proteinCount'];
             }
         }
 

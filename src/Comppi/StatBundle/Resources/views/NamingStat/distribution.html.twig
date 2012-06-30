@@ -41,6 +41,17 @@ No naming convention found
 </div>
 {% endfor %}
     </tbody>
+    {% if specieStat.totalProteinCount %}
+    <tfoot>
+        <tr>
+            <td>{% trans %}TOTAL{% endtrans %}</td>
+            <td class="tcell-numeric">{{ specieStat.totalProteinCount }}</td>
+            {% if specieAbbr != 'total' %}
+            <td></td>
+            {% endif %}
+        </tr>
+    </tfoot>
+    {% endif %}
 </table>
 
 {% endfor %}
