@@ -46,20 +46,40 @@ class SourceStatController extends Controller
         $locaizationSourceStat = $statistics->getLocalizationSourceStats($specie);
         $sourceProteinCounts = $statistics->getSourceProteinCounts($specie);
 
+        $totalInteractionProteinCount = 0;
+        $totalInteractionCount = 0;
+
+        $totalLocalizationProteinCount = 0;
+        $totalLocalizationCount = 0;
+
         foreach ($interactionSourceStat as $key => $stat) {
             $interactionSourceStat[$key]['proteinCount'] =
                 $sourceProteinCounts[$stat['database']];
+
+            $totalInteractionProteinCount += $sourceProteinCounts[$stat['database']];
+            $totalInteractionCount += $stat['interactionCount'];
         }
 
         foreach ($locaizationSourceStat as $key => $stat) {
             $locaizationSourceStat[$key]['proteinCount'] =
                 $sourceProteinCounts[$stat['database']];
+
+            $totalLocalizationProteinCount += $sourceProteinCounts[$stat['database']];
+            $totalLocalizationCount += $stat['localizationCount'];
         }
 
         return array(
         	'specieName' => $specieName,
             'interactions' => $interactionSourceStat,
+            'interactionTotal' => array(
+                'proteinCount' => $totalInteractionProteinCount,
+                'interactionCount' => $totalInteractionCount
+            ),
             'localizations' => $locaizationSourceStat,
+            'localizationTotal' => array(
+                'proteinCount' => $totalLocalizationProteinCount,
+                'localizationCount' => $totalLocalizationCount
+            ),
         	'species' => $this->species // subnav menu entries
         );
     }
