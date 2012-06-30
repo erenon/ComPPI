@@ -83,22 +83,24 @@ class Uniprot implements MapParserInterface
             'name' => $recordArray[2]
         );
 
-        $names = explode('; ', $recordArray[19]);
+        if ($this->fileName == 'HUMAN_9606_idmapping_selected.tab') {
+            $names = explode('; ', $recordArray[19]);
 
-        foreach ($names as $name) {
-            $maps[] = array(
-                'convention' => 'EnsemblGeneId',
-                'name' => $name
-            );
-        }
+            foreach ($names as $name) {
+                $maps[] = array(
+                    'convention' => 'EnsemblGeneId',
+                    'name' => $name
+                );
+            }
 
-        $names = explode('; ', $recordArray[21]);
+            $names = explode('; ', $recordArray[21]);
 
-        foreach ($names as $name) {
-            $maps[] = array(
-                'convention' => 'EnsemblPeptideId',
-                'name' => $name
-            );
+            foreach ($names as $name) {
+                $maps[] = array(
+                    'convention' => 'EnsemblPeptideId',
+                    'name' => $name
+                );
+            }
         }
 
         $this->currentLine = array(
