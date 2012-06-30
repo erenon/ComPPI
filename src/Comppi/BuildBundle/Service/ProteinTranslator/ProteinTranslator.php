@@ -13,6 +13,8 @@ class ProteinTranslator
         'UniProtKB-AC',
         'UniProtKB-ID',
         'EntrezGene',
+        'EnsemblPeptideId',
+        'EnsemblGeneId',
         'refseq',
         'Hprd',
         'WBGeneId'
