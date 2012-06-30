@@ -23,9 +23,9 @@ class CcsbHs extends AbstractInteractionParser
         $this->checkRecordFieldCount($recordArray, 4);
 
         $this->currentRecord = array(
-            'proteinANamingConvention' => 'CcsbHs',
+            'proteinANamingConvention' => 'UniprotGeneName',
             'proteinAName' => $recordArray[1],
-        	'proteinBNamingConvention' => 'CcsbHs',
+        	'proteinBNamingConvention' => 'UniprotGeneName',
             'proteinBName' => $recordArray[3],
             'pubmedId' => 21516116,
             'experimentalSystemType' => 'HQ Y2H'
