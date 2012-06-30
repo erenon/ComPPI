@@ -1,3 +1,7 @@
+home:
+    pattern: /
+    defaults: { _controller: ComppiDescriptionBundle:Description:About }
+
 ComppiProteinSearchBundle:
     resource: "@ComppiProteinSearchBundle/Resources/config/routing.yml"
     prefix:   /protein_search/
@@ -9,12 +13,15 @@ ComppiDownloadDbBundle:
 ComppiDescriptionBundle:
     resource: "@ComppiDescriptionBundle/Resources/config/routing.yml"
     prefix:   /
-    defaults: { _controller: DescriptionBundle:Description:About }
 
 StatBundle:
     resource: "@StatBundle/Controller/"
     type:     annotation
     prefix:   /stat/
+    
+stat_home:
+    pattern: /stat/
+    defaults: { _controller: StatBundle:SourceStat:index }    
 
 # Internal routing configuration to handle ESI
 #_internal:
