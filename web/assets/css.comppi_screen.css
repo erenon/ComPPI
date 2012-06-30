@@ -13,7 +13,7 @@ body  {
 }
 #Header  {
 	width: 1000px;
-	margin: 0 auto;
+	margin: 0 auto 1em 0;
     padding: 0;
 }
 #MainMenu { margin: 22px 0 0 0; padding: 0; list-style-type: none; text-align: right; color: #E0DFDC; }
