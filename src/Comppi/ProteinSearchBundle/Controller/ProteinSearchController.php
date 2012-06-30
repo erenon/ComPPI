@@ -9,10 +9,10 @@ class ProteinSearchController extends Controller
 {
     // @TODO: implement a central input processing bundle/service + Symfony-style forms
 	private $species_requested = array(
-		'Hs' => 1,
-		'Dm' => 1,
-		'Ce' => 1,
-		'Sc' => 1
+		'Hs' => 0,
+		'Dm' => 0,
+		'Ce' => 0,
+		'Sc' => 0
 	);
 	
 	public function proteinSearchAction($protein_name = '')

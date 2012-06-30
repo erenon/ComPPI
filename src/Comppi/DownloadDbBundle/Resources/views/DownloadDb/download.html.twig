@@ -4,7 +4,7 @@
 {% block title %}ComPPI - Search Protein Interactions - The Compartmentalized Protein-Protein Interaction Database{% endblock %}
 
 {% block bundlecontent %}
-	<p class="help">The compartmentalized protein-protein interaction database can be downloaded here. You can customize the parameters or get predefined datasets.</p>
+	<p class="help">Compartmentalized protein-protein interaction data can be downloaded here by major cellular compartments or by their sub-compartments. You can customize the parameters or get pre-defined datasets. You can select an option by a click, and de-select it by clicking again.</p>
 
 	{# @TODO: update this abomination to a proper Symfony form #}
 	<form id="DownloadForm" action="{{ path('ComppiDownloadDbBundle_serve') }}" method="post">
