@@ -70,6 +70,11 @@ class HprdToUniprot implements MapParserInterface
             $uniprotName = $recordArray[6];
         }
 
+        if ($uniprotName == '-') {
+            // no uniprot name provided, drop record
+            return $this->readRecord();
+        }
+
         $this->currentRecord = array (
             'namingConventionA' => 'Hprd',
             'namingConventionB'	=> 'UniProtKB-AC',
