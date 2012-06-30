@@ -96,3 +96,4 @@ input, select, textarea {
 /* DOWNLOAD DB */
 #DownloadForm { text-align: left; margin-top: 1em; }
 #fDownloadLocFine { width: 780px; height: 10em; background: #505050; }
+#fDownloadSpecHsBtn, #fDownloadSpecDmBtn, #fDownloadSpecCeBtn, #fDownloadSpecScBtn { font-style: italic; }
