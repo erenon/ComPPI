@@ -1637,3 +1637,4 @@
 **** viral capsid (GO:0019028)
 **** viral envelope (GO:0019031)
 ** membrane-enclosed lumen (GO:0031974)
+
