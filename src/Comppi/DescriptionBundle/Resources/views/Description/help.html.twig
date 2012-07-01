@@ -4,9 +4,179 @@
 {% block title %}ComPPI - Help{% endblock %}
 
 {% block bundlecontent %}
+	
+	
+	
+	
 	<h1>Help</h1>
-	<h2>How should I start searching?</h2>
-	<p>Bla-bla-bla. Bla.</p>
-	<h2>Examples?</h2>
-	<p>Bla-bla-bla. Bla.</p>
+	
+	<form id="fCommentForm" method="post">
+		<p>Let us know what you think!</p>
+		<label>Name:</label><input type="text" name="fCommentName" value="" /><br />
+		<label>E-mail (optional):</label><input type="text" name="fCommentEmail" value="" /><br />
+		<textarea cols="50" rows="5"></textarea>
+		<input type="submit" class="btn" name="fCommentSubmit" id="fCommentSubmit" value="Send" />
+	</form>
+	
+	<a name="toc"></a>
+	<ul id="HelpToc">
+		<li><a href="#tutorial">Tutorial</a></li>
+		<li><a href="#opensource">ComPPI & Open Source</a></li>
+		<li><a href="#confidencescore">Confidence score</a></li>
+		<li><a href="#inputdbs">Input databases</a></li>
+		<li><a href="#subcellocs">Subcellular localizations</a></li>
+		<li><a href="#namingconventions">Protein naming conventions</a></li>
+		<li><a href="#outputformats">Output formats</a></li>
+		<li><a href="#relatedpublications">Related publications</a></li>
+		<li><a href="#othertools">Other tools by LINK-group and NetBiol</a></li>
+	</ul>
+	
+	<a name="tutorial"></a>
+	<h2>Tutorial</h2>
+	<p></p>
+	
+	<a name="opensource"></a>
+	<h2>ComPPI & Open Source</h2>
+	<p></p>
+	
+	
+	<a name="confidencescore"></a>
+	<h2>Confidence score</h2>
+	<p></p>
+	
+	
+	<a name="inputdbs"></a>
+	<h2>Input databases</h2>
+	<p>Protein-Protein interaction databases: 
+
+<h3>BioGRID </h3>
+<a href="http://thebiogrid.org/">http://thebiogrid.org/</a>
+<p>Stark,C., Breitkreutz,B.-J., Reguly,T., Boucher,L., Breitkreutz,A. and Tyers,M. (2006) BioGRID: a general repository for interaction datasets. Nucleic Acids Res., 34, D535−D539.</p>
+
+<h3>CCSB </h3>
+<a href="http://ccsb.dfci.harvard.edu/web/www/ccsb/">http://ccsb.dfci.harvard.edu/web/www/ccsb/</a>
+
+<h3>DiP</h3>
+<a href="http://dip.doe-mbi.ucla.edu/dip/Main.cgi">http://dip.doe-mbi.ucla.edu/dip/Main.cgi</a>
+Xenarios,I., Rice,D.W., Salwinski,L., Baron,M.K., Marcotte,E.M. and Eisenberg,D. (2000) DIP : the Database of Interacting Proteins. Nucleic Acids Res., 28, 289−291.
+
+<h3>DroID </h3>
+<a href="http://www.droidb.org/">http://www.droidb.org/</a>
+Yu,J., Pacifico,S., Liu,G., and Finley,R.L. (2008) DroID: the Drosophila Interactions Database, a comprehensive resource for annotated gene and protein interactions. BMC Genomics, 9, 461. 
+
+<h3>HomoMINT </h3>
+<a href="http://mint.bio.uniroma2.it/HomoMINT/Welcome.do">http://mint.bio.uniroma2.it/HomoMINT/Welcome.do</a>
+Persico,M., Ceol,A., Gavrila,C., Hoffmann,R., Florio,A. and Cesareni,G. (2005) HomoMINT: an inferred human network based on orthology mapping of protein interactions discovered in model organisms. BMC Bioinformatics, 6, S21. 
+
+<h3>HPRD </h3>
+<a href="http://www.hprd.org/">http://www.hprd.org/</a>
+Keshava Prasad,T.S., Goel,R., Kandasamy,K., Keerthikumar,S., Kumar,S., Mathivanan,S., Telikicherla,D. et al. (2009) Human Protein Reference Database --2009 update. Nucleic Acids Res., 37, D767−D772.
+
+<h3>IntAct </h3>
+<a href="http://www.ebi.ac.uk/intact/">http://www.ebi.ac.uk/intact/</a>
+Hermjakob,H., Montecchi-Palazzi,L., Lewington,C., Mudali,S., Kerrien,S., Orchard,S., Vingron,M. et al. (2004) IntAct: an open source molecular interaction database. Nucleic Acids Res., 32, D452−D455.
+
+<h3>MatrixDB </h3>
+<a href="http://matrixdb.ibcp.fr/">http://matrixdb.ibcp.fr/</a>
+Chautard,E., Fatoux-Ardore,M., Ballut,L., Thierry-Mieg,N. and Ricard-Blum,S. (2011) MatrixDB, the extracellular matrix interaction database. Nucleic Acids Res., 39, D235−D240.
+
+<h3>MINT </h3>
+<a href="http://mint.bio.uniroma2.it/mint/">http://mint.bio.uniroma2.it/mint/</a>
+Chatr-aryamontri,A., Ceol,A., Palazzi,L.M., Nardelli,G., Schneider,M.V., Castagnoli,L. and Cesareni,G. (2007) MINT: the Molecular INTeraction database. Nucleic Acids Res., 35, D572−D574.
+
+<h3>MIPS </h3>
+<a href="http://mips.helmholtz-muenchen.de/proj/ppi/">http://mips.helmholtz-muenchen.de/proj/ppi/</a>
+Pagel,P., Kovac,S., Oesterheld,M., Brauner,B., Dunger-Kaltenbach,I., Frishman,G., Montrone,C. et al. (2005) The MIPS mammalian protein-protein interaction database. Bioinformatics, 21, 832−834.
+
+<h3>PIPs </h3>
+<a href="http://www.compbio.dundee.ac.uk/www-pips/">http://www.compbio.dundee.ac.uk/www-pips/</a>
+McDowall,M.D., Scott,M.S. and Barton,G.J. (2009) PIPs: human protein-protein interaction prediction database. Nucleic Acids Res., 37, D651−D656.
+
+<p>Subcellular Localization Databases:</p>
+
+<h3>BaCelLo </h3>
+<a href="http://gpcr.biocomp.unibo.it/bacello/">http://gpcr.biocomp.unibo.it/bacello/</a>
+Pierleoni,A., Martelli,P.L., Fariselli,P. and Casadio, R. (2006) BaCelLo: a balanced subcellular localization predictor. Bioinformatics, 22, e408−e416.
+
+<h3>eSLDB </h3>
+<a href="http://gpcr.biocomp.unibo.it/esldb/">http://gpcr.biocomp.unibo.it/esldb/</a>
+Pierleoni,A., Martelli,P.L., Fariselli,P. and Casadio,R. (2007) eSLDB: eukaryotic subcellular localization database. Nucleic Acids Res., 35, D208−D212.
+
+<h3>GO </h3>
+<a href="http://www.geneontology.org/">http://www.geneontology.org/</a>
+Ashburner,M., Ball,C.A., Blake,J.A., Botstein,D., Butler,H., Cherry,J.M. et al. (2000) Gene Ontology: tool for the unification of biology. Nature Genetics, 25, 25−29.
+
+<h3>Human Proteinpedia </h3>
+<a href="http://www.humanproteinpedia.org/">http://www.humanproteinpedia.org/</a>
+Li,N., Berriz,G.F., Gibbons,F.D., Dreze,M., Ayivi-guedehoussou,N., Klitgord,N., Simon,C. et al. (2005) Towards a proteome-scale map of the human protein – protein interaction network. Nature, 437, 1173−1178.
+
+<h3>LOCATE </h3>
+<a href="http://locate.imb.uq.edu.au/">http://locate.imb.uq.edu.au/</a>
+Fink,J.L., Aturaliya,R.N., Davis,M.J., Zhang,F., Hanson,K., Teasdale,M.S., Kai,C. et al. (2006) LOCATE: a mouse protein subcellular localization database. Nucleic Acids Res., 34, D213−D217.
+
+<h3>MatrixDB </h3>
+<a href="http://matrixdb.ibcp.fr/">http://matrixdb.ibcp.fr/</a>
+Chautard,E., Fatoux-Ardore,M., Ballut,L., Thierry-Mieg,N. and Ricard-Blum,S. (2011) MatrixDB, the extracellular matrix interaction database. Nucleic Acids Res., 39, D235−D240.
+
+<h3>OrganelleDB </h3>
+<a href="http://organelledb.lsi.umich.edu/">http://organelledb.lsi.umich.edu/</a>
+Wiwatwattana,N. and Kumar,A. (2005) Organelle DB: a cross-species database of protein localization and function. Nucleic Acids Res., 33, D598−D604.
+
+<h3>PA-GOSUB </h3>
+<a href="http://webdocs.cs.ualberta.ca/~bioinfo/PA/GOSUB/">http://webdocs.cs.ualberta.ca/~bioinfo/PA/GOSUB/</a>
+Lu,P., Szafron,D., Greiner,R., Wishart,D.S., Fyshe,A., Pearcy,B., Poulin,B. et al. (2005) PA-GOSUB: a searchable database of model organism protein sequences with their predicted Gene Ontology molecular function and subcellular localization. Nucleic Acids Res., 33, D147−D153.
+
+<h3>The Human Protein Atlas </h3>
+<a href="http://www.proteinatlas.org/">http://www.proteinatlas.org/</a>
+Uhlen,M., Oksvold,P., Fagerberg,L., Lundberg,E., Jonasson,K., Forsberg,M., Zwahlen,M. et al. (2010) Towards a knowledge-based Human Protein Atlas. Nature Biotechn., 28, 1248−1250.
+
+<p>Protein ID Mapping Tables:</p>
+
+<h3>HPRD </h3>
+<a href="http://www.hprd.org/">http://www.hprd.org/</a>
+Keshava Prasad,T.S., Goel,R., Kandasamy,K., Keerthikumar,S., Kumar,S., Mathivanan,S., Telikicherla,D. et al. (2009) Human Protein Reference Database --2009 update. Nucleic Acids Res., 37, D767−D772.
+
+<h3>Uniprot </h3>
+<a href="http://www.uniprot.org/">http://www.uniprot.org/</a>
+Huang,H., McGarvey,P.B., Suzek,B.E., Mazumder,R., Zhang,J., Chen,Y. and Wu,C.H. (2011) A comprehensive protein-centric ID mapping service for molecular data integration. Bioinformatics, 27, 1190−1191. 
+
+
+<p>6, Subcellular Localizations</p>
+
+ </p>
+	
+	
+	<a name="subcellocs"></a>
+	<h2>Subcellular localizations</h2>
+	<p>High-density: </h3>
+<p>Localization tree was created by using GO cellular component terms.
+Download Localization Tree (teljes loc tree letöltés)</p>
+
+Low-density:</h3> 
+6 big cellular components: cytoplasm, nucleus, mitochondrion, secretory pathway, plasma membrane, extracellular
+Download Low-density GO Terms (itt letöltheti milyen loc-ok tartoznak bele az egyes nagy loc-okba)</p>
+	
+	
+	<a name="namingconventions"></a>
+	<h2>Protein naming conventions</h2>
+	<p></p>
+	
+	
+	<a name="outputformats"></a>
+	<h2>Output formats</h2>
+	<p></p>
+	
+	
+	<a name="relatedpublications"></a>
+	<h2>Related publications</h2>
+	<p></p>
+	
+	
+	<a name="othertools"></a>
+	<h2>Other tools by LINK-group and NetBiol</h2>
+	<p></p>
+
+4, Confidence score (ezt is linkeld majd a threshold beállításnál)
+5,  
+6, Subcellular localizations (ezt is linkeld majd a loc választásnál)
 {% endblock %}

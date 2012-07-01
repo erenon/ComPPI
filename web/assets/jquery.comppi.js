@@ -78,4 +78,10 @@ $(document).ready(function(){
 		}*/
 		return true;
 	});
+	
+	$("#fCommentSubmit").click(function(){
+		window.alert("Thank you for your contribution!");
+		$("#fCommentForm").reset();
+		return false;
+	});
 });

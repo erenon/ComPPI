@@ -32,6 +32,7 @@ a { color: #007000; text-decoration: none; font-weight: bold; }
 a:hover { color: #CC0000; }
 a:visited { text-decoration: underline; }
 .hovered_listline { background-color: #e0e0e0; }
+li { margin: 0.5em 0; }
 
 .btn, .btn_green {
 	margin: 2px;
@@ -100,3 +101,10 @@ input, select, textarea {
 #DownloadForm { text-align: left; margin-top: 1em; }
 #fDownloadLocFine { width: 780px; height: 10em; background: #505050; }
 #fDownloadSpecHsBtn, #fDownloadSpecDmBtn, #fDownloadSpecCeBtn, #fDownloadSpecScBtn { font-style: italic; }
+
+
+#fCommentForm { margin: 1em auto; width: 650px; text-align: center; }
+#fCommentForm input { width: 405px; }
+#fCommentForm label { text-align: left; padding-left: 5px; }
+#HelpToc { border-bottom: 1px solid #404040; }
+#fCommentSubmit { margin: 2px auto; }
