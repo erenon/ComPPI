@@ -9,10 +9,10 @@ class ProteinSearchController extends Controller
 {
     // @TODO: implement a central input processing bundle/service + Symfony-style forms
 	private $species_requested = array(
-		'Hs' => 0,
-		'Dm' => 0,
-		'Ce' => 0,
-		'Sc' => 0
+		'Hs' => 1,
+		'Dm' => 1,
+		'Ce' => 1,
+		'Sc' => 1
 	);
 	
 	public function proteinSearchAction($protein_name = '')
@@ -25,18 +25,12 @@ class ProteinSearchController extends Controller
 		
 		$request = $this->getRequest();
 		if ($request->getMethod() == 'POST') {
-			$this->species_requested['Hs'] = $T['need_hs'] = intval($request->request->get('fProtSearchSpecHs'));
-			$this->species_requested['Dm'] = $T['need_dm'] = intval($request->request->get('fProtSearchSpecDm'));
-			$this->species_requested['Ce'] = $T['need_ce'] = intval($request->request->get('fProtSearchSpecCe'));
-			$this->species_requested['Sc'] = $T['need_sc'] = intval($request->request->get('fProtSearchSpecSc'));
-
-			// the default species are all turned off -> if no species is selected, we need all of them
-			if ( array_sum($this->species_requested)==0 ) {
-				$species_to_query = $this->species_requested;
-				foreach($this->species_requested as $sp => $needed) {
-					$species_to_query[$sp] = 1;
-				}
-			}
+			$DB = $this->get('database_connection');
+			
+			$this->species_requested['Hs'] = intval($request->request->get('fProtSearchSpecHs'));
+			$this->species_requested['Dm'] = intval($request->request->get('fProtSearchSpecDm'));
+			$this->species_requested['Ce'] = intval($request->request->get('fProtSearchSpecCe'));
+			$this->species_requested['Sc'] = intval($request->request->get('fProtSearchSpecSc'));
 			
 			$keywords = array();
 			if ($request->request->get('fProtSearchKeyword')) {
@@ -53,18 +47,24 @@ class ProteinSearchController extends Controller
 				foreach($keywords as $name) {
 					$name = str_replace("\r", '', $name); // different carriage returns on different platforms...
 					$name_cond[] = "(p1.proteinName LIKE '%".mysql_real_escape_string($name)."%' OR p2.proteinName LIKE '%".mysql_real_escape_string($name)."%')";
+					$pg_cond[] = "(p.proteinName LIKE '%".mysql_real_escape_string($name)."%')";
 				}
 
 				// Low-level Doctrine DBAL commands with custom query building to have better control
 				// @TODO: convert to Doctrine query builder ( conn->createQueryBuilder() )?
-				$DB = $this->get('database_connection');
 				$locs = $this->get('comppi.build.localizationTranslator');
 				$one_sp_at_least = false;
 
-				foreach($species_to_query as $sp => $specie_needed) {
+				foreach($this->species_requested as $sp => $specie_needed) {
 					$one_sp_at_least = true;
 					if ( $specie_needed ) {
-						$sql = "SELECT p1.proteinName AS protA, p2.proteinName AS protB, i.actorAId, i.actorBId, ptl1.localizationId AS locAId, ptl1.pubmedId AS locASrc, ptl2.localizationId AS locBId, ptl1.pubmedId AS locBSrc FROM Interaction$sp i LEFT JOIN Protein$sp p1 ON i.actorAId=p1.id LEFT JOIN Protein$sp p2 ON i.actorBId=p2.id LEFT JOIN ProteinToLocalization$sp ptl1 ON actorAId=ptl1.proteinId LEFT JOIN ProteinToLocalization$sp ptl2 ON actorBId=ptl2.proteinId WHERE ".join(' OR ', $name_cond);
+						$sql_pg = "SELECT DISTINCT COUNT(i.actorAId) AS rownum FROM Interaction$sp i LEFT JOIN Protein$sp p ON i.actorAId=p.id WHERE ".join(' OR ', $pg_cond);
+						$r_pg = $DB->query( $sql_pg );
+						$r_rownum = $r_pg->fetch();
+						$max_rownum = (int)$r_rownum['rownum'];
+						// @TODO: to be continued...
+						
+						$sql = "SELECT DISTINCT p1.proteinName AS protA, p2.proteinName AS protB, i.actorAId, i.actorBId, ptl1.localizationId AS locAId, ptl1.pubmedId AS locASrc, ptl2.localizationId AS locBId, ptl1.pubmedId AS locBSrc FROM Interaction$sp i LEFT JOIN Protein$sp p1 ON i.actorAId=p1.id LEFT JOIN Protein$sp p2 ON i.actorBId=p2.id LEFT JOIN ProteinToLocalization$sp ptl1 ON actorAId=ptl1.proteinId LEFT JOIN ProteinToLocalization$sp ptl2 ON actorBId=ptl2.proteinId WHERE ".join(' OR ', $name_cond).' LIMIT 20';
 
 						$results = $DB->query( $sql );
 						// @TODO: exception handling here
@@ -72,15 +72,15 @@ class ProteinSearchController extends Controller
 							$T['ls'][] = array(
 								'protA' => $p['protA'],
 								'locA' => (empty($p['locAId']) ? 'N/A' : $locs->getHumanReadableLocalizationById($p['locAId'])),
-								'locASrcUrl' => $this->linkToPubmed($p['locASrc']),
+								'locASrcUrl' => (empty($p['locAId']) ? '' : $this->linkToPubmed($p['locASrc'])),
 								'protB' => $p['protB'],
 								'locB' => (empty($p['locBId']) ? 'N/A' : $locs->getHumanReadableLocalizationById($p['locBId'])),
-								'locBSrcUrl' => $this->linkToPubmed($p['locBSrc'])
+								'locBSrcUrl' => (empty($p['locBId']) ? '' : $this->linkToPubmed($p['locBSrc']))
 							);
 						}
 					}
 				}
-				
+				//die( var_dump($T['ls']) );
 				if ( !$one_sp_at_least ) {
 					$this->get('session')->setFlash('notice', 'Please select at least one genus!');
 				}
@@ -90,11 +90,16 @@ class ProteinSearchController extends Controller
 			}
 		}
 		
+		$T['need_hs'] = $this->species_requested['Hs'];
+		$T['need_dm'] = $this->species_requested['Dm'];
+		$T['need_ce'] = $this->species_requested['Ce'];
+		$T['need_sc'] = $this->species_requested['Sc'];
+		
 		return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
 	}
 	
 	private function linkToPubmed($pubmed_uid)
 	{
-		return 'http://www.ncbi.nlm.nih.gov/sites/entrez?from_uid='.$pubmed_uid;
+		return 'http://www.ncbi.nlm.nih.gov/pubmed/'.$pubmed_uid;
 	}
 }
