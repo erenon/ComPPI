@@ -12,14 +12,15 @@
         {% include '::google_analytics.html.twig' %}
     </head>
     <body>
+        {% set controller = app.request.attributes.get('_template').get('controller') %}
         <div id="head">
             <h1>ComPPI<span>Stat</span></h1>
             <ul id="site-nav" class="navigation">
-                <li><a href="{{ path('stat_source_index') }}">Sources</a></li>
-                <li><a href="#">Interactions</a></li>
-                <li><a href="{{ path('stat_localization_index') }}">Localizations</a></li>
-                <li><a href="{{ path('stat_naming_index') }}">Naming conventions</a></li>
-                <li><a href="#">Visualization</a></li>
+                <li{% if controller == 'SourceStat'%} class="active"{% endif %}><a href="{{ path('stat_source_index') }}">Sources</a></li>
+                {# <li><a href="#">Interactions</a></li> #}
+                <li{% if controller == 'LocalizationStat'%} class="active"{% endif %}><a href="{{ path('stat_localization_index') }}">Localizations</a></li>
+                <li{% if controller == 'NamingStat'%} class="active"{% endif %}><a href="{{ path('stat_naming_index') }}">Naming conventions</a></li>
+                {# <li><a href="#">Visualization</a></li> #}
             </ul>
             {% block subnav %}{% endblock %}
         </div>
