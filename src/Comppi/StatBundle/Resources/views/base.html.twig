@@ -3,11 +3,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>{% block title %}Stat{% endblock %} | Stat | ComPPI</title>
-        {% stylesheets
-            '@StatBundle/Resources/public/css/*'
-        %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-        {% endstylesheets %}
+        {% block stylesheetAssets %}
+            {% stylesheets
+                '@StatBundle/Resources/public/css/layout.less'
+            %}
+            <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
+        {% endblock %}
+        {% block javascriptAssets %}{% endblock %}
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         {% include '::google_analytics.html.twig' %}
     </head>

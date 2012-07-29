@@ -1,0 +1,44 @@
+{% extends 'StatBundle:LocalizationStat:container.html.twig' %}
+
+{% block title %}Loctree visualization{% endblock %}
+
+{% block stylesheetAssets %}
+    {{ parent() }}
+
+    {% stylesheets
+        '@StatBundle/Resources/public/css/loctree-visualization.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+{% endblock %}
+
+{% block javascriptAssets %}
+    {{ parent() }}
+
+    {% javascripts
+        '@StatBundle/Resources/public/js/jit.js'
+        '@StatBundle/Resources/public/js/loctree-visualization.js'
+    %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+
+<div class="headline">
+<h2>{% trans %}Loctree visualization{% endtrans %}</h2>
+</div>
+
+{% autoescape false %}
+<script>
+function getLocalizationTree() {
+    return '{{ jsonTree }}';
+}
+</script>
+{% endautoescape %}
+
+<div id="loctree-visualization"></div>
+<div id="loctree-visualization-log"></div>
+
+{% endblock %}
