@@ -103,8 +103,8 @@ class LocalizationStatController extends Controller
         $root = array (
             'id' => 0,
             'sid' => 0, // will be unsetted
-            'name' => 'Cell',
-            'humanReadable' => 'Cell',
+            'name' => 'Cellular component',
+            'humanReadable' => 'Cellular component',
             'data' => '',
             'children' => array()
         );
