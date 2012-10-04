@@ -87,6 +87,10 @@ class ComppiStandard implements MapParserInterface
 
         // read headers
         $header = fgets($this->fileHandle);
+
+        // trim EOL
+        $header = trim($header);
+
         $headerParts = explode("\t", $header);
 
         $this->namingConventionA = $headerParts[0];
