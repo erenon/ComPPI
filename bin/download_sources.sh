@@ -621,6 +621,32 @@ then
     rm BIOGRID-ORGANISM-3.1.81.tab2.zip     
 fi
 
+# Biogrid mapping
+if [ ! -f ./hs/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt ] \
+|| [ ! -f ./dm/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt ] \
+|| [ ! -f ./sc/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt ] \
+|| [ ! -f ./ce/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt ]
+then
+    # download zip
+    if [ ! -f BIOGRID-IDENTIFIERS-3.1.92.tab.zip ]
+    then
+        wget "http://thebiogrid.org/downloads/archives/Release%20Archive/BIOGRID-3.1.92/BIOGRID-IDENTIFIERS-3.1.92.tab.zip"
+    fi
+    
+    # extract file
+    unzip BIOGRID-IDENTIFIERS-3.1.92.tab.zip
+    
+    # filter species
+    grep "Homo sapiens" BIOGRID-IDENTIFIERS-3.1.92.tab.txt > ./hs/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt
+    grep "Drosophila melanogaster" BIOGRID-IDENTIFIERS-3.1.92.tab.txt > ./dm/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt
+    grep "Saccharomyces cerevisiae" BIOGRID-IDENTIFIERS-3.1.92.tab.txt > ./sc/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt
+    grep "Caenorhabditis elegans" BIOGRID-IDENTIFIERS-3.1.92.tab.txt > ./ce/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt
+    
+    # remove zip
+    rm BIOGRID-IDENTIFIERS-3.1.92.tab.zip
+
+fi
+
 # DiP
 if [ ! -f ./hs/interaction/Hsapi20120228.txt ] \
 || [ ! -f ./dm/interaction/Dmela20120228.txt ] \
