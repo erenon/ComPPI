@@ -1,5 +1,6 @@
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-10943667-5']);
+  _gaq.push(['_setCookiePath', '/comppi']);
   _gaq.push(['_trackPageview']);
 
   (function() {
