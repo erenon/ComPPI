@@ -7,11 +7,15 @@ class Uniprot extends AbstractMapParser
     protected static $parsableFileNames = array(
         'YEAST_559292_idmapping_selected.tab',
         'CAEEL_6239_idmapping_selected.tab',
-        'HUMAN_9606_idmapping_selected.tab',
         'DROME_7227_idmapping_selected.tab'
     );
 
-    private $currentLine;
+    protected $currentLine;
+
+    protected $fields = array(
+        'UniProtKB-ID' => 1,
+        'EntrezGene' => 2
+    );
 
     protected function readRecord() {
         if (isset($this->currentLine['maps'])) {
@@ -38,34 +42,8 @@ class Uniprot extends AbstractMapParser
 
         $maps = array();
 
-        $maps[] = array(
-            'convention' => 'UniProtKB-ID',
-            'name' => $recordArray[1]
-        );
-
-        $maps[] = array(
-            'convention' => 'EntrezGene',
-            'name' => $recordArray[2]
-        );
-
-        if ($this->fileName == 'HUMAN_9606_idmapping_selected.tab') {
-            $names = explode('; ', $recordArray[19]);
-
-            foreach ($names as $name) {
-                $maps[] = array(
-                    'convention' => 'EnsemblGeneId',
-                    'name' => $name
-                );
-            }
-
-            $names = explode('; ', $recordArray[21]);
-
-            foreach ($names as $name) {
-                $maps[] = array(
-                    'convention' => 'EnsemblPeptideId',
-                    'name' => $name
-                );
-            }
+        foreach ($this->fields as $convention => $fieldIndex) {
+            $this->addToMap($maps, $convention, $recordArray[$fieldIndex]);
         }
 
         $this->currentLine = array(
@@ -80,5 +58,20 @@ class Uniprot extends AbstractMapParser
         );
 
         next($this->currentLine['maps']);
+    }
+
+    protected function addToMap(array &$map, $convention, $nameString) {
+        if (empty($nameString)) {
+            return;
+        }
+
+        $names = explode('; ', $nameString);
+
+        foreach ($names as $name) {
+            $map[] = array(
+                'convention' => $convention,
+                'name' => $name
+            );
+        }
     }
 }
