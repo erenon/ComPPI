@@ -2,19 +2,10 @@
 
 namespace Comppi\BuildBundle\Service\DatabaseProvider\Parser\Map;
 
-class ComppiStandard implements MapParserInterface
+class ComppiStandard extends AbstractMapParser
 {
-    private $fileName;
-    private $fileHandle = null;
-    private $currentIdx;
-    private $currentRecord;
-
     private $namingConventionA;
     private $namingConventionB;
-
-    public function __construct($fileName) {
-        $this->fileName = $fileName;
-    }
 
     /**
      * Parses file if fileName starts with comppi
@@ -25,38 +16,7 @@ class ComppiStandard implements MapParserInterface
         return $prefix == substr($fileName, 0, strlen($prefix));
     }
 
-    private function readline() {
-        $line = fgets($this->fileHandle);
-
-        // end of file
-        if (!$line) {
-            if (!feof($this->fileHandle)) {
-                throw new \Exception("Unexpected error while reading database");
-            }
-            return false;
-        }
-
-        // trim EOL
-        $line = trim($line);
-
-        if ($line == "") {
-            return $this->readline();
-        }
-
-        return $line;
-    }
-
-    protected function checkRecordFieldCount($recordArray, $expectedCount) {
-        if (count($recordArray) != $expectedCount) {
-            throw new \Exception(
-                "Parsed records field count is invalid (" .
-                count($recordArray)
-                . ")"
-            );
-        }
-    }
-
-    private function readRecord() {
+    protected function readRecord() {
         $line = $this->readLine();
 
         if ($line === false) {
@@ -97,27 +57,5 @@ class ComppiStandard implements MapParserInterface
         $this->namingConventionB = $headerParts[1];
 
         $this->readRecord();
-    }
-
-    public function current() {
-        return $this->currentRecord;
-    }
-
-    public function key() {
-        return $this->currentIdx;
-    }
-
-    public function next() {
-        $this->currentIdx++;
-        $this->readRecord();
-    }
-
-    public function valid() {
-        $valid = !feof($this->fileHandle);
-        if (!$valid) {
-            fclose($this->fileHandle);
-        }
-
-        return $valid;
     }
 }
