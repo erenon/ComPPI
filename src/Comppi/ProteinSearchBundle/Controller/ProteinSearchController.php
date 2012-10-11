@@ -25,7 +25,7 @@ class ProteinSearchController extends Controller
 		
 		$request = $this->getRequest();
 		if ($request->getMethod() == 'POST') {
-			$DB = $this->get('database_connection');
+			/*$DB = $this->get('database_connection');
 			
 			$this->species_requested['Hs'] = intval($request->request->get('fProtSearchSpecHs'));
 			$this->species_requested['Dm'] = intval($request->request->get('fProtSearchSpecDm'));
@@ -87,7 +87,7 @@ class ProteinSearchController extends Controller
 			} else {
 				// @TODO: set up a symfony-style proper form validation
 				$this->get('session')->setFlash('notice', 'Please fill in at least one protein name!');
-			}
+			}*/
 		}
 		
 		$T['need_hs'] = $this->species_requested['Hs'];

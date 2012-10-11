@@ -158,6 +158,7 @@ class DownloadDbController extends Controller
 		foreach($this->species_requested as $sp => $specie_needed) {
 			if ( $specie_needed ) {
 				$sql = "SELECT p1.proteinName AS protA, p1.proteinNamingConvention AS convA, ptl1.localizationId AS locAId, p2.proteinName AS protB, p2.proteinNamingConvention AS convB, ptl2.localizationId AS locBId FROM Interaction$sp i LEFT JOIN Protein$sp p1 ON i.actorAId=p1.id LEFT JOIN Protein$sp p2 ON i.actorBId=p2.id LEFT JOIN ProteinToLocalization$sp ptl1 ON i.actorAId=ptl1.proteinId LEFT JOIN ProteinToLocalization$sp ptl2 ON i.actorBId=ptl2.proteinId WHERE ".join(" OR ", $loc_conds);
+				die($sql);
 				$results = $DB->query( $sql );
 				// @TODO: exception handling here
 				while ( $r = $results->fetch() ) {
