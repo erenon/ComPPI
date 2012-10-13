@@ -13,6 +13,7 @@
 <table>
     <thead>
         <tr>
+            <td class="tcell-numeric">ID</td>
             <td>{% trans %}Localization{% endtrans %}</td>
             <td class="tcell-numeric">{% trans %}Protein Count{% endtrans %}</td>
         </tr> 
@@ -20,6 +21,7 @@
     <tbody>
 {% for localization in localizations.stat %}
     <tr>
+        <td class="tcell-numeric">{{ localization.localizationId }}</td>
         <td>{{ localization.localizationName }}</td>
         <td class="tcell-numeric">{{ localization.proteinCount }}</td>
     </tr>    
