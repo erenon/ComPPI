@@ -43,7 +43,9 @@ class Uniprot extends AbstractMapParser
         $maps = array();
 
         foreach ($this->fields as $convention => $fieldIndex) {
-            $this->addToMap($maps, $convention, $recordArray[$fieldIndex]);
+            if (isset($recordArray[$fieldIndex])) {
+                $this->addToMap($maps, $convention, $recordArray[$fieldIndex]);
+            }
         }
 
         $this->currentLine = array(
