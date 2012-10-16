@@ -179,6 +179,12 @@ class ProteinTranslator
             $recursiveTranslations = $translatedNames;
 
             foreach ($translatedNames as $translation) {
+                if ($translation['namingConventionA'] == $namingConvention) {
+                    // avoid infinite recursion
+                    // this name is a synonym in the same convention
+                    continue;
+                }
+
                 $recursiveTranslation = $this->getSynonyms(
                     $translation['namingConventionA'],
                     $translation['proteinNameA'],
