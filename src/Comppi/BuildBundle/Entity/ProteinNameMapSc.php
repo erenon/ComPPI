@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(indexes={@ORM\index(name="search_idx", columns={"namingConventionA", "proteinNameA"})})
+ * @ORM\Table(indexes={@ORM\index(name="search_idx", columns={"namingConventionA", "proteinNameA"}), @ORM\index(name="reverse_search_idx", columns={"namingConventionB", "proteinNameB"})})
  */
 class ProteinNameMapSc
 {

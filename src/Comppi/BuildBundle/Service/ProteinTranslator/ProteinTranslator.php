@@ -158,4 +158,39 @@ class ProteinTranslator
 
         return $this->connection->lastInsertId();
     }
+
+    public function getSynonyms($namingConvention, $proteinName, $specie) {
+        $mapTableName = 'ProteinNameMap' . ucfirst($specie);
+
+        /**
+         * @var \Doctrine\DBAL\Driver\Statement
+         */
+        $translateStatement = $this->connection->prepare(
+        	'SELECT namingConventionA, proteinNameA FROM ' . $mapTableName .
+            ' WHERE namingConventionB = ? AND proteinNameB = ?'
+        );
+
+        $translateStatement->execute(array($namingConvention, $proteinName));
+        $translatedNames = $translateStatement->fetchAll(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        if (count($translatedNames) == 0) {
+            return false;
+        } else {
+            $recursiveTranslations = $translatedNames;
+
+            foreach ($translatedNames as $translation) {
+                $recursiveTranslation = $this->getSynonyms(
+                    $translation['namingConventionA'],
+                    $translation['proteinNameA'],
+                    $specie
+                );
+
+                if ($recursiveTranslation) {
+                    $recursiveTranslations = array_merge($recursiveTranslations, $recursiveTranslation);
+                }
+            }
+
+            return $recursiveTranslations;
+        }
+    }
 }
