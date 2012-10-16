@@ -23,6 +23,9 @@ php $console comppi:build:interactions sc
 echo "Load SacCe localizations"
 php $console comppi:build:localizations sc
 
+echo "Load SacCe name lookup table"
+php $console comppi:build:namelookup sc
+
 echo "Load Human maps"
 php $console comppi:build:map hs
 
@@ -31,6 +34,9 @@ php $console comppi:build:interactions hs
 
 echo "Load Human localizations"
 php $console comppi:build:localizations hs
+
+echo "Load Human name lookup table"
+php $console comppi:build:namelookup hs
 
 echo "Load Drosi maps"
 php $console comppi:build:map dm
@@ -41,6 +47,9 @@ php $console comppi:build:interactions dm
 echo "Load Drosi localizations"
 php $console comppi:build:localizations dm
 
+echo "Load Drosi name lookup table"
+php $console comppi:build:namelookup dm
+
 echo "Load C'Elegans maps"
 php $console comppi:build:map ce
 
@@ -49,4 +58,7 @@ php $console comppi:build:interactions ce
 
 echo "Load C'Elegans localizations"
 php $console comppi:build:localizations ce
+
+echo "Load C'Elegans name lookup table"
+php $console comppi:build:namelookup ce
 
