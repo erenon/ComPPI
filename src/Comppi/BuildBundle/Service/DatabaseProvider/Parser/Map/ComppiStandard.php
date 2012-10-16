@@ -7,6 +7,9 @@ class ComppiStandard extends AbstractMapParser
     private $namingConventionA;
     private $namingConventionB;
 
+    private $validMap = true;
+    private $invalidLineCount = 0;
+
     /**
      * Parses file if fileName starts with comppi
      * @param string $fileName
@@ -25,7 +28,11 @@ class ComppiStandard extends AbstractMapParser
         }
 
         $recordArray = explode("\t", $line);
-        $this->checkRecordFieldCount($recordArray, 2);
+
+        if (count($recordArray) != 2) {
+            $this->invalidLineCount++;
+            return $this->readRecord();
+        }
 
         $this->currentRecord = array (
             'namingConventionA' => $this->namingConventionA,
@@ -53,9 +60,32 @@ class ComppiStandard extends AbstractMapParser
 
         $headerParts = explode("\t", $header);
 
+        if (count($headerParts) < 2) {
+            echo "WARNING: invalid header format in comppi standard map '" .
+                $this->fileName . "'\n";
+            echo "Header found: '" . $header . "'\n";
+
+            $this->validMap = false;
+            return;
+        }
+
         $this->namingConventionA = $headerParts[0];
         $this->namingConventionB = $headerParts[1];
 
         $this->readRecord();
+    }
+
+    public function valid() {
+        $valid = !feof($this->fileHandle) && $this->validMap;
+        if (!$valid) {
+            fclose($this->fileHandle);
+
+            if ($this->invalidLineCount > 0) {
+                echo "WARNING: failed to process " . $this->invalidLineCount . "line(s) in file: '"
+                    . $this->fileName . "'\n";
+            }
+        }
+
+        return $valid;
     }
 }
