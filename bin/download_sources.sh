@@ -524,14 +524,14 @@ cd ../map
 check_comppi_custom ce comppi_worm_ensembl_gene_id-ensembl_peptide_id.txt
 check_comppi_custom ce comppi_worm_ensembl_gene_id-uniprot_swissprot.txt
 check_comppi_custom ce comppi_worm_ensembl_gene_id-uniprot_trembl.txt
+check_comppi_custom ce comppi_worm_ensembl_peptide_id-uniprot.txt
 check_comppi_custom ce comppi_worm_entrezgene-ensembl_peptide_id.txt
 check_comppi_custom ce comppi_worm_entrezgene-uniprot_swissprot.txt
 check_comppi_custom ce comppi_worm_entrezgene-uniprot_trembl.txt
 check_comppi_custom ce comppi_worm_refseq-ensembl_peptide_id.txt
 check_comppi_custom ce comppi_worm_refseq-uniprot_swissprot.txt
 check_comppi_custom ce comppi_worm_refseq-uniprot_trembl.txt
-check_comppi_custom ce comppi_worm_uniprot-ensembl_peptide_id.txt
-check_comppi_custom ce comppi_worm_uniprot-wbgeneid.txt
+check_comppi_custom ce comppi_worm_wbgeneid-uniprot.txt
 check_comppi_custom ce comppi_worm_wormbase-uniprot_swissprot.txt
 check_comppi_custom ce comppi_worm_wormbase-uniprot_trembl.txt
 
