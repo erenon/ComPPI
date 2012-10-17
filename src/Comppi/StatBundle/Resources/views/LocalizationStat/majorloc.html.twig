@@ -1,0 +1,30 @@
+{% extends 'StatBundle:LocalizationStat:container.html.twig' %}
+
+{% block title %}Localizations{% endblock %}
+
+{% block body %}
+
+<div class="headline">
+<h2>{% trans %}Major Localizations{% endtrans %}</h2>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <td>{% trans %}Localization{% endtrans %}</td>
+            <td>{% trans %}GO Accession{% endtrans %}</td>
+            <td class="tcell-numeric">{% trans %}Loctree ID{% endtrans %}</td>
+        </tr> 
+    </thead>
+    <tbody>
+{% for majorLoc in majorLocs %}
+    <tr>
+        <td>{{ majorLoc.humanReadable }}</td>
+        <td>{{ majorLoc.go }}</td>
+        <td class="tcell-numeric">{{ majorLoc.id }}</td>
+    </tr>    
+{% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -23,9 +23,9 @@ class CcsbSc extends AbstractInteractionParser
         $this->checkRecordFieldCount($recordArray, 2);
 
         $this->currentRecord = array(
-            'proteinANamingConvention' => 'EnsemblGeneId',
+            'proteinANamingConvention' => 'EnsemblPeptideId',
             'proteinAName' => $recordArray[0],
-        	'proteinBNamingConvention' => 'EnsemblGeneId',
+        	'proteinBNamingConvention' => 'EnsemblPeptideId',
             'proteinBName' => $recordArray[1],
             'pubmedId' => 18719252,
             'experimentalSystemType' => 'HQ Y2H'

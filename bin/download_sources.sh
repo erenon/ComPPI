@@ -11,6 +11,16 @@ fi
 
 cd $bin_dir/../databases
 
+# Checks for comppi custom mappings
+# $1: specie abbr.
+# $2: map name
+check_comppi_custom () {
+    if [ ! -f $2 ]
+    then
+        wget "http://bificomp2.sote.hu/~erenon/comppi-custom-mapping/$1/$2"
+    fi
+}
+
 ###
 # Homo Sapiens
 ###
@@ -201,6 +211,53 @@ fi
 
 cd ../map
 
+check_comppi_custom hs comppi_hs_loc_ensemblgeneid-uniprot.txt
+check_comppi_custom hs comppi_hs_loc_ensemblpeptideid-uniprot.txt
+check_comppi_custom hs comppi_hs_loc_entrezgene-uniprot.txt
+check_comppi_custom hs comppi_hs_loc_refseq-uniprot.txt
+check_comppi_custom hs comppi_hs_loc_uni-uniprot.txt
+check_comppi_custom hs comppi_human_ensemblgeneid-swissprot.txt
+check_comppi_custom hs comppi_human_ensemblgeneid-trembl.txt
+check_comppi_custom hs comppi_human_ensembl_gene_id-uniprot_swissprot.txt
+check_comppi_custom hs comppi_human_ensembl_gene_id-uniprot_trembl.txt
+check_comppi_custom hs comppi_human_ensemblpeptideid_hiba_swissprot.txt
+check_comppi_custom hs comppi_human_ensembl_peptide_id-hiba.txt
+check_comppi_custom hs comppi_human_ensemblpeptideid_hiba.txt
+check_comppi_custom hs comppi_human_ensemblpeptideid_hiba_uniprotgenename-swissprot.txt
+check_comppi_custom hs comppi_human_ensemblpeptideid_hiba_uniprotgenename-trembl.txt
+check_comppi_custom hs comppi_human_ensembl
+check_comppi_custom hs peptide
+check_comppi_custom hs id_hiba-uniprotgenename-uniprot_swissprot.txt
+check_comppi_custom hs comppi_human_ensembl_peptide_id_hiba-uniprotgenename-uniprot_trembl.txt
+check_comppi_custom hs comppi_human_ensembl_peptide_id_hiba-uniprot_swissprot.txt
+check_comppi_custom hs comppi_human_entrezgene-ensembl_peptide_id.txt
+check_comppi_custom hs comppi_human_entrezgene-ensemblpeptideid.txt
+check_comppi_custom hs comppi_human_entrezgene-swissprot.txt
+check_comppi_custom hs comppi_human_entrezgene-trembl.txt
+check_comppi_custom hs comppi_human_entrezgene-uniprot_swissprot.txt
+check_comppi_custom hs comppi_human_entrezgene-uniprot_trembl.txt
+check_comppi_custom hs comppi_human_entrezprotein-ensembl_peptide_id.txt
+check_comppi_custom hs comppi_human_entrezprotein-ensembl.txt
+check_comppi_custom hs comppi_human_entrezprotein-swissprot.txt
+check_comppi_custom hs comppi_human_entrezprotein-trembl.txt
+check_comppi_custom hs comppi_human_entrezprotein-uniprot_swissprot.txt
+check_comppi_custom hs comppi_human_entrezprotein-uniprot_trembl.txt
+check_comppi_custom hs comppi_human_genebankproteinid-swissprot.txt
+check_comppi_custom hs comppi_human_genebankproteinid-trembl.txt
+check_comppi_custom hs comppi_human_genebankproteinid-uniprot_swissprot.txt
+check_comppi_custom hs comppi_human_genebankproteinid-uniprot_trembl.txt
+check_comppi_custom hs comppi_human_refseq-swissprot.txt
+check_comppi_custom hs comppi_human_refseq-trembl.txt
+check_comppi_custom hs comppi_human_refseq-uniprot_swissprot.txt
+check_comppi_custom hs comppi_human_refseq-uniprot_trembl.txt
+check_comppi_custom hs comppi_human_uniprot-ensembl
+check_comppi_custom hs peptide
+check_comppi_custom hs id2.txt
+check_comppi_custom hs comppi_human_uniprotgenename-swissprot.txt
+check_comppi_custom hs comppi_human_uniprotgenename-uniprot_swissprot.txt
+check_comppi_custom hs comppi_human_uniprot_hiba.txt
+check_comppi_custom hs comppi_human_uniprot_hiba-uniprot_swissprot.txt
+
 # Uniprot
 if [ ! -f HUMAN_9606_idmapping_selected.tab ]
 then
@@ -226,6 +283,12 @@ then
     # cleanup
     rm hprd.tar.gz
 fi
+
+# Netbiol refseq->uniprot
+if [ ! -f comppi_refseq_uniprot.csv ]
+then
+    echo "RefSeq->UniProtKB-AC map not found, upload manually as comppi_refseq_uniprot.csv"
+fi 
 
 cd ../../
 
@@ -334,12 +397,31 @@ fi
 
 cd ../map
 
+check_comppi_custom dm comppi_drosi_ensembl_gene_id-ensembl_peptide_id.txt
+check_comppi_custom dm comppi_drosi_ensembl_gene_id-uniprot_swissprot.txt
+check_comppi_custom dm comppi_drosi_ensembl_gene_id-uniprot_trembl.txt
+check_comppi_custom dm comppi_drosi_enterzgene-ensembl_peptide_id.txt
+check_comppi_custom dm comppi_drosi_enterzgene-uniprot_swissprot.txt
+check_comppi_custom dm comppi_drosi_entrezgene-uniprot_trembl.txt
+check_comppi_custom dm comppi_drosi_refseq-ensembl_peptide_id.txt
+check_comppi_custom dm comppi_drosi_refseq-uniprot_swissprot.txt
+check_comppi_custom dm comppi_drosi_refseq-uniprot_trembl.txt
+check_comppi_custom dm comppi_drosi_uniparc-uniprot_trembl.txt
+check_comppi_custom dm comppi_drosi_uniprot_swissprot-ensembl_peptide_id.txt
+check_comppi_custom dm comppi_drosi_uniprot_trembl-ensembl_peptide_id.txt
+
 # Uniprot
 if [ ! -f DROME_7227_idmapping_selected.tab ]
 then
     wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/DROME_7227_idmapping_selected.tab.gz" -O ./uniprot.gz
     gzip -d -N uniprot.gz
     rm uniprot.gz
+fi 
+
+# Netbiol refseq->uniprot
+if [ ! -f comppi_refseq_uniprot.csv ]
+then
+    echo "RefSeq->UniProtKB-AC map not found, upload manually as comppi_refseq_uniprot.csv"
 fi 
 
 cd ../../
@@ -439,13 +521,39 @@ fi
 
 cd ../map
 
+check_comppi_custom ce comppi_worm_ensembl_gene_id-ensembl_peptide_id.txt
+check_comppi_custom ce comppi_worm_ensembl_gene_id-uniprot_swissprot.txt
+check_comppi_custom ce comppi_worm_ensembl_gene_id-uniprot_trembl.txt
+check_comppi_custom ce comppi_worm_ensembl_peptide_id-uniprot.txt
+check_comppi_custom ce comppi_worm_entrezgene-ensembl_peptide_id.txt
+check_comppi_custom ce comppi_worm_entrezgene-uniprot_swissprot.txt
+check_comppi_custom ce comppi_worm_entrezgene-uniprot_trembl.txt
+check_comppi_custom ce comppi_worm_refseq-ensembl_peptide_id.txt
+check_comppi_custom ce comppi_worm_refseq-uniprot_swissprot.txt
+check_comppi_custom ce comppi_worm_refseq-uniprot_trembl.txt
+check_comppi_custom ce comppi_worm_wbgeneid-uniprot.txt
+check_comppi_custom ce comppi_worm_wormbase-uniprot_swissprot.txt
+check_comppi_custom ce comppi_worm_wormbase-uniprot_trembl.txt
+
 # Uniprot
 if [ ! -f CAEEL_6239_idmapping_selected.tab ]
 then
     wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/CAEEL_6239_idmapping_selected.tab.gz" -O ./uniprot.gz
     gzip -d -N uniprot.gz
     rm uniprot.gz
-fi   
+fi
+
+# NetBiol WBGeneId -> uniprot
+if [ ! -f "comppi_wbgeneid_uniprot.csv" ]
+then
+    echo "netbiol WBGeneId -> UniProtKB-AC mapping not found, upload it manually as 'comppi_wbgeneid_uniprot.csv'"
+fi  
+
+# Netbiol refseq->uniprot
+if [ ! -f comppi_refseq_uniprot.csv ]
+then
+    echo "RefSeq->UniProtKB-AC map not found, upload manually as comppi_refseq_uniprot.csv"
+fi 
 
 cd ../../
 
@@ -555,12 +663,21 @@ fi
 
 cd ../map
 
+check_comppi_custom sc comppi_uniprot_hiba.txt
+check_comppi_custom sc comppi_worm_uniprot-ensembl_peptide_id.txt
+
 # Uniprot
 if [ ! -f YEAST_559292_idmapping_selected.tab ]
 then
     wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/YEAST_559292_idmapping_selected.tab.gz" -O ./uniprot.gz
     gzip -d -N uniprot.gz
     rm uniprot.gz
+fi
+
+# Netbiol refseq->uniprot
+if [ ! -f comppi_refseq_uniprot.csv ]
+then
+    echo "RefSeq->UniProtKB-AC map not found, upload manually as comppi_refseq_uniprot.csv"
 fi
 
 cd ../../
@@ -589,6 +706,32 @@ then
     
     # remove zip
     rm BIOGRID-ORGANISM-3.1.81.tab2.zip     
+fi
+
+# Biogrid mapping
+if [ ! -f ./hs/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt ] \
+|| [ ! -f ./dm/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt ] \
+|| [ ! -f ./sc/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt ] \
+|| [ ! -f ./ce/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt ]
+then
+    # download zip
+    if [ ! -f BIOGRID-IDENTIFIERS-3.1.92.tab.zip ]
+    then
+        wget "http://thebiogrid.org/downloads/archives/Release%20Archive/BIOGRID-3.1.92/BIOGRID-IDENTIFIERS-3.1.92.tab.zip"
+    fi
+    
+    # extract file
+    unzip BIOGRID-IDENTIFIERS-3.1.92.tab.zip
+    
+    # filter species
+    grep "Homo sapiens" BIOGRID-IDENTIFIERS-3.1.92.tab.txt > ./hs/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt
+    grep "Drosophila melanogaster" BIOGRID-IDENTIFIERS-3.1.92.tab.txt > ./dm/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt
+    grep "Saccharomyces cerevisiae" BIOGRID-IDENTIFIERS-3.1.92.tab.txt > ./sc/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt
+    grep "Caenorhabditis elegans" BIOGRID-IDENTIFIERS-3.1.92.tab.txt > ./ce/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt
+    
+    # remove zip
+    rm BIOGRID-IDENTIFIERS-3.1.92.tab.zip
+
 fi
 
 # DiP

@@ -46,6 +46,12 @@ class Mint extends AbstractInteractionParser
 
             $expSysType = substr($recordArray[6], $expSysStart, $expSysEnd-$expSysStart);
 
+            // omit genetic records
+            if ($expSysType == 'genetic' || $expSysType == 'genetic interference') {
+                $validRead = false;
+                continue;
+            }
+
             $this->currentRecord = array(
                 'proteinANamingConvention' => $proteinA[0],
                 'proteinAName' => $proteinA[1],

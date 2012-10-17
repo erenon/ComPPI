@@ -12,7 +12,12 @@ class ProteinTranslator
     private $namingConventionOrder = array(
         'UniProtKB-AC',
         'UniProtKB-ID',
-        'EntrezGene'
+        'EntrezGene',
+        'EnsemblPeptideId',
+        'EnsemblGeneId',
+        'refseq',
+        'Hprd',
+        'WBGeneId'
     );
 
     /**
@@ -78,8 +83,15 @@ class ProteinTranslator
         $translatedNames = $translateStatement->fetchAll();
 
         // get strongest translated name
-        $strongestOrder = array_search($namingConvention, $this->namingConventionOrder);
+        // init strongest translation as the current one
         $strongestTranslation = array($namingConvention, $proteinName);
+        $strongestOrder = array_search($namingConvention, $this->namingConventionOrder);
+
+        // convention not found in the order
+        // the fixed weakest order (100) is necessary
+        if ($strongestOrder === false) {
+            $strongestOrder = 100;
+        }
 
         foreach ($translatedNames as $translatedName) {
             $translatedNameOrder = array_search(
@@ -145,5 +157,46 @@ class ProteinTranslator
         );
 
         return $this->connection->lastInsertId();
+    }
+
+    public function getSynonyms($namingConvention, $proteinName, $specie) {
+        $mapTableName = 'ProteinNameMap' . ucfirst($specie);
+
+        /**
+         * @var \Doctrine\DBAL\Driver\Statement
+         */
+        $translateStatement = $this->connection->prepare(
+        	'SELECT namingConventionA, proteinNameA FROM ' . $mapTableName .
+            ' WHERE namingConventionB = ? AND proteinNameB = ?'
+        );
+
+        $translateStatement->execute(array($namingConvention, $proteinName));
+        $translatedNames = $translateStatement->fetchAll(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        if (count($translatedNames) == 0) {
+            return false;
+        } else {
+            $recursiveTranslations = $translatedNames;
+
+            foreach ($translatedNames as $translation) {
+                if ($translation['namingConventionA'] == $namingConvention) {
+                    // avoid infinite recursion
+                    // this name is a synonym in the same convention
+                    continue;
+                }
+
+                $recursiveTranslation = $this->getSynonyms(
+                    $translation['namingConventionA'],
+                    $translation['proteinNameA'],
+                    $specie
+                );
+
+                if ($recursiveTranslation) {
+                    $recursiveTranslations = array_merge($recursiveTranslations, $recursiveTranslation);
+                }
+            }
+
+            return $recursiveTranslations;
+        }
     }
 }

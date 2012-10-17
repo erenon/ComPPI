@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(indexes={@ORM\index(name="search_idx", columns={"proteinName", "proteinNamingConvention"})})
+ * @ORM\Table(indexes={@ORM\index(name="search_idx", columns={"name", "namingConvention"})})
  */
-class ProteinSc
+class NameToProteinCe
 {
     /**
      * @ORM\Id
@@ -20,10 +20,17 @@ class ProteinSc
     /**
      * @ORM\Column(type="string", length="255")
      */
-    protected $proteinName;
+    protected $namingConvention;
 
     /**
      * @ORM\Column(type="string", length="255")
      */
-    protected $proteinNamingConvention;
+    protected $name;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="ProteinCe")
+     */
+    protected $proteinId;
+
 }
