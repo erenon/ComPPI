@@ -16,7 +16,7 @@ class ProteinSearchController extends Controller
 	);
 	// internal switches to create demonstration and presentation figures
 	private $null_loc_needed = false; // show rows where one or both locations are unknown
-	private $result_set_limit = 50; // limit the number of displayed results to ... (0 = unlimited)
+	private $result_set_limit = 0; // limit the number of displayed results to ... (0 = unlimited)
 	
 	public function proteinSearchAction($protein_name = '')
     {
@@ -61,6 +61,9 @@ class ProteinSearchController extends Controller
 				$locs = $this->get('comppi.build.localizationTranslator');
 				$one_sp_at_least = false;
 				$a_protein_ids = array(); // container for protein IDs from both names and synonyms
+				$d_names_found = 0; // number of search results in the Protein tables.
+				$d_synonyms_found = 0; // number of search results in the ProteinNameMap tables.
+				$d_interactions_found = 0;
 
 				foreach($this->species_requested as $sp => $specie_needed) {
 					$one_sp_at_least = true;
@@ -75,11 +78,10 @@ class ProteinSearchController extends Controller
 						}
 						
 						if ( !empty($a_protein_ids) ) {
-							$d_names_found = count($a_protein_ids);
+							$d_names_found += count($a_protein_ids);
 							// IDS  FROM PROTEIN SYNONYMS
 							$r_prot_ids_from_synonyms = $DB->query( "SELECT DISTINCT proteinId FROM NameToProtein$sp WHERE ".join(' OR ', $name2prot_cond) );
 							if ( !$r_prot_ids_from_synonyms ) throw new Exception('Protein synonyms query failed!');
-							$d_synonyms_found = 0;
 							while($r = $r_prot_ids_from_synonyms->fetch()) {
 								$a_protein_ids[$r['proteinId']] = (int)$r['proteinId'];
 								$d_synonyms_found++;
@@ -123,8 +125,9 @@ class ProteinSearchController extends Controller
 									'locB' => (empty($p['locBId']) ? 'N/A' : $locs->getHumanReadableLocalizationById($p['locBId'])),
 									'locBSrcUrl' => (empty($p['locBId']) ? '' : $this->linkToPubmed($p['locBSrc']))
 								);
+								$d_interactions_found++;
 							}
-							$T['result_msg'] = sprintf('%d proteins with %d synonyms were found.', $d_names_found, $d_synonyms_found);
+							$T['result_msg'] = sprintf('%d proteins with %d synonyms and %d interactions were found.', $d_names_found, $d_synonyms_found, $d_interactions_found);
 						} else {
 							$T['result_msg'] = 'No matching protein name (or synonym) was found.';
 						}
