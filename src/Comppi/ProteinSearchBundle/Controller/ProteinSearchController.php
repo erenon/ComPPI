@@ -14,6 +14,9 @@ class ProteinSearchController extends Controller
 		'Ce' => 1,
 		'Sc' => 1
 	);
+	// internal switches to create demonstration and presentation figures
+	private $null_loc_needed = false; // show rows where one or both locations are unknown
+	private $result_set_limit = 50; // limit the number of displayed results to ... (0 = unlimited)
 	
 	public function proteinSearchAction($protein_name = '')
     {
@@ -95,7 +98,17 @@ class ProteinSearchController extends Controller
 							//die();
 							
 							// SELECT ALL LINES FROM INTERACTIONS WHERE ANY OF THE INTERACTORS MATCHES A REQUESTED PROTEIN ID
-							$sql = "SELECT DISTINCT p1.proteinName AS protA, p2.proteinName AS protB, i.actorAId, i.actorBId, ptl1.localizationId AS locAId, ptl1.pubmedId AS locASrc, ptl2.localizationId AS locBId, ptl1.pubmedId AS locBSrc FROM Interaction$sp i LEFT JOIN Protein$sp p1 ON i.actorAId=p1.id LEFT JOIN Protein$sp p2 ON i.actorBId=p2.id LEFT JOIN ProteinToLocalization$sp ptl1 ON actorAId=ptl1.proteinId LEFT JOIN ProteinToLocalization$sp ptl2 ON actorBId=ptl2.proteinId WHERE p1.id IN($s_protein_ids_cond) OR p2.id IN($s_protein_ids_cond) LIMIT 50";
+							$sql = "SELECT DISTINCT p1.proteinName AS protA, p2.proteinName AS protB, i.actorAId, i.actorBId, ptl1.localizationId AS locAId, ptl1.pubmedId AS locASrc, ptl2.localizationId AS locBId, ptl1.pubmedId AS locBSrc "
+								."FROM Interaction$sp i
+								  LEFT JOIN Protein$sp p1 ON i.actorAId=p1.id
+								  LEFT JOIN Protein$sp p2 ON i.actorBId=p2.id
+								  LEFT JOIN ProteinToLocalization$sp ptl1 ON actorAId=ptl1.proteinId
+								  LEFT JOIN ProteinToLocalization$sp ptl2 ON actorBId=ptl2.proteinId "
+								."WHERE
+									(p1.id IN($s_protein_ids_cond)
+								 OR p2.id IN($s_protein_ids_cond))"
+								.(!$this->null_loc_needed ? " AND ptl1.localizationId IS NOT NULL AND ptl2.localizationId IS NOT NULL" : '')
+								.($this->result_set_limit ? ' LIMIT '.$this->result_set_limit : '');
 	
 							//exit($sql);
 							
