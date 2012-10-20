@@ -37,6 +37,10 @@
 		</div>
 	</form>
 	
+	{% if result_msg %}
+		<p id="protSearchResultMsg">{{ result_msg }}</p>
+	{% endif %}
+	
 	{% if ls %}
 	<table id="ProteinSearchResultsTbl" class="hovered_list">
 		<tr class="not_hovered_line"><th>Protein A</th><th>Localization A</th><th>Protein B</th><th>Localization B</th></tr>
