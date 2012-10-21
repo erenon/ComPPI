@@ -225,9 +225,7 @@ check_comppi_custom hs comppi_human_ensembl_peptide_id-hiba.txt
 check_comppi_custom hs comppi_human_ensemblpeptideid_hiba.txt
 check_comppi_custom hs comppi_human_ensemblpeptideid_hiba_uniprotgenename-swissprot.txt
 check_comppi_custom hs comppi_human_ensemblpeptideid_hiba_uniprotgenename-trembl.txt
-check_comppi_custom hs comppi_human_ensembl
-check_comppi_custom hs peptide
-check_comppi_custom hs id_hiba-uniprotgenename-uniprot_swissprot.txt
+check_comppi_custom hs comppi_human_ensembl_peptide_id_hiba-uniprotgenename-uniprot_swissprot.txt
 check_comppi_custom hs comppi_human_ensembl_peptide_id_hiba-uniprotgenename-uniprot_trembl.txt
 check_comppi_custom hs comppi_human_ensembl_peptide_id_hiba-uniprot_swissprot.txt
 check_comppi_custom hs comppi_human_entrezgene-ensembl_peptide_id.txt
@@ -250,9 +248,7 @@ check_comppi_custom hs comppi_human_refseq-swissprot.txt
 check_comppi_custom hs comppi_human_refseq-trembl.txt
 check_comppi_custom hs comppi_human_refseq-uniprot_swissprot.txt
 check_comppi_custom hs comppi_human_refseq-uniprot_trembl.txt
-check_comppi_custom hs comppi_human_uniprot-ensembl
-check_comppi_custom hs peptide
-check_comppi_custom hs id2.txt
+check_comppi_custom hs comppi_human_uniprot-ensemblpeptideid2.txt
 check_comppi_custom hs comppi_human_uniprotgenename-swissprot.txt
 check_comppi_custom hs comppi_human_uniprotgenename-uniprot_swissprot.txt
 check_comppi_custom hs comppi_human_uniprot_hiba.txt
