@@ -248,7 +248,7 @@ check_comppi_custom hs comppi_human_refseq-swissprot.txt
 check_comppi_custom hs comppi_human_refseq-trembl.txt
 check_comppi_custom hs comppi_human_refseq-uniprot_swissprot.txt
 check_comppi_custom hs comppi_human_refseq-uniprot_trembl.txt
-check_comppi_custom hs comppi_human_uniprot-ensemblpeptideid2.txt
+check_comppi_custom hs comppi_human_ensemblpeptideid2-uniprot.txt
 check_comppi_custom hs comppi_human_uniprotgenename-swissprot.txt
 check_comppi_custom hs comppi_human_uniprotgenename-uniprot_swissprot.txt
 check_comppi_custom hs comppi_human_uniprot_hiba.txt
