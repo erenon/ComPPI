@@ -1,0 +1,48 @@
+{% extends 'StatBundle::base.html.twig' %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block body %}
+
+<h2>{% trans %}Search{% endtrans %}</h2>
+
+<form action="{{ path('stat_search_search') }}" method="post" {{ form_enctype(searchForm) }}>
+    {{ form_errors(searchForm.searchTerm) }}
+    {{ form_widget(searchForm.searchTerm, { 'attr': {'size': 60} }) }}
+    <input type="submit" value="{% trans %}Search{% endtrans %}" />
+</form>
+
+{% for specieName, specieResults in results %}
+    {% if specieResults %}
+        <h3>{{ specieName }}</h3>
+        <table>
+            <thead>
+                <tr>
+                    <td>{% trans %}Naming Convention{% endtrans %}</td>
+                    <td>{% trans %}Protein Name{% endtrans %}</td>
+                    <td class="tcell-numeric">{% trans %}View details{% endtrans %}</td>
+                </tr> 
+            </thead>
+            <tbody>
+        {% for result in specieResults %}
+            <tr>
+                <td>{{ result.namingConvention }}</td>
+                <td>{{ result.name }}</td>
+                <td class="tcell-numeric">
+                    <a href="{{ path('stat_protein_protein', {'specie': specieName, 'id': result.proteinId }) }}">
+                    {% trans %}details{% endtrans %}
+                    </a>
+                </td>
+            </tr>    
+        {% endfor %}
+        </table>
+    {% endif %}
+{% else %}
+    <div class="message message-notice">
+        {% trans %}
+        Search term did not match any proteins.
+        {% endtrans %}
+    </div>
+{% endfor %}
+
+{% endblock %}
