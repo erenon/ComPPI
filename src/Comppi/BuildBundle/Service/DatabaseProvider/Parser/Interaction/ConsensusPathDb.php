@@ -51,16 +51,21 @@ class ConsensusPathDb extends AbstractInteractionParser
                 $proteinGroups[0]
             );
         } else {
-            assert(count($proteinGroups) == 2);
-            $proteinAGroup = explode('.', $proteinGroups[0]);
-            $proteinBGroup = explode('.', $proteinGroups[1]);
+            $subgroups = array();
+            foreach ($proteinGroups as $group) {
+                $subgroups[] = explode('.', $group);
+            }
 
-            foreach ($proteinAGroup as $proteinA) {
-                foreach ($proteinBGroup as $proteinB) {
-                    $proteinPairArray[] = array (
-                        $proteinA,
-                        $proteinB
-                    );
+            for ($i = 0; $i < count($subgroups) - 1; $i++) {
+                foreach ($subgroups[$i] as $proteinA) {
+                    for ($j = $i + 1; $j < count($subgroups); $j++) {
+                        foreach ($subgroups[$j] as $proteinB) {
+                            $proteinPairArray[] = array (
+                                $proteinA,
+                                $proteinB
+                            );
+                        }
+                    }
                 }
             }
         }
