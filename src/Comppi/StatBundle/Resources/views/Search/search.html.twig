@@ -10,6 +10,8 @@
     {{ form_errors(searchForm.searchTerm) }}
     {{ form_widget(searchForm.searchTerm, { 'attr': {'size': 60} }) }}
     <input type="submit" value="{% trans %}Search{% endtrans %}" />
+    
+    {{ form_rest(searchForm) }}
 </form>
 
 {% for specieName, specieResults in results %}

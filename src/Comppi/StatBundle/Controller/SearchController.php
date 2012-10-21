@@ -17,6 +17,7 @@ class SearchController extends Controller
     {
         $searchForm = $this->createFormBuilder(null)
             ->add('searchTerm', 'text')
+            ->setAttribute('csrf_protection', false)
             ->getForm();
 
         $search = $this->get('comppi.stat.search');
@@ -44,6 +45,7 @@ class SearchController extends Controller
     {
         $searchForm = $this->createFormBuilder(null)
             ->add('searchTerm', 'text')
+            ->setAttribute('csrf_protection', false)
             ->getForm();
 
         if ($request->getMethod() == 'POST') {
