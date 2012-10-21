@@ -29,16 +29,35 @@ class Search
         $results = array();
 
         foreach ($this->species as $specie) {
-            $table = 'NameToProtein' . ucfirst($specie);
-            $statement = 'SELECT namingConvention, name, proteinId FROM ' . $table .
-            	" WHERE name = ?;";
+            $main = array();
+            $synonyms = array();
+
+            $table = 'Protein' . ucfirst($specie);
+            $statement = 'SELECT id as proteinId, proteinName as name, proteinNamingConvention as namingConvention FROM ' . $table .
+            	' WHERE proteinName = ?;';
 
             $select = $this->connection->prepare($statement);
             $select->bindValue(1, $name);
             $select->execute();
 
             if ($select->rowCount() > 0) {
-                $results[$specie] = $select->fetchAll(\PDO::FETCH_ASSOC);
+                $main = $select->fetchAll(\PDO::FETCH_ASSOC);
+            }
+
+            $table = 'NameToProtein' . ucfirst($specie);
+            $statement = 'SELECT namingConvention, name, proteinId FROM ' . $table .
+            	' WHERE name = ?;';
+
+            $select = $this->connection->prepare($statement);
+            $select->bindValue(1, $name);
+            $select->execute();
+
+            if ($select->rowCount() > 0) {
+               $synonyms  = $select->fetchAll(\PDO::FETCH_ASSOC);
+            }
+
+            if (!empty($main) || !empty($synonyms)) {
+                $results[$specie] = array_merge($main, $synonyms);
             }
         }
 
