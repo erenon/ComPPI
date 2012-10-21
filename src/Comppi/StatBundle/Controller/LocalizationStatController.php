@@ -65,7 +65,7 @@ class LocalizationStatController extends Controller
     		'GO:0005739',
     		'GO:0005634',
     		'GO:0005576',
-    		'secretory_pathway',
+    		'GO:secretory_pathway',
     		'GO:0016020'
         );
 

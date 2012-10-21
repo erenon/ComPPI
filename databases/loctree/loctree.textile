@@ -1,4 +1,4 @@
-* secretory pathway (secretory_pathway)
+* secretory pathway (GO:secretory_pathway)
 * cellular component (GO:0005575)
 ** macromolecular complex (GO:0032991)
 *** protein-carbohydrate complex (GO:0032992)
@@ -197,7 +197,6 @@
 ******** ribonucleoprotein complex (GO:0030529)
 ********* RISC-loading complex (GO:0070578)
 ********* small nuclear ribonucleoprotein complex (GO:0030532)
-
 ********* telomerase holoenzyme complex (GO:0005697)
 ********** telomerase catalytic core complex (GO:0000333)
 ********* RNAi effector complex (GO:0031332)
@@ -754,7 +753,7 @@
 *********** oligosaccharyltransferase complex (GO:0008250)
 *********** UDP-N-acetylglucosamine transferase complex (GO:0043541)
 *********** signal peptidase complex (GO:0005787)
-*********** ER ubiquitin ligase complex 8GO:0000835)
+*********** ER ubiquitin ligase complex (GO:0000835)
 ************ Doa10p ubiquitin ligase complex (GO:0000837)
 ************ Hrd1p ubiquitin ligase complex (GO:0000836)
 ************* Hrd1p ubiquitin ligase ERAD-L complex (GO:0000839)
