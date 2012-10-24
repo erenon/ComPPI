@@ -5,17 +5,25 @@ namespace Comppi\BuildBundle\Service\DatabaseProvider\Parser\Map;
 class UniprotSwissprot extends AbstractMapParser
 {
     protected static $parsableFileNames = array(
-        'hs_uniprot_sprot.dat',
-        'dm_uniprot_sprot.dat',
-        'ce_uniprot_sprot.dat',
-        'sc_uniprot_sprot.dat'
+        'hs_uniprot_sprot.dat.part1',
+    	'hs_uniprot_sprot.dat.part2',
+        'dm_uniprot_sprot.dat.part1',
+    	'dm_uniprot_sprot.dat.part2',
+        'ce_uniprot_sprot.dat.part1',
+    	'ce_uniprot_sprot.dat.part2',
+        'sc_uniprot_sprot.dat.part1',
+    	'sc_uniprot_sprot.dat.part2'
     );
 
     private $specieIds = array (
-        'hs_uniprot_sprot.dat' => 9606,
-        'dm_uniprot_sprot.dat' => 7227,
-        'ce_uniprot_sprot.dat' => 6239,
-        'sc_uniprot_sprot.dat' => 4932
+        'hs_uniprot_sprot.dat.part1' => 9606,
+    	'hs_uniprot_sprot.dat.part2' => 9606,
+        'dm_uniprot_sprot.dat.part1' => 7227,
+    	'dm_uniprot_sprot.dat.part2' => 7227,
+        'ce_uniprot_sprot.dat.part1' => 6239,
+    	'ce_uniprot_sprot.dat.part2' => 6239,
+        'sc_uniprot_sprot.dat.part1' => 4932,
+    	'sc_uniprot_sprot.dat.part2' => 4932
     );
 
     private $specieId;
