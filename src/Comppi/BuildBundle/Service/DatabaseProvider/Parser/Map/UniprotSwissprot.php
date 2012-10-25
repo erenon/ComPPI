@@ -37,14 +37,16 @@ class UniprotSwissprot extends AbstractMapParser
     protected function readRecord() {
         $validRead = false;
 
-        $accessionPrefix = '"AC   ';
-        $suffix = ';"';
+        $accessionPrefix = 'AC   ';
+        $suffix = ';';
 
         $acPrefixLen = strlen($accessionPrefix);
         $suffixLen = strlen($suffix);
 
-        $speciePrefix = '"OX   NCBI_TaxID=';
+        $speciePrefix = 'OX   NCBI_TaxID=';
         $specieLine = $speciePrefix . $this->specieId . $suffix;
+
+        $specieLineLen = strlen($specieLine);
 
         $lastAccession;
 
@@ -57,7 +59,7 @@ class UniprotSwissprot extends AbstractMapParser
 
             if (substr($line, 0, $acPrefixLen) == $accessionPrefix) {
                 $lastAccession = substr($line, $acPrefixLen, -1 * $suffixLen);
-            } else if ($line == $specieLine) {
+            } else if (substr($line, 0, $specieLineLen) == $specieLine) {
                 $validRead = true;
             }
         }
@@ -68,5 +70,7 @@ class UniprotSwissprot extends AbstractMapParser
             'proteinNameA'	=> $lastAccession,
             'proteinNameB'	=> $lastAccession
         );
+
+        var_dump($this->currentRecord);
     }
 }

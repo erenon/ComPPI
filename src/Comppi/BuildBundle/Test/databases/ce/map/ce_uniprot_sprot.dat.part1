@@ -1,494 +1,500 @@
-//
-"ID   FIS_SHEHH               Reviewed;         101 AA."
-"AC   B0TJ39;"
-DT   20-MAY-2008, integrated into UniProtKB/Swiss-Prot.
-DT   08-APR-2008, sequence version 1.
-DT   16-MAY-2012, entry version 33.
-"DE   RecName: Full=DNA-binding protein fis;"
-"GN   Name=fis; OrderedLocusNames=Shal_3902;"
-OS   Shewanella halifaxensis (strain HAW-EB4).
-"OC   Bacteria; Proteobacteria; Gammaproteobacteria; Alteromonadales;"
-"OC   Shewanellaceae; Shewanella."
-"OX   NCBI_TaxID=458817;"
+ID   001R_FRG3G              Reviewed;         256 AA.
+AC   Q6GZX4;
+DT   28-JUN-2011, integrated into UniProtKB/Swiss-Prot.
+DT   19-JUL-2004, sequence version 1.
+DT   18-APR-2012, entry version 24.
+DE   RecName: Full=Putative transcription factor 001R;
+GN   ORFNames=FV3-001R;
+OS   Frog virus 3 (isolate Goorha) (FV-3).
+OC   Viruses; dsDNA viruses, no RNA stage; Iridoviridae; Ranavirus.
+OX   NCBI_TaxID=654924;
+OH   NCBI_TaxID=8295; Ambystoma (mole salamanders).
+OH   NCBI_TaxID=30343; Hyla versicolor (chameleon treefrog).
+OH   NCBI_TaxID=8316; Notophthalmus viridescens (Eastern newt) (Triturus viridescens).
+OH   NCBI_TaxID=8404; Rana pipiens (Northern leopard frog).
+OH   NCBI_TaxID=45438; Rana sylvatica (Wood frog).
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
-"RC   STRAIN=HAW-EB4;"
-"RG   US DOE Joint Genome Institute;"
-RA   Copeland A., Lucas S., Lapidus A., Glavina del Rio T., Dalin E.,
-RA   Tice H., Bruce D., Goodwin L., Pitluck S., Sims D., Brettin T.,
-RA   Detter J.C., Han C., Kuske C.R., Schmutz J., Larimer F., Land M.,
-"RA   Hauser L., Kyrpides N., Kim E., Zhao J.-S., Richardson P.;"
-"RT   ""Complete sequence of Shewanella halifaxensis HAW-EB4."";"
-RL   Submitted (JAN-2008) to the EMBL/GenBank/DDBJ databases.
-CC   -!- FUNCTION: Activates ribosomal RNA transcription. Plays a direct
-CC       role in upstream activation of rRNA promoters (By similarity).
-CC   -!- SUBUNIT: Homodimer (By similarity).
-CC   -!- SIMILARITY: Belongs to the transcriptional regulatory fis family.
+RX   PubMed=15165820; DOI=10.1016/j.virol.2004.02.019;
+RA   Tan W.G., Barkman T.J., Gregory Chinchar V., Essani K.;
+RT   "Comparative genomic analyses of frog virus 3, type species of the
+RT   genus Ranavirus (family Iridoviridae).";
+RL   Virology 323:70-84(2004).
+CC   -!- FUNCTION: Transcription activation (Potential).
 CC   -----------------------------------------------------------------------
 CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
-"DR   EMBL; CP000931; ABZ78442.1; -; Genomic_DNA."
-"DR   RefSeq; YP_001676101.1; NC_010334.1."
-"DR   ProteinModelPortal; B0TJ39; -."
-"DR   SMR; B0TJ39; 25-101."
-"DR   STRING; B0TJ39; -."
-"DR   GeneID; 5904470; -."
-"DR   GenomeReviews; CP000931_GR; Shal_3902."
-"DR   KEGG; shl:Shal_3902; -."
-"DR   PATRIC; 23510830; VBISheHal24697_4092."
-"DR   eggNOG; COG2901; -."
-"DR   HOGENOM; HOG000256331; -."
-"DR   KO; K03557; -."
-"DR   OMA; LEQQRNP; -."
-"DR   ProtClustDB; PRK00430; -."
-"DR   BioCyc; SHAL458817:SHAL_3902-MONOMER; -."
-"DR   GO; GO:0003677; F:DNA binding; IEA:UniProtKB-KW."
-"DR   GO; GO:0003700; F:sequence-specific DNA binding transcription factor activity; IEA:InterPro."
-"DR   GO; GO:0006351; P:transcription, DNA-dependent; IEA:UniProtKB-KW."
-"DR   HAMAP; MF_00166; DNA-binding_Fis; 1; -."
-"DR   InterPro; IPR005412; Fis_DNA-bd."
-"DR   InterPro; IPR009057; Homeodomain-like."
-"DR   InterPro; IPR002197; HTH_Fis."
-"DR   Pfam; PF02954; HTH_8; 1."
-"DR   PIRSF; PIRSF002097; DNA-binding_Fis; 1."
-"DR   PRINTS; PR01591; DNABINDNGFIS."
-"DR   PRINTS; PR01590; HTHFIS."
-"DR   SUPFAM; SSF46689; Homeodomain_like; 1."
-"PE   3: Inferred from homology;"
-"KW   Activator; Complete proteome; DNA-binding; Transcription;"
+DR   EMBL; AY548484; AAT09660.1; -; Genomic_DNA.
+DR   RefSeq; YP_031579.1; NC_005946.1.
+DR   ProteinModelPortal; Q6GZX4; -.
+DR   GeneID; 2947773; -.
+DR   ProtClustDB; CLSP2511514; -.
+DR   GO; GO:0006355; P:regulation of transcription, DNA-dependent; IEA:UniProtKB-KW.
+DR   GO; GO:0046782; P:regulation of viral transcription; IEA:InterPro.
+DR   GO; GO:0006351; P:transcription, DNA-dependent; IEA:UniProtKB-KW.
+DR   InterPro; IPR007031; Poxvirus_VLTF3.
+DR   Pfam; PF04947; Pox_VLTF3; 1.
+PE   4: Predicted;
+KW   Activator; Complete proteome; Reference proteome; Transcription;
 KW   Transcription regulation.
-FT   CHAIN         1    101       DNA-binding protein fis.
-FT                                /FTId=PRO_1000076985.
-FT   DNA_BIND     77     96       H-T-H motif (By similarity).
-"SQ   SEQUENCE   101 AA;  11375 MW;  7FD94885DA3B18D5 CRC64;"
-     MFDQTTHTEV HQLTVGKIET ASGAIKPQLL RDAVKRAVTN FFAQMDGQEA EEVYEMVLSE
-     VEAPLLDIIM QHTRGNQTRA ANMLGINRGT LRKKLKKYGM N
+FT   CHAIN         1    256       Putative transcription factor 001R.
+FT                                /FTId=PRO_0000410512.
+FT   COMPBIAS     14     17       Poly-Arg.
+SQ   SEQUENCE   256 AA;  29735 MW;  B4840739BF7D4121 CRC64;
+     MAFSAEDVLK EYDRRRRMEA LLLSLYYPND RKLLDYKEWS PPRVQVECPK APVEWNNPPS
+     EKGLIVGHFS GIKYKGEKAQ ASEVDVNKMC CWVSKFKDAM RRYQGIQTCK IPGKVLSDLD
+     AKIKAYNLTV EGVEGFVRYS RVTKQHVAAF LKELRHSKQY ENVNLIHYIL TDKRVDIQHL
+     EKDLVKDFKA LVESAHRMRQ GHMINVKYIL YQLLKKHGHG PDGPDILTVK TGSKGVLYDD
+     SFRKIYTDLG WKFTPL
 //
-"ID   FIS_SHELP               Reviewed;         101 AA."
-"AC   A3Q9Q3;"
-DT   15-JAN-2008, integrated into UniProtKB/Swiss-Prot.
-DT   17-APR-2007, sequence version 1.
-DT   16-MAY-2012, entry version 43.
-"DE   RecName: Full=DNA-binding protein fis;"
-"GN   Name=fis; OrderedLocusNames=Shew_0329;"
-OS   Shewanella loihica (strain ATCC BAA-1088 / PV-4).
-"OC   Bacteria; Proteobacteria; Gammaproteobacteria; Alteromonadales;"
-"OC   Shewanellaceae; Shewanella."
-"OX   NCBI_TaxID=323850;"
+ID   002L_FRG3G              Reviewed;         320 AA.
+AC   Q6GZX3;
+DT   28-JUN-2011, integrated into UniProtKB/Swiss-Prot.
+DT   19-JUL-2004, sequence version 1.
+DT   19-OCT-2011, entry version 22.
+DE   RecName: Full=Uncharacterized protein 002L;
+GN   ORFNames=FV3-002L;
+OS   Frog virus 3 (isolate Goorha) (FV-3).
+OC   Viruses; dsDNA viruses, no RNA stage; Iridoviridae; Ranavirus.
+OX   NCBI_TaxID=654924;
+OH   NCBI_TaxID=8295; Ambystoma (mole salamanders).
+OH   NCBI_TaxID=30343; Hyla versicolor (chameleon treefrog).
+OH   NCBI_TaxID=8316; Notophthalmus viridescens (Eastern newt) (Triturus viridescens).
+OH   NCBI_TaxID=8404; Rana pipiens (Northern leopard frog).
+OH   NCBI_TaxID=45438; Rana sylvatica (Wood frog).
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
-"RC   STRAIN=ATCC BAA-1088 / PV-4;"
-"RG   US DOE Joint Genome Institute;"
-RA   Copeland A., Lucas S., Lapidus A., Barry K., Detter J.C.,
-RA   Glavina del Rio T., Hammon N., Israni S., Dalin E., Tice H.,
-RA   Pitluck S., Chain P., Malfatti S., Shin M., Vergez L., Schmutz J.,
-RA   Larimer F., Land M., Hauser L., Kyrpides N., Mikhailova N.,
-"RA   Romine M.F., Serres G., Fredrickson J., Tiedje J., Richardson P.;"
-"RT   ""Complete sequence of Shewanella loihica PV-4."";"
-RL   Submitted (MAR-2007) to the EMBL/GenBank/DDBJ databases.
-CC   -!- FUNCTION: Activates ribosomal RNA transcription. Plays a direct
-CC       role in upstream activation of rRNA promoters (By similarity).
-CC   -!- SUBUNIT: Homodimer (By similarity).
-CC   -!- SIMILARITY: Belongs to the transcriptional regulatory fis family.
+RX   PubMed=15165820; DOI=10.1016/j.virol.2004.02.019;
+RA   Tan W.G., Barkman T.J., Gregory Chinchar V., Essani K.;
+RT   "Comparative genomic analyses of frog virus 3, type species of the
+RT   genus Ranavirus (family Iridoviridae).";
+RL   Virology 323:70-84(2004).
+CC   -!- SUBCELLULAR LOCATION: Host membrane; Single-pass membrane protein
+CC       (Potential).
 CC   -----------------------------------------------------------------------
 CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
-"DR   EMBL; CP000606; ABO22201.1; -; Genomic_DNA."
-"DR   RefSeq; YP_001092460.1; NC_009092.1."
-"DR   ProteinModelPortal; A3Q9Q3; -."
-"DR   SMR; A3Q9Q3; 24-101."
-"DR   STRING; A3Q9Q3; -."
-"DR   GeneID; 4922462; -."
-"DR   GenomeReviews; CP000606_GR; Shew_0329."
-"DR   KEGG; slo:Shew_0329; -."
-"DR   PATRIC; 23512423; VBISheLoi132094_0335."
-"DR   eggNOG; COG2901; -."
-"DR   HOGENOM; HOG000256331; -."
-"DR   KO; K03557; -."
-"DR   OMA; LEQQRNP; -."
-"DR   ProtClustDB; PRK00430; -."
-"DR   BioCyc; SLOI323850:SHEW_0329-MONOMER; -."
-"DR   GO; GO:0003677; F:DNA binding; IEA:UniProtKB-KW."
-"DR   GO; GO:0003700; F:sequence-specific DNA binding transcription factor activity; IEA:InterPro."
-"DR   GO; GO:0006351; P:transcription, DNA-dependent; IEA:UniProtKB-KW."
-"DR   HAMAP; MF_00166; DNA-binding_Fis; 1; -."
-"DR   InterPro; IPR005412; Fis_DNA-bd."
-"DR   InterPro; IPR009057; Homeodomain-like."
-"DR   InterPro; IPR002197; HTH_Fis."
-"DR   Pfam; PF02954; HTH_8; 1."
-"DR   PIRSF; PIRSF002097; DNA-binding_Fis; 1."
-"DR   PRINTS; PR01591; DNABINDNGFIS."
-"DR   PRINTS; PR01590; HTHFIS."
-"DR   SUPFAM; SSF46689; Homeodomain_like; 1."
-"PE   3: Inferred from homology;"
-"KW   Activator; Complete proteome; DNA-binding; Transcription;"
-KW   Transcription regulation.
-FT   CHAIN         1    101       DNA-binding protein fis.
-FT                                /FTId=PRO_1000023339.
-FT   DNA_BIND     77     96       H-T-H motif (By similarity).
-"SQ   SEQUENCE   101 AA;  11407 MW;  2FFF7B7492692424 CRC64;"
-     MFDQTTQPEA HQLTVGKIET ANGTIKPQLL RDAVKRAVTN FFAQMDGQEA EEVYEMVLCE
-     VEAPLLDIIM QHTRGNQTRA ANMLGINRGT LRKKLKKYGM N
+DR   EMBL; AY548484; AAT09661.1; -; Genomic_DNA.
+DR   RefSeq; YP_031580.1; NC_005946.1.
+DR   GeneID; 2947774; -.
+DR   ProtClustDB; CLSP2511503; -.
+DR   GO; GO:0033644; C:host cell membrane; IEA:UniProtKB-SubCell.
+DR   GO; GO:0016021; C:integral to membrane; IEA:UniProtKB-KW.
+DR   InterPro; IPR004251; Vaccinia_virus_A16.
+DR   Pfam; PF03003; DUF230; 1.
+PE   4: Predicted;
+KW   Complete proteome; Host membrane; Membrane; Reference proteome;
+KW   Transmembrane; Transmembrane helix.
+FT   CHAIN         1    320       Uncharacterized protein 002L.
+FT                                /FTId=PRO_0000410509.
+FT   TRANSMEM    301    318       Helical; (Potential).
+FT   COMPBIAS    263    295       Pro-rich.
+SQ   SEQUENCE   320 AA;  34642 MW;  9E110808B6E328E0 CRC64;
+     MSIIGATRLQ NDKSDTYSAG PCYAGGCSAF TPRGTCGKDW DLGEQTCASG FCTSQPLCAR
+     IKKTQVCGLR YSSKGKDPLV SAEWDSRGAP YVRCTYDADL IDTQAQVDQF VSMFGESPSL
+     AERYCMRGVK NTAGELVSRV SSDADPAGGW CRKWYSAHRG PDQDAALGSF CIKNPGAADC
+     KCINRASDPV YQKVKTLHAY PDQCWYVPCA ADVGELKMGT QRDTPTNCPT QVCQIVFNML
+     DDGSVTMDDV KNTINCDFSK YVPPPPPPKP TPPTPPTPPT PPTPPTPPTP PTPRPVHNRK
+     VMFFVAGAVL VAILISTVRW
 //
-"ID   FIS_SHEON               Reviewed;         101 AA."
-"AC   Q8EJR9;"
-DT   16-JAN-2004, integrated into UniProtKB/Swiss-Prot.
-DT   01-MAR-2003, sequence version 1.
-DT   11-JUL-2012, entry version 68.
-"DE   RecName: Full=DNA-binding protein fis;"
-"GN   Name=fis; OrderedLocusNames=SO_0393;"
-OS   Shewanella oneidensis (strain MR-1).
-"OC   Bacteria; Proteobacteria; Gammaproteobacteria; Alteromonadales;"
-"OC   Shewanellaceae; Shewanella."
-"OX   NCBI_TaxID=6239;"
+ID   002R_IIV3               Reviewed;         458 AA.
+AC   Q197F8;
+DT   16-JUN-2009, integrated into UniProtKB/Swiss-Prot.
+DT   11-JUL-2006, sequence version 1.
+DT   21-SEP-2011, entry version 15.
+DE   RecName: Full=Uncharacterized protein 002R;
+GN   ORFNames=IIV3-002R;
+OS   Invertebrate iridescent virus 3 (IIV-3) (Mosquito iridescent virus).
+OC   Viruses; dsDNA viruses, no RNA stage; Iridoviridae; Chloriridovirus.
+OX   NCBI_TaxID=345201;
+OH   NCBI_TaxID=7163; Aedes vexans (Inland floodwater mosquito) (Culex vexans).
+OH   NCBI_TaxID=42431; Culex territans.
+OH   NCBI_TaxID=332058; Culiseta annulata.
+OH   NCBI_TaxID=310513; Ochlerotatus sollicitans (eastern saltmarsh mosquito).
+OH   NCBI_TaxID=329105; Ochlerotatus taeniorhynchus (Black salt marsh mosquito) (Aedes taeniorhynchus).
+OH   NCBI_TaxID=7183; Psorophora ferox.
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
-"RC   STRAIN=MR-1;"
-"RX   MEDLINE=22297686; PubMed=12368813; DOI=10.1038/nbt749;"
-RA   Heidelberg J.F., Paulsen I.T., Nelson K.E., Gaidos E.J., Nelson W.C.,
-RA   Read T.D., Eisen J.A., Seshadri R., Ward N.L., Methe B.A.,
-RA   Clayton R.A., Meyer T., Tsapin A., Scott J., Beanan M.J.,
-RA   Brinkac L.M., Daugherty S.C., DeBoy R.T., Dodson R.J., Durkin A.S.,
-RA   Haft D.H., Kolonay J.F., Madupu R., Peterson J.D., Umayam L.A.,
-RA   White O., Wolf A.M., Vamathevan J.J., Weidman J.F., Impraim M.,
-RA   Lee K., Berry K.J., Lee C., Mueller J., Khouri H.M., Gill J.,
-RA   Utterback T.R., McDonald L.A., Feldblyum T.V., Smith H.O.,
-"RA   Venter J.C., Nealson K.H., Fraser C.M.;"
-"RT   ""Genome sequence of the dissimilatory metal ion-reducing bacterium"
-"RT   Shewanella oneidensis."";"
-RL   Nat. Biotechnol. 20:1118-1123(2002).
-CC   -!- FUNCTION: Activates ribosomal RNA transcription. Plays a direct
-CC       role in upstream activation of rRNA promoters (By similarity).
-CC   -!- SUBUNIT: Homodimer (By similarity).
-CC   -!- SIMILARITY: Belongs to the transcriptional regulatory fis family.
+RX   PubMed=16912294; DOI=10.1128/JVI.00464-06;
+RA   Delhon G., Tulman E.R., Afonso C.L., Lu Z., Becnel J.J., Moser B.A.,
+RA   Kutish G.F., Rock D.L.;
+RT   "Genome of invertebrate iridescent virus type 3 (mosquito iridescent
+RT   virus).";
+RL   J. Virol. 80:8439-8449(2006).
 CC   -----------------------------------------------------------------------
 CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
-"DR   EMBL; AE014299; AAN53476.1; -; Genomic_DNA."
-"DR   RefSeq; NP_716031.1; NC_004347.1."
-"DR   ProteinModelPortal; Q8EJR9; -."
-"DR   SMR; Q8EJR9; 24-101."
-"DR   GeneID; 1168270; -."
-"DR   GenomeReviews; AE014299_GR; SO_0393."
-"DR   KEGG; son:SO_0393; -."
-"DR   PATRIC; 23520489; VBISheOne101494_0383."
-"DR   eggNOG; COG2901; -."
-"DR   HOGENOM; HOG000256331; -."
-"DR   KO; K03557; -."
-"DR   OMA; LEQQRNP; -."
-"DR   ProtClustDB; PRK00430; -."
-"DR   BioCyc; SONE211586:SO_0393-MONOMER; -."
-"DR   GO; GO:0003677; F:DNA binding; IEA:UniProtKB-KW."
-"DR   GO; GO:0003700; F:sequence-specific DNA binding transcription factor activity; IEA:InterPro."
-"DR   GO; GO:0006351; P:transcription, DNA-dependent; IEA:UniProtKB-KW."
-"DR   HAMAP; MF_00166; DNA-binding_Fis; 1; -."
-"DR   InterPro; IPR005412; Fis_DNA-bd."
-"DR   InterPro; IPR009057; Homeodomain-like."
-"DR   InterPro; IPR002197; HTH_Fis."
-"DR   Pfam; PF02954; HTH_8; 1."
-"DR   PIRSF; PIRSF002097; DNA-binding_Fis; 1."
-"DR   PRINTS; PR01591; DNABINDNGFIS."
-"DR   PRINTS; PR01590; HTHFIS."
-"DR   SUPFAM; SSF46689; Homeodomain_like; 1."
-"PE   3: Inferred from homology;"
-"KW   Activator; Complete proteome; DNA-binding; Reference proteome;"
-"KW   Transcription; Transcription regulation."
-FT   CHAIN         1    101       DNA-binding protein fis.
-FT                                /FTId=PRO_0000203896.
-FT   DNA_BIND     77     96       H-T-H motif (By similarity).
-"SQ   SEQUENCE   101 AA;  11390 MW;  4FD2982815CDCFA8 CRC64;"
-     MFDQTTNTEV HQLTVGKIET ANGTIKPQLL RDAVKRAVTN FFAQLDGQEA QEVYEMVLSE
-     VEAPLLDIIM QHTRGNQTRA ANMLGINRGT LRKKLKKYGM N
+DR   EMBL; DQ643392; ABF82032.1; -; Genomic_DNA.
+DR   RefSeq; YP_654574.1; NC_008187.1.
+DR   ProteinModelPortal; Q197F8; -.
+DR   GeneID; 4156251; -.
+PE   4: Predicted;
+KW   Complete proteome; Reference proteome.
+FT   CHAIN         1    458       Uncharacterized protein 002R.
+FT                                /FTId=PRO_0000377938.
+SQ   SEQUENCE   458 AA;  53921 MW;  E46E5C85D7ACA139 CRC64;
+     MASNTVSAQG GSNRPVRDFS NIQDVAQFLL FDPIWNEQPG SIVPWKMNRE QALAERYPEL
+     QTSEPSEDYS GPVESLELLP LEIKLDIMQY LSWEQISWCK HPWLWTRWYK DNVVRVSAIT
+     FEDFQREYAF PEKIQEIHFT DTRAEEIKAI LETTPNVTRL VIRRIDDMNY NTHGDLGLDD
+     LEFLTHLMVE DACGFTDFWA PSLTHLTIKN LDMHPRWFGP VMDGIKSMQS TLKYLYIFET
+     YGVNKPFVQW CTDNIETFYC TNSYRYENVP RPIYVWVLFQ EDEWHGYRVE DNKFHRRYMY
+     STILHKRDTD WVENNPLKTP AQVEMYKFLL RISQLNRDGT GYESDSDPEN EHFDDESFSS
+     GEEDSSDEDD PTWAPDSDDS DWETETEEEP SVAARILEKG KLTITNLMKS LGFKPKPKKI
+     QSIDRYFCSL DSNYNSEDED FEYDSDSEDD DSDSEDDC
 //
-"ID   FIS_SHEPA               Reviewed;         101 AA."
-"AC   A8GZI0;"
-DT   20-MAY-2008, integrated into UniProtKB/Swiss-Prot.
-DT   13-NOV-2007, sequence version 1.
-DT   16-MAY-2012, entry version 39.
-"DE   RecName: Full=DNA-binding protein fis;"
-"GN   Name=fis; OrderedLocusNames=Spea_0389;"
-OS   Shewanella pealeana (strain ATCC 700345 / ANG-SQ1).
-"OC   Bacteria; Proteobacteria; Gammaproteobacteria; Alteromonadales;"
-"OC   Shewanellaceae; Shewanella."
-"OX   NCBI_TaxID=398579;"
+ID   003L_IIV3               Reviewed;         156 AA.
+AC   Q197F7;
+DT   16-JUN-2009, integrated into UniProtKB/Swiss-Prot.
+DT   11-JUL-2006, sequence version 1.
+DT   21-SEP-2011, entry version 15.
+DE   RecName: Full=Uncharacterized protein 003L;
+GN   ORFNames=IIV3-003L;
+OS   Invertebrate iridescent virus 3 (IIV-3) (Mosquito iridescent virus).
+OC   Viruses; dsDNA viruses, no RNA stage; Iridoviridae; Chloriridovirus.
+OX   NCBI_TaxID=345201;
+OH   NCBI_TaxID=7163; Aedes vexans (Inland floodwater mosquito) (Culex vexans).
+OH   NCBI_TaxID=42431; Culex territans.
+OH   NCBI_TaxID=332058; Culiseta annulata.
+OH   NCBI_TaxID=310513; Ochlerotatus sollicitans (eastern saltmarsh mosquito).
+OH   NCBI_TaxID=329105; Ochlerotatus taeniorhynchus (Black salt marsh mosquito) (Aedes taeniorhynchus).
+OH   NCBI_TaxID=7183; Psorophora ferox.
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
-"RC   STRAIN=ATCC 700345 / ANG-SQ1;"
-"RG   US DOE Joint Genome Institute;"
-RA   Copeland A., Lucas S., Lapidus A., Barry K., Glavina del Rio T.,
-RA   Dalin E., Tice H., Pitluck S., Chertkov O., Brettin T., Bruce D.,
-RA   Detter J.C., Han C., Schmutz J., Larimer F., Land M., Hauser L.,
-"RA   Kyrpides N., Kim E., Zhao J.-S.Z., Manno D., Hawari J., Richardson P.;"
-"RT   ""Complete sequence of Shewanella pealeana ATCC 700345."";"
-RL   Submitted (OCT-2007) to the EMBL/GenBank/DDBJ databases.
-CC   -!- FUNCTION: Activates ribosomal RNA transcription. Plays a direct
-CC       role in upstream activation of rRNA promoters (By similarity).
-CC   -!- SUBUNIT: Homodimer (By similarity).
-CC   -!- SIMILARITY: Belongs to the transcriptional regulatory fis family.
+RX   PubMed=16912294; DOI=10.1128/JVI.00464-06;
+RA   Delhon G., Tulman E.R., Afonso C.L., Lu Z., Becnel J.J., Moser B.A.,
+RA   Kutish G.F., Rock D.L.;
+RT   "Genome of invertebrate iridescent virus type 3 (mosquito iridescent
+RT   virus).";
+RL   J. Virol. 80:8439-8449(2006).
 CC   -----------------------------------------------------------------------
 CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
-"DR   EMBL; CP000851; ABV85717.1; -; Genomic_DNA."
-"DR   RefSeq; YP_001500252.1; NC_009901.1."
-"DR   ProteinModelPortal; A8GZI0; -."
-"DR   SMR; A8GZI0; 25-101."
-"DR   STRING; A8GZI0; -."
-"DR   GeneID; 5660789; -."
-"DR   GenomeReviews; CP000851_GR; Spea_0389."
-"DR   KEGG; spl:Spea_0389; -."
-"DR   PATRIC; 23530376; VBIShePea72822_0404."
-"DR   eggNOG; COG2901; -."
-"DR   HOGENOM; HOG000256331; -."
-"DR   KO; K03557; -."
-"DR   OMA; LEQQRNP; -."
-"DR   ProtClustDB; PRK00430; -."
-"DR   BioCyc; SPEA398579:SPEA_0389-MONOMER; -."
-"DR   GO; GO:0003677; F:DNA binding; IEA:UniProtKB-KW."
-"DR   GO; GO:0003700; F:sequence-specific DNA binding transcription factor activity; IEA:InterPro."
-"DR   GO; GO:0006351; P:transcription, DNA-dependent; IEA:UniProtKB-KW."
-"DR   HAMAP; MF_00166; DNA-binding_Fis; 1; -."
-"DR   InterPro; IPR005412; Fis_DNA-bd."
-"DR   InterPro; IPR009057; Homeodomain-like."
-"DR   InterPro; IPR002197; HTH_Fis."
-"DR   Pfam; PF02954; HTH_8; 1."
-"DR   PIRSF; PIRSF002097; DNA-binding_Fis; 1."
-"DR   PRINTS; PR01591; DNABINDNGFIS."
-"DR   PRINTS; PR01590; HTHFIS."
-"DR   SUPFAM; SSF46689; Homeodomain_like; 1."
-"PE   3: Inferred from homology;"
-"KW   Activator; Complete proteome; DNA-binding; Transcription;"
-KW   Transcription regulation.
-FT   CHAIN         1    101       DNA-binding protein fis.
-FT                                /FTId=PRO_1000076986.
-FT   DNA_BIND     77     96       H-T-H motif (By similarity).
-"SQ   SEQUENCE   101 AA;  11344 MW;  7FD85984CA2A19C4 CRC64;"
-     MFDQTTHTEV HPLTVGKIET ASGAIKPQLL RDAVKRAVTN FFAQMDGQEA EEVYEMVLSE
-     VEAPLLDIIM QHTRGNQTRA ANMLGINRGT LRKKLKKYGM N
+DR   EMBL; DQ643392; ABF82033.1; -; Genomic_DNA.
+DR   RefSeq; YP_654575.1; NC_008187.1.
+DR   ProteinModelPortal; Q197F7; -.
+DR   GeneID; 4156252; -.
+PE   4: Predicted;
+KW   Complete proteome; Reference proteome.
+FT   CHAIN         1    156       Uncharacterized protein 003L.
+FT                                /FTId=PRO_0000377939.
+SQ   SEQUENCE   156 AA;  17043 MW;  D48A43940FF8C815 CRC64;
+     MYQAINPCPQ SWYGSPQLER EIVCKMSGAP HYPNYYPVHP NALGGAWFDT SLNARSLTTT
+     PSLTTCTPPS LAACTPPTSL GMVDSPPHIN PPRRIGTLCF DFGSAKSPQR CECVASDRPS
+     TTSNTAPDTY RLLITNSKTR KNNYGTCRLE PLTYGI
 //
-"ID   FIS_SHEPC               Reviewed;         101 AA."
-"AC   A4YB21;"
-DT   15-JAN-2008, integrated into UniProtKB/Swiss-Prot.
-DT   29-MAY-2007, sequence version 1.
-DT   16-MAY-2012, entry version 39.
-"DE   RecName: Full=DNA-binding protein fis;"
-"GN   Name=fis; OrderedLocusNames=Sputcn32_3444;"
-OS   Shewanella putrefaciens (strain CN-32 / ATCC BAA-453).
-"OC   Bacteria; Proteobacteria; Gammaproteobacteria; Alteromonadales;"
-"OC   Shewanellaceae; Shewanella."
-"OX   NCBI_TaxID=319224;"
+ID   003R_FRG3G              Reviewed;         438 AA.
+AC   Q6GZX2;
+DT   28-JUN-2011, integrated into UniProtKB/Swiss-Prot.
+DT   19-JUL-2004, sequence version 1.
+DT   21-SEP-2011, entry version 20.
+DE   RecName: Full=Uncharacterized protein 3R;
+DE   Flags: Precursor;
+GN   ORFNames=FV3-003R;
+OS   Frog virus 3 (isolate Goorha) (FV-3).
+OC   Viruses; dsDNA viruses, no RNA stage; Iridoviridae; Ranavirus.
+OX   NCBI_TaxID=654924;
+OH   NCBI_TaxID=8295; Ambystoma (mole salamanders).
+OH   NCBI_TaxID=30343; Hyla versicolor (chameleon treefrog).
+OH   NCBI_TaxID=8316; Notophthalmus viridescens (Eastern newt) (Triturus viridescens).
+OH   NCBI_TaxID=8404; Rana pipiens (Northern leopard frog).
+OH   NCBI_TaxID=45438; Rana sylvatica (Wood frog).
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
-"RC   STRAIN=CN-32 / ATCC BAA-453;"
-"RG   US DOE Joint Genome Institute;"
-RA   Copeland A., Lucas S., Lapidus A., Barry K., Detter J.C.,
-RA   Glavina del Rio T., Hammon N., Israni S., Dalin E., Tice H.,
-RA   Pitluck S., Chain P., Malfatti S., Shin M., Vergez L., Schmutz J.,
-RA   Larimer F., Land M., Hauser L., Kyrpides N., Mikhailova N.,
-"RA   Romine M.F., Fredrickson J., Tiedje J., Richardson P.;"
-"RT   ""Complete sequence of Shewanella putrefaciens CN-32."";"
-RL   Submitted (APR-2007) to the EMBL/GenBank/DDBJ databases.
-CC   -!- FUNCTION: Activates ribosomal RNA transcription. Plays a direct
-CC       role in upstream activation of rRNA promoters (By similarity).
-CC   -!- SUBUNIT: Homodimer (By similarity).
-CC   -!- SIMILARITY: Belongs to the transcriptional regulatory fis family.
+RX   PubMed=15165820; DOI=10.1016/j.virol.2004.02.019;
+RA   Tan W.G., Barkman T.J., Gregory Chinchar V., Essani K.;
+RT   "Comparative genomic analyses of frog virus 3, type species of the
+RT   genus Ranavirus (family Iridoviridae).";
+RL   Virology 323:70-84(2004).
 CC   -----------------------------------------------------------------------
 CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
-"DR   EMBL; CP000681; ABP77154.1; -; Genomic_DNA."
-"DR   RefSeq; YP_001184953.1; NC_009438.1."
-"DR   ProteinModelPortal; A4YB21; -."
-"DR   SMR; A4YB21; 24-101."
-"DR   STRING; A4YB21; -."
-"DR   GeneID; 5079835; -."
-"DR   GenomeReviews; CP000681_GR; Sputcn32_3444."
-"DR   KEGG; spc:Sputcn32_3444; -."
-"DR   PATRIC; 23555946; VBIShePut135485_3602."
-"DR   eggNOG; COG2901; -."
-"DR   HOGENOM; HOG000256331; -."
-"DR   KO; K03557; -."
-"DR   OMA; LEQQRNP; -."
-"DR   ProtClustDB; PRK00430; -."
-"DR   GO; GO:0003677; F:DNA binding; IEA:UniProtKB-KW."
-"DR   GO; GO:0003700; F:sequence-specific DNA binding transcription factor activity; IEA:InterPro."
-"DR   GO; GO:0006351; P:transcription, DNA-dependent; IEA:UniProtKB-KW."
-"DR   HAMAP; MF_00166; DNA-binding_Fis; 1; -."
-"DR   InterPro; IPR005412; Fis_DNA-bd."
-"DR   InterPro; IPR009057; Homeodomain-like."
-"DR   InterPro; IPR002197; HTH_Fis."
-"DR   Pfam; PF02954; HTH_8; 1."
-"DR   PIRSF; PIRSF002097; DNA-binding_Fis; 1."
-"DR   PRINTS; PR01591; DNABINDNGFIS."
-"DR   PRINTS; PR01590; HTHFIS."
-"DR   SUPFAM; SSF46689; Homeodomain_like; 1."
-"PE   3: Inferred from homology;"
-"KW   Activator; Complete proteome; DNA-binding; Transcription;"
-KW   Transcription regulation.
-FT   CHAIN         1    101       DNA-binding protein fis.
-FT                                /FTId=PRO_1000023340.
-FT   DNA_BIND     77     96       H-T-H motif (By similarity).
-"SQ   SEQUENCE   101 AA;  11390 MW;  4FD2982815CDCFA8 CRC64;"
-     MFDQTTNTEV HQLTVGKIET ANGTIKPQLL RDAVKRAVTN FFAQLDGQEA QEVYEMVLSE
-     VEAPLLDIIM QHTRGNQTRA ANMLGINRGT LRKKLKKYGM N
+DR   EMBL; AY548484; AAT09662.1; -; Genomic_DNA.
+DR   RefSeq; YP_031581.1; NC_005946.1.
+DR   GeneID; 2947775; -.
+DR   ProtClustDB; CLSP2512347; -.
+PE   4: Predicted;
+KW   Complete proteome; Reference proteome; Signal.
+FT   SIGNAL        1     32       Potential.
+FT   CHAIN        33    438       Uncharacterized protein 3R.
+FT                                /FTId=PRO_0000410532.
+SQ   SEQUENCE   438 AA;  48297 MW;  075C8FA17B3C5C56 CRC64;
+     MARPLLGKTS SVRRRLESLS ACSIFFFLRK FCQKMASLVF LNSPVYQMSN ILLTERRQVD
+     RAMGGSDDDG VMVVALSPSD FKTVLGSALL AVERDMVHVV PKYLQTPGIL HDMLVLLTPI
+     FGEALSVDMS GATDVMVQQI ATAGFVDVDP LHSSVSWKDN VSCPVALLAV SNAVRTMMGQ
+     PCQVTLIIDV GTQNILRDLV NLPVEMSGDL QVMAYTKDPL GKVPAVGVSV FDSGSVQKGD
+     AHSVGAPDGL VSFHTHPVSS AVELNYHAGW PSNVDMSSLL TMKNLMHVVV AEEGLWTMAR
+     TLSMQRLTKV LTDAEKDVMR AAAFNLFLPL NELRVMGTKD SNNKSLKTYF EVFETFTIGA
+     LMKHSGVTPT AFVDRRWLDN TIYHMGFIPW GRDMRFVVEY DLDGTNPFLN TVPTLMSVKR
+     KAKIQEMFDN MVSRMVTS
 //
-"ID   FIS_SHEPW               Reviewed;         101 AA."
-"AC   B8CHY1;"
-DT   14-APR-2009, integrated into UniProtKB/Swiss-Prot.
-DT   03-MAR-2009, sequence version 1.
-DT   16-MAY-2012, entry version 29.
-"DE   RecName: Full=DNA-binding protein fis;"
-"GN   Name=fis; OrderedLocusNames=swp_0425;"
-OS   Shewanella piezotolerans (strain WP3 / JCM 13877).
-"OC   Bacteria; Proteobacteria; Gammaproteobacteria; Alteromonadales;"
-"OC   Shewanellaceae; Shewanella."
-"OX   NCBI_TaxID=225849;"
+ID   004R_FRG3G              Reviewed;          60 AA.
+AC   Q6GZX1;
+DT   28-JUN-2011, integrated into UniProtKB/Swiss-Prot.
+DT   19-JUL-2004, sequence version 1.
+DT   21-SEP-2011, entry version 20.
+DE   RecName: Full=Uncharacterized protein 004R;
+GN   ORFNames=FV3-004R;
+OS   Frog virus 3 (isolate Goorha) (FV-3).
+OC   Viruses; dsDNA viruses, no RNA stage; Iridoviridae; Ranavirus.
+OX   NCBI_TaxID=654924;
+OH   NCBI_TaxID=8295; Ambystoma (mole salamanders).
+OH   NCBI_TaxID=30343; Hyla versicolor (chameleon treefrog).
+OH   NCBI_TaxID=8316; Notophthalmus viridescens (Eastern newt) (Triturus viridescens).
+OH   NCBI_TaxID=8404; Rana pipiens (Northern leopard frog).
+OH   NCBI_TaxID=45438; Rana sylvatica (Wood frog).
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
-"RC   STRAIN=WP3 / JCM 13877;"
-"RX   PubMed=18398463; DOI=10.1371/journal.pone.0001937;"
-RA   Wang F., Wang J., Jian H., Zhang B., Li S., Wang F., Zeng X., Gao L.,
-"RA   Bartlett D.H., Yu J., Hu S., Xiao X.;"
-"RT   ""Environmental adaptation: genomic analysis of the piezotolerant and"
-RT   psychrotolerant deep-sea iron reducing bacterium Shewanella
-"RT   piezotolerans WP3."";"
-RL   PLoS ONE 3:E1937-E1937(2008).
-CC   -!- FUNCTION: Activates ribosomal RNA transcription. Plays a direct
-CC       role in upstream activation of rRNA promoters (By similarity).
-CC   -!- SUBUNIT: Homodimer (By similarity).
-CC   -!- SIMILARITY: Belongs to the transcriptional regulatory fis family.
+RX   PubMed=15165820; DOI=10.1016/j.virol.2004.02.019;
+RA   Tan W.G., Barkman T.J., Gregory Chinchar V., Essani K.;
+RT   "Comparative genomic analyses of frog virus 3, type species of the
+RT   genus Ranavirus (family Iridoviridae).";
+RL   Virology 323:70-84(2004).
+CC   -!- SUBCELLULAR LOCATION: Host membrane; Single-pass membrane protein
+CC       (Potential).
 CC   -----------------------------------------------------------------------
 CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
-"DR   EMBL; CP000472; ACJ27257.1; -; Genomic_DNA."
-"DR   RefSeq; YP_002309844.1; NC_011566.1."
-"DR   ProteinModelPortal; B8CHY1; -."
-"DR   SMR; B8CHY1; 25-101."
-"DR   STRING; B8CHY1; -."
-"DR   GeneID; 7031542; -."
-"DR   GenomeReviews; CP000472_GR; swp_0425."
-"DR   KEGG; swp:swp_0425; -."
-"DR   PATRIC; 23539604; VBIShePie65056_0392."
-"DR   eggNOG; COG2901; -."
-"DR   HOGENOM; HOG000256331; -."
-"DR   KO; K03557; -."
-"DR   OMA; LEQQRNP; -."
-"DR   ProtClustDB; PRK00430; -."
-"DR   GO; GO:0003677; F:DNA binding; IEA:UniProtKB-KW."
-"DR   GO; GO:0003700; F:sequence-specific DNA binding transcription factor activity; IEA:InterPro."
-"DR   GO; GO:0006351; P:transcription, DNA-dependent; IEA:UniProtKB-KW."
-"DR   HAMAP; MF_00166; DNA-binding_Fis; 1; -."
-"DR   InterPro; IPR005412; Fis_DNA-bd."
-"DR   InterPro; IPR009057; Homeodomain-like."
-"DR   InterPro; IPR002197; HTH_Fis."
-"DR   Pfam; PF02954; HTH_8; 1."
-"DR   PIRSF; PIRSF002097; DNA-binding_Fis; 1."
-"DR   PRINTS; PR01591; DNABINDNGFIS."
-"DR   PRINTS; PR01590; HTHFIS."
-"DR   SUPFAM; SSF46689; Homeodomain_like; 1."
-"PE   3: Inferred from homology;"
-"KW   Activator; Complete proteome; DNA-binding; Transcription;"
-KW   Transcription regulation.
-FT   CHAIN         1    101       DNA-binding protein fis.
-FT                                /FTId=PRO_1000118227.
-FT   DNA_BIND     77     96       H-T-H motif (By similarity).
-"SQ   SEQUENCE   101 AA;  11344 MW;  7FD85984CA2A19C4 CRC64;"
-     MFDQTTHTEV HPLTVGKIET ASGAIKPQLL RDAVKRAVTN FFAQMDGQEA EEVYEMVLSE
-     VEAPLLDIIM QHTRGNQTRA ANMLGINRGT LRKKLKKYGM N
+DR   EMBL; AY548484; AAT09663.1; -; Genomic_DNA.
+DR   RefSeq; YP_031582.1; NC_005946.1.
+DR   GeneID; 2947776; -.
+DR   ProtClustDB; CLSP2512348; -.
+DR   GO; GO:0033644; C:host cell membrane; IEA:UniProtKB-SubCell.
+DR   GO; GO:0016021; C:integral to membrane; IEA:UniProtKB-KW.
+PE   4: Predicted;
+KW   Complete proteome; Host membrane; Membrane; Reference proteome;
+KW   Transmembrane; Transmembrane helix.
+FT   CHAIN         1     60       Uncharacterized protein 004R.
+FT                                /FTId=PRO_0000410528.
+FT   TRANSMEM     14     34       Helical; (Potential).
+SQ   SEQUENCE   60 AA;  6514 MW;  12F072778EE6DFE4 CRC64;
+     MNAKYDTDQG VGRMLFLGTI GLAVVVGGLM AYGYYYDGKT PSSGTSFHTA SPSFSSRYRY
 //
-"ID   FIS_SHESA               Reviewed;         101 AA."
-"AC   A0KS72;"
-DT   15-JAN-2008, integrated into UniProtKB/Swiss-Prot.
-DT   12-DEC-2006, sequence version 1.
-DT   16-MAY-2012, entry version 42.
-"DE   RecName: Full=DNA-binding protein fis;"
-"GN   Name=fis; OrderedLocusNames=Shewana3_0398;"
-OS   Shewanella sp. (strain ANA-3).
-"OC   Bacteria; Proteobacteria; Gammaproteobacteria; Alteromonadales;"
-"OC   Shewanellaceae; Shewanella."
-"OX   NCBI_TaxID=6239;"
+ID   005L_IIV3               Reviewed;         217 AA.
+AC   Q197F5;
+DT   16-JUN-2009, integrated into UniProtKB/Swiss-Prot.
+DT   11-JUL-2006, sequence version 1.
+DT   21-SEP-2011, entry version 18.
+DE   RecName: Full=Uncharacterized protein 005L;
+DE   Flags: Precursor;
+GN   ORFNames=IIV3-005L;
+OS   Invertebrate iridescent virus 3 (IIV-3) (Mosquito iridescent virus).
+OC   Viruses; dsDNA viruses, no RNA stage; Iridoviridae; Chloriridovirus.
+OX   NCBI_TaxID=6239;
+OH   NCBI_TaxID=7163; Aedes vexans (Inland floodwater mosquito) (Culex vexans).
+OH   NCBI_TaxID=42431; Culex territans.
+OH   NCBI_TaxID=332058; Culiseta annulata.
+OH   NCBI_TaxID=310513; Ochlerotatus sollicitans (eastern saltmarsh mosquito).
+OH   NCBI_TaxID=329105; Ochlerotatus taeniorhynchus (Black salt marsh mosquito) (Aedes taeniorhynchus).
+OH   NCBI_TaxID=7183; Psorophora ferox.
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
-"RC   STRAIN=ANA-3;"
-RA   Copeland A., Lucas S., Lapidus A., Barry K., Detter J.C.,
-RA   Glavina del Rio T., Hammon N., Israni S., Dalin E., Tice H.,
-RA   Pitluck S., Chertkov O., Brettin T., Bruce D., Han C., Tapia R.,
-RA   Gilna P., Schmutz J., Larimer F., Land M., Hauser L., Kyrpides N.,
-RA   Kim E., Newman D., Salticov C., Konstantinidis K., Klappenback J.,
-"RA   Tiedje J., Richardson P.;"
-"RT   ""Complete sequence of chromosome 1 of Shewanella sp. ANA-3."";"
-RL   Submitted (SEP-2006) to the EMBL/GenBank/DDBJ databases.
-CC   -!- FUNCTION: Activates ribosomal RNA transcription. Plays a direct
-CC       role in upstream activation of rRNA promoters (By similarity).
-CC   -!- SUBUNIT: Homodimer (By similarity).
-CC   -!- SIMILARITY: Belongs to the transcriptional regulatory fis family.
+RX   PubMed=16912294; DOI=10.1128/JVI.00464-06;
+RA   Delhon G., Tulman E.R., Afonso C.L., Lu Z., Becnel J.J., Moser B.A.,
+RA   Kutish G.F., Rock D.L.;
+RT   "Genome of invertebrate iridescent virus type 3 (mosquito iridescent
+RT   virus).";
+RL   J. Virol. 80:8439-8449(2006).
 CC   -----------------------------------------------------------------------
 CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
-"DR   EMBL; CP000469; ABK46641.1; -; Genomic_DNA."
-"DR   RefSeq; YP_868047.1; NC_008577.1."
-"DR   ProteinModelPortal; A0KS72; -."
-"DR   SMR; A0KS72; 24-101."
-"DR   STRING; A0KS72; -."
-"DR   GeneID; 4479305; -."
-"DR   GenomeReviews; CP000469_GR; Shewana3_0398."
-"DR   KEGG; shn:Shewana3_0398; -."
-"DR   PATRIC; 23568372; VBISheSp134792_0646."
-"DR   eggNOG; COG2901; -."
-"DR   HOGENOM; HOG000256331; -."
-"DR   KO; K03557; -."
-"DR   OMA; LEQQRNP; -."
-"DR   ProtClustDB; PRK00430; -."
-"DR   BioCyc; SSP94122:SHEWANA3_0398-MONOMER; -."
-"DR   GO; GO:0003677; F:DNA binding; IEA:UniProtKB-KW."
-"DR   GO; GO:0003700; F:sequence-specific DNA binding transcription factor activity; IEA:InterPro."
-"DR   GO; GO:0006351; P:transcription, DNA-dependent; IEA:UniProtKB-KW."
-"DR   HAMAP; MF_00166; DNA-binding_Fis; 1; -."
-"DR   InterPro; IPR005412; Fis_DNA-bd."
-"DR   InterPro; IPR009057; Homeodomain-like."
-"DR   InterPro; IPR002197; HTH_Fis."
-"DR   Pfam; PF02954; HTH_8; 1."
-"DR   PIRSF; PIRSF002097; DNA-binding_Fis; 1."
-"DR   PRINTS; PR01591; DNABINDNGFIS."
-"DR   PRINTS; PR01590; HTHFIS."
-"DR   SUPFAM; SSF46689; Homeodomain_like; 1."
-"PE   3: Inferred from homology;"
-"KW   Activator; Complete proteome; DNA-binding; Transcription;"
-KW   Transcription regulation.
-FT   CHAIN         1    101       DNA-binding protein fis.
-FT                                /FTId=PRO_1000023341.
-FT   DNA_BIND     77     96       H-T-H motif (By similarity).
-"SQ   SEQUENCE   101 AA;  11390 MW;  4FD2982815CDCFA8 CRC64;"
-     MFDQTTNTEV HQLTVGKIET ANGTIKPQLL RDAVKRAVTN FFAQLDGQEA QEVYEMVLSE
-     VEAPLLDIIM QHTRGNQTRA ANMLGINRGT LRKKLKKYGM N
+DR   EMBL; DQ643392; ABF82035.1; -; Genomic_DNA.
+DR   RefSeq; YP_654577.1; NC_008187.1.
+DR   GeneID; 4156254; -.
+PE   4: Predicted;
+KW   Complete proteome; Reference proteome; Signal.
+FT   SIGNAL        1     24       Potential.
+FT   CHAIN        25    217       Uncharacterized protein 005L.
+FT                                /FTId=PRO_0000377940.
+SQ   SEQUENCE   217 AA;  23854 MW;  6DBE65967D7EEBD5 CRC64;
+     MRYTVLIALQ GALLLLLLID DGQGQSPYPY PGMPCNSSRQ CGLGTCVHSR CAHCSSDGTL
+     CSPEDPTMVW PCCPESSCQL VVGLPSLVNH YNCLPNQCTD SSQCPGGFGC MTRRSKCELC
+     KADGEACNSP YLDWRKDKEC CSGYCHTEAR GLEGVCIDPK KIFCTPKNPW QLAPYPPSYH
+     QPTTLRPPTS LYDSWLMSGF LVKSTTAPST QEEEDDY
 //
-"ID   FIS_SHESH               Reviewed;         101 AA."
-"AC   A8G0V0;"
-DT   20-MAY-2008, integrated into UniProtKB/Swiss-Prot.
-DT   13-NOV-2007, sequence version 1.
-DT   16-MAY-2012, entry version 40.
-"DE   RecName: Full=DNA-binding protein fis;"
-"GN   Name=fis; OrderedLocusNames=Ssed_4119;"
-OS   Shewanella sediminis (strain HAW-EB3).
-"OC   Bacteria; Proteobacteria; Gammaproteobacteria; Alteromonadales;"
-"OC   Shewanellaceae; Shewanella."
-"OX   NCBI_TaxID=425104;"
+ID   005R_FRG3G              Reviewed;         204 AA.
+AC   Q6GZX0;
+DT   28-JUN-2011, integrated into UniProtKB/Swiss-Prot.
+DT   19-JUL-2004, sequence version 1.
+DT   21-SEP-2011, entry version 28.
+DE   RecName: Full=Uncharacterized protein 005R;
+GN   ORFNames=FV3-005R;
+OS   Frog virus 3 (isolate Goorha) (FV-3).
+OC   Viruses; dsDNA viruses, no RNA stage; Iridoviridae; Ranavirus.
+OX   NCBI_TaxID=654924;
+OH   NCBI_TaxID=8295; Ambystoma (mole salamanders).
+OH   NCBI_TaxID=30343; Hyla versicolor (chameleon treefrog).
+OH   NCBI_TaxID=8316; Notophthalmus viridescens (Eastern newt) (Triturus viridescens).
+OH   NCBI_TaxID=8404; Rana pipiens (Northern leopard frog).
+OH   NCBI_TaxID=45438; Rana sylvatica (Wood frog).
 RN   [1]
 RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
-"RC   STRAIN=HAW-EB3;"
-"RG   US DOE Joint Genome Institute;"
-RA   Copeland A., Lucas S., Lapidus A., Barry K., Glavina del Rio T.,
-RA   Dalin E., Tice H., Pitluck S., Chertkov O., Brettin T., Bruce D.,
-RA   Detter J.C., Han C., Schmutz J., Larimer F., Land M., Hauser L.,
-"RA   Kyrpides N., Kim E., Zhao J.-S., Richardson P.;"
-"RT   ""Complete sequence of Shewanella sediminis HAW-EB3."";"
-RL   Submitted (AUG-2007) to the EMBL/GenBank/DDBJ databases.
-CC   -!- FUNCTION: Activates ribosomal RNA transcription. Plays a direct
-CC       role in upstream activation of rRNA promoters (By similarity).
-CC   -!- SUBUNIT: Homodimer (By similarity).
-CC   -!- SIMILARITY: Belongs to the transcriptional regulatory fis family.
+RX   PubMed=15165820; DOI=10.1016/j.virol.2004.02.019;
+RA   Tan W.G., Barkman T.J., Gregory Chinchar V., Essani K.;
+RT   "Comparative genomic analyses of frog virus 3, type species of the
+RT   genus Ranavirus (family Iridoviridae).";
+RL   Virology 323:70-84(2004).
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; AY548484; AAT09664.1; -; Genomic_DNA.
+DR   RefSeq; YP_031583.1; NC_005946.1.
+DR   GeneID; 2947777; -.
+DR   ProtClustDB; CLSP2512488; -.
+DR   InterPro; IPR003360; Herpes_US22-like.
+DR   Pfam; PF02393; US22; 1.
+PE   4: Predicted;
+KW   Complete proteome; Reference proteome.
+FT   CHAIN         1    204       Uncharacterized protein 005R.
+FT                                /FTId=PRO_0000410513.
+SQ   SEQUENCE   204 AA;  23418 MW;  13AC9A179015F769 CRC64;
+     MQNPLPEVMS PEHDKRTTTP MSKEANKFIR ELDKKPGDLA VVSDFVKRNT GKRLPIGKRS
+     NLYVRICDLS GTIYMGETFI LESWEELYLP EPTKMEVLGT LESCCGIPPF PEWIVMVGED
+     QCVYAYGDEE ILLFAYSVKQ LVEEGIQETG ISYKYPDDIS DVDEEVLQQD EEIQKIRKKT
+     REFVDKDAQE FQDFLNSLDA SLLS
+//
+ID   006L_IIV6               Reviewed;         352 AA.
+AC   Q91G88;
+DT   16-JUN-2009, integrated into UniProtKB/Swiss-Prot.
+DT   01-DEC-2001, sequence version 1.
+DT   21-SEP-2011, entry version 32.
+DE   RecName: Full=Putative KilA-N domain-containing protein 006L;
+GN   ORFNames=IIV6-006L;
+OS   Invertebrate iridescent virus 6 (IIV-6) (Chilo iridescent virus).
+OC   Viruses; dsDNA viruses, no RNA stage; Iridoviridae; Iridovirus.
+OX   NCBI_TaxID=6239;
+OH   NCBI_TaxID=6997; Acheta domesticus (House cricket).
+OH   NCBI_TaxID=168631; Chilo suppressalis (striped riceborer).
+OH   NCBI_TaxID=6999; Gryllus bimaculatus (Two-spotted cricket).
+OH   NCBI_TaxID=58607; Gryllus campestris.
+OH   NCBI_TaxID=7108; Spodoptera frugiperda (Fall armyworm).
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RX   MEDLINE=21342589; PubMed=11448171; DOI=10.1006/viro.2001.0963;
+RA   Jakob N.J., Mueller K., Bahr U., Darai G.;
+RT   "Analysis of the first complete DNA sequence of an invertebrate
+RT   iridovirus: coding strategy of the genome of Chilo iridescent virus.";
+RL   Virology 286:182-196(2001).
+RN   [2]
+RP   GENOME REANNOTATION.
+RX   PubMed=17239238; DOI=10.1186/1743-422X-4-11;
+RA   Eaton H.E., Metcalf J., Penny E., Tcherepanov V., Upton C.,
+RA   Brunetti C.R.;
+RT   "Comparative genomic analysis of the family Iridoviridae: re-
+RT   annotating and defining the core set of iridovirus genes.";
+RL   Virol. J. 4:11-11(2007).
+CC   -!- SIMILARITY: Belongs to the IIV-6 006L/238R/313L/468L family.
+CC   -!- SIMILARITY: Contains 1 KilA-N domain.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; AF303741; AAK81943.1; -; Genomic_DNA.
+DR   RefSeq; NP_149469.1; NC_003038.1.
+DR   GeneID; 1733056; -.
+DR   ProtClustDB; CLSP2511638; -.
+DR   InterPro; IPR022549; DUF3627.
+DR   InterPro; IPR017880; KilA_N.
+DR   InterPro; IPR018004; KilA_N/APSES_HTH.
+DR   Pfam; PF12299; DUF3627; 1.
+DR   Pfam; PF04383; KilA-N; 1.
+DR   PROSITE; PS51301; KILA_N; 1.
+PE   3: Inferred from homology;
+KW   Coiled coil; Complete proteome; Reference proteome.
+FT   CHAIN         1    352       Putative KilA-N domain-containing protein
+FT                                006L.
+FT                                /FTId=PRO_0000377958.
+FT   DOMAIN       15    123       KilA-N.
+FT   COILED      129    236       Potential.
+SQ   SEQUENCE   352 AA;  41658 MW;  3519C5E9E45A8AB6 CRC64;
+     MDSLNEVCYE QIKGTFYKGL FGDFPLIVDK KTGCFNATKL CVLGGKRFVD WNKTLRSKKL
+     IQYYETRCDI KTESLLYEIK GDNNDEITKQ ITGTYLPKEF ILDIASWISV EFYDKCNNII
+     INYFVNEYKT MDKKTLQSKI NEVEEKMQKL LNEKEEELQE KNDKIDELIL FSKRMEEDRK
+     KDREMMIKQE KMLRELGIHL EDVSSQNNEL IEKVDEQVEQ NAVLNFKIDN IQNKLEIAVE
+     DRAPQPKQNL KRERFILLKR NDDYYPYYTI RAQDINARSA LKRQKNLYNE VSVLLDLTCH
+     PNSKTLYVRV KDELKQKGVV FNLCKVSISN SKINEEELIK AMETINDEKR DV
+//
+ID   006R_FRG3G              Reviewed;          75 AA.
+AC   Q6GZW9;
+DT   28-JUN-2011, integrated into UniProtKB/Swiss-Prot.
+DT   19-JUL-2004, sequence version 1.
+DT   21-SEP-2011, entry version 20.
+DE   RecName: Full=Uncharacterized protein 006R;
+GN   ORFNames=FV3-006R;
+OS   Frog virus 3 (isolate Goorha) (FV-3).
+OC   Viruses; dsDNA viruses, no RNA stage; Iridoviridae; Ranavirus.
+OX   NCBI_TaxID=6239;
+OH   NCBI_TaxID=8295; Ambystoma (mole salamanders).
+OH   NCBI_TaxID=30343; Hyla versicolor (chameleon treefrog).
+OH   NCBI_TaxID=8316; Notophthalmus viridescens (Eastern newt) (Triturus viridescens).
+OH   NCBI_TaxID=8404; Rana pipiens (Northern leopard frog).
+OH   NCBI_TaxID=45438; Rana sylvatica (Wood frog).
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RX   PubMed=15165820; DOI=10.1016/j.virol.2004.02.019;
+RA   Tan W.G., Barkman T.J., Gregory Chinchar V., Essani K.;
+RT   "Comparative genomic analyses of frog virus 3, type species of the
+RT   genus Ranavirus (family Iridoviridae).";
+RL   Virology 323:70-84(2004).
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; AY548484; AAT09665.1; -; Genomic_DNA.
+DR   RefSeq; YP_031584.1; NC_005946.1.
+DR   GeneID; 2947778; -.
+DR   ProtClustDB; CLSP2512489; -.
+PE   4: Predicted;
+KW   Complete proteome; Reference proteome.
+FT   CHAIN         1     75       Uncharacterized protein 006R.
+FT                                /FTId=PRO_0000410535.
+SQ   SEQUENCE   75 AA;  8848 MW;  DC926963B93EDF36 CRC64;
+     MYKMYFLKDQ KFSLSGTIRI NDKTQSEYGS VWCPGLSITG LHHDAIDHNM FEEMETEIIE
+     YLGPWVQAEY RRIKG
+//
+ID   007R_FRG3G              Reviewed;         128 AA.
+AC   Q6GZW8;
+DT   28-JUN-2011, integrated into UniProtKB/Swiss-Prot.
+DT   19-JUL-2004, sequence version 1.
+DT   21-SEP-2011, entry version 19.
+DE   RecName: Full=Uncharacterized protein 007R;
+GN   ORFNames=FV3-007R;
+OS   Frog virus 3 (isolate Goorha) (FV-3).
+OC   Viruses; dsDNA viruses, no RNA stage; Iridoviridae; Ranavirus.
+OX   NCBI_TaxID=654924;
+OH   NCBI_TaxID=8295; Ambystoma (mole salamanders).
+OH   NCBI_TaxID=30343; Hyla versicolor (chameleon treefrog).
+OH   NCBI_TaxID=8316; Notophthalmus viridescens (Eastern newt) (Triturus viridescens).
+OH   NCBI_TaxID=8404; Rana pipiens (Northern leopard frog).
+OH   NCBI_TaxID=45438; Rana sylvatica (Wood frog).
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RX   PubMed=15165820; DOI=10.1016/j.virol.2004.02.019;
+RA   Tan W.G., Barkman T.J., Gregory Chinchar V., Essani K.;
+RT   "Comparative genomic analyses of frog virus 3, type species of the
+RT   genus Ranavirus (family Iridoviridae).";
+RL   Virology 323:70-84(2004).
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; AY548484; AAT09666.1; -; Genomic_DNA.
+DR   RefSeq; YP_031585.1; NC_005946.1.
+DR   GeneID; 2947779; -.
+PE   4: Predicted;
+KW   Complete proteome; Reference proteome.
+FT   CHAIN         1    128       Uncharacterized protein 007R.
+FT                                /FTId=PRO_0000410565.
+SQ   SEQUENCE   128 AA;  13707 MW;  9DD5475975A4405F CRC64;
+     MRSIKPLRCC NAHGRHVSQE YGRCTLLLFR EKLFLQTGLV CNKQCNAPNN DGAESKHHGI
+     HHGSRGALAL RGAGVHLLAS AALGPRVLAG LVPTGRSVQG SVGQCGRVAQ IGRARDVAAR
+     KQESYCEK
+//
+ID   007R_IIV3               Reviewed;         447 AA.
