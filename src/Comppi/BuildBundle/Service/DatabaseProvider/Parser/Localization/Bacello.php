@@ -12,7 +12,7 @@ class Bacello extends AbstractLocalizationParser
 
     protected $localizationToGoCode = array (
         'Cytoplasm' => 'GO:0005737',
-        'Secretory' => 'secretory_pathway',
+        'Secretory' => 'GO:secretory_pathway',
         'Mitochondrion' => 'GO:0005739',
         'Nucleus' => 'GO:0005634'
     );

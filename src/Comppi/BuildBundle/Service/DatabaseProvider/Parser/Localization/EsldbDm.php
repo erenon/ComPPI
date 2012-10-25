@@ -21,8 +21,8 @@ class EsldbDm extends AbstractLocalizationParser
         'Lysosome' => 'GO:0005764',
         'Endoplasmic reticulum' => 'GO:0005783',
         'Peroxisome' => 'GO:0005777',
-        'Secretory pathway' => 'secretory_pathway',
-        'Secretory' => 'secretory_pathway',
+        'Secretory pathway' => 'GO:secretory_pathway',
+        'Secretory' => 'GO:secretory_pathway',
         'Vacuole' => 'GO:0005773',
         'Extracellular' => 'GO:0005576',
         'Endosome' => 'GO:0005768'
