@@ -70,7 +70,5 @@ class UniprotSwissprot extends AbstractMapParser
             'proteinNameA'	=> $lastAccession,
             'proteinNameB'	=> $lastAccession
         );
-
-        var_dump($this->currentRecord);
     }
 }
