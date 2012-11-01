@@ -47,4 +47,9 @@ class InteractionHs
      * @ORM\Column(type="boolean")
      */
     protected $isExperimental;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    protected $confidenceScore;
 }

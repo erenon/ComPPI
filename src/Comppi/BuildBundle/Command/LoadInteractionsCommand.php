@@ -34,7 +34,7 @@ class LoadInteractionsCommand extends AbstractLoadCommand
         // init insert statement
         $interactionEntityName = 'Interaction' . ucfirst($this->specie);
         $statement = "INSERT INTO " . $interactionEntityName .
-        	" VALUES ('', ?, ?, ?, ?, ?, ?)";
+        	" VALUES ('', ?, ?, ?, ?, ?, ?, ?)";
         $this->insertInteractionStatement = $this->connection->prepare($statement);
     }
 
@@ -61,6 +61,9 @@ class LoadInteractionsCommand extends AbstractLoadCommand
 
             // TODO setup isExperimental field
             $this->insertInteractionStatement->bindValue(6, false);
+
+            // set confidence score to 0, correct it later
+            $this->insertInteractionStatement->bindValue(7, 0);
 
             foreach ($database as $interaction) {
                 // get proteinA name
