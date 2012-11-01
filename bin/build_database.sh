@@ -5,6 +5,10 @@
 defaultEnv="prod"
 env=${1:-$defaultEnv}
 
+startTime=$(date +"%s")
+
+echo "Build started at $( date )"
+
 dir="$( cd "$( dirname "$0" )" && pwd )"
 console=$dir"/../app/console --env=$env"
 
@@ -62,3 +66,10 @@ php $console comppi:build:localizations ce
 echo "Load C'Elegans name lookup table"
 php $console comppi:build:namelookup ce
 
+endTime=$(date +"%s")
+diffTime=$(($endTime - $startTime))
+
+echo ""
+echo "Build completed"
+echo "Elapsed time:"
+date -u -d @"$diffTime" +'%-Hh %-Mm %-Ss'
