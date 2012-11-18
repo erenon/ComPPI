@@ -31,9 +31,11 @@ $(document).ready(function(){
 		}
 	});
 	
+
+	
 	// download low-definition locations select the high-definition counterparts
 	// @TODO: select the branch below the loc -> feed into the sql query as exact id set (IN())
-	$("#fDownloadLocCytoplasmBtn, #fDownloadLocMitoBtn, #fDownloadLocNucleusBtn, #fDownloadLocECBtn, #fDownloadLocSecrBtn, #fDownloadLocPlasMembrBtn").click(function() {
+	/*$("#fDownloadLocCytoplasmBtn, #fDownloadLocMitoBtn, #fDownloadLocNucleusBtn, #fDownloadLocECBtn, #fDownloadLocSecrBtn, #fDownloadLocPlasMembrBtn").click(function() {
 		id = $(this).attr("rel");
 		if ( $(this).hasClass('btn_green') ) {
 			$(this).removeClass('btn_green');
@@ -42,7 +44,7 @@ $(document).ready(function(){
 			$(this).addClass('btn_green');
 			$('#fDownloadLocFine option[value="' + id + '"]').prop('selected', true);
 		}
-	});
+	});*/
 	
 	// dataset buttons can be toggled: only one button can be active, and 0 means no active button
 	/*$("#fDownloadIntByLoc, #fDownloadInts, #fDownloadLocs").click(function() {
@@ -84,4 +86,61 @@ $(document).ready(function(){
 		$("#fCommentForm").reset();
 		return false;
 	});
+});
+
+// LOCTREE
+$(document).ready(function(){
+	$("#LocTree li > ul").hide();
+	//$(".LocTreeParent").next("input").after('<a href="#" class="CategoryOpener"><img src="arrow_down.gif" width="22" height="22" alt="Open Branch" /></a>');
+	
+	
+	$('#LocTree li a').focus(function() { $(this).blur(); });
+	$('#LocTree li a.CategoryOpener').toggle(function() {
+		$(this).next('ul').slideDown(500);
+		$(this).find('img').attr('src', './web/assets/arrow_up.gif');
+		
+	}, function() {
+		$(this).next('ul').slideUp(500);
+		$(this).find('img').attr('src', './web/assets/arrow_down.gif');
+		
+	});
+	
+	$('#LocTree input:checkbox:checked').each(function() {
+		checkCatTree(this, $(this).is(':checked'));
+	})
+	$('#LocTree input:checkbox').change(function() {
+		checkCatTree(this, $(this).is(':checked'));
+	});
+	
+	function checkCatTree(obj, orig_checked) {
+		// felmenok, leszarmazottak ellenorzese
+		var parent = $(obj).parent();
+		if (parent[0].tagName=='LI') {
+			var label = $(parent).find('label').eq(0);
+			if (orig_checked) {
+				if (!$(label).hasClass('LocTree-has_checked')) {
+					$(label).addClass('LocTree-has_checked');
+				}
+			} else {
+				if ($(label).prev('input').is(':checked') || $(parent).find('input').is(':checked')) {
+					return; // ha o maga, v. leszarmazottak barmelyike checked
+				} else {
+					$(label).removeClass('LocTree-has_checked');
+				}
+			}
+			
+			if ($(parent).parent().attr('id')!='LocTree') {
+				checkCatTree($(parent).parent(), orig_checked);
+			} else {
+				return;
+			}
+		}
+
+		// sajat sor ellenorzese
+		if (orig_checked) {
+			$(obj).next('label').addClass('LocTree-has_checked');
+		} else {
+			$(obj).next('label').removeClass('LocTree-has_checked');
+		}
+	}
 });

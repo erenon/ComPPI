@@ -109,6 +109,9 @@ input, select, textarea {
 #HelpToc { border-bottom: 1px solid #404040; }
 #fCommentSubmit { margin: 2px auto; }
 
+#LocTree { margin-left: 200px; /* width of a label */ }
+#LocTree li { list-style-type: none; }
+
 /* About / Main page */
 #WelcomePanels {
 	margin: 0;

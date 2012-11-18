@@ -6,8 +6,8 @@ ComppiProteinSearchBundle:
     resource: "@ComppiProteinSearchBundle/Resources/config/routing.yml"
     prefix:   /protein_search/
 
-ComppiDownloadDbBundle:
-    resource: "@ComppiDownloadDbBundle/Resources/config/routing.yml"
+DownloadDbBundle:
+    resource: "@DownloadDbBundle/Resources/config/routing.yml"
     prefix:   /download/
 
 ComppiDescriptionBundle:
