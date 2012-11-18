@@ -88,7 +88,41 @@ class DownloadDbController extends Controller
 
 	private function serveInteractionsByLocalizations()
 	{
-		return new Response('Not implemented yet!');
+		$locs = $this->get('comppi.build.localizationTranslator');
+		$a_go_terms = array(
+			array('GO:0043226', 'GO:0043232', 'GO:0043229', 'GO:0044424', 'GO:0005622'), // citoplasm
+			array('GO:0005739'), // mitochondrion
+			array('GO:0005634', 'GO:0005694'), // nucleus
+			array('GO:0005576', 'GO:0031012'), // extracellular
+			array(/*'GO:secretory pathway',*/ 'GO:0005783', 'GO:0005793', 'GO:0005794', 'GO:0005801', 'GO:0005802', 'GO:0005768', 'GO:0031410', 'GO:0042175', 'GO:0031982'), // secretory
+			array('GO:0016020') // plasma membrane
+		);
+		
+		/*$a_largeloc_ids = array(
+			array(558, 2470, 1453, 1291, 1290), // citoplasm
+			array(1475), // mitochondrion
+			array(1617, 2699), // nucleus
+			array(4, 120), // extracellular
+			array(2053, 2151, 2155, 2199, 2203, 2207, 592, 328, 581), // secretory pathway
+			array(218) // plasma membrane
+		);*/
+		$a_largeloc_sqls = array();
+		
+		foreach ($a_go_terms as $largeloc_id => $largeloc) {
+			foreach ($largeloc as $go) {
+				$id = $locs->getIdByLocalization($go);
+				$secondary_id = $locs->getSecondaryIdByLocalization($go);
+				
+				$a_largeloc_sqls[$largeloc_id][] = "SELECT proteinId FROM ProteinToLocalizationSc WHERE localizationId >= $id AND localizationId <= $secondary_id";
+			}
+		}
+		
+		foreach ($a_largeloc_sqls as $largeloc_id => $sqls) {
+			echo join(' UNION ', $sqls).'<br /><br />';
+		}
+		die();
+		
+		//return new Response('This feature has not been implemented yet.');
 	}
 
 	private function serveInteractions()
