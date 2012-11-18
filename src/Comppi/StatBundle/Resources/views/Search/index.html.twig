@@ -1,0 +1,27 @@
+{% extends 'StatBundle::base.html.twig' %}
+
+{% block title %}Search{% endblock %}
+
+{% block body %}
+
+<h2>{% trans %}Search{% endtrans %}</h2>
+
+<form action="{{ path('stat_search_search') }}" method="post" {{ form_enctype(searchForm) }}>
+    {{ form_errors(searchForm.searchTerm) }}
+    {{ form_widget(searchForm.searchTerm, { 'attr': {'size': 60} }) }}
+    <input type="submit" value="{% trans %}Search{% endtrans %}" />
+    
+<p class="shy-text">Examples: 
+{% for example in examples %}
+    {% if loop.last %}
+        {{ example }}
+    {% else %}
+        {{ example }},
+    {% endif %}
+{% endfor %}
+</p>
+
+    {{ form_rest(searchForm) }}
+</form>
+
+{% endblock %}

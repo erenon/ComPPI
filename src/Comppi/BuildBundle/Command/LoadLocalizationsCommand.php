@@ -34,7 +34,7 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
         // init insert statement
         $localizationEntityName = 'ProteinToLocalization' . ucfirst($this->specie);
         $statement = "INSERT INTO " . $localizationEntityName .
-        	" VALUES ('', ?, ?, ?, ?, ?)";
+        	" VALUES ('', ?, ?, ?, ?, ?, ?)";
         $this->insertLocalizationStatement = $this->connection->prepare($statement);
     }
 
@@ -57,6 +57,9 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
 
             // bind source name
             $this->insertLocalizationStatement->bindValue(3, $sourceDb);
+
+            // TODO setup isExperimental field
+            $this->insertLocalizationStatement->bindValue(6, false);
 
             foreach ($database as $localization) {
                 // get translated protein name

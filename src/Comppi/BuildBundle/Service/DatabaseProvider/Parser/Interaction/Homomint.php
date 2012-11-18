@@ -5,7 +5,7 @@ namespace Comppi\BuildBundle\Service\DatabaseProvider\Parser\Interaction;
 class Homomint extends AbstractInteractionParser
 {
     protected static $parsableFileNames = array(
-        'homomint-full.mitab25.txt-binary.mitab26',
+        'homomint-full.mitab25.txt-binary.mitab26.txt'
     );
 
     protected $headerCount = 2;

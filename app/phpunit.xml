@@ -17,14 +17,15 @@
         <testsuite name="BuildBundle">
             <directory>../src/Comppi/BuildBundle/Test</directory>
             <exclude>../src/Comppi/BuildBundle/Test/databases</exclude>
+            <exclude>../src/Comppi/BuildBundle/Test/databases-expected</exclude>
         </testsuite>
     </testsuites>
 
-    <!--
     <php>
-        <server name="KERNEL_DIR" value="/path/to/your/app/" />
+        <env name="build_test_database_path" value="../src/Comppi/BuildBundle/Test/databases" />
+        <env name="build_test_database_expected_path" value="../src/Comppi/BuildBundle/Test/database-expected" />
+        <!--<server name="KERNEL_DIR" value="/path/to/your/app/" />-->
     </php>
-    -->
 
     <!-- Code coverage only -->
     <!-- 

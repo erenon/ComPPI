@@ -36,7 +36,7 @@ Grab the sources:
 
     $ ./bin/download_sources.sh
 
-This will put the 3rd party source databases under `./databases`. To load them into the configured database, issue the following command:
+This will put the 3rd party source databases under `./databases`. You may want to add other custom sources indicated by the download script. To load them into the configured database, issue the following command:
 
     $ ./bin/build_database.sh
     

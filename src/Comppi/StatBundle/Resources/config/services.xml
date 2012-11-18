@@ -6,10 +6,20 @@
 
     <parameters>
         <parameter key="comppi.stat.statistics.class">Comppi\StatBundle\Service\Statistics\Statistics</parameter>
+        <parameter key="comppi.stat.search.class">Comppi\StatBundle\Service\Search\Search</parameter>
+        <parameter key="comppi.stat.protein.class">Comppi\StatBundle\Service\Protein\Protein</parameter>
     </parameters>
     
     <services>
         <service id="comppi.stat.statistics" class="%comppi.stat.statistics.class%">
+            <argument type="service" id="doctrine.orm.default_entity_manager" />
+        </service>
+        
+        <service id="comppi.stat.search" class="%comppi.stat.search.class%">
+            <argument type="service" id="doctrine.orm.default_entity_manager" />
+        </service>
+        
+        <service id="comppi.stat.protein" class="%comppi.stat.protein.class%">
             <argument type="service" id="doctrine.orm.default_entity_manager" />
         </service>
     </services>

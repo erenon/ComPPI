@@ -137,12 +137,12 @@ then
 fi   
 
 # ConsensusPathDB
-#if [ ! -f ConsensusPathDB_human_PPI ]
-#then
-#    wget http://cpdb.molgen.mpg.de/download/ConsensusPathDB_human_PPI.gz -O ./consensus.gz
-#    gzip -d -N ./consensus.gz
-#    rm ./consensus.gz
-#fi
+if [ ! -f ConsensusPathDB_human_PPI ]
+then
+    wget http://cpdb.molgen.mpg.de/download/ConsensusPathDB_human_PPI.gz -O ./consensus.gz
+    gzip -d -N ./consensus.gz
+    rm ./consensus.gz
+fi
 
 # DiP
 # @see at the end of this file
@@ -211,52 +211,15 @@ fi
 
 cd ../map
 
-check_comppi_custom hs comppi_hs_loc_ensemblgeneid-uniprot.txt
-check_comppi_custom hs comppi_hs_loc_ensemblpeptideid-uniprot.txt
-check_comppi_custom hs comppi_hs_loc_entrezgene-uniprot.txt
-check_comppi_custom hs comppi_hs_loc_refseq-uniprot.txt
-check_comppi_custom hs comppi_hs_loc_uni-uniprot.txt
-check_comppi_custom hs comppi_human_ensemblgeneid-swissprot.txt
-check_comppi_custom hs comppi_human_ensemblgeneid-trembl.txt
-check_comppi_custom hs comppi_human_ensembl_gene_id-uniprot_swissprot.txt
-check_comppi_custom hs comppi_human_ensembl_gene_id-uniprot_trembl.txt
-check_comppi_custom hs comppi_human_ensemblpeptideid_hiba_swissprot.txt
-check_comppi_custom hs comppi_human_ensembl_peptide_id-hiba.txt
-check_comppi_custom hs comppi_human_ensemblpeptideid_hiba.txt
-check_comppi_custom hs comppi_human_ensemblpeptideid_hiba_uniprotgenename-swissprot.txt
-check_comppi_custom hs comppi_human_ensemblpeptideid_hiba_uniprotgenename-trembl.txt
-check_comppi_custom hs comppi_human_ensembl
-check_comppi_custom hs peptide
-check_comppi_custom hs id_hiba-uniprotgenename-uniprot_swissprot.txt
-check_comppi_custom hs comppi_human_ensembl_peptide_id_hiba-uniprotgenename-uniprot_trembl.txt
-check_comppi_custom hs comppi_human_ensembl_peptide_id_hiba-uniprot_swissprot.txt
-check_comppi_custom hs comppi_human_entrezgene-ensembl_peptide_id.txt
+check_comppi_custom hs comppi_human_ensemblgeneid-uniprotkbac.txt
+check_comppi_custom hs comppi_human_ensemblpeptideid-uniprotkbac.txt
 check_comppi_custom hs comppi_human_entrezgene-ensemblpeptideid.txt
-check_comppi_custom hs comppi_human_entrezgene-swissprot.txt
-check_comppi_custom hs comppi_human_entrezgene-trembl.txt
-check_comppi_custom hs comppi_human_entrezgene-uniprot_swissprot.txt
-check_comppi_custom hs comppi_human_entrezgene-uniprot_trembl.txt
-check_comppi_custom hs comppi_human_entrezprotein-ensembl_peptide_id.txt
-check_comppi_custom hs comppi_human_entrezprotein-ensembl.txt
-check_comppi_custom hs comppi_human_entrezprotein-swissprot.txt
-check_comppi_custom hs comppi_human_entrezprotein-trembl.txt
-check_comppi_custom hs comppi_human_entrezprotein-uniprot_swissprot.txt
-check_comppi_custom hs comppi_human_entrezprotein-uniprot_trembl.txt
-check_comppi_custom hs comppi_human_genebankproteinid-swissprot.txt
-check_comppi_custom hs comppi_human_genebankproteinid-trembl.txt
-check_comppi_custom hs comppi_human_genebankproteinid-uniprot_swissprot.txt
-check_comppi_custom hs comppi_human_genebankproteinid-uniprot_trembl.txt
-check_comppi_custom hs comppi_human_refseq-swissprot.txt
-check_comppi_custom hs comppi_human_refseq-trembl.txt
-check_comppi_custom hs comppi_human_refseq-uniprot_swissprot.txt
-check_comppi_custom hs comppi_human_refseq-uniprot_trembl.txt
-check_comppi_custom hs comppi_human_uniprot-ensembl
-check_comppi_custom hs peptide
-check_comppi_custom hs id2.txt
-check_comppi_custom hs comppi_human_uniprotgenename-swissprot.txt
-check_comppi_custom hs comppi_human_uniprotgenename-uniprot_swissprot.txt
-check_comppi_custom hs comppi_human_uniprot_hiba.txt
-check_comppi_custom hs comppi_human_uniprot_hiba-uniprot_swissprot.txt
+check_comppi_custom hs comppi_human_entrezgene-uniprotkbac.txt
+check_comppi_custom hs comppi_human_entrezprotein-ensemblpeptideid.txt
+check_comppi_custom hs comppi_human_entrezprotein-uniprotkbac.txt
+check_comppi_custom hs comppi_human_genebankproteinid-uniprotkbac.txt
+check_comppi_custom hs comppi_human_refseq-uniprotkbac.txt
+check_comppi_custom hs comppi_human_uniprotgenename-uniprotkbac.txt
 
 # Uniprot
 if [ ! -f HUMAN_9606_idmapping_selected.tab ]
@@ -397,18 +360,14 @@ fi
 
 cd ../map
 
-check_comppi_custom dm comppi_drosi_ensembl_gene_id-ensembl_peptide_id.txt
-check_comppi_custom dm comppi_drosi_ensembl_gene_id-uniprot_swissprot.txt
-check_comppi_custom dm comppi_drosi_ensembl_gene_id-uniprot_trembl.txt
-check_comppi_custom dm comppi_drosi_enterzgene-ensembl_peptide_id.txt
-check_comppi_custom dm comppi_drosi_enterzgene-uniprot_swissprot.txt
-check_comppi_custom dm comppi_drosi_entrezgene-uniprot_trembl.txt
-check_comppi_custom dm comppi_drosi_refseq-ensembl_peptide_id.txt
-check_comppi_custom dm comppi_drosi_refseq-uniprot_swissprot.txt
-check_comppi_custom dm comppi_drosi_refseq-uniprot_trembl.txt
-check_comppi_custom dm comppi_drosi_uniparc-uniprot_trembl.txt
-check_comppi_custom dm comppi_drosi_uniprot_swissprot-ensembl_peptide_id.txt
-check_comppi_custom dm comppi_drosi_uniprot_trembl-ensembl_peptide_id.txt
+check_comppi_custom dm comppi_drosi_ensemblgeneid-ensemblpeptideid.txt
+check_comppi_custom dm comppi_drosi_ensemblgeneid-uniprotkbac.txt
+check_comppi_custom dm comppi_drosi_ensemblpeptideid-uniprotkbac.txt
+check_comppi_custom dm comppi_drosi_enterzgene-ensemblpeptideid.txt
+check_comppi_custom dm comppi_drosi_enterzgene-uniprotkbac.txt
+check_comppi_custom dm comppi_drosi_refseq-ensemblpeptideid.txt
+check_comppi_custom dm comppi_drosi_refseq-uniprotkbac.txt
+check_comppi_custom dm comppi_drosi_uniparc-uniprotkbac.txt
 
 # Uniprot
 if [ ! -f DROME_7227_idmapping_selected.tab ]
@@ -521,19 +480,15 @@ fi
 
 cd ../map
 
-check_comppi_custom ce comppi_worm_ensembl_gene_id-ensembl_peptide_id.txt
-check_comppi_custom ce comppi_worm_ensembl_gene_id-uniprot_swissprot.txt
-check_comppi_custom ce comppi_worm_ensembl_gene_id-uniprot_trembl.txt
-check_comppi_custom ce comppi_worm_ensembl_peptide_id-uniprot.txt
-check_comppi_custom ce comppi_worm_entrezgene-ensembl_peptide_id.txt
-check_comppi_custom ce comppi_worm_entrezgene-uniprot_swissprot.txt
-check_comppi_custom ce comppi_worm_entrezgene-uniprot_trembl.txt
-check_comppi_custom ce comppi_worm_refseq-ensembl_peptide_id.txt
-check_comppi_custom ce comppi_worm_refseq-uniprot_swissprot.txt
-check_comppi_custom ce comppi_worm_refseq-uniprot_trembl.txt
-check_comppi_custom ce comppi_worm_wbgeneid-uniprot.txt
-check_comppi_custom ce comppi_worm_wormbase-uniprot_swissprot.txt
-check_comppi_custom ce comppi_worm_wormbase-uniprot_trembl.txt
+check_comppi_custom ce comppi_worm_ensemblgeneid-ensemblpeptideid.txt
+check_comppi_custom ce comppi_worm_ensemblgeneid-uniprotkbac.txt
+check_comppi_custom ce comppi_worm_ensemblpeptideid-uniprotkbac.txt
+check_comppi_custom ce comppi_worm_entrezgene-ensemblpeptideid.txt
+check_comppi_custom ce comppi_worm_entrezgene-uniprotkbac.txt
+check_comppi_custom ce comppi_worm_refseq-ensemblpeptideid.txt
+check_comppi_custom ce comppi_worm_refseq-uniprotkbac.txt
+check_comppi_custom ce comppi_worm_wbgeneid-uniprotkbac.txt
+check_comppi_custom ce comppi_worm_wormbase-uniprotkbac.txt
 
 # Uniprot
 if [ ! -f CAEEL_6239_idmapping_selected.tab ]
@@ -635,12 +590,12 @@ then
 fi
 
 # ConsensusPathDB
-#if [ ! -f ConsensusPathDB_yeast_PPI ]
-#then
-#    wget http://cpdb.molgen.mpg.de/download/ConsensusPathDB_yeast_PPI.gz -O ./consensus.gz
-#    gzip -d -N ./consensus.gz
-#    rm ./consensus.gz
-#fi
+if [ ! -f ConsensusPathDB_yeast_PPI ]
+then
+    wget http://cpdb.molgen.mpg.de/download/ConsensusPathDB_yeast_PPI.gz -O ./consensus.gz
+    gzip -d -N ./consensus.gz
+    rm ./consensus.gz
+fi
 
 # DiP
 # @see at the end of this file
@@ -663,8 +618,7 @@ fi
 
 cd ../map
 
-check_comppi_custom sc comppi_uniprot_hiba.txt
-check_comppi_custom sc comppi_worm_uniprot-ensembl_peptide_id.txt
+check_comppi_custom sc comppi_yeast_ensemblpeptideid-uniprotkbac.txt
 
 # Uniprot
 if [ ! -f YEAST_559292_idmapping_selected.tab ]
