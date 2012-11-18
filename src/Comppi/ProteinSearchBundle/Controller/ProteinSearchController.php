@@ -132,7 +132,6 @@ class ProteinSearchController extends Controller
 							$T['result_msg'] = 'No matching protein name (or synonym) was found.';
 						}
 						
-						
 					}
 				}
 				//die( var_dump($T['ls']) );
