@@ -2,5 +2,6 @@
     RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !app.php
     RewriteCond %{REQUEST_FILENAME} !app_dev.php
+    RewriteCond %{REQUEST_FILENAME} !assets/
     RewriteRule ^(.*)$ maintenance.html [QSA,L]
 </IfModule>
