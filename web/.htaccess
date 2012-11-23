@@ -1,5 +1,9 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+	RewriteCond %{HTTP_HOST} ^comppi.linkgroup.hu/download_database$
+	RewriteRule (.*)$ http://bificomp2.sote.hu/~erenon/comppi.sql [R=301,L]
+
     RewriteCond %{REQUEST_FILENAME} !app.php
     RewriteCond %{REQUEST_FILENAME} !app_dev.php
     RewriteCond %{REQUEST_FILENAME} !assets/
