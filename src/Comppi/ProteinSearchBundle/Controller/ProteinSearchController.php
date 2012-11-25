@@ -147,7 +147,11 @@ class ProteinSearchController extends Controller
 				if (empty($T['ls'])) {
 					$T['result_msg'] = 'No matching protein name (or synonym) was found.';
 				} else {
-					$T['result_msg'] = sprintf('%d proteins with %d synonyms and %d interactions were found.', $d_names_found, $d_synonyms_found, $d_interactions_found);
+					$result_msg_text = '%d protein'.($d_names_found>1 ? 's' : '')
+						.' with %d synonym'.($d_synonyms_found>1 ? 's' : '')
+						.' and %d interaction'.($d_interactions_found>1 ? 's' : '')
+						.' were found.';
+					$T['result_msg'] = sprintf($result_msg_text, $d_names_found, $d_synonyms_found, $d_interactions_found);
 				}
 				
 				//die( var_dump($T['ls']) );
