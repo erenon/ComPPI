@@ -96,6 +96,7 @@ input, select, textarea {
 	border-bottom: 1px solid #909090;
 }
 #ProteinSearchResultsTbl td { padding: 0 5px; }
+.protSearchMidLine { border-left: 1px solid #909090; }
 
 /* DOWNLOAD DB */
 #DownloadForm { text-align: left; margin-top: 1em; }
