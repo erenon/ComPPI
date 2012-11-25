@@ -6,6 +6,8 @@
 {% block bundlecontent %}
 	<p class="help"></p>
 	
+	{% if verbose_log %}<p><pre>{{ verbose_log }}</pre></p>{% endif %}
+	
 	<form id="ProteinSearchForm" action="" method="post">
 		<input type="hidden" name="fProtSearchSpecHs" id="fProtSearchSpecHs" value="{{ need_hs }}" />
 		<input type="hidden" name="fProtSearchSpecDm" id="fProtSearchSpecDm" value="{{ need_dm }}" />
