@@ -45,9 +45,9 @@
 	
 	{% if ls %}
 	<table id="ProteinSearchResultsTbl" class="hovered_list">
-		<tr class="not_hovered_line"><th>Src A</th><th>Localization A</th><th>Protein A</th><th class="protSearchMidLine">Protein B</th><th>Localization B</th><th>Src B</th></tr>
+		<tr class="not_hovered_line"><th>Src A</th><th>Localization A</th><th>Protein A</th><th class="protSearchMidLine">Protein B</th><th>Localization B</th><th>Src B</th><th>Sp.</th></tr>
 		{% for p in ls %}
-		<tr><td>{% if p.locASrcUrl %}<a href="{{ p.locASrcUrl }}" target="_blank" class="btn btn_src">src</a>{% endif %}</td><td>{{ p.locA }}</td><td>{{ p.protA }}</td><td class="protSearchMidLine">{{ p.protB }}</td><td>{{ p.locB }}</td><td>{% if p.locBSrcUrl %}<a href="{{ p.locBSrcUrl }}" target="_blank" class="btn btn_src">src</a>{% endif %}</td></tr>
+		<tr><td>{% if p.locASrcUrl %}<a href="{{ p.locASrcUrl }}" target="_blank" class="btn btn_src">src</a>{% endif %}</td><td>{{ p.locA }}</td><td>{{ p.protA }}</td><td class="protSearchMidLine">{{ p.protB }}</td><td>{{ p.locB }}</td><td>{% if p.locBSrcUrl %}<a href="{{ p.locBSrcUrl }}" target="_blank" class="btn btn_src">src</a>{% endif %}</td><td>{{ p.species }}</td></tr>
 		{% endfor %}
 	</table>
 	

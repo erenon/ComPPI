@@ -135,7 +135,8 @@ class ProteinSearchController extends Controller
 									'locASrcUrl' => (empty($p['locAId']) ? '' : $this->linkToPubmed($p['locASrc'])),
 									'protB' => $p['protB'],
 									'locB' => (empty($p['locBId']) ? 'N/A' : $locs->getHumanReadableLocalizationById($p['locBId'])),
-									'locBSrcUrl' => (empty($p['locBId']) ? '' : $this->linkToPubmed($p['locBSrc']))
+									'locBSrcUrl' => (empty($p['locBId']) ? '' : $this->linkToPubmed($p['locBSrc'])),
+									'species' => $sp
 								);
 								$d_interactions_found++;
 							}
