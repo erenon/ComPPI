@@ -1,7 +1,7 @@
-ComppiDownloadDbBundle_download:
+DownloadDbBundle_download:
     pattern:  /
-    defaults: { _controller: ComppiDownloadDbBundle:DownloadDb:download }
+    defaults: { _controller: DownloadDbBundle:DownloadDb:download }
 
-ComppiDownloadDbBundle_serve:
+DownloadDbBundle_serve:
     pattern:  /serve
-    defaults: { _controller: ComppiDownloadDbBundle:DownloadDb:serve }
+    defaults: { _controller: DownloadDbBundle:DownloadDb:serve }

@@ -66,7 +66,7 @@ li { margin: 0.5em 0; }
 .infobtn a:hover { color: #fff; }
 
 label { display: block; float: left; width: 200px; margin: 2px; }
-br { clear: left; }
+#Content form br { clear: left; }
 /*#fProtSearchLocECBtn { margin-left: 206px; }  properly align as a label was before it */
 input, select, textarea {
 	margin: 2px;
@@ -83,7 +83,7 @@ input, select, textarea {
 #fProtSearchKeyword { width: 412px; }
 #fProtSearchMultiNames { width: 412px; }
 #fProtSearchSpecHsBtn, #fProtSearchSpecDmBtn, #fProtSearchSpecCeBtn, #fProtSearchSpecScBtn { font-style: italic; }
-
+#protSearchResultMsg { text-align: center; font-weight: bold; }
 #ProteinSearchResultsTbl {
 	margin-top: 1em;
 	width: 100%;
@@ -96,6 +96,7 @@ input, select, textarea {
 	border-bottom: 1px solid #909090;
 }
 #ProteinSearchResultsTbl td { padding: 0 5px; }
+.protSearchMidLine { border-left: 1px solid #909090; }
 
 /* DOWNLOAD DB */
 #DownloadForm { text-align: left; margin-top: 1em; }
@@ -108,3 +109,35 @@ input, select, textarea {
 #fCommentForm label { text-align: left; padding-left: 5px; }
 #HelpToc { border-bottom: 1px solid #404040; }
 #fCommentSubmit { margin: 2px auto; }
+
+#LocTree { margin-left: 200px; /* width of a label */ }
+#LocTree li { list-style-type: none; }
+
+/* About / Main page */
+#WelcomePanels {
+	margin: 0;
+	padding: 0 1em;
+	text-align: center;
+	width: 100%;
+}
+#WelcomePanels li {
+	list-style-type: none;
+	float: left;
+	width: 46%;
+	margin: 1em 0.5em;
+	padding: 5px;
+	text-align: left;
+	/*border: 1px solid #000;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;*/
+}
+#WelcomePanels li h1 {
+	font-size: 1.1em;
+	font-weight: bold;
+	font-variant: small-caps;
+	border-bottom: 1px groove #000;
+	margin: 0;
+	padding: 0 0 0 2em;
+	width: 93%;
+}

@@ -45,9 +45,9 @@ class DownloadDbController extends Controller
 			'need_sc' => ( empty($this->species_requested['Sc']) ? 0 : 1 ),
 			//'dataset' => ( !empty($this->selected_dataset) ? $this->selected_dataset : 0 ),
 		);
-		$T['locs'] = $this->buildLocTree();
+		//$T['locs'] = $this->buildLocTree();
 		
-		return $this->render('ComppiDownloadDbBundle:DownloadDb:download.html.twig', $T);
+		return $this->render('DownloadDbBundle:DownloadDb:download.html.twig', $T);
     }
 	
 	public function serveAction()
@@ -81,14 +81,14 @@ class DownloadDbController extends Controller
 			return $response; // $response->send() is called automatically
 		} else {
 			// forwarding to downloadAction
-			$response = $this->forward('ComppiDownloadDbBundle:DownloadDb:serve', array());
+			$response = $this->forward('DownloadDbBundle:DownloadDb:serve', array());
 			return $response;
 		}
 	}
 
 	private function serveInteractionsByLocalizations()
 	{
-		return new Response('Not implemented yet!');
+		return new Response('This feature has not been implemented yet.');
 	}
 
 	private function serveInteractions()
@@ -158,6 +158,7 @@ class DownloadDbController extends Controller
 		foreach($this->species_requested as $sp => $specie_needed) {
 			if ( $specie_needed ) {
 				$sql = "SELECT p1.proteinName AS protA, p1.proteinNamingConvention AS convA, ptl1.localizationId AS locAId, p2.proteinName AS protB, p2.proteinNamingConvention AS convB, ptl2.localizationId AS locBId FROM Interaction$sp i LEFT JOIN Protein$sp p1 ON i.actorAId=p1.id LEFT JOIN Protein$sp p2 ON i.actorBId=p2.id LEFT JOIN ProteinToLocalization$sp ptl1 ON i.actorAId=ptl1.proteinId LEFT JOIN ProteinToLocalization$sp ptl2 ON i.actorBId=ptl2.proteinId WHERE ".join(" OR ", $loc_conds);
+				die($sql);
 				$results = $DB->query( $sql );
 				// @TODO: exception handling here
 				while ( $r = $results->fetch() ) {
@@ -192,28 +193,40 @@ class DownloadDbController extends Controller
 		// filesize: we don't know it, we are streaming...
     }
 	
-	private function buildLocTree()
+	// ugly to mix the controller and the view...
+	public function renderLocTreeAction()
 	{
 		$locs = $this->get('comppi.build.localizationTranslator');
 		$loctreedata = $locs->getLocalizationTree();
-		$loclist = array();
-		
+
+		//die( var_dump( getcwd() ) );
+		$loctreehtml = '<ul id="LocTree">';
 		foreach($loctreedata as $ltd_id => $node) {
-			$this->recursiveLocTreeHelper($node, $loclist);
+			$this->recursiveLocTreeHelper($node, $loctreedata, $loctreehtml);
 		}
-		
-		//die( var_dump( $loclist ) );
-		return $loclist;
+		$loctreehtml .= "\n</ul>";
+
+		$response = $this->createResponse();
+		$response->setContent($loctreehtml);
+		return $response;
 	}
 	
-	private function recursiveLocTreeHelper($node, &$loclist, $depth = 0)
+	private function recursiveLocTreeHelper($node, &$loctreedata, &$loctreehtml, $depth = 0)
 	{
-		$loclist[] = array('id' => $node['id'], 'label' => str_repeat('.', $depth).ucfirst($node['humanReadable'].' ('.$node['name'].')'));
+		$loctreehtml .= "\n".str_repeat("\t", $depth).'<li id="LocTree-'.$node['id'].'"'
+			.(isset($node['children']) ? ' class="LocTreeParent"' : '').'>'
+			.'<input type="checkbox" name="fRequestedLocs" value="'.$node['id'].'" />'
+			.ucfirst($node['humanReadable'].' ('.$node['name'].')')
+			.(isset($node['children']) ? ' <a href="#" class="CategoryOpener"><img src="/assets/arrow_down.png" width="22" height="22" alt="Open Branch" /></a>' : '');
 		$depth++;
 		if (isset($node['children'])) {
+			$loctreehtml .= "\n".str_repeat("\t", $depth).'<ul>';
 			foreach ($node['children'] as $child) {
-				$this->recursiveLocTreeHelper($child, $loclist, $depth);
+				$this->recursiveLocTreeHelper($child, $loctreedata, $loctreehtml, $depth+1);
 			}
+			$loctreehtml .= "\n".str_repeat("\t", $depth).'</ul>'
+				."\n".str_repeat("\t", $depth); // closing LI should be in a new line IF there was a branch
 		}
+		$loctreehtml .= '</li>';
 	}
 }

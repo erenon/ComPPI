@@ -4,6 +4,7 @@ app/config/parameters.ini
 
 vendor
 web/bundles
+web/comppi--2012-11-23.zip
 
 #eclipse
 .buildpath

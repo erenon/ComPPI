@@ -7,7 +7,7 @@
 	<p class="help">Compartmentalized protein-protein interaction data can be downloaded here by major cellular compartments or by their sub-compartments. You can customize the parameters or get pre-defined datasets. You can select an option by a click, and de-select it by clicking again.</p>
 
 	{# @TODO: update this abomination to a proper Symfony form #}
-	<form id="DownloadForm" action="{{ path('ComppiDownloadDbBundle_serve') }}" method="post">
+	<form id="DownloadForm" action="{{ path('DownloadDbBundle_serve') }}" method="post">
 		<input type="hidden" name="fDownloadSpecHs" id="fDownloadSpecHs" value="{{ need_hs }}" />
 		<input type="hidden" name="fDownloadSpecDm" id="fDownloadSpecDm" value="{{ need_dm }}" />
 		<input type="hidden" name="fDownloadSpecCe" id="fDownloadSpecCe" value="{{ need_ce }}" />
@@ -42,12 +42,8 @@
 		{#<input class="btn toggleButton" id="AdvDownloadBtn" type="button" value="Open Advanced Search" />
 		<div id="AdvDownloadFrame">#}
 			<label>High-definition Localizations:</label>
-			<select name="fDownloadLocFine[]" id="fDownloadLocFine" class="btn" multiple="multiple">
-				{#<option value="0">Please Select A Localization!</option>#}
-				{% for l in locs %}
-				<option value="{{ l.id }}">{{ l.label }}</option>
-				{% endfor %}
-			</select>
+			
+			{% render "DownloadDbBundle:DownloadDb:renderLocTree" %}
 		{#</div>#}
 		
 		<p align="center">
