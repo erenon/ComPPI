@@ -97,10 +97,10 @@ then
 fi
 
 # Organelle
-if [ ! -f organelle_hs.txt ]
-then
-    wget "http://organelledb.lsi.umich.edu/search-result.php?local=all&endoplasmic+reticulum=all&membrane+protein=all&miscellaneous+others=all&mitochondrion=all&nucleus=all&protein+complex=all&organism=human&searchtype=full&geneAdv=&flat_file=Download+in+Flat+File" -O ./organelle_hs.txt
-fi  
+#if [ ! -f organelle_hs.txt ]
+#then
+#    wget "http://organelledb.lsi.umich.edu/search-result.php?local=all&endoplasmic+reticulum=all&membrane+protein=all&miscellaneous+others=all&mitochondrion=all&nucleus=all&protein+complex=all&organism=human&searchtype=full&geneAdv=&flat_file=Download+in+Flat+File" -O ./organelle_hs.txt
+#fi  
 
 # Pagosub
 if [ ! -f homo_sapiens.csv ]
@@ -296,10 +296,10 @@ then
 fi   
 
 # Organelle
-if [ ! -f organelle_dm.txt ]
-then
-    wget "http://organelledb.lsi.umich.edu/search-result.php?local=all&endoplasmic+reticulum=all&membrane+protein=all&miscellaneous+others=all&mitochondrion=all&nucleus=all&protein+complex=all&organism=fly&searchtype=full&geneAdv=&flat_file=Download+in+Flat+File" -O ./organelle_dm.txt
-fi 
+#if [ ! -f organelle_dm.txt ]
+#then
+#    wget "http://organelledb.lsi.umich.edu/search-result.php?local=all&endoplasmic+reticulum=all&membrane+protein=all&miscellaneous+others=all&mitochondrion=all&nucleus=all&protein+complex=all&organism=fly&searchtype=full&geneAdv=&flat_file=Download+in+Flat+File" -O ./organelle_dm.txt
+#fi 
 
 ### Interactions
 
@@ -428,10 +428,10 @@ then
 fi
 
 # Organelle
-if [ ! -f organelle_ce.txt ]
-then
-    wget "http://organelledb.lsi.umich.edu/search-result.php?local=all&endoplasmic+reticulum=all&membrane+protein=all&miscellaneous+others=all&mitochondrion=all&nucleus=all&protein+complex=all&organism=worm&searchtype=full&geneAdv=&flat_file=Download+in+Flat+File" -O ./organelle_ce.txt
-fi
+#if [ ! -f organelle_ce.txt ]
+#then
+#    wget "http://organelledb.lsi.umich.edu/search-result.php?local=all&endoplasmic+reticulum=all&membrane+protein=all&miscellaneous+others=all&mitochondrion=all&nucleus=all&protein+complex=all&organism=worm&searchtype=full&geneAdv=&flat_file=Download+in+Flat+File" -O ./organelle_ce.txt
+#fi
 
 # Pagosub
 if [ ! -f caenorhabditis_elegans.csv ]
@@ -555,10 +555,10 @@ then
 fi  
 
 # Organelle
-if [ ! -f organelle_sc.txt ]
-then
-    wget "http://organelledb.lsi.umich.edu/search-result.php?local=all&endoplasmic+reticulum=all&membrane+protein=all&miscellaneous+others=all&mitochondrion=all&nucleus=all&protein+complex=all&organism=yeast&searchtype=full&geneAdv=&flat_file=Download+in+Flat+File" -O ./organelle_sc.txt
-fi
+#if [ ! -f organelle_sc.txt ]
+#then
+#    wget "http://organelledb.lsi.umich.edu/search-result.php?local=all&endoplasmic+reticulum=all&membrane+protein=all&miscellaneous+others=all&mitochondrion=all&nucleus=all&protein+complex=all&organism=yeast&searchtype=full&geneAdv=&flat_file=Download+in+Flat+File" -O ./organelle_sc.txt
+#fi
 
 # Pagosub
 if [ ! -f saccharomyces_cerevisiae.csv ]

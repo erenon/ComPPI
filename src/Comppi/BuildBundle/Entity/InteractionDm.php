@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
+ * @ORM\Table(indexes={@ORM\index(name="search_idx_aid", columns={"actorAId"}), @ORM\index(name="search_idx_bid", columns={"actorBId"})})
  */
 class InteractionDm
 {
