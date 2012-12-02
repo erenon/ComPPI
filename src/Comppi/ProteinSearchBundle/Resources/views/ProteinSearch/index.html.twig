@@ -14,10 +14,10 @@
 		<br />
 		
 		<label>Species:</label>
-		<input type="radio" name="fProtSearchHs" id="fProtSearchHs" class="btn" value="{{ need_hs }}" {% if need_hs %}checked="checked"{% endif %}/><label for="fProtSearchHs" class="radioButtonLabel">H. sapiens</label>
-		<input type="radio" name="fProtSearchDm" id="fProtSearchDm" class="btn" value="{{ need_dm }}" {% if need_dm %}checked="checked"{% endif %}/><label for="fProtSearchDm" class="radioButtonLabel">D. melanogaster</label>
-		<input type="radio" name="fProtSearchCe" id="fProtSearchCe" class="btn" value="{{ need_ce }}" {% if need_ce %}checked="checked"{% endif %}/><label for="fProtSearchCe" class="radioButtonLabel">C. elegans</label>
-		<input type="radio" name="fProtSearchSc" id="fProtSearchSc" class="btn" value="{{ need_sc }}" {% if need_sc %}checked="checked"{% endif %}/><label for="fProtSearchSc" class="radioButtonLabel">S. cerevisiae</label>
+		<input type="radio" name="fProtSearchHs" id="fProtSearchHs" class="btn" value="{{ need.hs }}" {% if need.hs %}checked="checked"{% endif %}/><label for="fProtSearchHs" class="radioButtonLabel">H. sapiens</label>
+		<input type="radio" name="fProtSearchDm" id="fProtSearchDm" class="btn" value="{{ need.dm }}" {% if need.dm %}checked="checked"{% endif %}/><label for="fProtSearchDm" class="radioButtonLabel">D. melanogaster</label>
+		<input type="radio" name="fProtSearchCe" id="fProtSearchCe" class="btn" value="{{ need.ce }}" {% if need.ce %}checked="checked"{% endif %}/><label for="fProtSearchCe" class="radioButtonLabel">C. elegans</label>
+		<input type="radio" name="fProtSearchSc" id="fProtSearchSc" class="btn" value="{{ need.sc }}" {% if need.sc %}checked="checked"{% endif %}/><label for="fProtSearchSc" class="radioButtonLabel">S. cerevisiae</label>
 
 		<br />
 		
