@@ -8,12 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class ProteinSearchController extends Controller
 {
     // @TODO: implement a central input processing bundle/service + Symfony-style forms
-	private $species_requested = array( // which species to be used in the search - main cycle controller
-		'Hs' => 1,
-		'Dm' => 1,
-		'Ce' => 1,
-		'Sc' => 1,
-	);
+	private $species_requested = 'Hs';
 	private $verbose = false;
 	//private $null_loc_needed = false; // show rows where one or both locations are unknown
 	private $search_range_start = 0; // search result display starts from here
@@ -32,11 +27,18 @@ class ProteinSearchController extends Controller
 		$request = $this->getRequest();
 		if ($request->getMethod() == 'POST') {
 			$DB = $this->get('database_connection');
-			
-			$this->species_requested['Hs'] = intval($request->request->get('fProtSearchSpecHs'));
-			$this->species_requested['Dm'] = intval($request->request->get('fProtSearchSpecDm'));
-			$this->species_requested['Ce'] = intval($request->request->get('fProtSearchSpecCe'));
-			$this->species_requested['Sc'] = intval($request->request->get('fProtSearchSpecSc'));
+			die( var_dump($request->request->get('fProtSearchSpecDm')) );
+			if ($request->request->get('fProtSearchSpecHs')) {
+				$this->species_requested = 'Hs';
+			} elseif ($request->request->get('fProtSearchSpecDm')) {
+				$this->species_requested = 'Dm';
+			} elseif ($request->request->get('fProtSearchSpecCe')) {
+				$this->species_requested = 'Ce';
+			} elseif ($request->request->get('fProtSearchSpecSc')) {
+				$this->species_requested = 'Sc';
+			} else {
+				$this->species_requested = 'Hs';
+			}
 			
 			$keywords = array();
 			if ($request->request->get('fProtSearchKeyword')) {

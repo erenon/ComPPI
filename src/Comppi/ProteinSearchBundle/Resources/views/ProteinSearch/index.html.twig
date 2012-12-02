@@ -9,34 +9,19 @@
 	{% if verbose_log %}<p><pre>{{ verbose_log }}</pre></p>{% endif %}
 	
 	<form id="ProteinSearchForm" action="" method="post">
-		<input type="hidden" name="fProtSearchSpecHs" id="fProtSearchSpecHs" value="{{ need_hs }}" />
-		<input type="hidden" name="fProtSearchSpecDm" id="fProtSearchSpecDm" value="{{ need_dm }}" />
-		<input type="hidden" name="fProtSearchSpecCe" id="fProtSearchSpecCe" value="{{ need_ce }}" />
-		<input type="hidden" name="fProtSearchSpecSc" id="fProtSearchSpecSc" value="{{ need_sc }}" />
-		{#<input type="hidden" name="fProtSearchLocCytoplasm" id="fProtSearchLocCytoplasm" value="0" />
-		<input type="hidden" name="fProtSearchLocMito" id="fProtSearchLocMito" value="0" />
-		<input type="hidden" name="fProtSearchLocNucleus" id="fProtSearchLocNucleus" value="0" />
-		<input type="hidden" name="fProtSearchLocEC" id="fProtSearchLocEC" value="0" />
-		<input type="hidden" name="fProtSearchLocSecr" id="fProtSearchLocSecr" value="0" />
-		<input type="hidden" name="fProtSearchLocPlasMembr" id="fProtSearchLocPlasMembr" value="0" />#}
-
 		<label for="fProtSearchKeyword">Protein Name:</label>
 		<input type="text" name="fProtSearchKeyword" id="fProtSearchKeyword" value="{{ keyword }}" />
-		<input class="btn btn_submit" type="submit" value="Submit Search" />
-		<input class="btn toggleButton" id="AdvSearchBtn" type="button" value="Open Advanced Search" />
-		<div id="AdvSearchFrame">
-			<br />
-			<label>Species:</label>
-			<input type="button" name="fProtSearchSpecHsBtn" id="fProtSearchSpecHsBtn" class="btn toggleButton{% if need_hs==1 %} btn_green{% endif %}" value="H. sapiens" />
-			<input type="button" name="fProtSearchSpecDmBtn" id="fProtSearchSpecDmBtn" class="btn toggleButton{% if need_dm==1 %} btn_green{% endif %}" value="D. melanogaster" />
-			<input type="button" name="fProtSearchSpecCeBtn" id="fProtSearchSpecCeBtn" class="btn toggleButton{% if need_ce==1 %} btn_green{% endif %}" value="C. elegans" />
-			<input type="button" name="fProtSearchSpecScBtn" id="fProtSearchSpecScBtn" class="btn toggleButton{% if need_sc==1 %} btn_green{% endif %}" value="S. cerevisiae" />
+		<br />
+		
+		<label>Species:</label>
+		<input type="radio" name="fProtSearchHs" id="fProtSearchHs" class="btn" value="{{ need_hs }}" {% if need_hs %}checked="checked"{% endif %}/><label for="fProtSearchHs" class="radioButtonLabel">H. sapiens</label>
+		<input type="radio" name="fProtSearchDm" id="fProtSearchDm" class="btn" value="{{ need_dm }}" {% if need_dm %}checked="checked"{% endif %}/><label for="fProtSearchDm" class="radioButtonLabel">D. melanogaster</label>
+		<input type="radio" name="fProtSearchCe" id="fProtSearchCe" class="btn" value="{{ need_ce }}" {% if need_ce %}checked="checked"{% endif %}/><label for="fProtSearchCe" class="radioButtonLabel">C. elegans</label>
+		<input type="radio" name="fProtSearchSc" id="fProtSearchSc" class="btn" value="{{ need_sc }}" {% if need_sc %}checked="checked"{% endif %}/><label for="fProtSearchSc" class="radioButtonLabel">S. cerevisiae</label>
 
-			<br />
-			<label>Multiple protein names (each in a new row):</label>
-			<textarea name="fProtSearchMultiNames" id="fProtSearchMultiNames" cols="50" rows="10">{{ protein_names }}</textarea>
-			<br />
-		</div>
+		<br />
+		
+		<input class="btn btn_submit" type="submit" value="Submit Search" />
 	</form>
 	
 	{% if result_msg %}
