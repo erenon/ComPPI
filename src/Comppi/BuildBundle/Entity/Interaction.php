@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(indexes={@ORM\index(name="search_idx", columns={"proteinId"})})
+ * @ORM\Table(indexes={@ORM\index(name="search_idx_aid", columns={"actorAId"}), @ORM\index(name="search_idx_bid", columns={"actorBId"})})
  */
-class ProteinToLocalizationHs
+class Interaction
 {
     /**
      * @ORM\Id
@@ -17,16 +17,17 @@ class ProteinToLocalizationHs
      */
     protected $id;
 
-    /**
+	/**
      * @ORM\Column(type="integer")
-     * @ORM\ManyToOne(targetEntity="ProteinHs")
+     * @ORM\ManyToOne(targetEntity="Protein")
      */
-    protected $proteinId;
+    protected $actorAId;
 
     /**
      * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="Protein")
      */
-    protected $localizationId;
+    protected $actorBId;
 
     /**
      * @ORM\Column(type="string", length="255")
@@ -47,4 +48,9 @@ class ProteinToLocalizationHs
      * @ORM\Column(type="boolean")
      */
     protected $isExperimental;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    protected $confidenceScore;
 }

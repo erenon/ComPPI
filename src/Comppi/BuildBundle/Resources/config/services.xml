@@ -13,6 +13,8 @@
     	<parameter key="comppi.build.proteinTranslator.class">Comppi\BuildBundle\Service\ProteinTranslator\ProteinTranslator</parameter>
     	<parameter key="comppi.build.localizationTranslator.class">Comppi\BuildBundle\Service\LocalizationTranslator\LocalizationTranslator</parameter>
     	<parameter key="comppi.build.localizationFile">%kernel.root_dir%/../databases/loctree/loctree.textile</parameter>
+    	
+    	<parameter key="comppi.build.specieProvider.class">Comppi\BuildBundle\Service\SpecieProvider\SpecieProvider</parameter>
     </parameters>
 
     <services>
@@ -27,6 +29,9 @@
         
         <service id="comppi.build.localizationTranslator" class="%comppi.build.localizationTranslator.class%">
             <argument>%comppi.build.localizationFile%</argument>
+        </service>
+        
+        <service id="comppi.build.specieProvider" class="%comppi.build.specieProvider.class%">
         </service>
     </services>
     

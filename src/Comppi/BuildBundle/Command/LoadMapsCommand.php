@@ -30,10 +30,9 @@ class LoadMapsCommand extends AbstractLoadCommand
             ->getMapsBySpecie($this->specie);
 
         // init insert statement
-        $mapName = 'ProteinNameMap' . ucfirst($this->specie);
-        $statement = "INSERT INTO " . $mapName .
-        	" VALUES ('', ?, ?, ?, ?)";
+        $statement = "INSERT INTO ProteinNameMap VALUES ('', ?, ?, ?, ?, ?)";
         $this->insertMapEntryStatement = $this->connection->prepare($statement);
+        $this->insertMapEntryStatement->bindValue(1, $this->specie->id);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -52,10 +51,10 @@ class LoadMapsCommand extends AbstractLoadCommand
             $connection->beginTransaction();
             foreach ($database as $entry) {
 
-                $this->insertMapEntryStatement->bindValue(1, $entry['namingConventionA']);
-                $this->insertMapEntryStatement->bindValue(2, $entry['proteinNameA']);
-                $this->insertMapEntryStatement->bindValue(3, $entry['namingConventionB']);
-                $this->insertMapEntryStatement->bindValue(4, $entry['proteinNameB']);
+                $this->insertMapEntryStatement->bindValue(2, $entry['namingConventionA']);
+                $this->insertMapEntryStatement->bindValue(3, $entry['proteinNameA']);
+                $this->insertMapEntryStatement->bindValue(4, $entry['namingConventionB']);
+                $this->insertMapEntryStatement->bindValue(5, $entry['proteinNameB']);
                 $this->insertMapEntryStatement->execute();
 
                 $recordIdx++;

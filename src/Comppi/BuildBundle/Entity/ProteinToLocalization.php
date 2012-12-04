@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(indexes={@ORM\index(name="search_idx", columns={"proteinId"})})
  */
-class ProteinToLocalizationDm
+class ProteinToLocalization
 {
     /**
      * @ORM\Id
@@ -19,7 +19,7 @@ class ProteinToLocalizationDm
 
     /**
      * @ORM\Column(type="integer")
-     * @ORM\ManyToOne(targetEntity="ProteinDm")
+     * @ORM\ManyToOne(targetEntity="ProteinCe")
      */
     protected $proteinId;
 
@@ -47,4 +47,5 @@ class ProteinToLocalizationDm
      * @ORM\Column(type="boolean")
      */
     protected $isExperimental;
+
 }

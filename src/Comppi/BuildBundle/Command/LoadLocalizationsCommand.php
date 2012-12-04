@@ -32,9 +32,7 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
             ->getLocalizationsBySpecie($this->specie);
 
         // init insert statement
-        $localizationEntityName = 'ProteinToLocalization' . ucfirst($this->specie);
-        $statement = "INSERT INTO " . $localizationEntityName .
-        	" VALUES ('', ?, ?, ?, ?, ?, ?)";
+        $statement = "INSERT INTO ProteinToLocalization VALUES ('', ?, ?, ?, ?, ?, ?)";
         $this->insertLocalizationStatement = $this->connection->prepare($statement);
     }
 
@@ -66,7 +64,7 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
                 $proteinComppiId = $this->proteinTranslator->getComppiId(
                     $localization['namingConvention'],
                     $localization['proteinId'],
-                    $this->specie
+                    $this->specie->id
                 );
 
                 try {
@@ -76,7 +74,7 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
                     continue;
                 }
 
-                $this->addDatabaseRefToId($sourceDb, $proteinComppiId, $this->specie);
+                $this->addDatabaseRefToId($sourceDb, $proteinComppiId);
 
                 $this->insertLocalizationStatement->bindValue(1, $proteinComppiId);
                 $this->insertLocalizationStatement->bindValue(2, $localizationId);

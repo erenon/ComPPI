@@ -32,9 +32,7 @@ class LoadInteractionsCommand extends AbstractLoadCommand
             ->getInteractionsBySpecie($this->specie);
 
         // init insert statement
-        $interactionEntityName = 'Interaction' . ucfirst($this->specie);
-        $statement = "INSERT INTO " . $interactionEntityName .
-        	" VALUES ('', ?, ?, ?, ?, ?, ?, ?)";
+        $statement = "INSERT INTO Interaction VALUES ('', ?, ?, ?, ?, ?, ?, ?)";
         $this->insertInteractionStatement = $this->connection->prepare($statement);
     }
 
@@ -70,18 +68,18 @@ class LoadInteractionsCommand extends AbstractLoadCommand
                 $proteinAOriginalName = $interaction['proteinAName'];
                 $proteinANamingConvention = $interaction['proteinANamingConvention'];
                 $proteinAComppiId = $translator->getComppiId(
-                    $proteinANamingConvention, $proteinAOriginalName, $this->specie
+                    $proteinANamingConvention, $proteinAOriginalName, $this->specie->id
                 );
 
                 // get proteinB name
                 $proteinBOriginalName = $interaction['proteinBName'];
                 $proteinBNamingConvention = $interaction['proteinBNamingConvention'];
                 $proteinBComppiId = $translator->getComppiId(
-                    $proteinBNamingConvention, $proteinBOriginalName, $this->specie
+                    $proteinBNamingConvention, $proteinBOriginalName, $this->specie->id
                 );
 
-                $this->addDatabaseRefToId($sourceDb, $proteinAComppiId, $this->specie);
-                $this->addDatabaseRefToId($sourceDb, $proteinBComppiId, $this->specie);
+                $this->addDatabaseRefToId($sourceDb, $proteinAComppiId);
+                $this->addDatabaseRefToId($sourceDb, $proteinBComppiId);
 
                 $this->insertInteractionStatement->bindValue(1, $proteinAComppiId);
                 $this->insertInteractionStatement->bindValue(2, $proteinBComppiId);

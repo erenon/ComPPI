@@ -66,6 +66,16 @@ class Statistics
         return $localizationStats;
     }
 
+    public function getLocalizationExpSysTypes($specie) {
+        $table = 'ProteinToLocalization' . ucfirst($specie);
+        $selExperimentalSystemTypes = $this->connection->executeQuery(
+            "SELECT experimentalSystemType FROM ".$table." GROUP BY experimentalSystemType;"
+        );
+        $experimentalSystemTypes = $selExperimentalSystemTypes->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $experimentalSystemTypes;
+    }
+
     public function getNamingConventionStats($specie) {
         $table = 'Protein' . ucfirst($specie);
         $selNamingStats = $this->connection->executeQuery(

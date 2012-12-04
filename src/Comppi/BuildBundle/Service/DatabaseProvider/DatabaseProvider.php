@@ -3,6 +3,7 @@
 namespace Comppi\BuildBundle\Service\DatabaseProvider;
 
 use Symfony\Component\Finder\Finder;
+use Comppi\BuildBundle\Service\SpecieProvider\SpecieDescriptor;
 
 class DatabaseProvider
 {
@@ -20,9 +21,9 @@ class DatabaseProvider
         $this->logger = $logger;
     }
 
-    public function getMapsBySpecie($specie) {
+    public function getMapsBySpecie(SpecieDescriptor $specie) {
         // get map database paths
-        $mapDir = $this->rootDir . '/' . $specie . '/map/';
+        $mapDir = $this->rootDir . '/' . $specie->abbreviation . '/map/';
         $mapFiles = $this->getFilesInDir($mapDir);
 
         // available parsers
@@ -35,9 +36,9 @@ class DatabaseProvider
         return $this->getParsersInstancesWithFiles($mapParsers, $mapFiles);
     }
 
-    public function getInteractionsBySpecie($specie) {
+    public function getInteractionsBySpecie(SpecieDescriptor $specie) {
         // get interaction database paths
-        $interactionDir = $this->rootDir . '/' . $specie . '/interaction/';
+        $interactionDir = $this->rootDir . '/' . $specie->abbreviation . '/interaction/';
         $interactionFiles = $this->getFilesInDir($interactionDir);
 
         // available parsers
@@ -50,9 +51,9 @@ class DatabaseProvider
         return $this->getParsersInstancesWithFiles($interactionParsers, $interactionFiles);
     }
 
-    public function getLocalizationsBySpecie($specie) {
+    public function getLocalizationsBySpecie(SpecieDescriptor $specie) {
         // get localization database paths
-        $localizationDir = $this->rootDir . '/' . $specie . '/localization/';
+        $localizationDir = $this->rootDir . '/' . $specie->abbreviation . '/localization/';
         $localizationFiles = $this->getFilesInDir($localizationDir);
 
         // available parsers
