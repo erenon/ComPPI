@@ -15,7 +15,9 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
         'ProteinToLocalization' => 'WRITE',
         'Protein' => 'WRITE',
         'ProteinToDatabase' => 'WRITE',
-        'ProteinNameMap' => 'READ'
+        'ProteinNameMap' => 'READ',
+        'ProtLocToSystemType' => 'WRITE',
+        'SystemType' => 'WRITE'
     );
 
     /**
@@ -32,8 +34,14 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
             ->getLocalizationsBySpecie($this->specie);
 
         // init insert statement
-        $statement = "INSERT INTO ProteinToLocalization VALUES ('', ?, ?, ?, ?, ?, ?)";
-        $this->insertLocalizationStatement = $this->connection->prepare($statement);
+        $this->insertLocalizationStatement = $this->connection->prepare(
+            "INSERT INTO ProteinToLocalization VALUES ('', ?, ?, ?, ?)"
+        );
+
+        // init add system type statement
+        $this->addSystemTypeStatement = $this->connection->prepare(
+            'INSERT INTO ProtLocToSystemType VALUES (?, ?)'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -56,9 +64,6 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
             // bind source name
             $this->insertLocalizationStatement->bindValue(3, $sourceDb);
 
-            // TODO setup isExperimental field
-            $this->insertLocalizationStatement->bindValue(6, false);
-
             foreach ($database as $localization) {
                 // get translated protein name
                 $proteinComppiId = $this->proteinTranslator->getComppiId(
@@ -79,8 +84,11 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
                 $this->insertLocalizationStatement->bindValue(1, $proteinComppiId);
                 $this->insertLocalizationStatement->bindValue(2, $localizationId);
                 $this->insertLocalizationStatement->bindValue(4, $localization['pubmedId']);
-                $this->insertLocalizationStatement->bindValue(5, $localization['experimentalSystemType']);
                 $this->insertLocalizationStatement->execute();
+
+               $id = $this->connection->lastInsertId();
+
+                $this->addSystemTypes($id, $localization['experimentalSystemType']);
 
                 // flush transaction
                 $recordIdx++;
