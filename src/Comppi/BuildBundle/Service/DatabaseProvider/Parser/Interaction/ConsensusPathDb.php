@@ -70,6 +70,8 @@ class ConsensusPathDb extends AbstractInteractionParser
             }
         }
 
+        $systemTypes = explode(',', $recordArray[0]);
+
         $this->currentLine['proteinPair'] = $proteinPairArray;
 
         $this->currentRecord = array(
@@ -78,7 +80,7 @@ class ConsensusPathDb extends AbstractInteractionParser
         	'proteinBNamingConvention' => 'UniProtKB-ID',
             'proteinBName' => $this->currentLine['proteinPair'][0][1],
             'pubmedId' => $pubmedId,
-            'experimentalSystemType' => $recordArray[0]
+            'experimentalSystemType' => $systemTypes
         );
 
         next($this->currentLine['proteinPair']);

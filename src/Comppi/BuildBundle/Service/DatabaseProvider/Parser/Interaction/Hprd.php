@@ -27,7 +27,7 @@ class Hprd extends AbstractInteractionParser
             'proteinBNamingConvention' => 'Hprd',
             'proteinBName' => $recordArray[4],
             'pubmedId' => $recordArray[7],
-            'experimentalSystemType' => $recordArray[6]
+            'experimentalSystemType' => explode(';', $recordArray[6])
         );
     }
 }

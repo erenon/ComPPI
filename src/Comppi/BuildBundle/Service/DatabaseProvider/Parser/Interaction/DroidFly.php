@@ -25,6 +25,6 @@ class DroidFly extends AbstractDroid
 
     protected function formatExpSysType($field) {
         preg_match_all("/MI\:\d+\((.+?)\)/", $field, $matches);
-        return implode(', ', $matches[1]);
+        return $matches[1];
     }
 }
