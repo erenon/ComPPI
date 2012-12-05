@@ -40,15 +40,20 @@ abstract class AbstractLoadCommand extends ContainerAwareCommand
 
     /**
      * ProteinTranslator service
-     * @var Comppi\BuildBundle\Service\ProteinTranslator
+     * @var Comppi\BuildBundle\Service\ProteinTranslator\ProteinTranslator
      */
     protected $proteinTranslator;
 
     /**
      * LocalizationTranslator service
-     * @var Comppi\BuildBundle\Service\LocalizationTranslator
+     * @var Comppi\BuildBundle\Service\LocalizationTranslator\LocalizationTranslator
      */
     protected $localizationTranslator;
+
+    /**
+     * @var Comppi\BuildBundle\Service\SystemTypeTranslator\SystemTypeTranslator
+     */
+    protected $systemTypeTranslator;
 
     /**
      * @var Doctrine\DBAL\Connection
@@ -86,6 +91,7 @@ abstract class AbstractLoadCommand extends ContainerAwareCommand
         // setup translators
         $this->proteinTranslator = $container->get('comppi.build.proteinTranslator');
         $this->localizationTranslator = $container->get('comppi.build.localizationTranslator');
+        $this->systemTypeTranslator = $container->get('comppi.build.systemTypeTranslator');
 
         // setup database connection
         $this->connection = $container

@@ -22,7 +22,13 @@ class LoadInteractionsCommand extends AbstractLoadCommand
      * @see execute
      * @var Doctrine\DBAL\Driver\Statement
      */
-    protected $insertInteractionStatement = null;
+    protected $insertInteractionStatement;
+
+    /**
+     * @see addSystemTypes
+     * @var Doctrine\DBAL\Driver\Statement
+     */
+    protected $addSystemTypeStatement;
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
         parent::initialize($input, $output);
@@ -32,8 +38,14 @@ class LoadInteractionsCommand extends AbstractLoadCommand
             ->getInteractionsBySpecie($this->specie);
 
         // init insert statement
-        $statement = "INSERT INTO Interaction VALUES ('', ?, ?, ?, ?, ?, ?, ?)";
-        $this->insertInteractionStatement = $this->connection->prepare($statement);
+        $this->insertInteractionStatement = $this->connection->prepare(
+        	"INSERT INTO Interaction VALUES ('', ?, ?, ?, ?, ?)"
+        );
+
+        // init add system type statement
+        $this->addSystemTypeStatement = $this->connection->prepare(
+            'INSERT INTO InteractionToSystemType VALUES (?, ?)'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -57,11 +69,8 @@ class LoadInteractionsCommand extends AbstractLoadCommand
             // bind source name
             $this->insertInteractionStatement->bindValue(3, $sourceDb);
 
-            // TODO setup isExperimental field
-            $this->insertInteractionStatement->bindValue(6, false);
-
             // set confidence score to 0, correct it later
-            $this->insertInteractionStatement->bindValue(7, 0);
+            $this->insertInteractionStatement->bindValue(5, 0);
 
             foreach ($database as $interaction) {
                 // get proteinA name
@@ -84,12 +93,14 @@ class LoadInteractionsCommand extends AbstractLoadCommand
                 $this->insertInteractionStatement->bindValue(1, $proteinAComppiId);
                 $this->insertInteractionStatement->bindValue(2, $proteinBComppiId);
                 $this->insertInteractionStatement->bindValue(4, $interaction['pubmedId']);
-                $this->insertInteractionStatement->bindValue(5, $interaction['experimentalSystemType']);
                 $this->insertInteractionStatement->execute();
 
-                // flush transaction
+                $id = $this->connection->lastInsertId();
+
+                $this->addSystemTypes($id, $interaction['experimentalSystemType']);
+
                 $recordIdx++;
-                if ($recordIdx == $recordsPerTransaction) {
+                if ($recordIdx == $recordsPerTransaction) { // flush transaction
                     $recordIdx = 0;
 
                     $connection->commit();
@@ -103,5 +114,18 @@ class LoadInteractionsCommand extends AbstractLoadCommand
         }
 
         $this->closeConnection();
+    }
+
+    private function addSystemTypes($interactionId, $systemTypes) {
+        if (is_array($systemTypes) == false) {
+            $systemTypes = array($systemTypes);
+        }
+
+        $systemTypes = array_unique($systemTypes);
+
+        foreach ($systemTypes as $systemType) {
+            $systemTypeId = $this->systemTypeTranslator->getSystemTypeId($systemType);
+            $this->addSystemTypeStatement->execute(array($interactionId, $systemTypeId));
+        }
     }
 }
