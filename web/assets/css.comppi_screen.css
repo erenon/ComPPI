@@ -66,6 +66,7 @@ li { margin: 0.5em 0; }
 .infobtn a:hover { color: #fff; }
 
 label { display: block; float: left; width: 200px; margin: 2px; }
+.radioButtonLabel { float: none; width: auto; display: inline; }
 #Content form br { clear: left; }
 /*#fProtSearchLocECBtn { margin-left: 206px; }  properly align as a label was before it */
 input, select, textarea {
@@ -81,7 +82,6 @@ input, select, textarea {
 /* PROTEIN SEARCH */
 #ProteinSearchForm { text-align: left; }
 #fProtSearchKeyword { width: 412px; }
-#fProtSearchMultiNames { width: 412px; }
 #fProtSearchSpecHsBtn, #fProtSearchSpecDmBtn, #fProtSearchSpecCeBtn, #fProtSearchSpecScBtn { font-style: italic; }
 #protSearchResultMsg { text-align: center; font-weight: bold; }
 #ProteinSearchResultsTbl {
