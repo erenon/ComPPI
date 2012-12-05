@@ -15,7 +15,9 @@ class LoadInteractionsCommand extends AbstractLoadCommand
         'Interaction' => 'WRITE',
         'Protein' => 'WRITE',
         'ProteinToDatabase' => 'WRITE',
-        'ProteinNameMap' => 'READ'
+        'ProteinNameMap' => 'READ',
+        'InteractionToSystemType' => 'WRITE',
+        'SystemType' => 'WRITE'
     );
 
     /**
