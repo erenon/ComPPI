@@ -15,6 +15,8 @@
     	<parameter key="comppi.build.localizationFile">%kernel.root_dir%/../databases/loctree/loctree.textile</parameter>
     	
     	<parameter key="comppi.build.specieProvider.class">Comppi\BuildBundle\Service\SpecieProvider\SpecieProvider</parameter>
+    	
+    	<parameter key="comppi.build.systemTypeTranslator.class">Comppi\BuildBundle\Service\SystemTypeTranslator\SystemTypeTranslator</parameter>
     </parameters>
 
     <services>
@@ -32,6 +34,10 @@
         </service>
         
         <service id="comppi.build.specieProvider" class="%comppi.build.specieProvider.class%">
+        </service>
+        
+        <service id="comppi.build.systemTypeTranslator" class="%comppi.build.systemTypeTranslator.class%">
+            <argument type="service" id="doctrine.orm.default_entity_manager" />
         </service>
     </services>
     
