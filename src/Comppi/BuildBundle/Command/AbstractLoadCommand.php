@@ -56,6 +56,12 @@ abstract class AbstractLoadCommand extends ContainerAwareCommand
     protected $systemTypeTranslator;
 
     /**
+     * @see addSystemTypes
+     * @var Doctrine\DBAL\Driver\Statement
+     */
+    protected $addSystemTypeStatement;
+
+    /**
      * @var Doctrine\DBAL\Connection
      */
     protected $connection;
@@ -129,6 +135,19 @@ abstract class AbstractLoadCommand extends ContainerAwareCommand
         $this->addDatababaseRefStatement->bindValue(1, $comppiId);
         $this->addDatababaseRefStatement->bindValue(2, $sourceDb);
         $this->addDatababaseRefStatement->execute();
+    }
+
+    protected function addSystemTypes($id, $systemTypes) {
+        if (is_array($systemTypes) == false) {
+            $systemTypes = array($systemTypes);
+        }
+
+        $systemTypes = array_unique($systemTypes);
+
+        foreach ($systemTypes as $systemType) {
+            $systemTypeId = $this->systemTypeTranslator->getSystemTypeId($systemType);
+            $this->addSystemTypeStatement->execute(array($id, $systemTypeId));
+        }
     }
 
     protected function openConnection() {

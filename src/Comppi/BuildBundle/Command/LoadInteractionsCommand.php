@@ -26,12 +26,6 @@ class LoadInteractionsCommand extends AbstractLoadCommand
      */
     protected $insertInteractionStatement;
 
-    /**
-     * @see addSystemTypes
-     * @var Doctrine\DBAL\Driver\Statement
-     */
-    protected $addSystemTypeStatement;
-
     protected function initialize(InputInterface $input, OutputInterface $output) {
         parent::initialize($input, $output);
 
@@ -116,18 +110,5 @@ class LoadInteractionsCommand extends AbstractLoadCommand
         }
 
         $this->closeConnection();
-    }
-
-    private function addSystemTypes($interactionId, $systemTypes) {
-        if (is_array($systemTypes) == false) {
-            $systemTypes = array($systemTypes);
-        }
-
-        $systemTypes = array_unique($systemTypes);
-
-        foreach ($systemTypes as $systemType) {
-            $systemTypeId = $this->systemTypeTranslator->getSystemTypeId($systemType);
-            $this->addSystemTypeStatement->execute(array($interactionId, $systemTypeId));
-        }
     }
 }
