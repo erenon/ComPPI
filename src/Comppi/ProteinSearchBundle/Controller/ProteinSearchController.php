@@ -8,16 +8,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class ProteinSearchController extends Controller
 {
     // @TODO: implement a central input processing bundle/service + Symfony-style forms
-	private $species_requested = array(
-		'Hs' => 1,
-		'Dm' => 1,
-		'Ce' => 1,
-		'Sc' => 1,
+	private $species_map = array(
+		'Hs' => array('form_field' => 'fProtSearchHs', 'needed' => false),
+		'Dm' => array('form_field' => 'fProtSearchDm', 'needed' => false),
+		'Ce' => array('form_field' => 'fProtSearchCe', 'needed' => false),
+		'Sc' => array('form_field' => 'fProtSearchSc', 'needed' => false)
 	);
-	// internal switches to create demonstration and presentation figures
 	private $verbose = false;
-	private $null_loc_needed = false; // show rows where one or both locations are unknown
-	private $result_set_limit = 0; // limit the number of displayed results to ... (0 = unlimited)
+	//private $null_loc_needed = false; // show rows where one or both locations are unknown
+	private $search_range_start = 0; // search result display starts from here
+	private $search_result_per_page = 50; // limit the number of displayed results to ... (0 = unlimited)
 	
 	public function proteinSearchAction($protein_name = '')
     {
@@ -32,142 +32,110 @@ class ProteinSearchController extends Controller
 		$request = $this->getRequest();
 		if ($request->getMethod() == 'POST') {
 			$DB = $this->get('database_connection');
+
+			$this->mapSpeciesRequest();
+			$sp = $this->getRequestedSpecies();
+			$requested_keyword = $_POST['fProtSearchKeyword']; // $request->request->get('fProtSearchKeyword') is not even NULL if empty!
 			
-			$this->species_requested['Hs'] = intval($request->request->get('fProtSearchSpecHs'));
-			$this->species_requested['Dm'] = intval($request->request->get('fProtSearchSpecDm'));
-			$this->species_requested['Ce'] = intval($request->request->get('fProtSearchSpecCe'));
-			$this->species_requested['Sc'] = intval($request->request->get('fProtSearchSpecSc'));
-			
-			$keywords = array();
-			if ($request->request->get('fProtSearchKeyword')) {
-				$keywords[] = mysql_real_escape_string($request->request->get('fProtSearchKeyword'));
-				$T['keyword']  = $request->request->get('fProtSearchKeyword');
-			}
-			if ($request->request->get('fProtSearchMultiNames')) {
-				$T['protein_names']  = $request->request->get('fProtSearchMultiNames');
-				$keywords = array_merge(explode("\n", $request->request->get('fProtSearchMultiNames')), $keywords);
-			}
+			if (empty($sp))//$this->get('session')->setFlash('notice', 'Please select at least one genus!');
+				throw new \ErrorException('Species missing!');
+			if (empty($requested_keyword))
+				throw new \ErrorException('Keyword missing!');
 
-			if (!empty($keywords)) {
-				$name_cond = array();
-				$name2prot_cond = array();
-				foreach($keywords as $name) {
-					$name = str_replace("\r", '', $name); // different carriage returns on different platforms...
-					$name_cond[] = "(proteinName LIKE '%".mysql_real_escape_string($name)."%')";
-					$name2prot_cond[] = "(name LIKE '%".mysql_real_escape_string($name)."%')";
-					//$pg_cond[] = "(p.proteinName LIKE '%".mysql_real_escape_string($name)."%')"; pager condition
-				}
-
-				$this->verbose ? $T['verbose_log'] .= "\n Keywords: ".join(', ', $keywords) : '';
-
-				// Low-level Doctrine DBAL commands with custom query building to have better control
-				// @TODO: convert to Doctrine query builder ( conn->createQueryBuilder() )?
-				$locs = $this->get('comppi.build.localizationTranslator');
-				$one_sp_at_least = false;
+			if (!empty($requested_keyword) and !empty($sp)) {
+				$T['keyword']  = htmlspecialchars(strip_tags($requested_keyword));
+				$keyword = mysql_real_escape_string($requested_keyword);
+				
 				$d_names_found = 0; // number of search results in the Protein tables.
 				$d_synonyms_found = 0; // number of search results in the ProteinNameMap tables.
-				$d_interactions_found = 0;
-
-				foreach($this->species_requested as $sp => $specie_needed) {
-					$one_sp_at_least = true;
-					
-					if ($specie_needed) {
-						$a_protein_ids = array(); // container for protein IDs from both names and synonyms
-						$this->verbose ? $T['verbose_log'] .= "\n Query cycle for $sp started" : '';
-						
-						// Doctrine's $DB->fetchAll returns a 2 dimensional array, which consumes memory like hell
-						// -> we fill a 1 dimensional array, which also serves as a pseudo array_unique()
-						
-						// IDS FROM PROTEIN NAMES
-						$r_prot_ids_from_name = $DB->query( "SELECT DISTINCT id AS proteinId FROM Protein$sp WHERE ".join(' OR ', $name_cond) );
-						$this->verbose ? $T['verbose_log'] .= "\n SELECT DISTINCT id AS proteinId FROM Protein$sp WHERE ".join(' OR ', $name_cond) : '';
-						if (!$r_prot_ids_from_name) throw new Exception('Protein name query failed!');
-						while($r = $r_prot_ids_from_name->fetch()) {
-							$a_protein_ids[$r['proteinId']] = (int)$r['proteinId'];
-							$d_names_found++;
-						}
-						$this->verbose ? $T['verbose_log'] .= "\n $d_names_found protein names found for $sp" : '';
-						
-						// IDS FROM PROTEIN SYNONYMS
-						$r_prot_ids_from_synonyms = $DB->query( "SELECT DISTINCT proteinId FROM NameToProtein$sp WHERE ".join(' OR ', $name2prot_cond) );
-						$this->verbose ? $T['verbose_log'] .= "\n SELECT DISTINCT proteinId FROM NameToProtein$sp WHERE ".join(' OR ', $name2prot_cond) : '';
-						if (!$r_prot_ids_from_synonyms) throw new Exception('Protein synonyms query failed!');
-						while($r = $r_prot_ids_from_synonyms->fetch()) {
-							$a_protein_ids[$r['proteinId']] = (int)$r['proteinId'];
-							$d_synonyms_found++;
-						}
-						$this->verbose ? $T['verbose_log'] .= "\n $d_synonyms_found synonyms found for $sp" : '';
-						
-						// INTERACTIONS
-						if (!empty($a_protein_ids)) {
-							/*$sql_pg = "SELECT DISTINCT COUNT(i.actorAId) AS rownum FROM Interaction$sp i LEFT JOIN Protein$sp p ON i.actorAId=p.id WHERE ".join(' OR ', $pg_cond);
-							$r_pg = $DB->query( $sql_pg );
-							$r_rownum = $r_pg->fetch();
-							$max_rownum = (int)$r_rownum['rownum'];
-							// @TODO: to be continued...*/
-							
-							//var_dump($a_prot_ids_from_name);
-							//var_dump($a_prot_ids_from_synonyms);
-							//die();
-							
-							// SELECT ALL LINES FROM INTERACTIONS WHERE ANY OF THE INTERACTORS MATCHES A REQUESTED PROTEIN ID
-							$sql = "SELECT DISTINCT p1.id AS p1id, p2.id AS p2id, p1.proteinName AS protA, p2.proteinName AS protB, i.actorAId, i.actorBId, ptl1.localizationId AS locAId, ptl1.pubmedId AS locASrc, ptl2.localizationId AS locBId, ptl1.pubmedId AS locBSrc"
-								." FROM Interaction$sp i
-								  LEFT JOIN Protein$sp p1 ON i.actorAId=p1.id
-								  LEFT JOIN Protein$sp p2 ON i.actorBId=p2.id
-								  LEFT JOIN ProteinToLocalization$sp ptl1 ON actorAId=ptl1.proteinId
-								  LEFT JOIN ProteinToLocalization$sp ptl2 ON actorBId=ptl2.proteinId "
-								.' WHERE ('
-									."(p1.id=".join(' OR p1.id=', $a_protein_ids).") OR	(p2.id=".join(' OR p2.id=', $a_protein_ids).")"
-									.(!$this->null_loc_needed ? " AND (ptl1.localizationId IS NOT NULL AND ptl2.localizationId IS NOT NULL)" : '')
-									.' )'
-									.($this->result_set_limit ? ' LIMIT '.$this->result_set_limit : '');
-							
-							$this->verbose ? $T['verbose_log'] .= "\n $sql" : '';
-							//exit($sql);
-							
-							$r_interactions = $DB->query( $sql );
-							if ( !$r_interactions ) throw new Exception('Interaction query failed!');
-							while ( $p = $r_interactions->fetch() ) {
-								$T['ls'][] = array(
-									'protA' => $p['protA'],
-									'locA' => (empty($p['locAId']) ? 'N/A' : $locs->getHumanReadableLocalizationById($p['locAId'])),
-									'locASrcUrl' => (empty($p['locAId']) ? '' : $this->linkToPubmed($p['locASrc'])),
-									'protB' => $p['protB'],
-									'locB' => (empty($p['locBId']) ? 'N/A' : $locs->getHumanReadableLocalizationById($p['locBId'])),
-									'locBSrcUrl' => (empty($p['locBId']) ? '' : $this->linkToPubmed($p['locBSrc'])),
-									'species' => $sp
-								);
-								$d_interactions_found++;
-							}
-						}
-					}
-				}
+				$a_protein_ids = array(); // container for protein IDs from both names and synonyms
 				
-				if (empty($T['ls'])) {
-					$T['result_msg'] = 'No matching protein name (or synonym) was found.';
-				} else {
+				// PROTEIN IDS FROM NAMES AND SYNONYMS
+				// Protein IDs from names
+				$sql_prot_ids_from_name = "SELECT DISTINCT id AS proteinId FROM Protein$sp WHERE proteinName LIKE '%$keyword%'";
+				$r_prot_ids_from_name = $DB->query($sql_prot_ids_from_name);
+				$this->verbose ? $T['verbose_log'] .= "\n $sql_prot_ids_from_name" : '';
+				if (!$r_prot_ids_from_name) throw new \ErrorException('Protein name query failed!');
+				while($r = $r_prot_ids_from_name->fetch()) { // DBAL fetch is a fuckin memory hog
+					$a_protein_ids[$r['proteinId']] = (int)$r['proteinId'];
+					$d_names_found++;
+				}
+				$this->verbose ? $T['verbose_log'] .= "\n $d_names_found protein names found for $sp" : '';
+				
+				// Protein IDs from synonyms
+				// we have to search amongst synonyms too even if we haven't found anything in protein names...
+				$sql_prot_ids_from_synonyms = "SELECT DISTINCT proteinId FROM NameToProtein$sp WHERE name LIKE '%$keyword%'";
+				$r_prot_ids_from_synonyms = $DB->query($sql_prot_ids_from_synonyms);
+				$this->verbose ? $T['verbose_log'] .= "\n $sql_prot_ids_from_synonyms" : '';
+				if (!$r_prot_ids_from_synonyms) throw new \ErrorException('Protein synonyms query failed!');
+				while($r = $r_prot_ids_from_synonyms->fetch()) {
+					$a_protein_ids[$r['proteinId']] = (int)$r['proteinId'];
+					$d_synonyms_found++;
+				}
+				$this->verbose ? $T['verbose_log'] .= "\n $d_synonyms_found synonyms found for $sp" : '';
+				
+				if (!empty($a_protein_ids)) {
+					// PAGINATION
+					$sql_pg = "SELECT COUNT(id) AS proteinCount FROM Interaction$sp WHERE (actorAId=".join(' OR actorAId=', $a_protein_ids).") OR (actorBId=".join(' OR actorBId=', $a_protein_ids).")";			
+					$r_pg = $DB->query($sql_pg);
+					$this->verbose ? $T['verbose_log'] .= "\n Pagination: $sql_pg" : '';
+					$a_rownum = $r_pg->fetch();
+					$sum_protein_count = (int)$a_rownum['proteinCount'];
+					
+					// INTERACTIONS OF PREVIOUSLY DETERMINED PROTEIN IDS
+					$locs = $this->get('comppi.build.localizationTranslator');
+					$sql_i = "
+						SELECT DISTINCT
+							p1.proteinName AS protA,
+							p2.proteinName AS protB,
+							i.actorAId,
+							i.actorBId,
+							ptl1.localizationId AS locAId,
+							ptl1.pubmedId AS locASrc,
+							ptl2.localizationId AS locBId,
+							ptl2.pubmedId AS locBSrc
+						FROM Interaction$sp i
+						LEFT JOIN Protein$sp p1 ON i.actorAId=p1.id
+						LEFT JOIN Protein$sp p2 ON i.actorBId=p2.id
+						LEFT JOIN ProteinToLocalization$sp ptl1 ON actorAId=ptl1.proteinId
+						LEFT JOIN ProteinToLocalization$sp ptl2 ON actorBId=ptl2.proteinId
+						WHERE
+							(i.actorAId=".join(' OR i.actorAId=', $a_protein_ids).") OR (i.actorBId=".join(' OR i.actorBId=', $a_protein_ids).")"
+							//.(!$this->null_loc_needed ? " AND (ptl1.localizationId IS NOT NULL AND ptl2.localizationId IS NOT NULL)" : '')
+							.($this->search_result_per_page ? " LIMIT ".$this->search_range_start.", ".$this->search_result_per_page : '');
+					
+					$this->verbose ? $T['verbose_log'] .= "\n $sql_i" : '';
+					//exit($sql);
+					
+					$r_i = $DB->query($sql_i);
+					if (!$r_i) throw new \ErrorException('Interaction query failed!');
+					while ( $p = $r_i->fetch() ) {
+						$T['ls'][] = array(
+							'protA' => $p['protA'],
+							'locA' => (empty($p['locAId']) ? 'N/A' : $locs->getHumanReadableLocalizationById($p['locAId'])),
+							'locASrcUrl' => (empty($p['locAId']) ? '' : $this->linkToPubmed($p['locASrc'])),
+							'protB' => $p['protB'],
+							'locB' => (empty($p['locBId']) ? 'N/A' : $locs->getHumanReadableLocalizationById($p['locBId'])),
+							'locBSrcUrl' => (empty($p['locBId']) ? '' : $this->linkToPubmed($p['locBSrc'])),
+							'species' => $sp
+						);
+					}
+					
 					$result_msg_text = '%d protein'.($d_names_found>1 ? 's' : '')
 						.' with %d synonym'.($d_synonyms_found>1 ? 's' : '')
-						.' and %d interaction'.($d_interactions_found>1 ? 's' : '')
+						.' and %d interaction'.($sum_protein_count>1 ? 's' : '')
 						.' were found.';
-					$T['result_msg'] = sprintf($result_msg_text, $d_names_found, $d_synonyms_found, $d_interactions_found);
-				}
-				
-				//die( var_dump($T['ls']) );
-				if ( !$one_sp_at_least ) {
-					$this->get('session')->setFlash('notice', 'Please select at least one genus!');
+					$T['result_msg'] = sprintf($result_msg_text, $d_names_found, $d_synonyms_found, $sum_protein_count);
+				} else {
+					$T['result_msg'] = 'No matching protein name (or synonym) was found.';
 				}
 			} else {
 				// @TODO: set up a symfony-style proper form validation
-				$this->get('session')->setFlash('notice', 'Please fill in at least one protein name!');
+				$T['result_msg'] = 'Please fill in a protein name and select a species!';
 			}
 		}
 		
-		$T['need_hs'] = $this->species_requested['Hs'];
-		$T['need_dm'] = $this->species_requested['Dm'];
-		$T['need_ce'] = $this->species_requested['Ce'];
-		$T['need_sc'] = $this->species_requested['Sc'];
+		$T['need'] = $this->mapSpeciesToTemplate();
 		
 		return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
 	}
@@ -175,5 +143,39 @@ class ProteinSearchController extends Controller
 	private function linkToPubmed($pubmed_uid)
 	{
 		return 'http://www.ncbi.nlm.nih.gov/pubmed/'.$pubmed_uid;
+	}
+	
+	private function mapSpeciesRequest()
+	{
+		$request = $this->getRequest();
+		foreach($this->species_map as $sp => $d) {
+			if ($request->request->get($d['form_field'])) {
+				$this->species_map[$sp]['needed'] = true;
+			} else {
+				$this->species_map[$sp]['needed'] = false;
+			}
+		}
+		return;
+	}
+	
+	private function mapSpeciesToTemplate()
+	{
+		foreach($this->species_map as $sp => $d) {
+			if ($this->species_map[$sp]['needed']) {
+				$needed[strtolower($sp)] = 1;
+			}  else {
+				$needed[strtolower($sp)] = 0;
+			}
+		}
+		
+		return $needed;
+	}
+	
+	private function getRequestedSpecies()
+	{
+		foreach($this->species_map as $sp => $d)
+			if (!empty($d['needed']))	return $sp;
+		
+		return null;
 	}
 }
