@@ -15,7 +15,7 @@ class SpecieProvider
 
     public function getSpecieById($id) {
         foreach ($this->descriptors as $descriptor) {
-            if ($descriptor->id = $id) {
+            if ($descriptor->id == $id) {
                 return $descriptor;
             }
         }
@@ -25,7 +25,7 @@ class SpecieProvider
 
     public function getSpecieByAbbreviation($abbr) {
         foreach ($this->descriptors as $descriptor) {
-            if ($descriptor->abbreviation = $abbr) {
+            if ($descriptor->abbreviation == $abbr) {
                 return $descriptor;
             }
         }
@@ -35,7 +35,7 @@ class SpecieProvider
 
     public function getSpecieByName($name) {
         foreach ($this->descriptors as $descriptor) {
-            if ($descriptor->name = $name) {
+            if ($descriptor->name == $name) {
                 return $descriptor;
             }
         }
