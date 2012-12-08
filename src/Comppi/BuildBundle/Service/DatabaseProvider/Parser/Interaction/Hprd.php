@@ -21,13 +21,19 @@ class Hprd extends AbstractInteractionParser
         $recordArray = explode("\t", $line);
         $this->checkRecordFieldCount($recordArray, 8);
 
+        $systemTypes = explode(';', $recordArray[6]);
+
+        foreach ($systemTypes as $i => $systemType) {
+            $systemTypes[$i] = trim($systemType);
+        }
+
         $this->currentRecord = array(
             'proteinANamingConvention' => 'Hprd',
             'proteinAName' => $recordArray[1],
             'proteinBNamingConvention' => 'Hprd',
             'proteinBName' => $recordArray[4],
             'pubmedId' => $recordArray[7],
-            'experimentalSystemType' => explode(';', $recordArray[6])
+            'experimentalSystemType' => $systemTypes
         );
     }
 }
