@@ -59,6 +59,11 @@ class Intact extends AbstractInteractionParser
             $expSysStart = strpos($recordArray[6], '(') + 1;
             $expSysEnd = strpos($recordArray[6], ')');
 
+            if ($expSysEnd === false) {
+                $expSysStart = strpos($recordArray[6], '"') + 1;
+                $expSysEnd = strrpos($recordArray[6], '"');
+            }
+
             $expSysType = substr($recordArray[6], $expSysStart, $expSysEnd-$expSysStart);
 
             $this->currentRecord = array(
