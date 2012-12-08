@@ -18,6 +18,9 @@ php $console doctrine:schema:drop --force
 echo "Create new schema"
 php $console doctrine:schema:update --force
 
+echo "Load System Types"
+php $console comppi:build:systems
+
 echo "Load SacCe maps"
 php $console comppi:build:map sc
 
