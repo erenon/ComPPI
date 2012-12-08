@@ -42,7 +42,7 @@ class Mint extends AbstractInteractionParser
 
             // extract experimental system type
             $expSysStart = strpos($recordArray[6], '(') + 1;
-            $expSysEnd = strpos($recordArray[6], ')');
+            $expSysEnd = strrpos($recordArray[6], ')');
 
             $expSysType = substr($recordArray[6], $expSysStart, $expSysEnd-$expSysStart);
 
