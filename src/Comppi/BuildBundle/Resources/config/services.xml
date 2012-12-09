@@ -21,6 +21,8 @@
     	<parameter key="comppi.build.systemTypeTranslator.systemFile">%kernel.root_dir%/../databases/systemtypes/system.csv</parameter>
  	    <parameter key="comppi.build.systemTypeTranslator.testSynonymFile">%kernel.root_dir%/../src/Comppi/BuildBundle/Test/databases/systemtypes/synonym.csv</parameter>
         <parameter key="comppi.build.systemTypeTranslator.testSystemFile">%kernel.root_dir%/../src/Comppi/BuildBundle/Test/databases/systemtypes/system.csv</parameter>
+        
+        <parameter key="comppi.build.confidenceScore.class">Comppi\BuildBundle\Service\ConfidenceScore\ConfidenceScore</parameter>
     </parameters>
 
     <services>
@@ -44,6 +46,10 @@
             <argument type="service" id="doctrine.orm.default_entity_manager" />
             <argument>%comppi.build.systemTypeTranslator.synonymFile%</argument>
             <argument>%comppi.build.systemTypeTranslator.systemFile%</argument>
+        </service>
+        
+        <service id="comppi.build.confidenceScore" class="%comppi.build.confidenceScore.class%">
+            <argument type="service" id="doctrine.orm.default_entity_manager" />
         </service>
     </services>
     
