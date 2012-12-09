@@ -69,6 +69,9 @@ php $console comppi:build:localizations ce
 echo "Load C'Elegans name lookup table"
 php $console comppi:build:namelookup ce
 
+echo "Calculate Confidence Scores"
+php $console comppi:build:confidenceScores
+
 endTime=$(date +"%s")
 diffTime=$(($endTime - $startTime))
 
