@@ -13,6 +13,10 @@ class SpecieProvider
         $this->descriptors[] = new SpecieDescriptor(3, 'sc', 'Saccaromicies Cervisae');
     }
 
+    public function getDescriptors() {
+        return $this->descriptors;
+    }
+
     public function getSpecieById($id) {
         foreach ($this->descriptors as $descriptor) {
             if ($descriptor->id == $id) {
