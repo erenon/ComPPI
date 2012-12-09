@@ -13,66 +13,57 @@ class Protein
         $this->connection = $em->getConnection();
     }
 
-    public function get($specie, $id) {
-        $table = 'Protein' . ucfirst($specie);
-        $statement = 'SELECT proteinName as name, proteinNamingConvention as namingConvention FROM ' . $table .
-        	" WHERE id = ? LIMIT 1;";
+    public function get($specieId, $id) {
+        $protein = $this->connection->executeQuery(
+            'SELECT proteinName as name, proteinNamingConvention as namingConvention FROM Protein' .
+        	' WHERE id = ? AND specieId = ? LIMIT 1',
+            array($id, $specieId)
+        );
 
-        $select = $this->connection->prepare($statement);
-        $select->bindValue(1, $id);
-        $select->execute();
-
-        if ($select->rowCount() > 0) {
-            return $select->fetch(\PDO::FETCH_ASSOC);
+        if ($protein->rowCount() > 0) {
+            return $protein->fetch(\PDO::FETCH_ASSOC);
         } else {
             return false;
         }
     }
 
-    public function getSynonyms($specie, $id) {
-        $table = 'NameToProtein' . ucfirst($specie);
-        $statement = 'SELECT namingConvention, name FROM ' . $table .
-        	" WHERE proteinId = ?;";
+    public function getSynonyms($id) {
+        $synonyms = $this->connection->executeQuery(
+        	'SELECT namingConvention, name FROM NameToProtein' .
+        	' WHERE proteinId = ?',
+            array($id)
+        );
 
-        $select = $this->connection->prepare($statement);
-        $select->bindValue(1, $id);
-        $select->execute();
-
-        if ($select->rowCount() > 0) {
-            return $select->fetchAll(\PDO::FETCH_ASSOC);
+        if ($synonyms->rowCount() > 0) {
+            return $synonyms->fetchAll(\PDO::FETCH_ASSOC);
         } else {
             return false;
         }
     }
 
-    public function getLocalizations($specie, $id) {
-        $table = 'ProteinToLocalization' . ucfirst($specie);
-        $statement = 'SELECT localizationId as id, sourceDb, pubmedId, experimentalSystemType FROM ' . $table .
-        	" WHERE proteinId = ?;";
+    public function getLocalizations($id) {
+        $localizations = $this->connection->executeQuery(
+        	'SELECT localizationId as id, sourceDb, pubmedId FROM ProteinToLocalization' .
+        	' WHERE proteinId = ?',
+            array($id)
+        );
 
-        $select = $this->connection->prepare($statement);
-        $select->bindValue(1, $id);
-        $select->execute();
-
-        if ($select->rowCount() > 0) {
-            return $select->fetchAll(\PDO::FETCH_ASSOC);
+        if ($localizations->rowCount() > 0) {
+            return $localizations->fetchAll(\PDO::FETCH_ASSOC);
         } else {
             return false;
         }
     }
 
-    public function getInteractions($specie, $id) {
-        $table = 'Interaction' . ucfirst($specie);
-        $statement = 'SELECT actorAId, actorBId, sourceDb, pubmedId, experimentalSystemType FROM ' . $table .
-        	" WHERE actorAId = ? OR actorBId = ?;";
+    public function getInteractions($id) {
+        $interactions = $this->connection->executeQuery(
+        	'SELECT actorAId, actorBId, sourceDb, pubmedId FROM Interaction' .
+        	' WHERE actorAId = ? OR actorBId = ?',
+            array($id, $id)
+        );
 
-        $select = $this->connection->prepare($statement);
-        $select->bindValue(1, $id);
-        $select->bindValue(2, $id);
-        $select->execute();
-
-        if ($select->rowCount() > 0) {
-            $results = $select->fetchAll(\PDO::FETCH_ASSOC);
+        if ($interactions->rowCount() > 0) {
+            $results = $interactions->fetchAll(\PDO::FETCH_ASSOC);
 
             foreach ($results as &$record) {
                 if ($record['actorAId'] == $id) {

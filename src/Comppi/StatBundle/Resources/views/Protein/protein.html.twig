@@ -37,7 +37,7 @@
                 <td>{% trans %}Localization{% endtrans %}</td>
                 <td>{% trans %}Source database{% endtrans %}</td>
                 <td class="tcell-numeric">{% trans %}Pubmed ID{% endtrans %}</td>
-                <td>{% trans %}Experimental System Type{% endtrans %}</td>
+                {# <td>{% trans %}Experimental System Type{% endtrans %}</td> #}
                 {# <td class="tcell-numeric">{% trans %}View in tree{% endtrans %}</td> #}
             </tr> 
         </thead>
@@ -47,7 +47,7 @@
             <td>{{ localization.localizationName }}</td>
             <td>{{ localization.sourceDb }}</td>
             <td class="tcell-numeric">{{ localization.pubmedId }}</td>
-            <td>{{ localization.experimentalSystemType }}</td>
+            {# <td>{{ localization.experimentalSystemType }}</td> #}
             {# <td class="tcell-numeric">view {{ localization.id }}</td> #}
         </tr>    
     {% endfor %}
@@ -64,7 +64,7 @@
                 <td>{% trans %}Protein Name{% endtrans %}</td>
                 <td>{% trans %}Source database{% endtrans %}</td>
                 <td class="tcell-numeric">{% trans %}Pubmed ID{% endtrans %}</td>
-                <td>{% trans %}Experimental System Type{% endtrans %}</td>
+                {# <td>{% trans %}Experimental System Type{% endtrans %}</td> #}
             </tr> 
         </thead>
         <tbody>
@@ -72,13 +72,13 @@
         <tr>
             <td>{{ interaction.actor.namingConvention }}</td>
             <td>
-                <a href="{{ path('stat_protein_protein', {'specie': main.specie, 'id': interaction.actorId }) }}">
+                <a href="{{ path('stat_protein_protein', {'specieAbbr': main.specie.abbreviation, 'id': interaction.actorId }) }}">
                 {{ interaction.actor.name }}
                 </a>
             </td>
             <td>{{ interaction.sourceDb }}</td>
             <td class="tcell-numeric">{{ interaction.pubmedId }}</td>
-            <td>{{ interaction.experimentalSystemType }}</td>
+            {# <td>{{ interaction.experimentalSystemType }}</td> #}
         </tr>    
     {% endfor %}
     </table>

@@ -27,7 +27,7 @@
         <td class="tcell-numeric">{{ conventionStat.proteinCount }}</td>
         {% if specieAbbr != 'total' %}
             <td class="tcell-numeric">
-                <a href="{{  path('stat_naming_proteins', {'specie': specieAbbr, 'convention': conventionStat.namingConvention }) }}">
+                <a href="{{  path('stat_naming_proteins', {'specieAbbr': specieAbbr, 'convention': conventionStat.namingConvention }) }}">
                     {% trans %}proteins{% endtrans %}
                 </a>
             </td>

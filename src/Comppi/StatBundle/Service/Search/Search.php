@@ -9,17 +9,19 @@ class Search
      */
     protected $connection;
 
-    protected $species = array(
-        'hs', 'dm', 'ce', 'sc'
-    );
+    /**
+     * @var Comppi\BuildBundle\Service\SpecieProvider\SpecieProvider
+     */
+    protected $specieProvider;
 
-    public function __construct($em) {
+    public function __construct($em, $specieProvider) {
         $this->connection = $em->getConnection();
+        $this->specieProvider = $specieProvider;
     }
 
     public function getExamples() {
         $selExamples = $this->connection->executeQuery(
-            'SELECT namingConvention, name FROM NameToProteinHs GROUP BY namingConvention LIMIT 5;'
+            'SELECT namingConvention, name FROM NameToProtein GROUP BY namingConvention LIMIT 5;'
         );
 
         return $selExamples->fetchAll(\PDO::FETCH_ASSOC);
@@ -28,37 +30,32 @@ class Search
     public function searchByName($name) {
         $results = array();
 
-        foreach ($this->species as $specie) {
-            $main = array();
-            $synonyms = array();
+        $select = $this->connection->executeQuery(
+        	'SELECT id as proteinId, specieId, proteinName as name, proteinNamingConvention as namingConvention FROM Protein' .
+        	' WHERE proteinName = ?',
+            array($name)
+        );
 
-            $table = 'Protein' . ucfirst($specie);
-            $statement = 'SELECT id as proteinId, proteinName as name, proteinNamingConvention as namingConvention FROM ' . $table .
-            	' WHERE proteinName = ?;';
+        if ($select->rowCount() > 0) {
+            $results = $select->fetchAll(\PDO::FETCH_ASSOC);
+        }
 
-            $select = $this->connection->prepare($statement);
-            $select->bindValue(1, $name);
-            $select->execute();
+        $select = $this->connection->executeQuery(
+            'SELECT proteinId, specieId, name, namingConvention FROM NameToProtein' .
+        	' WHERE name = ?',
+            array($name)
+        );
 
-            if ($select->rowCount() > 0) {
-                $main = $select->fetchAll(\PDO::FETCH_ASSOC);
-            }
+        if ($select->rowCount() > 0) {
+           $synonyms  = $select->fetchAll(\PDO::FETCH_ASSOC);
+           $results = array_merge($results, $synonyms);
+        }
 
-            $table = 'NameToProtein' . ucfirst($specie);
-            $statement = 'SELECT namingConvention, name, proteinId FROM ' . $table .
-            	' WHERE name = ?;';
+        // change specie ids to specie descriptors
+        $specieDescriptors = $this->specieProvider->getDescriptors();
 
-            $select = $this->connection->prepare($statement);
-            $select->bindValue(1, $name);
-            $select->execute();
-
-            if ($select->rowCount() > 0) {
-               $synonyms  = $select->fetchAll(\PDO::FETCH_ASSOC);
-            }
-
-            if (!empty($main) || !empty($synonyms)) {
-                $results[$specie] = array_merge($main, $synonyms);
-            }
+        foreach ($results as &$result) {
+            $result['specie'] = $specieDescriptors[$result['specieId']];
         }
 
         return $results;

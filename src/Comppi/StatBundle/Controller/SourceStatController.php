@@ -21,30 +21,42 @@ class SourceStatController extends Controller
      */
     public function indexAction()
     {
+        /**
+         * @var Comppi\BuildBundle\Service\SpecieProvider\SpecieProvider
+         */
+        $specieProvider = $this->container->get('comppi.build.specieProvider');
+
         return array(
-            'species' => $this->species
+            'species' => $specieProvider->getDescriptors()
         );
     }
 
     /**
-     * @Route("/source/{specie}", name="stat_source_specie")
+     * @Route("/source/{specieAbbr}", name="stat_source_specie")
      * @Template()
      */
-    public function sourceBySpecieAction($specie)
+    public function sourceBySpecieAction($specieAbbr)
     {
-        if (isset($this->species[$specie])) {
-            $specieName = $this->species[$specie];
-        } else {
-            throw $this->createNotFoundException('Invalid specie specified');
+        /**
+         * @var Comppi\BuildBundle\Service\SpecieProvider\SpecieProvider
+         */
+        $specieProvider = $this->container->get('comppi.build.specieProvider');
+
+        try {
+            $specie = $specieProvider->getSpecieByAbbreviation($specieAbbr);
+            $specieId = $specie->id;
+        } catch (\InvalidArgumentException $e) {
+            throw $this->createNotFoundException('Invalid species specified');
         }
 
         /**
          * @var $statistics Comppi\StatBundle\Service\Statistics\Statistics
          */
         $statistics = $this->get('comppi.stat.statistics');
-        $interactionSourceStat = $statistics->getInteractionSourceStats($specie);
-        $locaizationSourceStat = $statistics->getLocalizationSourceStats($specie);
-        $sourceProteinCounts = $statistics->getSourceProteinCounts($specie);
+
+        $interactionSourceStat = $statistics->getInteractionSourceStats($specieId);
+        $locaizationSourceStat = $statistics->getLocalizationSourceStats($specieId);
+        $sourceProteinCounts = $statistics->getSourceProteinCounts($specieId);
 
         $totalInteractionProteinCount = 0;
         $totalInteractionCount = 0;
@@ -69,7 +81,7 @@ class SourceStatController extends Controller
         }
 
         return array(
-        	'specieName' => $specieName,
+        	'specieName' => $specie->name,
             'interactions' => $interactionSourceStat,
             'interactionTotal' => array(
                 'proteinCount' => $totalInteractionProteinCount,
@@ -80,7 +92,7 @@ class SourceStatController extends Controller
                 'proteinCount' => $totalLocalizationProteinCount,
                 'localizationCount' => $totalLocalizationCount
             ),
-        	'species' => $this->species // subnav menu entries
+        	'species' => $specieProvider->getDescriptors() // subnav menu entries
         );
     }
 }
