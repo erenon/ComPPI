@@ -35,7 +35,7 @@ class LoadInteractionsCommand extends AbstractLoadCommand
 
         // init insert statement
         $this->insertInteractionStatement = $this->connection->prepare(
-        	"INSERT INTO Interaction VALUES ('', ?, ?, ?, ?, ?)"
+        	"INSERT INTO Interaction VALUES ('', ?, ?, ?, ?)"
         );
 
         // init add system type statement
@@ -64,9 +64,6 @@ class LoadInteractionsCommand extends AbstractLoadCommand
 
             // bind source name
             $this->insertInteractionStatement->bindValue(3, $sourceDb);
-
-            // set confidence score to 0, correct it later
-            $this->insertInteractionStatement->bindValue(5, 0);
 
             foreach ($database as $interaction) {
                 // get proteinA name

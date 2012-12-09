@@ -38,9 +38,4 @@ class Interaction
      * @ORM\Column(type="integer")
      */
     protected $pubmedId;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    protected $confidenceScore;
 }
