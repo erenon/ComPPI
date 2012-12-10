@@ -28,4 +28,12 @@ class ConfidenceScore
 
         $this->calculators[$calculatorId]->calculate($this->connection);
     }
+
+    public function getCalculatorName($calculatorId) {
+        if (!isset($this->calculators[$calculatorId])) {
+            throw new \InvalidArgumentException("Invalid calculatorId given");
+        }
+
+        return $this->calculators[$calculatorId]->getName();
+    }
 }

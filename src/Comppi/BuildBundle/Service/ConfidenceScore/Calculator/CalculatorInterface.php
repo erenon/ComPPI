@@ -6,4 +6,5 @@ interface CalculatorInterface
 {
     public function __construct($id);
     public function calculate(\Doctrine\DBAL\Connection $connection);
+    public function getName();
 }

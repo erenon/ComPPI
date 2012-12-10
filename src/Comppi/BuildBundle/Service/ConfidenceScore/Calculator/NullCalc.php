@@ -18,4 +18,8 @@ class NullCalc implements CalculatorInterface
 
         $nullInsert->execute(array($this->id));
     }
+
+    public function getName() {
+        return "Null Calculator";
+    }
 }
