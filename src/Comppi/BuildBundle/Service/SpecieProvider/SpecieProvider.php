@@ -24,7 +24,7 @@ class SpecieProvider
             }
         }
 
-        throw \InvalidArgumentException('No specie found for id: "' . $id . '"');
+        throw new \InvalidArgumentException('No specie found for id: "' . $id . '"');
     }
 
     public function getSpecieByAbbreviation($abbr) {
@@ -34,7 +34,7 @@ class SpecieProvider
             }
         }
 
-        throw \InvalidArgumentException('No specie found for abbreviation: "' . $abbr . '"');
+        throw new \InvalidArgumentException('No specie found for abbreviation: "' . $abbr . '"');
     }
 
     public function getSpecieByName($name) {
@@ -44,6 +44,6 @@ class SpecieProvider
             }
         }
 
-        throw \InvalidArgumentException('No specie found for name: "' . $name . '"');
+        throw new \InvalidArgumentException('No specie found for name: "' . $name . '"');
     }
 }
