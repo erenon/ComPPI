@@ -2,6 +2,24 @@
 
 {% block title %}{{ main.name }} protein details{% endblock %}
 
+{% block javascriptAssets %}
+    {{ parent() }}
+
+    {% javascripts
+        '@StatBundle/Resources/public/js/jquery.js'
+        '@StatBundle/Resources/public/js/twig.min.js'
+        '@StatBundle/Resources/public/js/protein-browser.js'
+    %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+    
+    {% javascripts
+        '@StatBundle/Resources/public/jstemplates/interactionDetails.html.twig'
+    %}
+    <meta id="jstemplate-interactionDetails" name="templateUrl" content="{{ asset_url }}" />
+    {% endjavascripts %}   
+{% endblock %}
+
 {% block body %}
 
 <div class="headline">
@@ -64,7 +82,7 @@
                 <td>{% trans %}Protein Name{% endtrans %}</td>
                 <td>{% trans %}Source database{% endtrans %}</td>
                 <td class="tcell-numeric">{% trans %}Pubmed ID{% endtrans %}</td>
-                {# <td>{% trans %}Experimental System Type{% endtrans %}</td> #}
+                <td>{% trans %}Details{% endtrans %}</td>
             </tr> 
         </thead>
         <tbody>
@@ -78,7 +96,11 @@
             </td>
             <td>{{ interaction.sourceDb }}</td>
             <td class="tcell-numeric">{{ interaction.pubmedId }}</td>
-            {# <td>{{ interaction.experimentalSystemType }}</td> #}
+            <td>
+                <a class="trow-dynamic-expander-link" href="{{ path('stat_protein_intdetails', {'id': interaction.id }) }}">
+                {% trans %}details{% endtrans %}
+                </a>
+            </td>
         </tr>    
     {% endfor %}
     </table>
