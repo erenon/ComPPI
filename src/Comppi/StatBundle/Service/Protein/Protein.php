@@ -57,7 +57,7 @@ class Protein
 
     public function getInteractions($id) {
         $interactions = $this->connection->executeQuery(
-        	'SELECT actorAId, actorBId, sourceDb, pubmedId FROM Interaction' .
+        	'SELECT id, actorAId, actorBId, sourceDb, pubmedId FROM Interaction' .
         	' WHERE actorAId = ? OR actorBId = ?',
             array($id, $id)
         );
@@ -80,5 +80,27 @@ class Protein
         } else {
             return false;
         }
+    }
+
+    public function getInteractionDetails($interactionId) {
+        $systemTypesSel = $this->connection->executeQuery(
+        	'SELECT name FROM SystemType' .
+        	' LEFT JOIN InteractionToSystemType as ItoS ON SystemType.id = ItoS.systemTypeId' .
+        	' WHERE ItoS.interactionId = ?',
+            array($interactionId)
+        );
+
+        $confidenceScoresSel = $this->connection->executeQuery(
+        	'SELECT calculatorId, score FROM ConfidenceScore WHERE interactionId = ?',
+            array($interactionId)
+        );
+
+        $systemTypes = $systemTypesSel->fetchAll(\PDO::FETCH_ASSOC);
+        $confidenceScores = $confidenceScoresSel->fetchAll(\PDO::FETCH_ASSOC);
+
+        return array(
+            'systemTypes' => $systemTypes,
+            'confidenceScores' => $confidenceScores
+        );
     }
 }

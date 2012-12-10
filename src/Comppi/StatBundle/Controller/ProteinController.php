@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProteinController extends Controller
 {
@@ -64,5 +65,31 @@ class ProteinController extends Controller
             'localizations' => $localizations,
             'interactions' => $interactions
         );
+    }
+
+    /**
+     * @Route("/proteindetails/interaction/{id}", requirements={"id" = "\d+"}, name="stat_protein_intdetails")
+     * @Template()
+     */
+    public function interactionDetailsAction($id) {
+        $request = $this->getRequest();
+
+        $pservice = $this->get('comppi.stat.protein');
+        $interactionDetails = $pservice->getInteractionDetails($id);
+
+        $scoreService = $this->get('comppi.build.confidenceScore');
+
+        foreach ($interactionDetails['confidenceScores'] as &$score) {
+            $score['name'] = $scoreService->getCalculatorName($score['calculatorId']);
+        }
+
+        if ($request->isXmlHttpRequest()) {
+            $response = new Response(json_encode($interactionDetails));
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
+        } else {
+            return $interactionDetails;
+        }
     }
 }
