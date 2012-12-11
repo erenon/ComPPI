@@ -16,8 +16,14 @@
     {% javascripts
         '@StatBundle/Resources/public/jstemplates/interactionDetails.html.twig'
     %}
-    <meta id="jstemplate-interactionDetails" name="templateUrl" content="{{ asset_url }}" />
-    {% endjavascripts %}   
+    <meta id="jstemplate-interactionDetails" name="interactionDetails" content="{{ asset_url }}" />
+    {% endjavascripts %}
+    
+    {% javascripts
+        '@StatBundle/Resources/public/jstemplates/localizationDetails.html.twig'
+    %}
+    <meta id="jstemplate-localizationDetails" name="localizationDetails" content="{{ asset_url }}" />
+    {% endjavascripts %} 
 {% endblock %}
 
 {% block body %}
@@ -55,7 +61,7 @@
                 <td>{% trans %}Localization{% endtrans %}</td>
                 <td>{% trans %}Source database{% endtrans %}</td>
                 <td class="tcell-numeric">{% trans %}Pubmed ID{% endtrans %}</td>
-                {# <td>{% trans %}Experimental System Type{% endtrans %}</td> #}
+                <td>{% trans %}Details{% endtrans %}</td>
                 {# <td class="tcell-numeric">{% trans %}View in tree{% endtrans %}</td> #}
             </tr> 
         </thead>
@@ -65,8 +71,12 @@
             <td>{{ localization.localizationName }}</td>
             <td>{{ localization.sourceDb }}</td>
             <td class="tcell-numeric">{{ localization.pubmedId }}</td>
-            {# <td>{{ localization.experimentalSystemType }}</td> #}
-            {# <td class="tcell-numeric">view {{ localization.id }}</td> #}
+            <td>
+                <a class="trow-dynamic-expander-link" href="{{ path('stat_protein_locdetails', {'id': localization.id }) }}" data-jstemplate="localizationDetails">
+                {% trans %}details{% endtrans %}
+                </a>
+            </td>
+            {# <td class="tcell-numeric">view {{ localization.localizationId }}</td> #}
         </tr>    
     {% endfor %}
     </table>
@@ -97,7 +107,7 @@
             <td>{{ interaction.sourceDb }}</td>
             <td class="tcell-numeric">{{ interaction.pubmedId }}</td>
             <td>
-                <a class="trow-dynamic-expander-link" href="{{ path('stat_protein_intdetails', {'id': interaction.id }) }}">
+                <a class="trow-dynamic-expander-link" href="{{ path('stat_protein_intdetails', {'id': interaction.id }) }}" data-jstemplate="interactionDetails">
                 {% trans %}details{% endtrans %}
                 </a>
             </td>

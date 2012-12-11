@@ -1,11 +1,19 @@
 var
 initDynamicLinks = function() {
-	var template = twig({
+	twig({
 		id: 'interactionDetails',
 		href: $('#jstemplate-interactionDetails').attr('content')
 	});
+	
+	twig({
+		id: 'localizationDetails',
+		href: $('#jstemplate-localizationDetails').attr('content')
+	});
+	
 	$('a.trow-dynamic-expander-link').each(function(index) {
-		var link = $(this); 
+		var link = $(this),
+			template = link.data('jstemplate')
+		; 
 		link.data('remoteUrl', link.attr('href'));
 		link.data('ready', false);
 		link.removeAttr('href');
@@ -17,12 +25,11 @@ initDynamicLinks = function() {
 				function(data) {
 					link.parents('tr').after(
 						'<tr class="dynamic">' 
-						+  twig({ ref: "interactionDetails" }).render(data)
+						+  twig({ ref: template }).render(data)
 						+ '</tr>'
 					);
 					
 					link.data('ready', true);
-//					link.css('cursor', 'n-resize');
 					link.unbind();
 				},
 				'json'

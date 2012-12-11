@@ -43,7 +43,7 @@ class ProteinController extends Controller
 
             foreach ($localizations as &$localization) {
                 $localization['localizationName'] = $localizationTranslator->
-                    getLocalizationById($localization['id']);
+                    getLocalizationById($localization['localizationId']);
             }
         }
 
@@ -72,8 +72,6 @@ class ProteinController extends Controller
      * @Template()
      */
     public function interactionDetailsAction($id) {
-        $request = $this->getRequest();
-
         $pservice = $this->get('comppi.stat.protein');
         $interactionDetails = $pservice->getInteractionDetails($id);
 
@@ -83,6 +81,8 @@ class ProteinController extends Controller
             $score['name'] = $scoreService->getCalculatorName($score['calculatorId']);
         }
 
+        $request = $this->getRequest();
+
         if ($request->isXmlHttpRequest()) {
             $response = new Response(json_encode($interactionDetails));
             $response->headers->set('Content-Type', 'application/json');
@@ -90,6 +90,26 @@ class ProteinController extends Controller
             return $response;
         } else {
             return $interactionDetails;
+        }
+    }
+
+    /**
+     * @Route("/proteindetails/localization/{id}", requirements={"id" = "\d+"}, name="stat_protein_locdetails")
+     * @Template()
+     */
+    public function localizationDetailsAction($id) {
+        $pservice = $this->get('comppi.stat.protein');
+        $localizationDetails = $pservice->getLocalizationDetails($id);
+
+        $request = $this->getRequest();
+
+        if ($request->isXmlHttpRequest()) {
+            $response = new Response(json_encode($localizationDetails));
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
+        } else {
+            return $localizationDetails;
         }
     }
 }

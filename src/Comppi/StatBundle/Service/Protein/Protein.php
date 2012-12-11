@@ -43,7 +43,7 @@ class Protein
 
     public function getLocalizations($id) {
         $localizations = $this->connection->executeQuery(
-        	'SELECT localizationId as id, sourceDb, pubmedId FROM ProteinToLocalization' .
+        	'SELECT id, localizationId, sourceDb, pubmedId FROM ProteinToLocalization' .
         	' WHERE proteinId = ?',
             array($id)
         );
@@ -101,6 +101,21 @@ class Protein
         return array(
             'systemTypes' => $systemTypes,
             'confidenceScores' => $confidenceScores
+        );
+    }
+
+    public function getLocalizationDetails($localizationId) {
+        $systemTypesSel = $this->connection->executeQuery(
+            'SELECT name FROM SystemType' .
+            ' LEFT JOIN ProtLocToSystemType as LtoS ON SystemType.id = LtoS.systemTypeid' .
+            ' WHERE LtoS.protLocId = ?',
+            array($localizationId)
+        );
+
+        $systemTypes = $systemTypesSel->fetchAll(\PDO::FETCH_ASSOC);
+
+        return array(
+            'systemTypes' => $systemTypes,
         );
     }
 }

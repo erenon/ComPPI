@@ -1,0 +1,10 @@
+<td colspan="4">
+<h4>System Types</h4>
+<ul>
+{% for system in systemTypes %}
+    <li>{{ system.name }}</li>
+{% else %}
+    <li>N/A</li>
+{% endfor %}
+</ul>    
+</td>
