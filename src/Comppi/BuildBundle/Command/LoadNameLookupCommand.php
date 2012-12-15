@@ -42,19 +42,17 @@ class LoadNameLookupCommand extends AbstractLoadCommand
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $output->writeln('  > loading name lookup table for specie: ' . $this->specie);
+        $output->writeln('  > loading name lookup table for specie: ' . $this->specie->name);
 
         $connection = $this->connection;
 
-        $proteinTable = 'Protein' . ucfirst($this->specie);
-        $statement = "SELECT id, proteinName, proteinNamingConvention FROM " . $proteinTable
-            . " ORDER BY id ASC LIMIT ?, ?";
+        $statement = "SELECT id, proteinName, proteinNamingConvention FROM Protein" .
+            " ORDER BY id ASC LIMIT ?, ?";
 
         $this->selectProteins = $connection->prepare($statement);
 
-        $synonymTable = 'NameToProtein' . ucfirst($this->specie);
-        $statement = "INSERT INTO " . $synonymTable .
-            " VALUES ('', ?, ?, ?)";
+        $statement = "INSERT INTO NameToProtein" .
+            " VALUES ('', ?, ?, ?, ?)";
 
         $this->insertSynonym = $connection->prepare($statement);
 
@@ -79,7 +77,7 @@ class LoadNameLookupCommand extends AbstractLoadCommand
                 $synonyms = $this->proteinTranslator->getSynonyms(
                     $protein['proteinNamingConvention'],
                     $protein['proteinName'],
-                    $this->specie
+                    $this->specie->id
                 );
 
                 if (is_array($synonyms)) {
@@ -88,6 +86,7 @@ class LoadNameLookupCommand extends AbstractLoadCommand
 
                     foreach ($synonyms as $synonym) {
                         $this->insertSynonym->execute(array(
+                            $this->specie->id,
                             $synonym['namingConventionA'],
                             $synonym['proteinNameA'],
                             $protein['id']

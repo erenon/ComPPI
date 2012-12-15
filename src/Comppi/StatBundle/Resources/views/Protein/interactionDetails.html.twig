@@ -1,0 +1,30 @@
+{% extends 'StatBundle::base.html.twig' %}
+
+{% block title %}{% trans %}Interaction Details{% endtrans%}{% endblock %}
+
+{% block body %}
+
+<h1>{% trans %}Interaction Details{% endtrans%}</h1>
+
+<h3>{% trans %}System Types{% endtrans%}</h3>
+
+<ul>
+{% for system in systemTypes %}
+    <li>{{ system.name }}</li>
+{% else %}
+    <li>{% trans %}N/A{% endtrans%}</li>
+{% endfor %}
+</ul>
+
+<h3>{% trans %}Confidence Scores{% endtrans%}</h3>
+
+<dl>
+{% for score in confidenceScores %}
+    <dt>{{ score.name }}</dt>
+    <dd>{{ score.score }}</dd>
+{% else %}
+    <dt>{% trans %}N/A{% endtrans%}</dt>
+{% endfor %}
+</dl>
+
+{% endblock %}

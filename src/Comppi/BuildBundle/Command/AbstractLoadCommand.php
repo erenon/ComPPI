@@ -11,8 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 abstract class AbstractLoadCommand extends ContainerAwareCommand
 {
     /**
-     * Species available: ce, dm, hs, sc
-     * @var string
+     * @var Comppi\BuildBundle\Service\SpecieProvider\SpecieDescriptor
      */
     protected $specie;
 
@@ -41,15 +40,26 @@ abstract class AbstractLoadCommand extends ContainerAwareCommand
 
     /**
      * ProteinTranslator service
-     * @var Comppi\BuildBundle\Service\ProteinTranslator
+     * @var Comppi\BuildBundle\Service\ProteinTranslator\ProteinTranslator
      */
     protected $proteinTranslator;
 
     /**
      * LocalizationTranslator service
-     * @var Comppi\BuildBundle\Service\LocalizationTranslator
+     * @var Comppi\BuildBundle\Service\LocalizationTranslator\LocalizationTranslator
      */
     protected $localizationTranslator;
+
+    /**
+     * @var Comppi\BuildBundle\Service\SystemTypeTranslator\SystemTypeTranslator
+     */
+    protected $systemTypeTranslator;
+
+    /**
+     * @see addSystemTypes
+     * @var Doctrine\DBAL\Driver\Statement
+     */
+    protected $addSystemTypeStatement;
 
     /**
      * @var Doctrine\DBAL\Connection
@@ -72,19 +82,22 @@ abstract class AbstractLoadCommand extends ContainerAwareCommand
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
         // set specie
-        $specie = $input->getArgument('specie');
-        if (!$specie) {
+        $specieAbbr = $input->getArgument('specie');
+        if (!$specieAbbr) {
             throw new \Exception("Please specify a specie! Species availabe: ce, dm, hs, sc");
         }
-        $this->specie = $specie;
 
         $container = $this->getContainer();
+        $specieProvider = $container->get('comppi.build.specieProvider');
+
+        $this->specie = $specieProvider->getSpecieByAbbreviation($specieAbbr);
 
         $this->databaseProvider = $container->get('comppi.build.databaseProvider');
 
         // setup translators
         $this->proteinTranslator = $container->get('comppi.build.proteinTranslator');
         $this->localizationTranslator = $container->get('comppi.build.localizationTranslator');
+        $this->systemTypeTranslator = $container->get('comppi.build.systemTypeTranslator');
 
         // setup database connection
         $this->connection = $container
@@ -107,15 +120,12 @@ abstract class AbstractLoadCommand extends ContainerAwareCommand
      *
      * @param string $sourceDb
      * @param string $comppiId
-     * @param string $specie
+     * @param int $specie
      */
-    protected function addDatabaseRefToId($sourceDb, $comppiId, $specie) {
-
+    protected function addDatabaseRefToId($sourceDb, $comppiId) {
         if ($this->addDatababaseRefStatement == null) { // init statement
-            $proteinToDatabaseTable = 'ProteinToDatabase' . ucfirst($specie);
-
             // insert ref only if not yet inserted
-            $statement = 'INSERT INTO ' .$proteinToDatabaseTable.
+            $statement = 'INSERT INTO ProteinToDatabase' .
                 ' VALUES (?, ?)'.
                 ' ON DUPLICATE KEY UPDATE proteinId=proteinId';
 
@@ -127,32 +137,43 @@ abstract class AbstractLoadCommand extends ContainerAwareCommand
         $this->addDatababaseRefStatement->execute();
     }
 
+    protected function addSystemTypes($id, $systemTypes) {
+        if (is_array($systemTypes) == false) {
+            $systemTypes = array($systemTypes);
+        }
+
+        $systemTypes = array_unique($systemTypes);
+
+        foreach ($systemTypes as $systemType) {
+            $systemTypeId = $this->systemTypeTranslator->getSystemTypeId($systemType);
+            $this->addSystemTypeStatement->execute(array($id, $systemTypeId));
+        }
+    }
+
     protected function openConnection() {
-        $this->disableTableKeys($this->specie);
+        $this->disableTableKeys();
         $this->disableForeignKeys();
-        $this->lockTables($this->specie);
+        $this->lockTables();
     }
 
     protected function closeConnection() {
         $this->unlockTables();
         $this->enableForeignKeys();
-        $this->enableTableKeys($this->specie);
+        $this->enableTableKeys();
     }
 
-    private function disableTableKeys($specie) {
-        $specie = ucfirst($specie);
+    private function disableTableKeys() {
         foreach ($this->usedEntities as $entity => $permission) {
             if ($permission == 'WRITE') {
-                $this->connection->exec('ALTER TABLE ' . $entity . $specie . ' DISABLE KEYS');
+                $this->connection->exec('ALTER TABLE ' . $entity . ' DISABLE KEYS');
             }
         }
     }
 
-    private function enableTableKeys($specie) {
-        $specie = ucfirst($specie);
+    private function enableTableKeys() {
         foreach ($this->usedEntities as $entity => $permission) {
             if ($permission == 'WRITE') {
-                $this->connection->exec('ALTER TABLE ' . $entity . $specie . ' ENABLE KEYS');
+                $this->connection->exec('ALTER TABLE ' . $entity . ' ENABLE KEYS');
             }
         }
     }
@@ -165,12 +186,10 @@ abstract class AbstractLoadCommand extends ContainerAwareCommand
         $this->connection->exec('SET FOREIGN_KEY_CHECKS = 1;');
     }
 
-    private function lockTables($specie) {
-        $specie = ucfirst($specie);
-
+    private function lockTables() {
         $tablesWithPermission = array();
         foreach ($this->usedEntities as $entity => $permission) {
-            $tablesWithPermission[] = $entity . $specie . ' ' . $permission;
+            $tablesWithPermission[] = $entity . ' ' . $permission;
         }
         $tableList = implode(', ', $tablesWithPermission);
 

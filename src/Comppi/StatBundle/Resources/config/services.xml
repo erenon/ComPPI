@@ -17,6 +17,7 @@
         
         <service id="comppi.stat.search" class="%comppi.stat.search.class%">
             <argument type="service" id="doctrine.orm.default_entity_manager" />
+            <argument type="service" id="comppi.build.specieProvider" />
         </service>
         
         <service id="comppi.stat.protein" class="%comppi.stat.protein.class%">

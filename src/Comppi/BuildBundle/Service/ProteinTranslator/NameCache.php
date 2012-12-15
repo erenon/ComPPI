@@ -13,7 +13,7 @@ class NameCache
     /**
      * Gets a cache entry
      *
-     * @param string $specie
+     * @param int $specie
      * @param string $namingConvention
      * @param string $name
      * @return int|bool ComPPI id if cached or false on cache miss
@@ -33,7 +33,7 @@ class NameCache
     /**
      * Sets a cache entry
      *
-     * @param string $specie
+     * @param int $specie
      * @param string $namingConvention
      * @param string $name
      * @param string $comppiId

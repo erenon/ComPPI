@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(indexes={@ORM\index(name="search_idx", columns={"namingConventionA", "proteinNameA"}), @ORM\index(name="reverse_search_idx", columns={"namingConventionB", "proteinNameB"})})
+ * @ORM\Table(indexes={@ORM\index(name="search_idx", columns={"specieId", "namingConventionA", "proteinNameA"}), @ORM\index(name="reverse_search_idx", columns={"specieId", "namingConventionB", "proteinNameB"})})
  */
-class ProteinNameMapSc
+class ProteinNameMap
 {
     /**
      * @ORM\Id
@@ -16,6 +16,11 @@ class ProteinNameMapSc
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $specieId;
 
     /**
      * @ORM\Column(type="string", length="255")

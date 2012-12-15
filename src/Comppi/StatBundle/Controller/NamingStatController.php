@@ -8,13 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class NamingStatController extends Controller
 {
-    protected $species = array(
-        'hs' => 'Homo Sapiens',
-        'dm' => 'Drosophila Melanogaster',
-        'ce' => 'Caernohabditis Elegans',
-        'sc' => 'Saccaromicies Cervisae'
-    );
-
     /**
      * @Route("/naming", name="stat_naming_index")
      */
@@ -40,12 +33,18 @@ class NamingStatController extends Controller
          * @var $statistics Comppi\StatBundle\Service\Statistics\Statistics
          */
         $statistics = $this->get('comppi.stat.statistics');
-        foreach ($this->species as $specie => $specieName) {
-            $specieStats = $statistics->getNamingConventionStats($specie);
 
-            $namingStats[$specie]['stat'] = $specieStats;
-            $namingStats[$specie]['specieName'] = $specieName;
-            $namingStats[$specie]['totalProteinCount'] = 0;
+        /**
+         * @var Comppi\BuildBundle\Service\SpecieProvider\SpecieProvider
+         */
+        $specieProvider = $this->container->get('comppi.build.specieProvider');
+
+        foreach ($specieProvider->getDescriptors() as $specie) {
+            $specieStats = $statistics->getNamingConventionStats($specie->id);
+
+            $namingStats[$specie->abbreviation]['stat'] = $specieStats;
+            $namingStats[$specie->abbreviation]['specieName'] = $specie->name;
+            $namingStats[$specie->abbreviation]['totalProteinCount'] = 0;
 
             // add to total
             foreach ($specieStats as $stat) {
@@ -55,7 +54,7 @@ class NamingStatController extends Controller
 
                 $totalCounts[$stat['namingConvention']] += $stat['proteinCount'];
                 $namingStats['total']['totalProteinCount'] += $stat['proteinCount'];
-                $namingStats[$specie]['totalProteinCount'] += $stat['proteinCount'];
+                $namingStats[$specie->abbreviation]['totalProteinCount'] += $stat['proteinCount'];
             }
         }
 
@@ -83,20 +82,27 @@ class NamingStatController extends Controller
     }
 
     /**
-     * @Route("/naming/proteins/{specie}/{convention}", name="stat_naming_proteins", requirements={"convention" = ".+"})
+     * @Route("/naming/proteins/{specieAbbr}/{convention}", name="stat_naming_proteins", requirements={"convention" = ".+"})
      * @Template()
      */
-    public function proteinsByConventionAction($specie, $convention) {
-        if (!array_key_exists($specie, $this->species)) {
-            // invalid specie abbr.
-            throw $this->createNotFoundException('Invalid specie specified');
+    public function proteinsByConventionAction($specieAbbr, $convention) {
+        /**
+         * @var Comppi\BuildBundle\Service\SpecieProvider\SpecieProvider
+         */
+        $specieProvider = $this->container->get('comppi.build.specieProvider');
+
+        try {
+            $specie = $specieProvider->getSpecieByAbbreviation($specieAbbr);
+            $specieId = $specie->id;
+        } catch (\InvalidArgumentException $e) {
+            throw $this->createNotFoundException('Invalid species specified');
         }
 
         $connection = $this->getDoctrine()->getConnection();
-        $table = 'Protein' . ucfirst($specie);
         $selProteins = $connection->executeQuery(
-            "SELECT proteinName FROM " . $table . " WHERE proteinNamingConvention = ?",
-            array($convention)
+            "SELECT proteinName FROM Protein" .
+            " WHERE specieId = ? AND proteinNamingConvention = ?",
+            array($specieId, $convention)
         );
 
         $proteins = $selProteins->fetchAll(\PDO::FETCH_COLUMN);
@@ -115,10 +121,16 @@ class NamingStatController extends Controller
          * @var $statistics Comppi\StatBundle\Service\Statistics\Statistics
          */
         $statistics = $this->get('comppi.stat.statistics');
+
+        /**
+         * @var Comppi\BuildBundle\Service\SpecieProvider\SpecieProvider
+         */
+        $specieProvider = $this->container->get('comppi.build.specieProvider');
+
         $mapStats = array();
 
-        foreach ($this->species as $specie => $specieName) {
-            $mapStats[$specieName] = $statistics->getMapStats($specie);
+        foreach ($specieProvider->getDescriptors() as $specie) {
+            $mapStats[$specie->name] = $statistics->getMapStats($specie->id);
         }
 
         return array(

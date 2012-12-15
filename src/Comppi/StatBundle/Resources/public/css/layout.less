@@ -7,6 +7,7 @@
 @color_green_light: #B4DA85;
 
 @color_blue: #2790B0;
+@color_blue_light: #d5f6ff;
 
 @color_orange: #F58723;
 
@@ -23,6 +24,10 @@ body {
 
 a {
     color: @color_green_dark;
+}
+
+a.trow-dynamic-expander-link {
+    font-weight: 700;
 }
 
 /*
@@ -182,6 +187,39 @@ tbody tr:nth-child(2n) {
 
 tbody tr:hover {
     background: @color_green_light;   
+}
+
+tr.dynamic {
+    background: @color_blue_light !important;
+    color: @color_grey;    
+    
+    td {
+        padding: 0.1em 4px;
+        vertical-align: top;
+    }
+    
+    ul {
+        list-style-type: circle;
+        margin: 0.1em;
+        padding: 0 1em;
+    }
+    
+    dl {
+        margin: 0.1em;
+        padding: 0 1em;        
+    }
+    
+    dt, dd {
+        float: left;
+    }
+    
+    h4 {
+        margin: 0;
+    }
+}
+
+tr.dynamic:hover {
+    background: @color_blue_light;
 }
 
 /*

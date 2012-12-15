@@ -2,8 +2,8 @@
 
 {% block subnav %}
 <ul id="sub-nav" class="navigation">
-    {% for abbr, specie in species %}
-        <li><a href="{{ path('stat_source_specie', { 'specie': abbr }) }}">{{ specie }}</a></li>
+    {% for sd in species %}
+        <li><a href="{{ path('stat_source_specie', { 'specieAbbr': sd.abbreviation }) }}">{{ sd.name }}</a></li>
     {% endfor %}
 </ul>
 {% endblock %}

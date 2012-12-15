@@ -42,23 +42,23 @@ class ProteinTranslator
      *
      * @param string $namingConvention
      * @param string $originalName
-     * @param string $specie
+     * @param int $specieId
      * @return int CommpiId
      */
-    public function getComppiId($namingConvention, $originalName, $specie) {
-        $comppiId = $this->nameCache->getComppiId($specie, $namingConvention, $originalName);
+    public function getComppiId($namingConvention, $originalName, $specieId) {
+        $comppiId = $this->nameCache->getComppiId($specieId, $namingConvention, $originalName);
         if ($comppiId !== false) {
             return $comppiId;
         }
 
-        $translation = $this->getStrongestTranslation($namingConvention, $originalName, $specie);
-        $comppiId = $this->getExistingComppiId($translation[0], $translation[1], $specie);
+        $translation = $this->getStrongestTranslation($namingConvention, $originalName, $specieId);
+        $comppiId = $this->getExistingComppiId($translation[0], $translation[1], $specieId);
 
         if ($comppiId === false) {
-            $comppiId = $this->insertProtein($translation[0], $translation[1], $specie);
+            $comppiId = $this->insertProtein($translation[0], $translation[1], $specieId);
         }
 
-        $this->nameCache->setComppiId($specie, $namingConvention, $originalName, $comppiId);
+        $this->nameCache->setComppiId($specieId, $namingConvention, $originalName, $comppiId);
 
         return $comppiId;
     }
@@ -66,21 +66,19 @@ class ProteinTranslator
     /**
      * @param string $namingConvention
      * @param string $proteinName
-     * @param string $specie
+     * @param int $specie
      *
      * @return array 0 => naming convention; 1 => protein name
      */
     private function getStrongestTranslation($namingConvention, $proteinName, $specie) {
-        $mapTableName = 'ProteinNameMap' . ucfirst($specie);
-
         /**
          * @var \Doctrine\DBAL\Driver\Statement
          */
         $translateStatement = $this->connection->prepare(
-        	'SELECT namingConventionB, proteinNameB FROM ' . $mapTableName .
-            ' WHERE namingConventionA = ? AND proteinNameA = ?'
+        	'SELECT namingConventionB, proteinNameB FROM ProteinNameMap' .
+            ' WHERE specieId = ? AND namingConventionA = ? AND proteinNameA = ?'
         );
-        $translateStatement->execute(array($namingConvention, $proteinName));
+        $translateStatement->execute(array($specie, $namingConvention, $proteinName));
         $translatedNames = $translateStatement->fetchAll();
 
         // get strongest translated name
@@ -125,16 +123,15 @@ class ProteinTranslator
     }
 
     private function getExistingComppiId($namingConvention, $proteinName, $specie) {
-        $proteinTableName = 'Protein' . ucfirst($specie);
         /**
          * @var \Doctrine\DBAL\Driver\Statement
          */
         $getIdStatement = $this->connection->prepare(
-            'SELECT id FROM ' . $proteinTableName .
-            ' WHERE proteinName = ? AND proteinNamingConvention = ?' .
+            'SELECT id FROM Protein' .
+            ' WHERE proteinName = ? AND proteinNamingConvention = ? AND specieId = ?' .
             ' LIMIT 1'
         );
-        $getIdStatement->execute(array($proteinName, $namingConvention));
+        $getIdStatement->execute(array($proteinName, $namingConvention, $specie));
 
         if ($getIdStatement->rowCount() > 0) {
             $result = $getIdStatement->fetch();
@@ -152,26 +149,24 @@ class ProteinTranslator
         $proteinTableName = 'Protein' . ucfirst($specie);
 
         $this->connection->executeQuery(
-            'INSERT INTO ' .$proteinTableName.
-            ' VALUES ("", ?, ?)',
-            array($proteinName, $namingConvention)
+            'INSERT INTO Protein' .
+            ' VALUES ("", ?, ?, ?)',
+            array($specie, $proteinName, $namingConvention)
         );
 
         return $this->connection->lastInsertId();
     }
 
-    public function getSynonyms($namingConvention, $proteinName, $specie) {
-        $mapTableName = 'ProteinNameMap' . ucfirst($specie);
-
+    public function getSynonyms($namingConvention, $proteinName, $specieId) {
         /**
          * @var \Doctrine\DBAL\Driver\Statement
          */
         $translateStatement = $this->connection->prepare(
-        	'SELECT namingConventionA, proteinNameA FROM ' . $mapTableName .
-            ' WHERE namingConventionB = ? AND proteinNameB = ?'
+        	'SELECT namingConventionA, proteinNameA FROM ProteinNameMap' .
+            ' WHERE specieId = ? AND namingConventionB = ? AND proteinNameB = ?'
         );
 
-        $translateStatement->execute(array($namingConvention, $proteinName));
+        $translateStatement->execute(array($specieId, $namingConvention, $proteinName));
         $translatedNames = $translateStatement->fetchAll(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         if (count($translatedNames) == 0) {
@@ -189,7 +184,7 @@ class ProteinTranslator
                 $recursiveTranslation = $this->getSynonyms(
                     $translation['namingConventionA'],
                     $translation['proteinNameA'],
-                    $specie
+                    $specieId
                 );
 
                 if ($recursiveTranslation) {

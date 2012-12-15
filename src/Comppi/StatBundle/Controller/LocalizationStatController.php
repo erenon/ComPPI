@@ -8,13 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class LocalizationStatController extends Controller
 {
-    protected $species = array(
-        'hs' => 'Homo Sapiens',
-        'dm' => 'Drosophila Melanogaster',
-        'ce' => 'Caernohabditis Elegans',
-        'sc' => 'Saccaromicies Cervisae'
-    );
-
     /**
      * @Route("/localization", name="stat_localization_index")
      * @Template()
@@ -32,8 +25,14 @@ class LocalizationStatController extends Controller
          * @var $statistics Comppi\StatBundle\Service\Statistics\Statistics
          */
         $statistics = $this->get('comppi.stat.statistics');
-        foreach ($this->species as $specie => $specieName) {
-            $specieStats = $statistics->getLocalizationStats($specie);
+
+    	/**
+         * @var Comppi\BuildBundle\Service\SpecieProvider\SpecieProvider
+         */
+        $specieProvider = $this->container->get('comppi.build.specieProvider');
+
+        foreach ($specieProvider->getDescriptors() as $specie) {
+            $specieStats = $statistics->getLocalizationStats($specie->id);
 
             // transform localizationId to localization name
             foreach ($specieStats as $key => $stat) {
@@ -46,8 +45,8 @@ class LocalizationStatController extends Controller
                 }
             }
 
-            $locStats[$specie]['stat'] = $specieStats;
-            $locStats[$specie]['specieName'] = $specieName;
+            $locStats[$specie->id]['stat'] = $specieStats;
+            $locStats[$specie->id]['specieName'] = $specie->name;
         }
 
         return array (

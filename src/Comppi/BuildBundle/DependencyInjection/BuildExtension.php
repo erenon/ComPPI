@@ -27,6 +27,16 @@ class BuildExtension extends Extension
 
         if ($container->getParameter('kernel.environment') == 'test') {
             $databaseRootPath = $container->getParameter('comppi.build.databaseProvider.testDatabaseRootDir');
+
+            $container->setParameter(
+            	'comppi.build.systemTypeTranslator.synonymFile',
+                $container->getParameter('comppi.build.systemTypeTranslator.testSynonymFile')
+            );
+
+            $container->setParameter(
+            	'comppi.build.systemTypeTranslator.systemFile',
+                $container->getParameter('comppi.build.systemTypeTranslator.testSystemFile')
+            );
         } else {
             if (!isset($config['database_path'])) {
                 throw new \InvalidArgumentException('Please set the database_path option in the application config');

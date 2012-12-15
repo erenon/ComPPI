@@ -2,6 +2,30 @@
 
 {% block title %}{{ main.name }} protein details{% endblock %}
 
+{% block javascriptAssets %}
+    {{ parent() }}
+
+    {% javascripts
+        '@StatBundle/Resources/public/js/jquery.js'
+        '@StatBundle/Resources/public/js/twig.min.js'
+        '@StatBundle/Resources/public/js/protein-browser.js'
+    %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+    
+    {% javascripts
+        '@StatBundle/Resources/public/jstemplates/interactionDetails.html.twig'
+    %}
+    <meta id="jstemplate-interactionDetails" name="interactionDetails" content="{{ asset_url }}" />
+    {% endjavascripts %}
+    
+    {% javascripts
+        '@StatBundle/Resources/public/jstemplates/localizationDetails.html.twig'
+    %}
+    <meta id="jstemplate-localizationDetails" name="localizationDetails" content="{{ asset_url }}" />
+    {% endjavascripts %} 
+{% endblock %}
+
 {% block body %}
 
 <div class="headline">
@@ -37,7 +61,7 @@
                 <td>{% trans %}Localization{% endtrans %}</td>
                 <td>{% trans %}Source database{% endtrans %}</td>
                 <td class="tcell-numeric">{% trans %}Pubmed ID{% endtrans %}</td>
-                <td>{% trans %}Experimental System Type{% endtrans %}</td>
+                <td>{% trans %}Details{% endtrans %}</td>
                 {# <td class="tcell-numeric">{% trans %}View in tree{% endtrans %}</td> #}
             </tr> 
         </thead>
@@ -47,8 +71,12 @@
             <td>{{ localization.localizationName }}</td>
             <td>{{ localization.sourceDb }}</td>
             <td class="tcell-numeric">{{ localization.pubmedId }}</td>
-            <td>{{ localization.experimentalSystemType }}</td>
-            {# <td class="tcell-numeric">view {{ localization.id }}</td> #}
+            <td>
+                <a class="trow-dynamic-expander-link" href="{{ path('stat_protein_locdetails', {'id': localization.id }) }}" data-jstemplate="localizationDetails">
+                {% trans %}details{% endtrans %}
+                </a>
+            </td>
+            {# <td class="tcell-numeric">view {{ localization.localizationId }}</td> #}
         </tr>    
     {% endfor %}
     </table>
@@ -64,7 +92,7 @@
                 <td>{% trans %}Protein Name{% endtrans %}</td>
                 <td>{% trans %}Source database{% endtrans %}</td>
                 <td class="tcell-numeric">{% trans %}Pubmed ID{% endtrans %}</td>
-                <td>{% trans %}Experimental System Type{% endtrans %}</td>
+                <td>{% trans %}Details{% endtrans %}</td>
             </tr> 
         </thead>
         <tbody>
@@ -72,13 +100,17 @@
         <tr>
             <td>{{ interaction.actor.namingConvention }}</td>
             <td>
-                <a href="{{ path('stat_protein_protein', {'specie': main.specie, 'id': interaction.actorId }) }}">
+                <a href="{{ path('stat_protein_protein', {'specieAbbr': main.specie.abbreviation, 'id': interaction.actorId }) }}">
                 {{ interaction.actor.name }}
                 </a>
             </td>
             <td>{{ interaction.sourceDb }}</td>
             <td class="tcell-numeric">{{ interaction.pubmedId }}</td>
-            <td>{{ interaction.experimentalSystemType }}</td>
+            <td>
+                <a class="trow-dynamic-expander-link" href="{{ path('stat_protein_intdetails', {'id': interaction.id }) }}" data-jstemplate="interactionDetails">
+                {% trans %}details{% endtrans %}
+                </a>
+            </td>
         </tr>    
     {% endfor %}
     </table>

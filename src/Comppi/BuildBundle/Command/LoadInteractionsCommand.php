@@ -15,14 +15,16 @@ class LoadInteractionsCommand extends AbstractLoadCommand
         'Interaction' => 'WRITE',
         'Protein' => 'WRITE',
         'ProteinToDatabase' => 'WRITE',
-        'ProteinNameMap' => 'READ'
+        'ProteinNameMap' => 'READ',
+        'InteractionToSystemType' => 'WRITE',
+        'SystemType' => 'WRITE'
     );
 
     /**
      * @see execute
      * @var Doctrine\DBAL\Driver\Statement
      */
-    protected $insertInteractionStatement = null;
+    protected $insertInteractionStatement;
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
         parent::initialize($input, $output);
@@ -32,10 +34,14 @@ class LoadInteractionsCommand extends AbstractLoadCommand
             ->getInteractionsBySpecie($this->specie);
 
         // init insert statement
-        $interactionEntityName = 'Interaction' . ucfirst($this->specie);
-        $statement = "INSERT INTO " . $interactionEntityName .
-        	" VALUES ('', ?, ?, ?, ?, ?, ?, ?)";
-        $this->insertInteractionStatement = $this->connection->prepare($statement);
+        $this->insertInteractionStatement = $this->connection->prepare(
+        	"INSERT INTO Interaction VALUES ('', ?, ?, ?, ?)"
+        );
+
+        // init add system type statement
+        $this->addSystemTypeStatement = $this->connection->prepare(
+            'INSERT INTO InteractionToSystemType VALUES (?, ?)'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -59,39 +65,35 @@ class LoadInteractionsCommand extends AbstractLoadCommand
             // bind source name
             $this->insertInteractionStatement->bindValue(3, $sourceDb);
 
-            // TODO setup isExperimental field
-            $this->insertInteractionStatement->bindValue(6, false);
-
-            // set confidence score to 0, correct it later
-            $this->insertInteractionStatement->bindValue(7, 0);
-
             foreach ($database as $interaction) {
                 // get proteinA name
                 $proteinAOriginalName = $interaction['proteinAName'];
                 $proteinANamingConvention = $interaction['proteinANamingConvention'];
                 $proteinAComppiId = $translator->getComppiId(
-                    $proteinANamingConvention, $proteinAOriginalName, $this->specie
+                    $proteinANamingConvention, $proteinAOriginalName, $this->specie->id
                 );
 
                 // get proteinB name
                 $proteinBOriginalName = $interaction['proteinBName'];
                 $proteinBNamingConvention = $interaction['proteinBNamingConvention'];
                 $proteinBComppiId = $translator->getComppiId(
-                    $proteinBNamingConvention, $proteinBOriginalName, $this->specie
+                    $proteinBNamingConvention, $proteinBOriginalName, $this->specie->id
                 );
 
-                $this->addDatabaseRefToId($sourceDb, $proteinAComppiId, $this->specie);
-                $this->addDatabaseRefToId($sourceDb, $proteinBComppiId, $this->specie);
+                $this->addDatabaseRefToId($sourceDb, $proteinAComppiId);
+                $this->addDatabaseRefToId($sourceDb, $proteinBComppiId);
 
                 $this->insertInteractionStatement->bindValue(1, $proteinAComppiId);
                 $this->insertInteractionStatement->bindValue(2, $proteinBComppiId);
                 $this->insertInteractionStatement->bindValue(4, $interaction['pubmedId']);
-                $this->insertInteractionStatement->bindValue(5, $interaction['experimentalSystemType']);
                 $this->insertInteractionStatement->execute();
 
-                // flush transaction
+                $id = $this->connection->lastInsertId();
+
+                $this->addSystemTypes($id, $interaction['experimentalSystemType']);
+
                 $recordIdx++;
-                if ($recordIdx == $recordsPerTransaction) {
+                if ($recordIdx == $recordsPerTransaction) { // flush transaction
                     $recordIdx = 0;
 
                     $connection->commit();

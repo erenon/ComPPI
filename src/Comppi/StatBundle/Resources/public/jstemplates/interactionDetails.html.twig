@@ -1,0 +1,21 @@
+<td colspan="3">
+<h4>System Types</h4>
+<ul>
+{% for system in systemTypes %}
+    <li>{{ system.name }}</li>
+{% else %}
+    <li>N/A</li>
+{% endfor %}
+</ul>    
+</td>
+<td colspan="2">
+<h4>Confidence Scores</h4>
+<dl>
+{% for score in confidenceScores %}
+    <dt>{{ score.name }}</dt>
+    <dd>{{ score.score }}</dd>
+{% else %}
+    <dt>N/A</dt>
+{% endfor %}
+</dl>
+</td>

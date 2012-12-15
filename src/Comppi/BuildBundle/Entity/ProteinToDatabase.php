@@ -7,12 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class ProteinToDatabaseHs
+class ProteinToDatabase
 {
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
-     * @ORM\ManyToOne(targetEntity="ProteinHs")
+     * @ORM\ManyToOne(targetEntity="Protein")
      */
     protected $proteinId;
 

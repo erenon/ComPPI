@@ -1,0 +1,19 @@
+{% extends 'StatBundle::base.html.twig' %}
+
+{% block title %}{% trans %}Localization Details{% endtrans%}{% endblock %}
+
+{% block body %}
+
+<h1>{% trans %}Localization Details{% endtrans%}</h1>
+
+<h3>{% trans %}System Types{% endtrans%}</h3>
+
+<ul>
+{% for system in systemTypes %}
+    <li>{{ system.name }}</li>
+{% else %}
+    <li>{% trans %}N/A{% endtrans%}</li>
+{% endfor %}
+</ul>
+
+{% endblock %}

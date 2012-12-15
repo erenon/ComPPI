@@ -18,6 +18,9 @@ php $console doctrine:schema:drop --force
 echo "Create new schema"
 php $console doctrine:schema:update --force
 
+echo "Load System Types"
+php $console comppi:build:systems
+
 echo "Load SacCe maps"
 php $console comppi:build:map sc
 
@@ -65,6 +68,9 @@ php $console comppi:build:localizations ce
 
 echo "Load C'Elegans name lookup table"
 php $console comppi:build:namelookup ce
+
+echo "Calculate Confidence Scores"
+php $console comppi:build:confidenceScores
 
 endTime=$(date +"%s")
 diffTime=$(($endTime - $startTime))

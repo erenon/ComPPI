@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(indexes={@ORM\index(name="search_idx", columns={"proteinName", "proteinNamingConvention"})})
  */
-class ProteinSc
+class Protein
 {
     /**
      * @ORM\Id
@@ -16,6 +16,11 @@ class ProteinSc
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $specieId;
 
     /**
      * @ORM\Column(type="string", length="255")
