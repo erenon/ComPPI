@@ -7,13 +7,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class ProteinSearchController extends Controller
 {
-    // @TODO: implement a central input processing bundle/service + Symfony-style forms
-	private $species_map = array(
+	// @TODO: implement a central input processing bundle/service + Symfony-style forms
+	/*private $species_map = array(
 		'Hs' => array('form_field' => 'fProtSearchHs', 'needed' => false),
 		'Dm' => array('form_field' => 'fProtSearchDm', 'needed' => false),
 		'Ce' => array('form_field' => 'fProtSearchCe', 'needed' => false),
 		'Sc' => array('form_field' => 'fProtSearchSc', 'needed' => false)
+	);*/
+	private $species = array(
+		'provider' => null,
+		'requested_species' => array(
+			//species abbreviation => species ID, like 'hs'=>0,'dm'=>1,'ce'=>2,'sc'=>3
+		)
 	);
+	private $localizationTranslator = null;
 	private $verbose = false;
 	//private $null_loc_needed = false; // show rows where one or both locations are unknown
 	private $search_range_start = 0; // search result display starts from here
@@ -21,8 +28,12 @@ class ProteinSearchController extends Controller
 	
 	public function proteinSearchAction($protein_name = '')
     {
-        $T = array(
+        $species = $this->getSpeciesProvider();
+		$descriptors = $species->getDescriptors();
+		
+		$T = array(
 			'verbose_log' => '',
+			'species_list' => $descriptors,
             'ls' => array(),
 			'keyword' => '',
 			'protein_names' => '',
@@ -33,16 +44,11 @@ class ProteinSearchController extends Controller
 		if ($request->getMethod() == 'POST') {
 			$DB = $this->get('database_connection');
 
-			$this->mapSpeciesRequest();
-			$sp = $this->getRequestedSpecies();
-			$requested_keyword = $_POST['fProtSearchKeyword']; // $request->request->get('fProtSearchKeyword') is not even NULL if empty!
+			$this->validateSpeciesRequest();
 			
-			if (empty($sp))//$this->get('session')->setFlash('notice', 'Please select at least one genus!');
-				throw new \ErrorException('Species missing!');
-			if (empty($requested_keyword))
-				throw new \ErrorException('Keyword missing!');
+			$requested_keyword = $_POST['fProtSearchKeyword']; // $request->request->get('fProtSearchKeyword') is not empty even if no keyword was filled in!
 
-			if (!empty($requested_keyword) and !empty($sp)) {
+			if (!empty($requested_keyword)) {
 				$T['keyword']  = htmlspecialchars(strip_tags($requested_keyword));
 				$keyword = mysql_real_escape_string($requested_keyword);
 				
@@ -83,7 +89,7 @@ class ProteinSearchController extends Controller
 					$sum_protein_count = (int)$a_rownum['proteinCount'];
 					
 					// INTERACTIONS OF PREVIOUSLY DETERMINED PROTEIN IDS
-					$locs = $this->get('comppi.build.localizationTranslator');
+					$locs = $this->getLocalizationTranslator();
 					$sql_i = "
 						SELECT DISTINCT
 							p1.proteinName AS protA,
@@ -100,6 +106,9 @@ class ProteinSearchController extends Controller
 						LEFT JOIN ProteinToLocalization ptl1 ON actorAId=ptl1.proteinId
 						LEFT JOIN ProteinToLocalization ptl2 ON actorBId=ptl2.proteinId
 						WHERE
+							(p1.specieId=".join(' AND p1.specieId=', $this->species['requested_species'])."
+							AND p2.specieId=".join(' AND p2.specieId=', $this->species['requested_species'])."
+							) AND
 							(i.actorAId=".join(' OR i.actorAId=', $a_protein_ids).") OR (i.actorBId=".join(' OR i.actorBId=', $a_protein_ids).")"
 							//.(!$this->null_loc_needed ? " AND (ptl1.localizationId IS NOT NULL AND ptl2.localizationId IS NOT NULL)" : '')
 							.($this->search_result_per_page ? " LIMIT ".$this->search_range_start.", ".$this->search_result_per_page : '');
@@ -125,16 +134,19 @@ class ProteinSearchController extends Controller
 						.' and %d interaction'.($sum_protein_count>1 ? 's' : '')
 						.' were found.';
 					$T['result_msg'] = sprintf($result_msg_text, $d_names_found, $d_synonyms_found, $sum_protein_count);
-				} else {
+				}
+				else
+				{
 					$T['result_msg'] = 'No matching protein name (or synonym) was found.';
 				}
-			} else {
-				// @TODO: set up a symfony-style proper form validation
-				$T['result_msg'] = 'Please fill in a protein name and select a species!';
+			}
+			else
+			{
+				$T['result_msg'] = 'Please fill in a protein name as keyword, select a species and submit the the search again!';
 			}
 		}
 		
-		$T['need'] = $this->mapSpeciesToTemplate();
+		$T['requested_species'] = $this->mapSpeciesToTemplate();
 		
 		return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
 	}
@@ -144,37 +156,51 @@ class ProteinSearchController extends Controller
 		return 'http://www.ncbi.nlm.nih.gov/pubmed/'.$pubmed_uid;
 	}
 	
-	private function mapSpeciesRequest()
+	// Validates the user input and maps it to $this->requested_species property. Initiates specieProvider if needed.
+	private function validateSpeciesRequest()
 	{
 		$request = $this->getRequest();
-		foreach($this->species_map as $sp => $d) {
-			if ($request->request->get($d['form_field'])) {
-				$this->species_map[$sp]['needed'] = true;
-			} else {
-				$this->species_map[$sp]['needed'] = false;
+		$species_provider = $this->getSpeciesProvider();
+		
+		if (!empty($_POST['fProtSearchSpecies']) and is_array($_POST['fProtSearchSpecies']))
+		{
+			foreach($_POST['fProtSearchSpecies'] as $sp => $needed)
+			{
+				// this ensures that we need an exact match from the input to be valid
+				// if we don't get back an object, then the form was forged
+				$descriptor = @$species_provider->getSpecieByAbbreviation($sp); 
+				if (is_object($descriptor))
+				{
+					$this->species['requested_species'][$sp] = $descriptor->id;
+				}
 			}
 		}
+		else
+		{
+			throw new \InvalidArgumentException('The requested species was/were invalid!');
+		}
+
 		return;
 	}
 	
 	private function mapSpeciesToTemplate()
 	{
-		foreach($this->species_map as $sp => $d) {
-			if ($this->species_map[$sp]['needed']) {
-				$needed[strtolower($sp)] = 1;
-			}  else {
-				$needed[strtolower($sp)] = 0;
-			}
-		}
-		
-		return $needed;
+		return $this->species['requested_species'];
 	}
 	
-	private function getRequestedSpecies()
+	private function getSpeciesProvider()
 	{
-		foreach($this->species_map as $sp => $d)
-			if (!empty($d['needed']))	return $sp;
-		
-		return null;
+		if (!$this->species['provider'])
+			$this->species['provider'] = $this->get('comppi.build.specieProvider');
+			
+		return $this->species['provider'];
+	}
+	
+	private function getLocalizationTranslator()
+	{
+		if (!$this->localizationTranslator)
+			$this->localizationTranslator = $this->get('comppi.build.localizationTranslator');
+			
+		return $this->localizationTranslator;
 	}
 }

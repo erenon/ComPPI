@@ -14,13 +14,17 @@
 		<br />
 		
 		<label>Species:</label>
-		<input type="radio" name="fProtSearchHs" id="fProtSearchHs" class="btn" value="{{ need.hs }}" {% if need.hs %}checked="checked"{% endif %}/><label for="fProtSearchHs" class="radioButtonLabel">H. sapiens</label>
-		<input type="radio" name="fProtSearchDm" id="fProtSearchDm" class="btn" value="{{ need.dm }}" {% if need.dm %}checked="checked"{% endif %}/><label for="fProtSearchDm" class="radioButtonLabel">D. melanogaster</label>
-		<input type="radio" name="fProtSearchCe" id="fProtSearchCe" class="btn" value="{{ need.ce }}" {% if need.ce %}checked="checked"{% endif %}/><label for="fProtSearchCe" class="radioButtonLabel">C. elegans</label>
-		<input type="radio" name="fProtSearchSc" id="fProtSearchSc" class="btn" value="{{ need.sc }}" {% if need.sc %}checked="checked"{% endif %}/><label for="fProtSearchSc" class="radioButtonLabel">S. cerevisiae</label>
+		{% for s in species_list %}
+		<input type="radio" name="fProtSearchSpecies[{{ s.abbreviation }}]" id="fProtSearch{{ s.abbreviation }}" class="btn"
+			{% if requested_species[s.abbreviation] is defined %}
+			value="1" checked="checked"
+			{% else %}
+			value="0"
+			{% endif %}/>
+		<label for="fProtSearch{{ s.abbreviation }}" class="radioButtonLabel">{{ s.name }}</label>
+		{% endfor %}
 
 		<br />
-		
 		<input class="btn btn_submit" type="submit" value="Submit Search" />
 	</form>
 	
