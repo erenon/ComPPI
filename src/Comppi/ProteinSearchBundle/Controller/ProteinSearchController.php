@@ -52,7 +52,7 @@ class ProteinSearchController extends Controller
 				
 				// PROTEIN IDS FROM NAMES AND SYNONYMS
 				// Protein IDs from names
-				$sql_prot_ids_from_name = "SELECT DISTINCT id AS proteinId FROM Protein$sp WHERE proteinName LIKE '%$keyword%'";
+				$sql_prot_ids_from_name = "SELECT DISTINCT id AS proteinId FROM Protein WHERE proteinName LIKE '%$keyword%'";
 				$r_prot_ids_from_name = $DB->query($sql_prot_ids_from_name);
 				$this->verbose ? $T['verbose_log'] .= "\n $sql_prot_ids_from_name" : '';
 				if (!$r_prot_ids_from_name) throw new \ErrorException('Protein name query failed!');
@@ -64,7 +64,7 @@ class ProteinSearchController extends Controller
 				
 				// Protein IDs from synonyms
 				// we have to search amongst synonyms too even if we haven't found anything in protein names...
-				$sql_prot_ids_from_synonyms = "SELECT DISTINCT proteinId FROM NameToProtein$sp WHERE name LIKE '%$keyword%'";
+				$sql_prot_ids_from_synonyms = "SELECT DISTINCT proteinId FROM NameToProtein WHERE name LIKE '%$keyword%'";
 				$r_prot_ids_from_synonyms = $DB->query($sql_prot_ids_from_synonyms);
 				$this->verbose ? $T['verbose_log'] .= "\n $sql_prot_ids_from_synonyms" : '';
 				if (!$r_prot_ids_from_synonyms) throw new \ErrorException('Protein synonyms query failed!');
@@ -76,7 +76,7 @@ class ProteinSearchController extends Controller
 				
 				if (!empty($a_protein_ids)) {
 					// PAGINATION
-					$sql_pg = "SELECT COUNT(id) AS proteinCount FROM Interaction$sp WHERE (actorAId=".join(' OR actorAId=', $a_protein_ids).") OR (actorBId=".join(' OR actorBId=', $a_protein_ids).")";			
+					$sql_pg = "SELECT COUNT(id) AS proteinCount FROM Interaction WHERE (actorAId=".join(' OR actorAId=', $a_protein_ids).") OR (actorBId=".join(' OR actorBId=', $a_protein_ids).")";			
 					$r_pg = $DB->query($sql_pg);
 					$this->verbose ? $T['verbose_log'] .= "\n Pagination: $sql_pg" : '';
 					$a_rownum = $r_pg->fetch();
@@ -94,11 +94,11 @@ class ProteinSearchController extends Controller
 							ptl1.pubmedId AS locASrc,
 							ptl2.localizationId AS locBId,
 							ptl2.pubmedId AS locBSrc
-						FROM Interaction$sp i
-						LEFT JOIN Protein$sp p1 ON i.actorAId=p1.id
-						LEFT JOIN Protein$sp p2 ON i.actorBId=p2.id
-						LEFT JOIN ProteinToLocalization$sp ptl1 ON actorAId=ptl1.proteinId
-						LEFT JOIN ProteinToLocalization$sp ptl2 ON actorBId=ptl2.proteinId
+						FROM Interaction i
+						LEFT JOIN Protein p1 ON i.actorAId=p1.id
+						LEFT JOIN Protein p2 ON i.actorBId=p2.id
+						LEFT JOIN ProteinToLocalization ptl1 ON actorAId=ptl1.proteinId
+						LEFT JOIN ProteinToLocalization ptl2 ON actorBId=ptl2.proteinId
 						WHERE
 							(i.actorAId=".join(' OR i.actorAId=', $a_protein_ids).") OR (i.actorBId=".join(' OR i.actorBId=', $a_protein_ids).")"
 							//.(!$this->null_loc_needed ? " AND (ptl1.localizationId IS NOT NULL AND ptl2.localizationId IS NOT NULL)" : '')
