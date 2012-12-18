@@ -41,14 +41,16 @@ class ProteinSearchController extends Controller
         );
 
 		$request = $this->getRequest();
-		if ($request->getMethod() == 'POST') {
+		if ($request->getMethod() == 'POST')
+		{
 			$DB = $this->get('database_connection');
 
 			$this->validateSpeciesRequest();
 			
 			$requested_keyword = $_POST['fProtSearchKeyword']; // $request->request->get('fProtSearchKeyword') is not empty even if no keyword was filled in!
 
-			if (!empty($requested_keyword)) {
+			if (!empty($requested_keyword))
+			{
 				$T['keyword']  = htmlspecialchars(strip_tags($requested_keyword));
 				$keyword = mysql_real_escape_string($requested_keyword);
 				
@@ -58,29 +60,38 @@ class ProteinSearchController extends Controller
 				
 				// PROTEIN IDS FROM NAMES AND SYNONYMS
 				// Protein IDs from names
-				$sql_prot_ids_from_name = "SELECT DISTINCT id AS proteinId FROM Protein WHERE proteinName LIKE '%$keyword%'";
+				$sql_prot_ids_from_name = "SELECT DISTINCT id AS proteinId FROM Protein WHERE (specieId=".join(' OR specieId=', $this->species['requested_species']).") AND proteinName LIKE '%$keyword%'";
 				$r_prot_ids_from_name = $DB->query($sql_prot_ids_from_name);
 				$this->verbose ? $T['verbose_log'] .= "\n $sql_prot_ids_from_name" : '';
-				if (!$r_prot_ids_from_name) throw new \ErrorException('Protein name query failed!');
-				while($r = $r_prot_ids_from_name->fetch()) { // DBAL fetch is a fuckin memory hog
+				if (!$r_prot_ids_from_name)
+					throw new \ErrorException('Protein name query failed!');
+				while($r = $r_prot_ids_from_name->fetch()) // DBAL fetch is a fuckin memory hog
+				{
 					$a_protein_ids[$r['proteinId']] = (int)$r['proteinId'];
 					$d_names_found++;
 				}
-				$this->verbose ? $T['verbose_log'] .= "\n $d_names_found protein names found for $sp" : '';
+				$this->verbose ? $T['verbose_log'] .= "\n $d_names_found protein names found" : '';
 				
 				// Protein IDs from synonyms
 				// we have to search amongst synonyms too even if we haven't found anything in protein names...
-				$sql_prot_ids_from_synonyms = "SELECT DISTINCT proteinId FROM NameToProtein WHERE name LIKE '%$keyword%'";
+				$sql_prot_ids_from_synonyms = "SELECT DISTINCT proteinId FROM NameToProtein WHERE (specieId=".join(' OR specieId=', $this->species['requested_species']).") AND name LIKE '%$keyword%'";
 				$r_prot_ids_from_synonyms = $DB->query($sql_prot_ids_from_synonyms);
 				$this->verbose ? $T['verbose_log'] .= "\n $sql_prot_ids_from_synonyms" : '';
-				if (!$r_prot_ids_from_synonyms) throw new \ErrorException('Protein synonyms query failed!');
-				while($r = $r_prot_ids_from_synonyms->fetch()) {
+				if (!$r_prot_ids_from_synonyms)
+					throw new \ErrorException('Protein synonyms query failed!');
+				while($r = $r_prot_ids_from_synonyms->fetch())
+				{
 					$a_protein_ids[$r['proteinId']] = (int)$r['proteinId'];
 					$d_synonyms_found++;
 				}
-				$this->verbose ? $T['verbose_log'] .= "\n $d_synonyms_found synonyms found for $sp" : '';
+				$this->verbose ? $T['verbose_log'] .= "\n $d_synonyms_found synonyms found" : '';
 				
-				if (!empty($a_protein_ids)) {
+				if (!empty($a_protein_ids))
+				{
+					$db_cond[] = "(p1.specieId=".join(' OR p1.specieId=', $this->species['requested_species'])
+						." OR p2.specieId=".join(' OR p2.specieId=', $this->species['requested_species']).")";
+					$db_cond[] = "(i.actorAId=".join(' OR i.actorAId=', $a_protein_ids).") OR (i.actorBId=".join(' OR i.actorBId=', $a_protein_ids).")";
+					
 					// PAGINATION
 					$sql_pg = "SELECT COUNT(id) AS proteinCount FROM Interaction WHERE (actorAId=".join(' OR actorAId=', $a_protein_ids).") OR (actorBId=".join(' OR actorBId=', $a_protein_ids).")";			
 					$r_pg = $DB->query($sql_pg);
@@ -103,13 +114,10 @@ class ProteinSearchController extends Controller
 						FROM Interaction i
 						LEFT JOIN Protein p1 ON i.actorAId=p1.id
 						LEFT JOIN Protein p2 ON i.actorBId=p2.id
-						LEFT JOIN ProteinToLocalization ptl1 ON actorAId=ptl1.proteinId
-						LEFT JOIN ProteinToLocalization ptl2 ON actorBId=ptl2.proteinId
-						WHERE
-							(p1.specieId=".join(' AND p1.specieId=', $this->species['requested_species'])."
-							AND p2.specieId=".join(' AND p2.specieId=', $this->species['requested_species'])."
-							) AND
-							(i.actorAId=".join(' OR i.actorAId=', $a_protein_ids).") OR (i.actorBId=".join(' OR i.actorBId=', $a_protein_ids).")"
+						LEFT JOIN ProteinToLocalization ptl1 ON i.actorAId=ptl1.proteinId
+						LEFT JOIN ProteinToLocalization ptl2 ON i.actorBId=ptl2.proteinId
+						WHERE "
+							.join(' AND ', $db_cond)
 							//.(!$this->null_loc_needed ? " AND (ptl1.localizationId IS NOT NULL AND ptl2.localizationId IS NOT NULL)" : '')
 							.($this->search_result_per_page ? " LIMIT ".$this->search_range_start.", ".$this->search_result_per_page : '');
 					
@@ -118,7 +126,8 @@ class ProteinSearchController extends Controller
 					
 					$r_i = $DB->query($sql_i);
 					if (!$r_i) throw new \ErrorException('Interaction query failed!');
-					while ( $p = $r_i->fetch() ) {
+					while ($p = $r_i->fetch())
+					{
 						$T['ls'][] = array(
 							'protA' => $p['protA'],
 							'locA' => (empty($p['locAId']) ? 'N/A' : $locs->getHumanReadableLocalizationById($p['locAId'])),
