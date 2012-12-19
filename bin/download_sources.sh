@@ -227,7 +227,13 @@ then
     wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/HUMAN_9606_idmapping_selected.tab.gz" -O ./uniprot.gz
     gzip -d -N uniprot.gz
     rm uniprot.gz
-fi 
+fi
+
+# UniprotFullname
+if [ ! -f uniprot_hs_fullname.tab ] 
+then
+    wget "http://www.uniprot.org/uniprot/?query=organism%3a%22Homo+sapiens+%5b9606%5d%22&force=yes&format=tab&columns=id,entry%20name,reviewed,protein%20names" -O ./uniprot_hs_fullname.tab
+fi
 
 # Hprd
 if [ ! -f HPRD_ID_MAPPINGS.txt ]
@@ -377,6 +383,12 @@ then
     rm uniprot.gz
 fi 
 
+# UniprotFullname
+if [ ! -f uniprot_dm_fullname.tab ] 
+then
+    wget "http://www.uniprot.org/uniprot/?query=organism%3a%22Drosophila+melanogaster+%5b7227%5d%22&force=yes&format=tab&columns=id,entry%20name,reviewed,protein%20names" -O ./uniprot_dm_fullname.tab
+fi
+
 # Netbiol refseq->uniprot
 if [ ! -f comppi_refseq_uniprot.csv ]
 then
@@ -496,6 +508,12 @@ then
     wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/CAEEL_6239_idmapping_selected.tab.gz" -O ./uniprot.gz
     gzip -d -N uniprot.gz
     rm uniprot.gz
+fi
+
+# UniprotFullname
+if [ ! -f uniprot_ce_fullname.tab ] 
+then
+    wget "http://www.uniprot.org/uniprot/?query=organism%3a%22Caenorhabditis+elegans+%5b6239%5d%22&force=yes&format=tab&columns=id,entry%20name,reviewed,protein%20names" -O ./uniprot_ce_fullname.tab
 fi
 
 # NetBiol WBGeneId -> uniprot
@@ -626,6 +644,12 @@ then
     wget "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/YEAST_559292_idmapping_selected.tab.gz" -O ./uniprot.gz
     gzip -d -N uniprot.gz
     rm uniprot.gz
+fi
+
+# UniprotFullname
+if [ ! -f uniprot_sc_fullname.tab ] 
+then
+    wget "http://www.uniprot.org/uniprot/?query=organism%3a%22Saccharomyces+cerevisiae+%5b4932%5d%22&force=yes&format=tab&columns=id,entry%20name,reviewed,protein%20names" -O ./uniprot_sc_fullname.tab
 fi
 
 # Netbiol refseq->uniprot
