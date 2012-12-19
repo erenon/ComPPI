@@ -49,12 +49,6 @@ class ProteinController extends Controller
 
         $interactions = $pservice->getInteractions($id);
 
-        if (is_array($interactions)) {
-            foreach ($interactions as &$interaction) {
-                $interaction['actor'] = $pservice->get($specie->id, $interaction['actorId']);
-            }
-        }
-
         return array(
             'main' => array(
                 'specie' => $specie,

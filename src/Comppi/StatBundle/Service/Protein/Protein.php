@@ -57,26 +57,16 @@ class Protein
 
     public function getInteractions($id) {
         $interactions = $this->connection->executeQuery(
-        	'SELECT id, actorAId, actorBId, sourceDb, pubmedId FROM Interaction' .
-        	' WHERE actorAId = ? OR actorBId = ?',
-            array($id, $id)
+            'SELECT Interaction.id, sourceDb, pubmedId, ' .
+            ' Protein.id as actorId, Protein.proteinName as actorName, Protein.proteinNamingConvention as actorNamingConvention' .
+            ' FROM Interaction' .
+            ' LEFT JOIN Protein ON Protein.id = IF(actorAId = ?, actorBId, actorAId)' .
+            ' WHERE actorAId = ? OR actorBId = ?',
+            array($id, $id, $id)
         );
 
         if ($interactions->rowCount() > 0) {
-            $results = $interactions->fetchAll(\PDO::FETCH_ASSOC);
-
-            foreach ($results as &$record) {
-                if ($record['actorAId'] == $id) {
-                    $record['actorId'] = $record['actorBId'];
-                } else {
-                    $record['actorId'] = $record['actorAId'];
-                }
-
-                unset($record['actorAId']);
-                unset($record['actorBId']);
-            }
-
-            return $results;
+            return $interactions->fetchAll(\PDO::FETCH_ASSOC);
         } else {
             return false;
         }
