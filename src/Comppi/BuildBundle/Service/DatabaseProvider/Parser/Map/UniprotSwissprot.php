@@ -31,6 +31,9 @@ class UniprotSwissprot extends AbstractMapParser
     public function __construct($fileName) {
         parent::__construct($fileName);
 
+        file_put_contents(STDERR, 'UniprotSwissprot parser is deprecated and will be removed.' .
+         ' Delete all xx_uniprot_sprot.dat.partX sources as they are no longer needed.');
+
         $this->specieId = $this->specieIds[basename($fileName)];
     }
 
