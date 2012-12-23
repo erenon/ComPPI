@@ -23,7 +23,8 @@ abstract class AbstractParser
     }
 
     public function getDatabaseIdentifier() {
-        return basename($this->fileName);
+        $fullName = get_class($this);
+        return substr($fullName, strrpos($fullName, '\\') + 1);
     }
 
     protected function readline() {
