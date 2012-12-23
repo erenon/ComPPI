@@ -16,6 +16,8 @@ class Intact extends AbstractInteractionParser
         'intact-sc.txt'
     );
 
+    protected $databaseIdentifier = "IntAct";
+
     // no header in the stripped versions
     protected $headerCount = 0;
 

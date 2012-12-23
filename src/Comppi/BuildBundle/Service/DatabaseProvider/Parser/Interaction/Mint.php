@@ -11,6 +11,8 @@ class Mint extends AbstractInteractionParser
         '2012-02-06-mint-Saccharomyces-binary.mitab26.txt'
     );
 
+    protected $databaseIdentifier = "MINT";
+
     protected $headerCount = 1;
 
     protected function readRecord() {

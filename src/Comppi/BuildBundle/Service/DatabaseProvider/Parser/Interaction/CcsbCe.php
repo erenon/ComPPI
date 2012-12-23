@@ -8,6 +8,8 @@ class CcsbCe extends AbstractInteractionParser
         'wi8.txt',
     );
 
+    protected $databaseIdentifier = "CCSB";
+
     protected $headerCount = 1;
 
     protected function readRecord() {

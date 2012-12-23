@@ -8,6 +8,8 @@ class DroidFriedman extends AbstractDroid
         'FRIEDMANPERRIMON_COAP.txt',
     );
 
+    protected $databaseIdentifier = "DroID";
+
     protected $pubmedColIdx = 20;
     protected $expSysTypeColIdx = 19;
 

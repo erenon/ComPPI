@@ -8,6 +8,8 @@ class Ptarget extends AbstractLocalizationParser
         'yeast_preds.txt'
     );
 
+    protected $databaseIdentifier = "pTARGET";
+
     private static $minimumProbability = 95;
 
     /**

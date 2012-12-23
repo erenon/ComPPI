@@ -12,6 +12,8 @@ class Esldb extends AbstractLocalizationParser
         'eSLDB_Homo_sapiens.txt'
     );
 
+    protected $databaseIdentifier = "eSLDB";
+
     private $currentLine;
 
     protected $localizationToGoCode = array (

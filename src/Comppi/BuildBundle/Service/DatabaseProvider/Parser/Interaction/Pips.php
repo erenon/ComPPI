@@ -8,6 +8,8 @@ class Pips extends AbstractInteractionParser
         'PredictedInteractions1000.txt'
     );
 
+    protected $databaseIdentifier = "PIPs";
+
     protected $headerCount = 1;
 
     protected function readRecord() {

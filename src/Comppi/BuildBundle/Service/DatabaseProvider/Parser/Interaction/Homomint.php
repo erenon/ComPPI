@@ -8,6 +8,8 @@ class Homomint extends AbstractInteractionParser
         'homomint-full.mitab25.txt-binary.mitab26.txt'
     );
 
+    protected $databaseIdentifier = "HomoMINT";
+
     protected $headerCount = 2;
 
     protected function readRecord() {

@@ -8,6 +8,8 @@ class CcsbHs extends AbstractInteractionParser
         'HI2_2011.tsv',
     );
 
+    protected $databaseIdentifier = "CCSB";
+
     protected $headerCount = 1;
 
     protected function readRecord() {

@@ -8,6 +8,8 @@ class CcsbSc extends AbstractInteractionParser
         'Y2H_union.txt',
     );
 
+    protected $databaseIdentifier = "CCSB";
+
     protected $headerCount = 0;
 
     protected function readRecord() {

@@ -10,6 +10,8 @@ class Go extends AbstractLocalizationParser
         'go_sc.csv'
     );
 
+    protected $databaseIdentifier = "GO";
+
     protected $headerCount = 1;
 
     protected function readRecord() {

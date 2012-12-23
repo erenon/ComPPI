@@ -8,6 +8,8 @@ class DroidDpim extends AbstractDroid
         'DPIM_COAPCOMPLEX.txt',
     );
 
+    protected $databaseIdentifier = "DroID";
+
     protected $pubmedColIdx = 4;
     protected $expSysTypeColIdx = 6;
 

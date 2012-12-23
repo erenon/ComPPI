@@ -8,6 +8,8 @@ class HumanProteinpedia extends AbstractLocalizationParser
         'HUPA_Localization_Data.txt'
     );
 
+    protected $databaseIdentifier = "Human Proteinpedia";
+
     protected $localizationToGoCode = array (
         'Actin cytoskeleton' => 'GO:0015629',
         'Centrosome' => 'GO:0005813',

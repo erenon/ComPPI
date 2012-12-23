@@ -8,6 +8,8 @@ class GoCe extends AbstractLocalizationParser
         'go_ce.tsv',
     );
 
+    protected $databaseIdentifier = "GO";
+
     protected $headerCount = 1;
 
     protected function readRecord() {

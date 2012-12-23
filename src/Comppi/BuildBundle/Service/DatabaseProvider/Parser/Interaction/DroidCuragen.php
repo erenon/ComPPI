@@ -8,6 +8,8 @@ class DroidCuragen extends AbstractDroid
         'CURAGEN_YTH.txt',
     );
 
+    protected $databaseIdentifier = "DroID";
+
     protected $pubmedColIdx = 7;
     protected $expSysTypeColIdx = 22;
 
