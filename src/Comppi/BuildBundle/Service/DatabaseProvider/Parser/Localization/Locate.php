@@ -53,8 +53,6 @@ class Locate extends AbstractLocalizationParser
         'transport vesicle' => 'GO:0030133'
     );
 
-    protected $hasHeader = false;
-
     protected $parser;
 
     const ST_START = 1;

@@ -30,7 +30,7 @@ class HumanProteinAtlas extends AbstractLocalizationParser
         'Vesicles' => 'GO:0031982'
     );
 
-    protected $hasHeader = true;
+    protected $headerCount = 1;
 
     protected function readLine() {
         $line = fgetcsv($this->fileHandle);

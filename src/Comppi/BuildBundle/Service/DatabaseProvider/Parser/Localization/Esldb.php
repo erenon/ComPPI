@@ -34,7 +34,7 @@ class Esldb extends AbstractLocalizationParser
         'Endosome' => 'GO:0005768'
     );
 
-    protected $hasHeader = true;
+    protected $headerCount = 1;
 
     protected function readRecord() {
         if (isset($this->currentLine['localization'])) {

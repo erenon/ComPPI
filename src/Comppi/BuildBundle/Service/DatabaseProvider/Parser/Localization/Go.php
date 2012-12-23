@@ -10,7 +10,7 @@ class Go extends AbstractLocalizationParser
         'go_sc.csv'
     );
 
-    protected $hasHeader = true;
+    protected $headerCount = 1;
 
     protected function readRecord() {
         $line = $this->readLine();

@@ -8,7 +8,7 @@ abstract class AbstractLocalizationParser implements LocalizationParserInterface
 
     protected $fileName;
     protected $localizationToGoCode = array();
-    protected $hasHeader = false;
+    protected $headerCount = 0;
 
     protected $fileHandle = null;
     protected $currentIdx;
@@ -78,8 +78,8 @@ abstract class AbstractLocalizationParser implements LocalizationParserInterface
             rewind($this->fileHandle);
         }
 
-        if ($this->hasHeader) {
-            // drop header
+        // drop headers
+        for ($i = 0; $i < $this->headerCount; $i++) {
             fgets($this->fileHandle);
         }
 

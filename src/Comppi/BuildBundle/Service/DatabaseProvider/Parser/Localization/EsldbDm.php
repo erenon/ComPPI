@@ -28,8 +28,6 @@ class EsldbDm extends AbstractLocalizationParser
         'Endosome' => 'GO:0005768'
     );
 
-    protected $hasHeader = false;
-
     protected function readRecord() {
         $line = $this->readLine();
         if ($line === false) {

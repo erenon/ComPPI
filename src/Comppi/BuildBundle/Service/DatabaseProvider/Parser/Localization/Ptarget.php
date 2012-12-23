@@ -38,8 +38,6 @@ class Ptarget extends AbstractLocalizationParser
         'Plasma_Membrane' => 'GO:0005886',
     );
 
-    protected $hasHeader = false;
-
     public function __construct($fileName) {
         parent::__construct($fileName);
         $this->setupUniprotSuffix(basename($fileName));
