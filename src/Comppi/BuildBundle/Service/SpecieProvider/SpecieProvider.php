@@ -7,10 +7,10 @@ class SpecieProvider
     private $descriptors;
 
     public function __construct() {
-        $this->descriptors[] = new SpecieDescriptor(0, 'hs', 'Homo Sapiens');
-        $this->descriptors[] = new SpecieDescriptor(1, 'dm', 'Drosophila Melanogaster');
-        $this->descriptors[] = new SpecieDescriptor(2, 'ce', 'Caernohabditis Elegans');
-        $this->descriptors[] = new SpecieDescriptor(3, 'sc', 'Saccaromicies Cervisae');
+        $this->descriptors[] = new SpecieDescriptor(0, 'hs', 'Homo sapiens');
+        $this->descriptors[] = new SpecieDescriptor(1, 'dm', 'Drosophila melanogaster');
+        $this->descriptors[] = new SpecieDescriptor(2, 'ce', 'Caenorhabditis elegans');
+        $this->descriptors[] = new SpecieDescriptor(3, 'sc', 'Saccharomyces cerevisiae');
     }
 
     public function getDescriptors() {
