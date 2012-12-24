@@ -14,8 +14,7 @@ class Pagosub extends AbstractLocalizationParser
 
     protected $currentLine;
 
-    // has double header
-    protected $hasHeader = false;
+    protected $headerCount = 2;
 
     protected $columnToLocalization = array(
         2 => 'GO:0005794',
@@ -86,25 +85,5 @@ class Pagosub extends AbstractLocalizationParser
             // no valid localization found, read next line
             $this->readRecord();
         }
-    }
-
-    /**
-     * Redefine rewind, must drop double header
-     * (non-PHPdoc)
-     * @see Comppi\BuildBundle\Service\DatabaseProvider\Parser\Localization.AbstractLocalizationParser::rewind()
-     */
-    public function rewind() {
-        if ($this->fileHandle == null) {
-            $this->fileHandle = fopen($this->fileName, 'r');
-            $this->currentIdx = 0;
-        } else {
-            rewind($this->fileHandle);
-        }
-
-        // drop double header
-        fgets($this->fileHandle);
-        fgets($this->fileHandle);
-
-        $this->readRecord();
     }
 }

@@ -10,15 +10,18 @@ class ProteinTranslator
      * @var array
      */
     private $namingConventionOrder = array(
+        'UniProtFull',
         'UniProtKB/Swiss-Prot',
+        'UniProtKB/TrEmbl',
         'UniProtKB-AC',
         'UniProtKB-ID',
-        'EntrezGene',
-        'EnsemblPeptideId',
+        'UniProtAlt',
         'EnsemblGeneId',
+        'EntrezGene',
         'refseq',
-        'Hprd',
-        'WBGeneId'
+        'WBGeneId',
+        'EnsemblPeptideId',
+        'Hprd'
     );
 
     /**

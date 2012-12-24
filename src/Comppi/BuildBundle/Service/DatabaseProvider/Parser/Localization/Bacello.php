@@ -17,8 +17,6 @@ class Bacello extends AbstractLocalizationParser
         'Nucleus' => 'GO:0005634'
     );
 
-    protected $hasHeader = false;
-
     protected function readRecord() {
         $line = $this->readLine();
         if ($line === false) {

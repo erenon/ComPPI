@@ -8,7 +8,7 @@ class GoCe extends AbstractLocalizationParser
         'go_ce.tsv',
     );
 
-    protected $hasHeader = true;
+    protected $headerCount = 1;
 
     protected function readRecord() {
         $line = $this->readLine();

@@ -10,7 +10,7 @@ class MatrixDb extends AbstractLocalizationParser
         'Secreted_Protein_list_20100825.txt'
     );
 
-    protected $hasHeader = true;
+    protected $headerCount = 1;
 
     private $localization;
 

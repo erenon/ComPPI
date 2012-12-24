@@ -68,8 +68,7 @@ class Organelle extends AbstractLocalizationParser
         'vacuolar membrane' => 'GO:0005774'
     );
 
-    // has double header
-    protected $hasHeader = false;
+    protected $headerCount = 2;
 
     protected function readRecord() {
         $line = $this->readLine();
@@ -87,25 +86,5 @@ class Organelle extends AbstractLocalizationParser
             'pubmedId' => 15608270,
             'experimentalSystemType' => 'Experimental (experimental)'
         );
-    }
-
-    /**
-     * Redefine rewind, must drop double header
-     * (non-PHPdoc)
-     * @see Comppi\BuildBundle\Service\DatabaseProvider\Parser\Localization.AbstractLocalizationParser::rewind()
-     */
-    public function rewind() {
-        if ($this->fileHandle == null) {
-            $this->fileHandle = fopen($this->fileName, 'r');
-            $this->currentIdx = 0;
-        } else {
-            rewind($this->fileHandle);
-        }
-
-        // drop double header
-        fgets($this->fileHandle);
-        fgets($this->fileHandle);
-
-        $this->readRecord();
     }
 }

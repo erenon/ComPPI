@@ -25,7 +25,7 @@ class HumanProteinpedia extends AbstractLocalizationParser
         'Plasma membrane' => 'GO:0005886'
     );
 
-    protected $hasHeader = true;
+    protected $headerCount = 1;
 
     protected function readRecord() {
         $line = $this->readLine();

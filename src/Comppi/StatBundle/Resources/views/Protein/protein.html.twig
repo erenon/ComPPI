@@ -92,21 +92,21 @@
                 <td>{% trans %}Protein Name{% endtrans %}</td>
                 <td>{% trans %}Source database{% endtrans %}</td>
                 <td class="tcell-numeric">{% trans %}Pubmed ID{% endtrans %}</td>
-                <td>{% trans %}Details{% endtrans %}</td>
+                <td class="tcell-numeric">{% trans %}Details{% endtrans %}</td>
             </tr> 
         </thead>
         <tbody>
     {% for interaction in interactions %}
         <tr>
-            <td>{{ interaction.actor.namingConvention }}</td>
+            <td>{{ interaction.actorNamingConvention }}</td>
             <td>
                 <a href="{{ path('stat_protein_protein', {'specieAbbr': main.specie.abbreviation, 'id': interaction.actorId }) }}">
-                {{ interaction.actor.name }}
+                {{ interaction.actorName }}
                 </a>
             </td>
             <td>{{ interaction.sourceDb }}</td>
             <td class="tcell-numeric">{{ interaction.pubmedId }}</td>
-            <td>
+            <td class="tcell-numeric">
                 <a class="trow-dynamic-expander-link" href="{{ path('stat_protein_intdetails', {'id': interaction.id }) }}" data-jstemplate="interactionDetails">
                 {% trans %}details{% endtrans %}
                 </a>
