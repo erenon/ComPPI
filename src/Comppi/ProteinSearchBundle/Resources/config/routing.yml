@@ -1,3 +1,5 @@
 ComppiProteinSearchBundle_proteinsearch:
-    pattern:  /
-    defaults: { _controller: ComppiProteinSearchBundle:ProteinSearch:proteinSearch }
+    pattern:  /protein_search/{protein_name}/{requested_species}/{current_page}
+    defaults: { _controller: ComppiProteinSearchBundle:ProteinSearch:proteinSearch, protein_name: '', requested_species: 'hs', current_page: 0 }
+    requirements:
+        current_page:  \d+

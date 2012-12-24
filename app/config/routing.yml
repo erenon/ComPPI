@@ -4,7 +4,7 @@ home:
 
 ComppiProteinSearchBundle:
     resource: "@ComppiProteinSearchBundle/Resources/config/routing.yml"
-    prefix:   /protein_search/
+    prefix:   /
 
 DownloadDbBundle:
     resource: "@DownloadDbBundle/Resources/config/routing.yml"
