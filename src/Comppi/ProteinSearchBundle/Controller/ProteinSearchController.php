@@ -9,9 +9,9 @@ class ProteinSearchController extends Controller
 {
 	private $speciesProvider = null;
 	private $localizationTranslator = null;
-	private $verbose = true;
+	private $verbose = false;
 	private $search_range_start = 0; // current page * search_result_per_page -> search query limit from here
-	private $search_result_per_page = 5; // search query limit offset (0: no limit)
+	private $search_result_per_page = 10; // search query limit offset (0: no limit)
 	
 	public function proteinSearchAction($protein_name, $requested_species, $current_page)
     {
@@ -132,7 +132,7 @@ class ProteinSearchController extends Controller
 					.urlencode($keyword).'/'
 					.join(',', array_keys($species)).'/';
 				$T['pagination_curr_page'] = $current_page;
-				$T['pagination_max_page'] = ceil($sum_interaction_count/$this->search_result_per_page);
+				$T['pagination_max_page'] = floor($sum_interaction_count/$this->search_result_per_page);
 				
 				// RESULT LINE
 				$result_msg_text = '%d protein'.($d_names_found>1 ? 's' : '')
