@@ -64,6 +64,16 @@ li { margin: 0.5em 0; }
 }
 .infobtn a { color: #E0DFDC; text-decoration: none; }
 .infobtn a:hover { color: #fff; }
+.pagination { list-style-type: none; margin: 0; padding: 0; width: 100%; text-align: center; }
+.pagination li { display: inline; margin: 0 4px; font-size: 1.2em; }
+.pagination li.paginationCurrentPage a {
+	margin: 0;
+	padding: 0 4px;
+	font-size: 1.5em; color: #fff; background-color: #007000;
+	border: 1px solid #E0DFDC;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px; }
 
 label { display: block; float: left; width: 200px; margin: 2px; }
 .radioButtonLabel { float: none; width: auto; display: inline; }

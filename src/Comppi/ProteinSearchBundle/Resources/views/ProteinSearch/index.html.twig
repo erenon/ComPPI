@@ -1,5 +1,6 @@
 {# src/Comppi/ProteinSearchBundle/Resources/views/index.html.twig #}
 {% extends '::base.html.twig' %}
+{% import '::pagination.html.twig' as pagination %}
 
 {% block title %}ComPPI - Search Protein Interactions - The Compartmentalized Protein-Protein Interaction Database{% endblock %}
 
@@ -25,7 +26,7 @@
 		{% endfor %}
 
 		<br />
-		<input class="btn btn_submit" type="submit" value="Submit Search" />
+		<input class="btn btn_submit" type="submit" name="fProtSearchSubmit" value="Submit Search" />
 	</form>
 	
 	{% if result_msg %}
@@ -33,6 +34,8 @@
 	{% endif %}
 	
 	{% if ls %}
+	{{ pagination.pages(pagination_max_page, pagination_curr_page, pagination_base_url) }}
+		
 	<table id="ProteinSearchResultsTbl" class="hovered_list">
 		<tr class="not_hovered_line"><th>Src A</th><th>Localization A</th><th>Protein A</th><th class="protSearchMidLine">Protein B</th><th>Localization B</th><th>Src B</th></tr>
 		{% for p in ls %}
@@ -41,6 +44,8 @@
 	</table>
 	
 	<p>N/A: Data not available.</p>
+	
+	{{ pagination.pages(pagination_max_page, pagination_curr_page, pagination_base_url) }}
 	{% endif %}
 
 {% endblock %}

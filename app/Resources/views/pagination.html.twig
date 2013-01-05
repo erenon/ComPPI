@@ -1,0 +1,7 @@
+{% macro pages(max_page, current_page, url) %}
+<ul class="pagination">
+{% for i in 0..max_page %}
+	<li{% if i == current_page %} class="paginationCurrentPage"{% endif %}><a href="{{ url }}{{ i }}">{{ i+1 }}</a></li>
+{% endfor %}
+</ul>
+{% endmacro %}
