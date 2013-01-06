@@ -32,6 +32,7 @@ class ConsensusPathDbTest extends \PHPUnit_Framework_TestCase
 
         if (($handle = fopen($this->expectedPath, "r")) !== false) {
             while (($data = fgetcsv($handle, 1000, ";")) !== false) {
+                $data[5] = explode(',', $data[5]);
                 $expected[] = $data;
             }
             fclose($handle);
