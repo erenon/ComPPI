@@ -32,7 +32,7 @@ class Go extends AbstractLocalizationParser
 
         $this->currentRecord = array(
             'proteinId' => $recordArray[0],
-            'namingConvention' => 'EnsemblPeptideId',
+            'namingConvention' => 'EnsemblGeneId',
             'localization' => $recordArray[1],
             'pubmedId' => 10802651,
             'experimentalSystemType' => 'not available'
