@@ -160,42 +160,93 @@ class ProteinTranslator
         return $this->connection->lastInsertId();
     }
 
-    public function getSynonyms($namingConvention, $proteinName, $specieId) {
+    protected function getWeakerSynonyms($namingConvention, $proteinName, $specieId) {
         /**
          * @var \Doctrine\DBAL\Driver\Statement
          */
         $translateStatement = $this->connection->prepare(
-        	'SELECT namingConventionA, proteinNameA FROM ProteinNameMap' .
+        	'SELECT namingConventionA as convention, proteinNameA as name FROM ProteinNameMap' .
             ' WHERE specieId = ? AND namingConventionB = ? AND proteinNameB = ?'
         );
 
         $translateStatement->execute(array($specieId, $namingConvention, $proteinName));
         $translatedNames = $translateStatement->fetchAll(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        if (count($translatedNames) == 0) {
-            return false;
+        if (empty($translatedNames)) {
+            return array();
         } else {
-            $recursiveTranslations = $translatedNames;
+            return $translatedNames;
+        }
+    }
 
-            foreach ($translatedNames as $translation) {
-                if ($translation['namingConventionA'] == $namingConvention) {
-                    // avoid infinite recursion
-                    // this name is a synonym in the same convention
-                    continue;
-                }
+    protected function getStrongerSynonyms($namingConvention, $proteinName, $specieId) {
+        if ($this->namingConventionOrder[0] == $namingConvention) {
+            // no naming convention of higher order available
+            return array();
+        }
 
-                $recursiveTranslation = $this->getSynonyms(
-                    $translation['namingConventionA'],
-                    $translation['proteinNameA'],
-                    $specieId
-                );
+        /**
+         * @var \Doctrine\DBAL\Driver\Statement
+         */
+        $translateStatement = $this->connection->prepare(
+        	'SELECT namingConventionB as convention, proteinNameB as name FROM ProteinNameMap' .
+            ' WHERE specieId = ? AND namingConventionA = ? AND proteinNameA = ?'
+        );
 
-                if ($recursiveTranslation) {
-                    $recursiveTranslations = array_merge($recursiveTranslations, $recursiveTranslation);
+        $translateStatement->execute(array($specieId, $namingConvention, $proteinName));
+        $translatedNames = $translateStatement->fetchAll(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        if (empty($translatedNames)) {
+            return array();
+        } else {
+            return $translatedNames;
+        }
+    }
+
+    public function getSynonyms($namingConvention, $proteinName, $specieId, $synonyms = array()) {
+        if (empty($synonyms)) {
+            $synonyms[0] = array(
+                'convention' => $namingConvention,
+                'name' => $proteinName
+            );
+        }
+
+        $strongerSynonyms = $this->getStrongerSynonyms($namingConvention, $proteinName, $specieId);
+        $weakerSynonyms = $this->getWeakerSynonyms($namingConvention, $proteinName, $specieId);
+
+        $foundSynonyms = array_merge($weakerSynonyms, $strongerSynonyms);
+        $newSynonyms = array();
+
+        foreach ($foundSynonyms as $foundSynonym) {
+            $neededSynonym = true;
+
+            foreach ($synonyms as $synonym) {
+                // add only not yet found naming conventions to $newSynonyms
+                if ($foundSynonym['convention'] == $synonym['convention']) {
+                    $neededSynonym = false;
+                    break;
                 }
             }
 
-            return $recursiveTranslations;
+            if ($neededSynonym === true) {
+                $newSynonyms[] = $foundSynonym;
+            }
         }
+
+        $synonyms = array_merge($synonyms, $newSynonyms);
+
+        foreach ($newSynonyms as $newSynonym) {
+            $newSynonyms = array_merge(
+                $newSynonyms,
+                $this->getSynonyms(
+                    $newSynonym['convention'],
+                    $newSynonym['name'],
+                    $specieId,
+                    $synonyms
+                )
+            );
+        }
+
+        return $newSynonyms;
     }
 }
