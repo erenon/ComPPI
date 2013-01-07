@@ -203,50 +203,63 @@ class ProteinTranslator
         }
     }
 
-    public function getSynonyms($namingConvention, $proteinName, $specieId, $synonyms = array()) {
-        if (empty($synonyms)) {
-            $synonyms[0] = array(
-                'convention' => $namingConvention,
-                'name' => $proteinName
-            );
-        }
+    /**
+     * This variable should be passed around by _getSynonyms
+     * but it's implemented as a member because of performance considerations.
+     *
+     * @var array
+     */
+    protected $synonyms;
 
+    /**
+     * This variable should be passed around by _getSynonyms
+     * but it's implemented as a member because of performance considerations.
+     *
+     * @var array
+     */
+    protected $foundConventions;
+
+    protected function _getSynonyms($namingConvention, $proteinName, $specieId, $synonyms = array()) {
         $strongerSynonyms = $this->getStrongerSynonyms($namingConvention, $proteinName, $specieId);
         $weakerSynonyms = $this->getWeakerSynonyms($namingConvention, $proteinName, $specieId);
 
         $foundSynonyms = array_merge($weakerSynonyms, $strongerSynonyms);
         $newSynonyms = array();
 
+        // add new synonyms to newSynonyms
         foreach ($foundSynonyms as $foundSynonym) {
-            $neededSynonym = true;
-
-            foreach ($synonyms as $synonym) {
-                // add only not yet found naming conventions to $newSynonyms
-                if ($foundSynonym['convention'] == $synonym['convention']) {
-                    $neededSynonym = false;
-                    break;
-                }
-            }
-
-            if ($neededSynonym === true) {
+            if (isset($this->foundConventions[$foundSynonym['convention']]) === false) {
                 $newSynonyms[] = $foundSynonym;
             }
         }
 
-        $synonyms = array_merge($synonyms, $newSynonyms);
-
+        // maintain foundConventions
+        // this foreach can't be merged into the previous one
         foreach ($newSynonyms as $newSynonym) {
-            $newSynonyms = array_merge(
-                $newSynonyms,
-                $this->getSynonyms(
-                    $newSynonym['convention'],
-                    $newSynonym['name'],
-                    $specieId,
-                    $synonyms
-                )
-            );
+            if (isset($this->foundConventions[$newSynonym['convention']]) === false) {
+                $this->foundConventions[$newSynonym['convention']] = true;
+            }
         }
 
-        return $newSynonyms;
+        $this->synonyms = array_merge($this->synonyms, $newSynonyms);
+
+        foreach ($newSynonyms as $newSynonym) {
+            $this->_getSynonyms(
+                $newSynonym['convention'],
+                $newSynonym['name'],
+                $specieId
+            );
+        }
+    }
+
+    public function getSynonyms($namingConvention, $proteinName, $specieId) {
+        $this->synonyms = array();
+        $this->foundConventions = array();
+
+        $this->foundConventions[$namingConvention] = true;
+
+        $this->_getSynonyms($namingConvention, $proteinName, $specieId);
+
+        return $this->synonyms;
     }
 }
