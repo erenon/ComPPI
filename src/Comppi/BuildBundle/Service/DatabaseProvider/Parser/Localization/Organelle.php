@@ -81,7 +81,7 @@ class Organelle extends AbstractLocalizationParser
 
         $this->currentRecord = array(
             'proteinId' => $recordArray[2],
-            'namingConvention' => 'EnsemblPeptideId',
+            'namingConvention' => 'Organelle',
             'localization' => $this->getGoCodeByLocalizationName($recordArray[0]),
             'pubmedId' => 15608270,
             'experimentalSystemType' => 'Experimental (experimental)'

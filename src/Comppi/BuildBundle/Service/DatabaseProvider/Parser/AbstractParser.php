@@ -10,6 +10,8 @@ abstract class AbstractParser
         return in_array($fileName, static::$parsableFileNames);
     }
 
+    protected $databaseIdentifier = null;
+
     protected $headerCount = 0;
 
     protected $fileName;
@@ -20,11 +22,15 @@ abstract class AbstractParser
 
     public function __construct($fileName) {
         $this->fileName = $fileName;
+
+        if ($this->databaseIdentifier == null) {
+            $fullName = get_class($this);
+            $this->databaseIdentifier = substr($fullName, strrpos($fullName, '\\') + 1);
+        }
     }
 
     public function getDatabaseIdentifier() {
-        $fullName = get_class($this);
-        return substr($fullName, strrpos($fullName, '\\') + 1);
+        return $this->databaseIdentifier;
     }
 
     protected function readline() {

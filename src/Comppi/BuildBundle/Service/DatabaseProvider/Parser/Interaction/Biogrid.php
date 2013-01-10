@@ -11,6 +11,8 @@ class Biogrid extends AbstractInteractionParser
         'BIOGRID-ORGANISM-Caenorhabditis_elegans-3.1.81.tab2.txt'
     );
 
+    protected $databaseIdentifier = "BioGRID";
+
     protected $headerCount = 1;
 
     protected function readRecord() {

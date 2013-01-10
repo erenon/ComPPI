@@ -47,7 +47,7 @@ class LoadNameLookupCommand extends AbstractLoadCommand
         $connection = $this->connection;
 
         $statement = "SELECT id, proteinName, proteinNamingConvention FROM Protein" .
-            " ORDER BY id ASC LIMIT ?, ?";
+            " WHERE specieId = ? ORDER BY id ASC LIMIT ?, ?";
 
         $this->selectProteins = $connection->prepare($statement);
 
@@ -63,8 +63,9 @@ class LoadNameLookupCommand extends AbstractLoadCommand
         $blockSize = 500;
 
         // execute protein select
-        $this->selectProteins->bindValue(1, $proteinOffset, IntegerParameter::INTEGER);
-        $this->selectProteins->bindValue(2, $blockSize, IntegerParameter::INTEGER);
+        $this->selectProteins->bindValue(1, $this->specie->id, IntegerParameter::INTEGER);
+        $this->selectProteins->bindValue(2, $proteinOffset, IntegerParameter::INTEGER);
+        $this->selectProteins->bindValue(3, $blockSize, IntegerParameter::INTEGER);
 
         $this->selectProteins->execute();
 
@@ -87,8 +88,8 @@ class LoadNameLookupCommand extends AbstractLoadCommand
                     foreach ($synonyms as $synonym) {
                         $this->insertSynonym->execute(array(
                             $this->specie->id,
-                            $synonym['namingConventionA'],
-                            $synonym['proteinNameA'],
+                            $synonym['convention'],
+                            $synonym['name'],
                             $protein['id']
                         ));
                     }
@@ -103,7 +104,7 @@ class LoadNameLookupCommand extends AbstractLoadCommand
             $proteinOffset += $blockSize;
 
             $this->selectProteins->closeCursor();
-            $this->selectProteins->bindValue(1, $proteinOffset, IntegerParameter::INTEGER);
+            $this->selectProteins->bindValue(2, $proteinOffset, IntegerParameter::INTEGER);
             $this->selectProteins->execute();
         }
 

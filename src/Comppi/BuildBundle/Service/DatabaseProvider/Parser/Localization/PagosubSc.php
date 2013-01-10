@@ -8,6 +8,8 @@ class PagosubSc extends Pagosub
         'saccharomyces_cerevisiae.csv'
     );
 
+    protected $databaseIdentifier = "PA-GOSUB";
+
     protected $columnToLocalization = array(
         2 => 'GO:0005794',
         4 => 'GO:0005634',

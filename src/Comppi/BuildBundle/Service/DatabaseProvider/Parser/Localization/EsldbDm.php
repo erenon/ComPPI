@@ -8,6 +8,8 @@ class EsldbDm extends AbstractLocalizationParser
         'Drosophila_melanogaster.BDGP5.4.49.pep.all.fa_subloc',
     );
 
+    protected $databaseIdentifier = "eSLDB";
+
     protected $localizationToGoCode = array (
         'Cytoplasm' => 'GO:0005737',
         'Cell wall' => 'GO:0005618',

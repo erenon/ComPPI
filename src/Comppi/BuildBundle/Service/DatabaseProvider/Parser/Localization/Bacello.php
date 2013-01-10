@@ -10,6 +10,8 @@ class Bacello extends AbstractLocalizationParser
         'pred_homo'
     );
 
+    protected $databaseIdentifier = "BaCelLo";
+
     protected $localizationToGoCode = array (
         'Cytoplasm' => 'GO:0005737',
         'Secretory' => 'GO:secretory_pathway',

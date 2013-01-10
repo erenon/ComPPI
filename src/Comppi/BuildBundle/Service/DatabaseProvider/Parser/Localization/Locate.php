@@ -8,6 +8,8 @@ class Locate extends AbstractLocalizationParser
         'LOCATE_human_v6_20081121.xml'
     );
 
+    protected $databaseIdentifier = "LOCATE";
+
     protected static $minimumProbability = 95;
 
     protected $currentProtein;

@@ -8,6 +8,8 @@ class Hprd extends AbstractInteractionParser
         'BINARY_PROTEIN_PROTEIN_INTERACTIONS.txt',
     );
 
+    protected $databaseIdentifier = "HPRD";
+
     protected $headerCount = 0;
 
     protected function readRecord() {

@@ -8,6 +8,8 @@ class Mips extends AbstractInteractionParser
         'allppis.xml',
     );
 
+    protected $databaseIdentifier = "MIPS";
+
     protected $headerCount = 0;
 
     protected $parser;

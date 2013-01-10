@@ -8,6 +8,8 @@ class HumanProteinAtlas extends AbstractLocalizationParser
         'subcellular_location.csv'
     );
 
+    protected $databaseIdentifier = "The Human Protein Atlas";
+
     protected $currentLine;
 
     protected $localizationToGoCode = array (

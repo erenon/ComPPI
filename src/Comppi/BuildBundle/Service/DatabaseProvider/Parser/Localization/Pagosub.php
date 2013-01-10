@@ -12,6 +12,8 @@ class Pagosub extends AbstractLocalizationParser
 
     protected static $minimumProbability = 0.95;
 
+    protected $databaseIdentifier = "PA-GOSUB";
+
     protected $currentLine;
 
     protected $headerCount = 2;

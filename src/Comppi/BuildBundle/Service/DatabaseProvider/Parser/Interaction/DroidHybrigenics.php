@@ -8,6 +8,8 @@ class DroidHybrigenics extends AbstractDroid
         'HYBRIGENICS_YTH.txt'
     );
 
+    protected $databaseIdentifier = "DroID";
+
     protected $pubmedColIdx = 7;
     protected $expSysTypeColIdx = 20;
 

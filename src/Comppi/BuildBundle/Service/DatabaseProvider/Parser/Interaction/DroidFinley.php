@@ -8,6 +8,8 @@ class DroidFinley extends AbstractDroid
         'finley_yth.txt',
     );
 
+    protected $databaseIdentifier = "DroID";
+
     protected $pubmedColIdx = 7;
     protected $expSysTypeColIdx = 22;
 

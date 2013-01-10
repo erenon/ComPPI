@@ -11,6 +11,8 @@ class Dip extends AbstractInteractionParser
         'Scere20120228.txt'
     );
 
+    protected $databaseIdentifier = "DIP";
+
     protected $headerCount = 1;
 
     protected function readRecord() {

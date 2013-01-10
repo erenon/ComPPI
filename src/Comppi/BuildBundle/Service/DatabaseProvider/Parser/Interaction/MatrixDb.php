@@ -8,6 +8,8 @@ class MatrixDb extends AbstractInteractionParser
         'MatrixDB_20120420.txt'
     );
 
+    protected $databaseIdentifier = "MatrixDB";
+
     protected $headerCount = 1;
 
     protected function readRecord() {

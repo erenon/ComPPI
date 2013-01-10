@@ -8,6 +8,8 @@ class DroidFly extends AbstractDroid
         'FLY_OTHER_PHYSICAL.txt',
     );
 
+    protected $databaseIdentifier = "DroID";
+
     protected $pubmedColIdx = 3;
     protected $expSysTypeColIdx = 2;
 
