@@ -17,6 +17,9 @@ class ComppiStandard implements CalculatorInterface
         // https://bugs.php.net/bug.php?id=44639
         $connection->getWrappedConnection()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
 
+	require("getneighborloc.php");
+        require("confidence.php");
+        
         $insert = $connection->prepare(
             'INSERT INTO ConfidenceScore(interactionId, calculatorId, score)' .
             ' VALUES(?, ?, ?)'
@@ -42,8 +45,8 @@ class ComppiStandard implements CalculatorInterface
             $connection->beginTransaction();
 
             foreach ($interactions as $interaction) {
-                // TODO calculate confidence score here
-                $score = 0;
+                
+                $score = $pLinkLoc[$interaction['id']]; //from confidence.php
 
                 $insert->bindValue(1, $interaction['id']);
                 $insert->bindValue(3, $score);
