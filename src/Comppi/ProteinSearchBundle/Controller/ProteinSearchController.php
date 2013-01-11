@@ -9,7 +9,7 @@ class ProteinSearchController extends Controller
 {
 	private $speciesProvider = null;
 	private $localizationTranslator = null;
-	private $verbose = false;
+	private $verbose = true;
 	private $search_range_start = 0; // current page * search_result_per_page -> search query limit from here
 	private $search_result_per_page = 10; // search query limit offset (0: no limit)
 	
@@ -182,7 +182,10 @@ class ProteinSearchController extends Controller
 		return $keyword;
 	}
 	
-	private function initSpecies($requested_species = array())
+	/*
+		@var $requested_species the list of species abbreviations separated by commas, e.g. hs,ce
+	*/
+	private function initSpecies($requested_species = '')
 	{
 		$species = array();
 		$species_provider = $this->getSpeciesProvider();
@@ -195,6 +198,8 @@ class ProteinSearchController extends Controller
 			$sp = array('hs'=>1);
 		}
 		
+		// array of species requested in the form
+		// currently one species per request, but this block ensures it can be extended easily
 		foreach($sp as $sp_key => $needed)
 		{
 			// this ensures that we need an exact match from the input to be valid
@@ -203,6 +208,13 @@ class ProteinSearchController extends Controller
 			if (is_object($descriptor)) {
 				$species[$sp_key] = $descriptor->id;
 			}
+		}
+		
+		// add the taxonomical abbreviations of all species, they'll be needed on the species selector buttons
+		$descriptors = $species_provider->getDescriptors();
+		foreach($descriptors as $o)
+		{
+			$o->shortname = substr_replace($o->name, '. ', 1, strpos($o->name, ' '));
 		}
 		
 		if (empty($species)) {
