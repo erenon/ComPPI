@@ -30,5 +30,10 @@ class LoadConfidenceScoresCommand extends ContainerAwareCommand
 
         $calculator = $this->calculator;
         $calculator->calculateScores($calculator::NULL_CALC);
+
+        $output->writeln('  > calculating comppi standard score');
+
+        $calculator = $this->calculator;
+        $calculator->calculateScores($calculator::COMPPI_STD);
     }
 }
