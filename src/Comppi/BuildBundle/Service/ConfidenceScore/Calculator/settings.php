@@ -1,7 +1,7 @@
 <?//USER VARIABLES
 global $db_name,$db_pass,$db_host,$db_user,$nagylocID_file,$avgfile,$fi_int_ext,$fi_int_pred,$fi_int_unknown,$loctreetextile,$fi_loc_exp,$fi_loc_pred,$fi_loc_unknown,$npredpow,$confidence_type_unknown,$confidence_type_predicted,$confidence_type_experimental,$sql,$verbose;
 
-$db_name="comppi_test";
+$db_name="comppi";
 $db_pass="chaperone";
 $db_host="localhost";
 $db_user="comppi";

@@ -17,7 +17,6 @@ class ComppiStandard implements CalculatorInterface
         // https://bugs.php.net/bug.php?id=44639
         $connection->getWrappedConnection()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
 
-	require("getneighborloc.php");
         require("confidence.php");
         
         $insert = $connection->prepare(

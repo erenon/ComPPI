@@ -3,6 +3,8 @@ require_once("settings.php");
 require_once("functions.php");
 $start=microtime(TRUE);
 
+global $scoreCache;
+$scoreCache=array();
 $loctree=new loctree($loctreetextile,$nagylocID_file);
 
 $prots=array();
@@ -23,7 +25,9 @@ $neighbors=getNeighbors($lid,-1,$sql);
 $deg=count($neighbors);
 
 $locs=$loctree->getLocArray($lid,$sql);
-
+foreach($loctree->largelocs as $loc=>$terms)
+    if(!array_key_exists($loc,$locs)) 
+	$locs[$loc]=0;
 $NeighborsLoc=array();
 foreach($neighbors as $nid) {$NeighborsLoc[]=$loctree->getLocArray($nid,$sql);}
 
@@ -41,7 +45,8 @@ foreach($loctree->largelocs as $loc=>$terms)
  foreach($NeighborsLoc as $NeighborLoc)
   $place+=$NeighborLoc[$loc];
  $score=$deg==0?0:$place/$deg;
-
+ $scoreCache[$species][$lid][$loc][0]=$locs[$loc];
+ $scoreCache[$species][$lid][$loc][1]=$score;
  if(!isset($avgnum)) $avgnum=array();
  if(!isset($avgval)) $avgval=array();
  if(!isset($avgnum[$species][$loc]))
@@ -54,7 +59,7 @@ foreach($loctree->largelocs as $loc=>$terms)
 }
 
 $current++;
-if($current%1000==0) echo("   > calculating averages (1/2)... ".$current."/".$num."\n");
+if($current%1000==0) echo("   > calculating neighbor scores (1/2)... ".$current."/".$num."\n");
 }
 $file=fopen($avgfile,'w');
 foreach($avgval as $spec=>$avgnsp)
