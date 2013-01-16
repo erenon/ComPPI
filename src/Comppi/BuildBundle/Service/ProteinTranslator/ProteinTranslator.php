@@ -10,10 +10,10 @@ class ProteinTranslator
      * @var array
      */
     private $namingConventionOrder = array(
+        'UniProtKB-AC',
         'UniProtFull',
         'UniProtKB/Swiss-Prot',
         'UniProtKB/TrEmbl',
-        'UniProtKB-AC',
         'UniProtKB-ID',
         'UniProtAlt',
         'EnsemblGeneId',
@@ -110,8 +110,10 @@ class ProteinTranslator
             }
         }
 
-        if ($strongestTranslation[0] != $namingConvention) {
-            // stronger translation found
+        if (
+            $strongestTranslation[0] != $namingConvention // stronger translation found
+        &&  $strongestTranslation[0] != $this->namingConventionOrder // a more stronges one may exist
+        ) {
             // try to get an even more stronger one
             // using recursion
             return $this->getStrongestTranslation(
