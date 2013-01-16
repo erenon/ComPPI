@@ -136,14 +136,6 @@ then
     wget http://interactome.dfci.harvard.edu/H_sapiens/download/HI2_2011.tsv
 fi   
 
-# ConsensusPathDB
-#if [ ! -f ConsensusPathDB_human_PPI ]
-#then
-#    wget http://cpdb.molgen.mpg.de/download/ConsensusPathDB_human_PPI.gz -O ./consensus.gz
-#    gzip -d -N ./consensus.gz
-#    rm ./consensus.gz
-#fi
-
 # DiP
 # @see at the end of this file
 
@@ -213,9 +205,7 @@ cd ../map
 
 check_comppi_custom hs comppi_human_ensemblgeneid-uniprotkbac.txt
 check_comppi_custom hs comppi_human_ensemblpeptideid-uniprotkbac.txt
-check_comppi_custom hs comppi_human_entrezgene-ensemblpeptideid.txt
 check_comppi_custom hs comppi_human_entrezgene-uniprotkbac.txt
-check_comppi_custom hs comppi_human_entrezprotein-ensemblpeptideid.txt
 check_comppi_custom hs comppi_human_entrezprotein-uniprotkbac.txt
 check_comppi_custom hs comppi_human_genebankproteinid-uniprotkbac.txt
 check_comppi_custom hs comppi_human_refseq-uniprotkbac.txt
@@ -366,12 +356,9 @@ fi
 
 cd ../map
 
-check_comppi_custom dm comppi_drosi_ensemblgeneid-ensemblpeptideid.txt
 check_comppi_custom dm comppi_drosi_ensemblgeneid-uniprotkbac.txt
 check_comppi_custom dm comppi_drosi_ensemblpeptideid-uniprotkbac.txt
-check_comppi_custom dm comppi_drosi_enterzgene-ensemblpeptideid.txt
 check_comppi_custom dm comppi_drosi_enterzgene-uniprotkbac.txt
-check_comppi_custom dm comppi_drosi_refseq-ensemblpeptideid.txt
 check_comppi_custom dm comppi_drosi_refseq-uniprotkbac.txt
 check_comppi_custom dm comppi_drosi_uniparc-uniprotkbac.txt
 
@@ -492,12 +479,9 @@ fi
 
 cd ../map
 
-check_comppi_custom ce comppi_worm_ensemblgeneid-ensemblpeptideid.txt
 check_comppi_custom ce comppi_worm_ensemblgeneid-uniprotkbac.txt
 check_comppi_custom ce comppi_worm_ensemblpeptideid-uniprotkbac.txt
-check_comppi_custom ce comppi_worm_entrezgene-ensemblpeptideid.txt
 check_comppi_custom ce comppi_worm_entrezgene-uniprotkbac.txt
-check_comppi_custom ce comppi_worm_refseq-ensemblpeptideid.txt
 check_comppi_custom ce comppi_worm_refseq-uniprotkbac.txt
 check_comppi_custom ce comppi_worm_wbgeneid-uniprotkbac.txt
 check_comppi_custom ce comppi_worm_wormbase-uniprotkbac.txt
