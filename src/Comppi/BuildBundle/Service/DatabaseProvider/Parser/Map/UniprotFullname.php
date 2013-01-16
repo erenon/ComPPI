@@ -52,10 +52,10 @@ class UniprotFullname extends AbstractMapParser
                 }
 
                 $this->recordReady[] = array(
-                    'namingConventionA' => 'UniProtKB-AC',
-                    'namingConventionB'	=> 'UniProtAlt',
-                    'proteinNameA'	=> $recordArray[0],
-                    'proteinNameB'	=> $altName
+                    'namingConventionA'	=> 'UniProtAlt',
+                    'namingConventionB' => 'UniProtKB-AC',
+                    'proteinNameA'	=> $altName,
+                    'proteinNameB'	=> $recordArray[0]
                 );
             }
         } else {
@@ -63,24 +63,24 @@ class UniprotFullname extends AbstractMapParser
         }
 
         $this->recordReady[] = array(
-            'namingConventionA' => 'UniProtKB-AC',
-            'namingConventionB'	=> 'UniProtFull',
-            'proteinNameA'	=> $recordArray[0],
-            'proteinNameB'	=> $fullName
+            'namingConventionA'	=> 'UniProtFull',
+            'namingConventionB' => 'UniProtKB-AC',
+            'proteinNameA'	=> $fullName,
+            'proteinNameB'	=> $recordArray[0]
         );
 
 
         if ($recordArray[2] == 'reviewed') {
             $this->currentRecord = array(
-                'namingConventionA' => 'UniProtKB-AC',
-                'namingConventionB'	=> 'UniProtKB/Swiss-Prot',
+                'namingConventionA'	=> 'UniProtKB/Swiss-Prot',
+                'namingConventionB' => 'UniProtKB-AC',
                 'proteinNameA'	=> $recordArray[0],
                 'proteinNameB'	=> $recordArray[0]
             );
         } else {
             $this->currentRecord = array(
-                'namingConventionA' => 'UniProtKB-AC',
-                'namingConventionB'	=> 'UniProtKB/TrEmbl',
+                'namingConventionA'	=> 'UniProtKB/TrEmbl',
+                'namingConventionB' => 'UniProtKB-AC',
                 'proteinNameA'	=> $recordArray[0],
                 'proteinNameB'	=> $recordArray[0]
             );
