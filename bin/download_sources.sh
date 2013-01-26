@@ -61,6 +61,7 @@ fi
 if [ ! -f go_hs.csv ]
 then
     echo "HS GO database missing, please upload it manually as go_hs.csv"
+    echo "Download page: http://jan2013.archive.ensembl.org/biomart/martview/cb8efa77723359a41a24da450c983d85"
 fi    
 
 # Human proteinpedia
@@ -281,6 +282,7 @@ fi
 if [ ! -f go_dm.csv ]
 then
     echo "DM GO database missing, please upload it manually as go_dm.csv"
+    echo "Download page: http://jan2013.archive.ensembl.org/biomart/martview/7f058076dc051108baa18455afce3932"
 fi  
 
 # PaGOSUB
@@ -423,7 +425,8 @@ fi
 # GO
 if [ ! -f go_ce.tsv ]
 then
-    echo "CE GO database missing, please upload it manually as go_ce.tsv"
+    echo "CE GO database missing, please upload it manually as go_ce.csv"
+    echo "Download page: http://jan2013.archive.ensembl.org/biomart/martview/bf98d29c4e632817da791a9ee75d302f"
 fi
 
 # Organelle
@@ -554,6 +557,7 @@ fi
 if [ ! -f go_sc.csv ]
 then
     echo "SC GO database missing, please upload it manually as go_sc.csv"
+    echo "Download page: http://jan2013.archive.ensembl.org/biomart/martview/96703a629fd6dded17a13ab9d8b1a70a"
 fi  
 
 # Organelle
