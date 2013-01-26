@@ -7,7 +7,8 @@ class Go extends AbstractLocalizationParser
     protected static $parsableFileNames = array(
         'go_hs.csv',
         'go_dm.csv',
-        'go_sc.csv'
+        'go_sc.csv',
+        'go_ce.csv'
     );
 
     protected $databaseIdentifier = "GO";
@@ -22,7 +23,7 @@ class Go extends AbstractLocalizationParser
         }
 
         /**
-         * 0 => Ensembl Protein ID
+         * 0 => Ensembl Gene ID
          * 1 => GO Term Accession (localization)
          *
          * @var array
