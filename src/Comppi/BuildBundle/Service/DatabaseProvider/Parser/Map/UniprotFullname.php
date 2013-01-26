@@ -9,6 +9,16 @@ class UniprotFullname extends AbstractMapParser
         'Fragments'
     );
 
+    protected $fullNameBlacklist = array(
+        '312',
+        'Alpha',
+        'Letha',
+        'NA',
+        'Peptide-',
+        'Probable tRN',
+        'Protein'
+    );
+
     protected $headerCount = 1;
 
     protected static $parsableFileNames = array(
@@ -62,13 +72,14 @@ class UniprotFullname extends AbstractMapParser
             $fullName = $recordArray[3];
         }
 
-        $this->recordReady[] = array(
-            'namingConventionA'	=> 'UniProtFull',
-            'namingConventionB' => 'UniProtKB-AC',
-            'proteinNameA'	=> $fullName,
-            'proteinNameB'	=> $recordArray[0]
-        );
-
+        if (in_array($fullName, $this->fullNameBlacklist) === false) {
+            $this->recordReady[] = array(
+                'namingConventionA'	=> 'UniProtFull',
+                'namingConventionB' => 'UniProtKB-AC',
+                'proteinNameA'	=> $fullName,
+                'proteinNameB'	=> $recordArray[0]
+            );
+        }
 
         if ($recordArray[2] == 'reviewed') {
             $this->currentRecord = array(
