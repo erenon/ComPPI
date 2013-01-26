@@ -189,10 +189,10 @@ then
 fi
 
 # PIP's
-if [ ! -f PredictedInteractions1000.txt ]
-then
-    wget http://www.compbio.dundee.ac.uk/www-pips/downloads/PredictedInteractions1000.txt
-fi 
+#if [ ! -f PredictedInteractions1000.txt ]
+#then
+#    wget http://www.compbio.dundee.ac.uk/www-pips/downloads/PredictedInteractions1000.txt
+#fi 
 
 ### Maps
 
