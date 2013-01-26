@@ -1,4 +1,4 @@
-<?
+<?php
 function loadavgs()
 {
  global $avgfile;
@@ -106,7 +106,7 @@ class loctree
 			}
 		  }
 		  if($verbose>=2) echo("Node found ({$node->name}) <br />");
-		  //climb up to first bigLoc		  
+		  //climb up to first bigLoc
 		  $found=FALSE;
 		  $climbed=FALSE;
 		  while(($found===FALSE)&&($node->parnt!=NULL))
@@ -178,7 +178,7 @@ function correct($a,$b,$avg,$pow)
     $x=$avg+($b-$avg)*$pow;
     if($b<$avg) return $a*(1-$pow+($pow*$b/$avg));
     else return or_operator($a,$pow*($b-$avg)/(1-$avg));
-    
+
 }
 
 class tree
@@ -186,7 +186,7 @@ class tree
  public $name="";
  public $startID=0;
  public $endID=0;
- 
+
  function __construct($par)
  {
   if($par!=NULL)

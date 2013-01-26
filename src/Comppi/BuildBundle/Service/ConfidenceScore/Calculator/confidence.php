@@ -1,4 +1,4 @@
-<?
+<?php
 require("getneighborloc.php");
 require("settings.php"); //to reopen SQL connection
 
@@ -32,7 +32,7 @@ foreach($links as $lid)
 
     foreach($loctree->largelocs as $loc=>$terms)
 	{
- 
+
 	 if(!isset($avg[$species][$loc])) echo("Warning: no average score for species {$species}, loc {$loc}!\n");
 	 $osa=correct($scoreCache[$species][$interaction['actorAid']][$loc][0],
 		$scoreCache[$species][$interaction['actorAid']][$loc][1],

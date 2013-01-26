@@ -1,8 +1,9 @@
-<?//USER VARIABLES
+<?php
+//USER VARIABLES
 global $db_name,$db_pass,$db_host,$db_user,$nagylocID_file,$avgfile,$fi_int_ext,$fi_int_pred,$fi_int_unknown,$loctreetextile,$fi_loc_exp,$fi_loc_pred,$fi_loc_unknown,$npredpow,$confidence_type_unknown,$confidence_type_predicted,$confidence_type_experimental,$sql,$verbose;
 
 $db_name="comppi";
-$db_pass="chaperone";
+$db_pass="comppi_pw";
 $db_host="localhost";
 $db_user="comppi";
 $nagylocID_file="src/Comppi/BuildBundle/Service/ConfidenceScore/Calculator/largelocIDs.txt";
@@ -23,4 +24,3 @@ $confidence_type_experimental=2;
 $sql=new mysqli("$db_host","$db_user","$db_pass","$db_name");
 if(isset($_REQUEST['verbose'])) {$verbose=$_REQUEST['verbose']; if ($verbose>=-1) echo("Verbosity level {$verbose} set.\n");}
   else $verbose=-1;
-?>
