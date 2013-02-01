@@ -17,11 +17,14 @@ class ConfidenceScore
 
     private $calculators = array();
 
-    public function __construct($em) {
+    public function __construct($em, $localizationTranslator) {
         $this->connection = $em->getConnection();
 
         $this->calculators[self::NULL_CALC] = new Calculator\NullCalc(self::NULL_CALC);
-        $this->calculators[self::COMPPI_STD] = new Calculator\ComppiStandard(self::COMPPI_STD);
+
+        $comppiStd = new Calculator\ComppiStandard(self::COMPPI_STD);
+        $comppiStd->setLocalizationTranslator($localizationTranslator);
+        $this->calculators[self::COMPPI_STD] = $comppiStd;
     }
 
     public function calculateScores($calculatorId) {
