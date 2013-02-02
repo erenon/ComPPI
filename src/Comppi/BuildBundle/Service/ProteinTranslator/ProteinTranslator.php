@@ -112,7 +112,6 @@ class ProteinTranslator
 
         if (
             $strongestTranslation[0] != $namingConvention // stronger translation found
-        &&  $strongestTranslation[0] != $this->namingConventionOrder // a more stronges one may exist
         ) {
             // try to get an even more stronger one
             // using recursion
