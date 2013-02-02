@@ -1,0 +1,100 @@
+
+----------------------------------------------------------------------------
+        UniProt Protein Knowledgebase
+        SIB Swiss Institute of Bioinformatics; Geneva, Switzerland
+        European Bioinformatics Institute (EBI); Hinxton, United Kingdom
+        Protein Information Resource (PIR); Washington DC, USA
+----------------------------------------------------------------------------
+
+Description: Secondary accession numbers: index
+Name:        SEC_AC.TXT
+Release:     09-Jan-2013
+----------------------------------------------------------------------------
+
+This file lists all secondary accession numbers in UniProtKB (Swiss-Prot and
+TrEMBL), together with their corresponding current primary accession number(s).
+Accession numbers become secondary when entries are merged or split. When two
+entries are merged into one, the accession numbers from both entries are stored
+for the new entry.
+
+If an existing entry is split into two or more entries (a rare occurrence),
+the original accession numbers are retained in all the derived entries and a
+new primary accession number is added to all the entries.
+
+An accession number is dropped only when the data to which it was assigned have
+been completely removed from the database. Accession numbers deleted from
+Swiss-Prot are listed in the document file delac_sp.txt and those deleted
+from TrEMBL are listed in delac_tr.txt.
+
+Secondary AC                  Primary AC
+____________                  __________
+A0A111                        P64943
+A0A112                        P64941
+A0A113                        Q10704
+A0A131                        O90631
+A0A174                        P17597
+A0A184                        Q6NUJ1
+A0A1A0                        A0A189
+A0A1A5                        A0A194
+A0A1D3                        A0A1C3
+A0A1D7                        A0A1C7
+A0A1D9                        A0A1C8
+A0A1E0                        A0A1D0
+A0A1E1                        A0A1C9
+A0A1E2                        A0A1D1
+A0A1K6                        Q9BZ11
+A0A1W3                        Q9UNQ0
+A0A1W6                        Q6IV20
+A0A2U6                        P51511
+A0A2V7                        P21439
+A0A343                        P48694
+A0A380                        P0CC48
+A0A380                        P0CC49
+A0A395                        P0CC48
+A0A395                        P0CC49
+A0A4N4                        A0A4M3
+A0A4N5                        A0A4M4
+A0A4N6                        A0A4M5
+A0A4N9                        A0A4M8
+A0A4R6                        Q9UBF9
+A0A4R7                        F4JRA6
+A0A4W6                        A2AL36
+A0A4X0                        Q7TPD0
+A0A4X1                        A2AL36
+A0A4X2                        Q149C3
+A0A4X3                        Q7TPD0
+A0A4X9                        Q6ZQA6
+A0A4Z0                        Q9Y6M1
+A0A4Z5                        O00425
+A0A569                        Q65JW4
+A0A5A7                        P01733
+A0A5B8                        P01850
+A0A5F2                        P07456
+A0A7B3                        A0A794
+A0A883                        P60989
+A0A887                        A0A885
+A0A8W5                        Q47088
+A0A8W6                        Q47089
+A0A962                        Q96EP0
+A0A963                        P12273
+A0A9C3                        P12273
+A0A9F3                        P12273
+A0A9J2                        P03478
+A0AAL2                        P32255
+A0AAS7                        Q7XM13
+A0AAS9                        Q33DK1
+A0AAT0                        Q8LR86
+A0AAT1                        Q7XTV3
+A0AAT2                        Q8W0F1
+A0AAT3                        A3BKM2
+A0AAT4                        A3B6V0
+A0AAT5                        Q6Z3L4
+A0AAT6                        Q5QMM3
+A0AB41                        Q9X736
+A0AED4                        Q9BX66
+A0AMZ0                        Q9VGG6
+A0ANE9                        P08175
+A0ANF2                        P08175
+A0ANF8                        P08175
+A0ANH4                        P20349
+A0ANH5                        P20349
