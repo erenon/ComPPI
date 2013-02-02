@@ -211,6 +211,7 @@ check_comppi_custom hs comppi_human_entrezprotein-uniprotkbac.txt
 check_comppi_custom hs comppi_human_genebankproteinid-uniprotkbac.txt
 check_comppi_custom hs comppi_human_refseq-uniprotkbac.txt
 check_comppi_custom hs comppi_human_uniprotgenename-uniprotkbac.txt
+check_comppi_custom hs human_organelle.csv
 
 # Uniprot
 if [ ! -f HUMAN_9606_idmapping_selected.tab ]
@@ -363,6 +364,7 @@ check_comppi_custom dm comppi_drosi_ensemblpeptideid-uniprotkbac.txt
 check_comppi_custom dm comppi_drosi_enterzgene-uniprotkbac.txt
 check_comppi_custom dm comppi_drosi_refseq-uniprotkbac.txt
 check_comppi_custom dm comppi_drosi_uniparc-uniprotkbac.txt
+check_comppi_custom dm drosi_organelle.csv
 
 # Uniprot
 if [ ! -f DROME_7227_idmapping_selected.tab ]
@@ -488,6 +490,7 @@ check_comppi_custom ce comppi_worm_entrezgene-uniprotkbac.txt
 check_comppi_custom ce comppi_worm_refseq-uniprotkbac.txt
 check_comppi_custom ce comppi_worm_wbgeneid-uniprotkbac.txt
 check_comppi_custom ce comppi_worm_wormbase-uniprotkbac.txt
+check_comppi_custom ce worm_organelle.csv
 
 # Uniprot
 if [ ! -f CAEEL_6239_idmapping_selected.tab ]
@@ -625,6 +628,7 @@ fi
 cd ../map
 
 check_comppi_custom sc comppi_yeast_ensemblpeptideid-uniprotkbac.txt
+check_comppi_custom sc yeast_organelle.csv
 
 # Uniprot
 if [ ! -f YEAST_559292_idmapping_selected.tab ]
