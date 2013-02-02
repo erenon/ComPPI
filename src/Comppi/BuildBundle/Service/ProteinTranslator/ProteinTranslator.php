@@ -101,6 +101,7 @@ class ProteinTranslator
                 $this->namingConventionOrder
             );
 
+            // <= : allow conventionA -> conventionA style maps
             if ($translatedNameOrder < $strongestOrder) {
                 $strongestOrder = $translatedNameOrder;
                 $strongestTranslation = array(
@@ -112,6 +113,7 @@ class ProteinTranslator
 
         if (
             $strongestTranslation[0] != $namingConvention // stronger translation found
+        ||  $strongestTranslation[1] != $proteinName
         ) {
             // try to get an even more stronger one
             // using recursion
