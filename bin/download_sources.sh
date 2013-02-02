@@ -642,7 +642,6 @@ fi
 if [ ! -f uniprot_sc_fullname.tab ] 
 then
     wget "http://www.uniprot.org/uniprot/?query=organism%3a%22Saccharomyces+cerevisiae+%5b4932%5d%22&force=yes&format=tab&columns=id,entry%20name,reviewed,protein%20names" -O ./uniprot_sc_fullname.tab
-    wget "http://www.uniprot.org/uniprot/?query=organism%3a559292+keyword%3a1185&force=yes&format=tab&columns=id,entry%20name,reviewed,protein%20names" -O ./uniprot_sc_fullname.tab
 fi
 
 # Netbiol refseq->uniprot
