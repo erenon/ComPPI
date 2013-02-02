@@ -30,7 +30,8 @@ class Protein
     public function getSynonyms($id) {
         $synonyms = $this->connection->executeQuery(
         	'SELECT namingConvention, name FROM NameToProtein' .
-        	' WHERE proteinId = ?',
+        	' WHERE proteinId = ?' .
+            ' ORDER BY namingConvention',
             array($id)
         );
 
