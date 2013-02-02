@@ -425,7 +425,7 @@ then
 fi
 
 # GO
-if [ ! -f go_ce.tsv ]
+if [ ! -f go_ce.csv ]
 then
     echo "CE GO database missing, please upload it manually as go_ce.csv"
     echo "Download page: http://jan2013.archive.ensembl.org/biomart/martview/bf98d29c4e632817da791a9ee75d302f"
