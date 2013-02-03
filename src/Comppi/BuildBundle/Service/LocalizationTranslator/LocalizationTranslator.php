@@ -216,7 +216,11 @@ class LocalizationTranslator
     }
 
     public function getLargelocById($id) {
-        return $this->idToLargeloc[$id];
+        if (isset($this->idToLargeloc[$id])) {
+            return $this->idToLargeloc[$id];
+        } else {
+            throw new \InvalidArgumentException("Given id ('".$id."') is not valid primary localization id");
+        }
     }
 
     /**
