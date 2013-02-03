@@ -9,7 +9,7 @@ class ProteinSearchController extends Controller
 {
 	private $speciesProvider = null;
 	private $localizationTranslator = null;
-	private $verbose = true;
+	private $verbose = false;
 	private $search_range_start = 0; // current page * search_result_per_page -> search query limit from here
 	private $search_result_per_page = 10; // search query limit offset (0: no limit)
 	
