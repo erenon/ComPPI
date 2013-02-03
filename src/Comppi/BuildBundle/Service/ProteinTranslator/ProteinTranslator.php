@@ -102,7 +102,7 @@ class ProteinTranslator
             );
 
             // <= : allow conventionA -> conventionA style maps
-            if ($translatedNameOrder < $strongestOrder) {
+            if ($translatedNameOrder <= $strongestOrder) {
                 $strongestOrder = $translatedNameOrder;
                 $strongestTranslation = array(
                     $translatedName['namingConventionB'],
