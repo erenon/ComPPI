@@ -103,7 +103,13 @@ class Biogrid extends AbstractMapParser
         unset($this->recordBuffer[$strongestKey]);
 
         foreach ($this->recordBuffer as $key => $record) {
-            $this->recordBuffer[$key] = array_merge($record, $conventionB);
+            // remove the other same strong conventions
+            // we don't want to provide conventionA -> conventionA style mapping here
+            if ($record['namingConventionA'] == $conventionB['namingConventionB']) {
+                unset($this->recordBuffer[$key]);
+            } else {
+                $this->recordBuffer[$key] = array_merge($record, $conventionB);
+            }
         }
 
         $this->records = $this->recordBuffer;
