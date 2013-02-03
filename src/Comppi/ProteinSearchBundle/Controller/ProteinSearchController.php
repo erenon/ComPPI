@@ -71,8 +71,8 @@ class ProteinSearchController extends Controller
 
 			if (!empty($a_protein_ids))
 			{
-				$db_cond[] = "(p1.specieId=".join(' OR p1.specieId=', $species)
-					." OR p2.specieId=".join(' OR p2.specieId=', $species).")";
+				$db_cond[] = "((p1.specieId=".join(' OR p1.specieId=', $species)
+					.") AND (p2.specieId=".join(' OR p2.specieId=', $species)."))";
 				$db_cond[] = "(i.actorAId=".join(' OR i.actorAId=', $a_protein_ids).") OR (i.actorBId=".join(' OR i.actorBId=', $a_protein_ids).")";
 				
 				// INTERACTIONS OF PREVIOUSLY DETERMINED PROTEIN IDS
