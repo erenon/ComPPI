@@ -92,7 +92,7 @@ input, select, textarea {
 /* PROTEIN SEARCH */
 #ProteinSearchForm { text-align: left; }
 #fProtSearchKeyword { width: 412px; }
-#fProtSearchSpecHsBtn, #fProtSearchSpecDmBtn, #fProtSearchSpecCeBtn, #fProtSearchSpecScBtn { font-style: italic; }
+#fProtSearchhsBtn, #fProtSearchdmBtn, #fProtSearchceBtn, #fProtSearchscBtn { font-style: italic; }
 #protSearchResultMsg { text-align: center; font-weight: bold; }
 #ProteinSearchResultsTbl {
 	margin-top: 1em;
