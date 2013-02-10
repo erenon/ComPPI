@@ -7,19 +7,20 @@ use Doctrine\DBAL\Types\IntegerType as IntegerParameter;
 class ComppiStandard implements CalculatorInterface
 {
     private $id;
-
-    private $useLearning=FALSE;
-    private $sampleSize=10;
-    private $numberOfIterations=10000;
+    private $dataSet=array('1'=>0,'2'=>1,'3'=>1,'4'=>0);
+    private $useLearning=TRUE;
+    private $SampleSize=4;
+    private $numberOfIterations=2;
     private $predictionPower=0.5;
     private $weights=array('0'=>0.7,'1'=>0.99,'2'=>0.7);
     private $threshold=0.95;
     private $learningRate=0.01;
+    private $randomSeed=42;
     /**
      * @var Comppi\BuildBundle\Service\LocalizationTranslator\LocalizationTranslator
      */
     private $localizationTranslator;
-
+    private $conn;
     /**
      * @var array
      */
@@ -32,9 +33,10 @@ class ComppiStandard implements CalculatorInterface
         $this->localizationTranslator = $translator;
     }
 
-    public function calculate(\Doctrine\DBAL\Connection $connection) {
-    
-    $locQuery=$connection->prepare('SELECT proteinId,localizationId,specieId,confidenceType FROM ProtLocToSystemType LEFT JOIN ProteinToLocalization on ProtLocToSystemType.protLocId=ProteinToLocalization.id LEFT JOIN Protein on Protein.id=ProteinToLocalization.proteinId LEFT JOIN SystemType on SystemType.id=ProtLocToSystemType.systemTypeId WHERE proteinId=?');
+    public function calculate(\Doctrine\DBAL\Connection $connection) 
+    {    
+        $this->conn=$connection; //needed for CalculateLinkConfidence;
+        $locQuery=$connection->prepare('SELECT proteinId,localizationId,specieId,confidenceType FROM ProtLocToSystemType LEFT JOIN ProteinToLocalization on ProtLocToSystemType.protLocId=ProteinToLocalization.id LEFT JOIN Protein on Protein.id=ProteinToLocalization.proteinId LEFT JOIN SystemType on SystemType.id=ProtLocToSystemType.systemTypeId WHERE proteinId=?');
         echo (" CompPPI Standard calculator init...\n");
         $this->initCalculation($connection);
         //for each protein
@@ -51,34 +53,34 @@ class ComppiStandard implements CalculatorInterface
          $localizations=$locQuery->fetchAll(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
          $proteinCalc=new ProteinScoreCalculator();
          if(!$proteinCalc->addEntries($localizations))
-            {echo("Warning: No localization information for protein #".$protein['id']."!"); continue;}
-         $proteinCalc->addNeighbors();
+            {echo("Warning: No localization information for protein #".$protein['id']."!\n"); continue;}
          ProteinScoreCalculator::$fullProteinList[$protein['id']]=$proteinCalc;
          if($num%10000==0) echo($num."/".count($protIDs)." proteins added.\n");
         }
-        
-        $this->averageValues=array();
+        echo("Adding protein connection data...\n");
+        foreach(ProteinScoreCalculator::$fullProteinList as $protein)
+         $protein->addNeighbors($connection);
 
-        if($useLearning)
+        ProteinScoreCalculator::$classWeights=$this->weights;
+
+        if($this->useLearning)
         {
-          echo("Executing PLA for weights ({$numberOfIterations} iterations)...\n");
+          srand($this->randomSeed);
+          echo("Executing PLA for weights ({$this->numberOfIterations} iterations)...\n");
           $learningParams=array();
           $learningParams[]=$this->weights[0];
           $learningParams[]=$this->weights[1];
           $learningParams[]=$this->weights[2];
           $learningParams[]=$this->predictionPower;
-         $bestParams=$learningParams;
+          $bestParams=$learningParams;
           $bestResult=0;
-         while ($iterationNumber<$numberOfIterations)
+         for ($iterationNumber=0;$iterationNumber<$this->numberOfIterations;$iterationNumber++)
          {
-          $this->weights[0]=$learningParams[0];
-          $this->weights[1]=$learningParams[1];
-          $this->weights[2]=$learningParams[2];
+          ProteinScoreCalculator::$classWeights[0]=$learningParams[0];
+          ProteinScoreCalculator::$classWeights[1]=$learningParams[1];
+          ProteinScoreCalculator::$classWeights[2]=$learningParams[2];
           $this->predictionPower=$learningParams[3];
           
-          ProteinScoreCalculator::$classWeights=$this->weights;
-          ProteinScoreCalculator::$predictionPower=$this->predictionPower;
-
           //new iteration: update the average
           foreach(ProteinScoreCalculator::$fullProteinList as $protein)
            $protein->calculateMyLocationScores();
@@ -89,55 +91,58 @@ class ComppiStandard implements CalculatorInterface
           ProteinScoreCalculator::RecalcAverage();
           
           $currentResults=array();
-          for ($i=0;$i<$SampleSize;$i++)
+          for ($i=0;$i<$this->SampleSize;$i++)
           {
-              $this->weights[0]=$learningParams[0];
-              $this->weights[1]=$learningParams[1];
-              $this->weights[2]=$learningParams[2];
+              ProteinScoreCalculator::$classWeights[0]=$learningParams[0];
+              ProteinScoreCalculator::$classWeights[1]=$learningParams[1];
+              ProteinScoreCalculator::$classWeights[2]=$learningParams[2];
               $this->predictionPower=$learningParams[3];
 
-              $which=rand(0,count($dataSet));
-              $interactionQuery=$connection->prepare('SELECT actorAId,actorBId,specieId FROM Interaction LEFT JOIN Protein on Interaction.actorAId=Protein.id WHERE id=?');
+              $which=array_rand($this->dataSet);
+              $interactionQuery=$connection->prepare("SELECT actorAId,actorBId,specieId FROM Interaction LEFT JOIN Protein on Interaction.actorAId=Protein.id WHERE Interaction.id=?");
               $interactionQuery->bindValue(1,$which,IntegerParameter::INTEGER);
               $interactionQuery->execute();
-              $sampleRow=$interactionQuery->fetchRow(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+              $sampleRow=$interactionQuery->fetchAll(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
               //we use the new weights for protein score calculation in-loop, we just don't update the average
-              ProteinScoreCalculator::$fullProteinList[$sampleRow['actorAId']]->calculateMyLocationScores();
-              ProteinScoreCalculator::$fullProteinList[$sampleRow['actorBId']]->calculateNeighborLocationScores();
+              if((!isset(ProteinScoreCalculator::$fullProteinList[$sampleRow[0]['actorAId']])) or (!isset(ProteinScoreCalculator::$fullProteinList[$sampleRow[0]['actorAId']])))
+                {echo("Warning: Interaction ".$which." in training set is missing proteins or localizations from the database!\n"); continue;}
+              ProteinScoreCalculator::$fullProteinList[$sampleRow[0]['actorAId']]->calculateMyLocationScores();
+              ProteinScoreCalculator::$fullProteinList[$sampleRow[0]['actorAId']]->calculateNeighborLocationScores();
+              ProteinScoreCalculator::$fullProteinList[$sampleRow[0]['actorBId']]->calculateMyLocationScores();
+              ProteinScoreCalculator::$fullProteinList[$sampleRow[0]['actorBId']]->calculateNeighborLocationScores();
               $result=CalculateLinkConfidence($which['link']);
               //classify based on threshold
               if($result>$this->threshold)
                 $result=1;
               else $result=0;
               //check hit or miss
-              if($result==$dataSet[$which])
+              if($result==$this->dataSet[$which])
                 $currentResults[]=1;
               else $currentResults[]=-1;
               //weight update
               foreach($learningParams as &$parameter)
-               $parameter+=$alpha*$parameter*$currentResults[count($currentResults)-1];
+               $parameter+=$this->alpha*$parameter*$currentResults[count($currentResults)-1];
               unset($parameter);
           }
-          if(sum($currentResults)>$bestResult)
+          $total=array_sum($currentResults);
+          if($total>$bestResult)
             {
              $bestParams=$learningParams;
-             $bestResult=sum($currentResults);
+             $bestResult=$total;
             }
 
-         if($iterationNumber%100==0) echo($iterationNumber."/".$numberOfIterations." iterations complete...\n"); 
+          if($iterationNumber%100==0) echo($iterationNumber."/".$this->numberOfIterations." iterations complete...\n"); 
          }
+         ProteinScoreCalculator::$classWeights[0]=$bestParams[0];
+         ProteinScoreCalculator::$classWeights[1]=$bestParams[1];
+         ProteinScoreCalculator::$classWeights[2]=$bestParams[2];
+         $this->predictionPower=$bestParams[3];
         }
-
-        ProteinScoreCalculator::$classWeights[0]=$this->weights[0]=$bestParams[0];
-        ProteinScoreCalculator::$classWeights[1]=$this->weights[1]=$bestParams[1];
-        ProteinScoreCalculator::$classWeights[2]=$this->weights[2]=$bestParams[2];
-        ProteinScoreCalculator::$predictionPower=$this->predictionPower=$bestParams[3];        
         
         echo("Calculating final confidence score...\n");
-        foreach($this->proteinList as $protein)
+        foreach(ProteinScoreCalculator::$fullProteinList as $protein)
          $protein->calculateMyLocationScores();
-        
-        foreach($this->proteinList as $protein)
+        foreach(ProteinScoreCalculator::$fullProteinList as $protein)
          $protein->calculateNeighborLocationScores();
          
         ProteinScoreCalculator::RecalcAverage();
@@ -151,7 +156,7 @@ class ComppiStandard implements CalculatorInterface
 
         //no cross-species links
         $interactionSelect = $connection->prepare(
-            'SELECT Interaction.id as id ORDER BY id ASC LIMIT ?, ?'
+            'SELECT Interaction.id as id FROM Interaction ORDER BY id ASC LIMIT ?, ?'
         );
 
         $interactionOffset = 0;
@@ -189,7 +194,7 @@ class ComppiStandard implements CalculatorInterface
             $interactionSelect->execute();
         }
         
-        echo("Confidence calculation complete...\n");
+        echo("Confidence calculation complete.\n");
     }
 
     public function getName() {
@@ -202,13 +207,13 @@ class ComppiStandard implements CalculatorInterface
         $connection->getWrappedConnection()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
         
         ProteinScoreCalculator::$localizationTranslator=$this->localizationTranslator;
-        ProteinScoreCalculator::$largeLocs=$this->largeLocs=$this->localizationTranslator->getLargelocs();
+        ProteinScoreCalculator::$largeLocs=$this->largeLocs=array_keys($this->localizationTranslator->getLargelocs());
         }
 
     private function ApplyNeigborCorrection($myLocScore, $neighborLocScore, $averageNeighborLocScore, $predictionPower) {
 
         if ($neighborLocScore < $averageNeighborLocScore) {
-            return $myLocScore * (1 - $predictionPower + ($predictionPower * $neighborLocSvore / $averageNeighborLocScore));
+            return $myLocScore * (1 - $predictionPower + ($predictionPower * $neighborLocScore / $averageNeighborLocScore));
         } else {
             return 1- (1-$myLocScore)*(1- ($predictionPower * ($neighborLocScore - $averageNeighborLocScore) / (1 - $averageNeighborLocScore)) );
         }
@@ -216,20 +221,22 @@ class ComppiStandard implements CalculatorInterface
     
     private function CalculateLinkConfidence($linkID)
     {
-     $interactionQuery=$connection->prepare('SELECT actorAId,actorBId,specieId FROM Interaction LEFT JOIN Protein on Interaction.actorAId=Protein.id WHERE id=?');
+     $interactionQuery=$this->conn->prepare('SELECT actorAId,actorBId,specieId FROM Interaction LEFT JOIN Protein on Interaction.actorAId=Protein.id WHERE Interaction.id=?');
      $interactionQuery->bindValue(1,$linkID,IntegerParameter::INTEGER);
      $interactionQuery->execute();
-     $interactionQuery->fetchRow(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-     $startLocScores=$this->proteinList[$interactionQuery['actorAId']]->getMyLocationScores;
-     $startNeighborLocScores=$this->proteinList[$interactionQuery['actorAId']]->getNeighborLocationScores;
-     $endLocScores=$this->proteinList[$interactionQuery['actorBId']]->getMyLocationScores;
-     $endNeighborLocScores=$this->proteinList[$interactionQuery['actorBId']]->getNeighborLocationScores;
+     $interactionResult=$interactionQuery->fetchAll(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+     if((!isset(ProteinScoreCalculator::$fullProteinList[$interactionResult[0]['actorAId']])) or (!isset(ProteinScoreCalculator::$fullProteinList[$interactionResult[0]['actorBId']])))
+     {echo("Protein for interaction ".$linkID." not found in database (or no localization info), skipping.\n");return 0;}
+     $startLocScores=ProteinScoreCalculator::$fullProteinList[$interactionResult[0]['actorAId']]->getMyLocationScores;
+     $startNeighborLocScores=ProteinScoreCalculator::$fullProteinList[$interactionResult[0]['actorAId']]->getNeighborLocationScores;
+     $endLocScores=ProteinScoreCalculator::$fullProteinList[$interactionResult[0]['actorBId']]->getMyLocationScores;
+     $endNeighborLocScores=ProteinScoreCalculator::$fullProteinList[$interactionResult[0]['actorBId']]->getNeighborLocationScores;
      
      $linkLocalizationScores=array();
      foreach ($this->largeLocs as $localization)
      {
-      $startCorrected=ApplyNeigborCorrection($startLocScore[$localization],$startNeighborLocScore[$localization],ProteinScoreCalculator::$averageValues[$interactionQuery['species']][$localization],$predictionPower);
-      $endCorrected=ApplyNeigborCorrection($endLocScore[$localization],$endNeighborLocScore[$localization],ProteinScoreCalculator::$averageValues[$interactionQuery['species']][$localization],$predictionPower);
+      $startCorrected=ApplyNeigborCorrection($startLocScore[$localization],$startNeighborLocScore[$localization],ProteinScoreCalculator::$averageValues[$interactionQuery['species']][$localization],$this->predictionPower);
+      $endCorrected=ApplyNeigborCorrection($endLocScore[$localization],$endNeighborLocScore[$localization],ProteinScoreCalculator::$averageValues[$interactionQuery['species']][$localization],$this->predictionPower);
       $linkLocalizationScores[$localization]=$startCorrected*$endCorrected;
      }
      $value=1;
@@ -255,6 +262,7 @@ class ProteinScoreCalculator
   public static $fullProteinList;
   
   private $neighbors;
+  private $connection;
   
   private $entries; //3D:"localization", "classnum" and "number"
   private static $averageValues;
@@ -272,9 +280,9 @@ class ProteinScoreCalculator
         foreach(ProteinScoreCalculator::$species as $spec)
             foreach(ProteinScoreCalculator::$largeLocs as $loc)        
             {
-                $averageArray[$spec][$loc]["sum"]=0;
-                $averageArray[$spec][$loc]["num"]=0;
-                $averageValues[$spec][$loc]=0;
+                ProteinScoreCalculator::$averageArray[$spec][$loc]["sum"]=0;
+                ProteinScoreCalculator::$averageArray[$spec][$loc]["num"]=0;
+                ProteinScoreCalculator::$averageValues[$spec][$loc]=0;
             }
         
        foreach(ProteinScoreCalculator::$fullProteinList as $protein)
@@ -297,7 +305,6 @@ class ProteinScoreCalculator
    $firstrow=true;
    foreach ($SqlAssocArray as $row)
    {
-    echo($row['proteinId']."\n");
     if($firstrow)
     {
      $firstrow=false;
@@ -307,69 +314,68 @@ class ProteinScoreCalculator
      $this->id=$row['proteinId'];
     }
     $loc=ProteinScoreCalculator::$localizationTranslator->getLargelocById($row['localizationId']);
-    $ProteinCount[$this->mySpecies][$loc][$id]=1;
+//    $ProteinCount[$this->mySpecies][$loc][$this->id]=1;
     //if (!isset($this->entries)) $this->entries=array();
     //if (!isset($this->entries[!localization!])) $this->entries[!localization!]=array();
     if (!isset($this->entries[$loc][$row['confidenceType']])) $this->entries[$loc][$row['confidenceType']]=0;
     $this->entries[$loc][$row['confidenceType']]+=1;
-    // also add entry to averages
-    //if (!isset($this->averageEntries)) $this->averageEntries=array();
-    //if (!isset($this->averageEntries[$this->mySpecies])) $this->averageEntries[$this->mySpecies]=array();
-    //if (!isset($this->averageEntries[$this->mySpecies][!localization!])) $this->averageEntries[$this->mySpecies][!localization!]=array();
-    if (!isset(ProteinScoreCalculator::$averageEntries[$this->mySpecies][$loc][$row['confidenceType']])) $this->averageEntries[$this->mySpecies][$loc][$row['confidenceType']]=0;
-    ProteinScoreCalculator::$averageEntries[$this->mySpecies][$loc][$row['confidenceType']]+=1;
    }
    if($firstrow==true) //no localization information, empty set received
     return FALSE;
    //collapse ProteinCount map into a single number
-   foreach ($ProteinCount as $species=>$ProtCountBySpecies)
+/*   foreach ($ProteinCount as $species=>$ProtCountBySpecies)
     foreach ($ProtCountBySpecies as $largeLoc=>$ProtCountBySpeciesAndLocation)
-      $ProtCountBySpeciasAndLocation = count($ProtCountBySpeciasAndLocation);
+      $ProtCountBySpeciesAndLocation = count($ProtCountBySpeciesAndLocation);*/
    
-   foreach(ProteinScoreCalculator::$averageEntries as $species=>$locationBySpeciesArray)
+/*   foreach(ProteinScoreCalculator::$averageEntries as $species=>$locationBySpeciesArray)
     foreach($locationBySpeciesArray as $location=>$classByLocationArray)
     {
         foreach($classByLocationArray as $probabilityClass => &$value)
             $value/=$ProteinCount[$species][$location];
         unset($value);
-    }
+    }*/
     return TRUE;
   }
   public function calculateMyLocationScores()
   {
    $this->locationScores=array();
-   foreach($this->largeLocs as $localization)
-    {
+   foreach(ProteinScoreCalculator::$largeLocs as $localization)
+    {     
+     if(!isset($this->entries[$localization]))
+     {$this->locationScores[$localization]=0;continue;}
+     
      $score=1;
      foreach($this->entries[$localization] as $entryClass => $entryNum)
-        $score*=pow( 1 - $this->classWeights[$entryClass] , $entryNum );
+        $score*=pow( 1 - ProteinScoreCalculator::$classWeights[$entryClass] , $entryNum );
      $this->locationScores[$localization]=1 - $score;
     }
   }
 
-  public function addNeighbors()
+  public function addNeighbors($connection)
   {
    $neighborQuery=$connection->prepare("SELECT actorAId AS id FROM Interaction WHERE actorBId=? and actorAId!=actorBId UNION SELECT actorBId AS id FROM Interaction WHERE actorAId=? AND actorAId!=actorBId");
    $neighborQuery->bindValue(1,$this->id,IntegerParameter::INTEGER);
    $neighborQuery->bindValue(2,$this->id,IntegerParameter::INTEGER);
    $neighborQuery->execute();
    $neighbors=$neighborQuery->fetchAll(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+   $this->neighbors=array();
    foreach ($neighbors as $neighbor)
-   $this->neighbors[]=&ProteinScorecalculator::$protList[$neighbor['id']];
+    if(isset(ProteinScoreCalculator::$fullProteinList[$neighbor['id']]))
+        $this->neighbors[]=&ProteinScoreCalculator::$fullProteinList[$neighbor['id']];
   }
   public function calculateNeighborLocationScores()
   {   
    $this->neighborLocationScores=array();
-   foreach ($this->largeLocs as $localization)
+   foreach (ProteinScoreCalculator::$largeLocs as $localization)
     $this->neighborLocationScores[$localization]=0;
    foreach ($this->neighbors as $neighbor)
    {    
-    $scores=$this->protList[$neighbor['id']]->getMyLocationScores();
-    foreach($this->largeLocs as $localization)
+    $scores=ProteinScoreCalculator::$fullProteinList[$neighbor['id']]->getMyLocationScores();
+    foreach(ProteinScoreCalculator::$largeLocs as $localization)
      $this->neighborLocationScores[$localization]+=$scores[$localization];
    }
    if(count($this->neighbors)>0)
-    foreach ($this->largeLocs as $localization)
+    foreach (ProteinScoreCalculator::$largeLocs as $localization)
      $this->neighborLocationScores[$localization]/=count($this->neighbors);
     
   }
