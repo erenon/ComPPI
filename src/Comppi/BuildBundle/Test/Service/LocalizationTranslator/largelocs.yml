@@ -1,0 +1,9 @@
+largelocs:
+    cellular-component:
+        childrenIncluded:
+        childrenExcluded:
+            - GO:0005575
+    macromolecular-complex:
+        childrenIncluded:
+             - GO:0032991
+        childrenExcluded:

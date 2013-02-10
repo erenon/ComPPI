@@ -2,6 +2,8 @@
 
 namespace Comppi\BuildBundle\Service\LocalizationTranslator;
 
+use Symfony\Component\Yaml\Parser;
+
 class LocalizationTranslator
 {
     public $localizations = array();
@@ -11,8 +13,12 @@ class LocalizationTranslator
 
     private $localizationTree = null;
 
-    public function __construct($localizationFile) {
+    private $largelocs;
+    private $idToLargeloc = array();
+
+    public function __construct($localizationFile, $largelocFile) {
         $this->loadLocalizations($localizationFile);
+        $this->loadLargelocs($largelocFile);
     }
 
     private function loadLocalizations($fileName) {
@@ -110,6 +116,57 @@ class LocalizationTranslator
         $this->localizationToIndex[$goCode] = $index;
     }
 
+    private function loadLargelocs($fileName) {
+        $yamlParser = new Parser();
+        $definition = $yamlParser->parse(file_get_contents($fileName));
+
+        foreach ($definition['largelocs'] as $largelocName => $terms) {
+            $ids = array();
+
+            if (is_array($terms['childrenExcluded'])) {
+                foreach ($terms['childrenExcluded'] as $singleTerm) {
+                    $ids[] = $this->getIdByLocalization($singleTerm);
+                }
+            }
+
+            if (is_array($terms['childrenIncluded'])) {
+                foreach ($terms['childrenIncluded'] as $multiTerm) {
+                    $id = $this->getIdByLocalization($multiTerm);
+                    $sid = $this->getSecondaryIdByLocalization($multiTerm);
+
+                    foreach ($this->idToIndex as $primaryId => $index) {
+                        if ($id <= $primaryId && $primaryId < $sid) {
+                            $ids[] = $primaryId;
+                        }
+                    }
+                }
+            }
+
+            $this->largelocs[$largelocName] = $ids;
+        }
+
+        $this->loadIdToLargeloc();
+    }
+
+    private function loadIdToLargeloc() {
+        foreach ($this->idToIndex as $id => $index) {
+            // search for largeloc
+            $largelocFound = false;
+
+            foreach ($this->largelocs as $largeloc => $ids) {
+                if (array_search($id, $ids) !== false) {
+                    $this->idToLargeloc[$id] = $largeloc;
+                    $largelocFound = true;
+                    break;
+                }
+            }
+
+            if ($largelocFound === false) {
+                $this->idToLargeloc[$id] = false;
+            }
+        }
+    }
+
     public function getIdByLocalization($localization) {
         if (isset($this->localizationToIndex[$localization])) {
             $index = $this->localizationToIndex[$localization];
@@ -152,6 +209,18 @@ class LocalizationTranslator
         }
 
         return $this->localizationTree;
+    }
+
+    public function getLargelocs() {
+        return $this->largelocs;
+    }
+
+    public function getLargelocById($id) {
+        if (isset($this->idToLargeloc[$id])) {
+            return $this->idToLargeloc[$id];
+        } else {
+            throw new \InvalidArgumentException("Given id ('".$id."') is not valid primary localization id");
+        }
     }
 
     /**
