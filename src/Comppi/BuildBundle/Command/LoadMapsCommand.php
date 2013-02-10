@@ -30,7 +30,8 @@ class LoadMapsCommand extends AbstractLoadCommand
             ->getMapsBySpecie($this->specie);
 
         // init insert statement
-        $statement = "INSERT INTO ProteinNameMap VALUES ('', ?, ?, ?, ?, ?)";
+        $statement = 'INSERT INTO ProteinNameMap VALUES (NULL, ?, ?, ?, ?, ?)' .
+            ' ON DUPLICATE KEY UPDATE id = id';
         $this->insertMapEntryStatement = $this->connection->prepare($statement);
         $this->insertMapEntryStatement->bindValue(1, $this->specie->id);
     }
