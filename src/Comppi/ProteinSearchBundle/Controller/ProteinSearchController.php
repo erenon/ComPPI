@@ -9,7 +9,7 @@ class ProteinSearchController extends Controller
 {
 	private $speciesProvider = null;
 	private $localizationTranslator = null;
-	private $verbose = true;
+	private $verbose = false;
 	private $search_range_start = 0; // current page * search_result_per_page -> search query limit from here
 	private $search_result_per_page = 10; // search query limit offset (0: no limit)
 	
@@ -71,8 +71,8 @@ class ProteinSearchController extends Controller
 
 			if (!empty($a_protein_ids))
 			{
-				$db_cond[] = "(p1.specieId=".join(' OR p1.specieId=', $species)
-					." OR p2.specieId=".join(' OR p2.specieId=', $species).")";
+				$db_cond[] = "((p1.specieId=".join(' OR p1.specieId=', $species)
+					.") AND (p2.specieId=".join(' OR p2.specieId=', $species)."))";
 				$db_cond[] = "(i.actorAId=".join(' OR i.actorAId=', $a_protein_ids).") OR (i.actorBId=".join(' OR i.actorBId=', $a_protein_ids).")";
 				
 				// INTERACTIONS OF PREVIOUSLY DETERMINED PROTEIN IDS

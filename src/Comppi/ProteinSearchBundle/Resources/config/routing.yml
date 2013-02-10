@@ -3,3 +3,4 @@ ComppiProteinSearchBundle_proteinsearch:
     defaults: { _controller: ComppiProteinSearchBundle:ProteinSearch:proteinSearch, protein_name: '', requested_species: 'hs', current_page: 0 }
     requirements:
         current_page:  \d+
+        protein_name: "[^/]*"
