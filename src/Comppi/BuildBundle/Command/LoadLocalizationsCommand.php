@@ -2,6 +2,8 @@
 
 namespace Comppi\BuildBundle\Command;
 
+use Symfony\Component\Validator\Constraints\Valid;
+
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -35,7 +37,8 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
 
         // init insert statement
         $this->insertLocalizationStatement = $this->connection->prepare(
-            "INSERT INTO ProteinToLocalization VALUES ('', ?, ?, ?, ?)"
+            'INSERT INTO ProteinToLocalization VALUES (NULL, ?, ?, ?, ?)' .
+            ' ON DUPLICATE KEY UPDATE id=id'
         );
 
         // init add system type statement
@@ -48,6 +51,7 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
         $recordsPerTransaction = 500;
 
         $connection = $this->connection;
+        $lastInsertId = 0;
 
         $this->openConnection();
 
@@ -86,20 +90,24 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
                 $this->insertLocalizationStatement->bindValue(4, $localization['pubmedId']);
                 $this->insertLocalizationStatement->execute();
 
-               $id = $this->connection->lastInsertId();
+                $id = $this->connection->lastInsertId();
 
-                $this->addSystemTypes($id, $localization['experimentalSystemType']);
+                if ($id !== intval($lastInsertId) && $id != 0) {
+                    $lastInsertId = $id;
 
-                // flush transaction
-                $recordIdx++;
-                if ($recordIdx == $recordsPerTransaction) {
-                    $recordIdx = 0;
+                    $this->addSystemTypes($id, $localization['experimentalSystemType']);
 
-                    $connection->commit();
-                    $connection->beginTransaction();
+                    // flush transaction
+                    $recordIdx++;
+                    if ($recordIdx == $recordsPerTransaction) {
+                        $recordIdx = 0;
 
-                    $output->writeln('  > ' . $recordsPerTransaction . ' records loaded');
-                }
+                        $connection->commit();
+                        $connection->beginTransaction();
+
+                        $output->writeln('  > ' . $recordsPerTransaction . ' records loaded');
+                    }
+                } // else ON DUPLICATE KEY => update
             }
 
             $connection->commit();
