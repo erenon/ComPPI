@@ -213,5 +213,3 @@ while($n=$res->fetch_assoc())
 if($verbose>0) echo(count($neighbors)." interactors found for node {$id}.\n");
 return $neighbors;
 }
-?>
-
