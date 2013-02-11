@@ -54,8 +54,7 @@ class Intact extends AbstractInteractionParser
                 $validRead = true;
             }
 
-            // 7: strlen('pubmed:')
-            $pubmedId = substr($recordArray[8], 7);
+            $pubmedId = $this->getPubmedFromField($recordArray[8]);
 
             // extract experimental system type
             $expSysStart = strpos($recordArray[6], '(') + 1;
@@ -88,5 +87,17 @@ class Intact extends AbstractInteractionParser
         }
 
         return false;
+    }
+
+    protected function getPubmedFromField($field) {
+        // 7: strlen('pubmed:')
+        $start = strpos($field, 'pubmed:') + 7;
+        $end = strpos($field, '|', $start);
+
+        if ($end === false) {
+            return substr($field, $start);
+        } else {
+            return substr($field, $start, $end);
+        }
     }
 }
