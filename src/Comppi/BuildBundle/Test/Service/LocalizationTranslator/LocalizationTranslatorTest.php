@@ -12,8 +12,9 @@ class LocalizationTranslatorTest extends \PHPUnit_Framework_TestCase
     protected $translator;
 
     protected function setUp() {
-        $testFile = __DIR__ . DIRECTORY_SEPARATOR . 'loctree.textile';
-        $this->translator = new LocalizationTranslator($testFile);
+        $loctreeFile = __DIR__ . DIRECTORY_SEPARATOR . 'loctree.textile';
+        $largelocFile = __DIR__ . DIRECTORY_SEPARATOR . 'largelocs.yml';
+        $this->translator = new LocalizationTranslator($loctreeFile, $largelocFile);
     }
 
     public function testGetIdByLocalization() {
@@ -116,5 +117,54 @@ class LocalizationTranslatorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLocalizationTree() {
         $this->markTestIncomplete('Implement this');
+    }
+
+    public function testGetLargelocs() {
+        $this->assertEquals(
+            array(
+                'cellular-component' => array(1),
+                'macromolecular-complex' =>
+                    array(2, 3, 4, 5, 9, 10, 11, 12, 14, 18)
+            ),
+            $this->translator->getLargelocs()
+        );
+    }
+
+    public function testGetLargelocById() {
+        $this->assertEquals(
+            'cellular-component',
+            $this->translator->getLargelocById(1)
+        );
+
+        $this->assertEquals(
+            'macromolecular-complex',
+            $this->translator->getLargelocById(2)
+        );
+
+        $this->assertEquals(
+            'macromolecular-complex',
+            $this->translator->getLargelocById(3)
+        );
+
+        $this->assertEquals(
+            'macromolecular-complex',
+            $this->translator->getLargelocById(4)
+        );
+
+        $this->assertEquals(
+            'macromolecular-complex',
+            $this->translator->getLargelocById(5)
+        );
+
+        $this->assertEquals(
+            'macromolecular-complex',
+            $this->translator->getLargelocById(10)
+        );
+
+        $this->assertEquals(
+            false,
+            $this->translator->getLargelocById(23)
+        );
+
     }
 }

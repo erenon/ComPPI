@@ -6,7 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(indexes={@ORM\index(name="search_idx", columns={"proteinId"})})
+ * @ORM\Table(
+ *     indexes={
+ *         @ORM\index(name="search_idx", columns={"proteinId"})
+ *     },
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="single_loc_per_source", columns={"proteinId", "localizationId", "sourceDb"})
+ *     }
+ * )
  */
 class ProteinToLocalization
 {
