@@ -35,14 +35,73 @@
 	
 	{% if ls %}
 	{{ pagination.pages(pagination_max_page, pagination_curr_page, pagination_base_url) }}
-		
-	<table id="ProteinSearchResultsTbl" class="hovered_list">
-		<tr class="not_hovered_line"><th>Src A</th><th>Localization A</th><th>Protein A</th><th class="protSearchMidLine">Protein B</th><th>Localization B</th><th>Src B</th></tr>
+
+	<table id="ProteinSearchResultsTbl" class="hovered_list" valign="top">
+		<tr class="not_hovered_line">
+			<th id="ProteinSearchThLocA">Localization A</th>
+			<th id="ProteinSearchThProtA">Protein A</th>
+			<th id="ProteinSearchThCS" class="protSearchMidLine">CS</th>
+			<th id="ProteinSearchThProtB" class="protSearchMidLine">Protein B</th>
+			<th id="ProteinSearchThLocB">Localization B</th><th>Details</th></tr>
 		{% for p in ls %}
-		<tr><td>{% if p.locASrcUrl %}<a href="{{ p.locASrcUrl }}" target="_blank" class="btn btn_src">src</a>{% endif %}</td><td>{{ p.locA }}</td><td>{{ p.protA }}</td><td class="protSearchMidLine">{{ p.protB }}</td><td>{{ p.locB }}</td><td>{% if p.locBSrcUrl %}<a href="{{ p.locBSrcUrl }}" target="_blank" class="btn btn_src">src</a>{% endif %}</td></tr>
+		<tr>
+			<td>{% if p.locA['-'] is defined %}
+				N/A
+				{% else %}
+				{% for abbrA,llocA in p.locA %}
+				<span class="btn btn_src" title="{{ llocA }}">{{ abbrA }}</span>
+				{% endfor %}
+				{% endif %}</td>
+			<td>{{ p.protA }}</td>
+			<td class="protSearchMidLine">  </td>
+			<td class="protSearchMidLine">{{ p.protB }}</td>
+			<td>{% if p.locB['-'] is defined %}
+				N/A
+				{% else %}
+				{% for abbrB,llocB in p.locB %}
+				<span class="btn btn_src" title="{{ llocB }}">{{ abbrB }}</span>
+				{% endfor %}
+				{% endif %}</td>
+			<td>{% if (p.protA_small_locs is defined or p.protB_small_locs is defined) %}<a href="{{ path('ComppiProteinSearchBundle_interaction') }}/{{ p.iid }}" class="protSearchDetailsLink" id="{{ p.iid }}">Details</a>{% else %}N/A{% endif %}</td>
+		</tr>
+		<tr class="protSearchDetailsBox">
+			<td colspan="6">Details of '{{ p.protA }}':
+				<p>Name:</p>
+				<p>Synonyms:</p>
+				{% if p.protA_small_locs is defined %}
+				<p>Localizations:
+				<table>
+				{% for i,sLocA in p.protA_small_locs %}
+					<tr>
+					<td>{{ p.protA_small_locs[i] }}</td>
+					<td>{{ p.protA_loc_exp_types[i] }}</td>
+					<td>{% if p.protA_source_dbs[i] %} {{ p.protA_source_dbs[i] }} {% endif %}</td>
+					<td>{% if p.protA_pubmed_links[i] %} <a href="{{ p.protA_pubmed_links[i] }}" target="_blank" class="btn btn_src">PubMed</a> {% endif %}</td>
+					</tr>
+				{% endfor %}
+				</table></p>
+			{% endif %}
+			<br /><br />Details of '{{ p.protB }}':
+			{% if p.protB_small_locs is defined %}
+			<br />Localizations:
+				<table>
+				{% for i,sLocB in p.protB_small_locs %}
+					<tr>
+					<td>{{ p.protB_small_locs[i] }}</td>
+					<td>{{ p.protB_loc_exp_types[i] }}</td>
+					<td>{% if p.protB_source_dbs[i] %} {{ p.protB_source_dbs[i] }} {% endif %}</td>
+					<td>{% if p.protB_pubmed_links[i] %} <a href="{{ p.protB_pubmed_links[i] }}" target="_blank" class="btn btn_src">PubMed</a> {% endif %}</td>
+					</tr>
+				{% endfor %}
+				</table>
+			{% endif %}
+			</td>
+		</tr>
 		{% endfor %}
 	</table>
-	
+	{#<!-- <td>{% if p.locASrcUrl %}<a href="{{ p.locASrcUrl }}" target="_blank" class="btn btn_src">src</a>{% endif %}</td>
+	<td>{% if p.locBSrcUrl %}<a href="{{ p.locBSrcUrl }}" target="_blank" class="btn btn_src">src</a>{% endif %}</td>
+	-->#}
 	<p>N/A: Data not available.</p>
 	
 	{{ pagination.pages(pagination_max_page, pagination_curr_page, pagination_base_url) }}

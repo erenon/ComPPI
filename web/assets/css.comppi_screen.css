@@ -66,14 +66,7 @@ li { margin: 0.5em 0; }
 .infobtn a:hover { color: #fff; }
 .pagination { list-style-type: none; margin: 0; padding: 0; width: 100%; text-align: center; }
 .pagination li { display: inline; margin: 0 4px; font-size: 1.2em; }
-.pagination li.paginationCurrentPage a {
-	margin: 0;
-	padding: 0 4px;
-	font-size: 1.5em; color: #fff; background-color: #007000;
-	border: 1px solid #E0DFDC;
-	border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-khtml-border-radius: 5px; }
+.pagination li.paginationCurrentPage a { color: #fff; }
 
 label { display: block; float: left; width: 200px; margin: 2px; }
 .radioButtonLabel { float: none; width: auto; display: inline; }
@@ -100,13 +93,33 @@ input, select, textarea {
 	border: 0;
 	border-collapse: collapse;
 	text-align: center;
+	vertical-align: top;
 }
 #ProteinSearchResultsTbl th {
 	font-weight: bold;
 	border-bottom: 1px solid #909090;
+	border-top: 0;
 }
-#ProteinSearchResultsTbl td { padding: 0 5px; }
+#ProteinSearchThLocA, #ProteinSearchThLocB { width: 13%; }
+#ProteinSearchThProtA, #ProteinSearchThProtB { width: 30%; }
+#ProteinSearchThCS { width: 5%; }
+#ProteinSearchResultsTbl tr { border-top: 1px dotted #909090; }
+#ProteinSearchResultsTbl tr.not_hovered_line { border-top: 0; }
+#ProteinSearchResultsTbl td { padding: 0 5px; vertical-align: top; }
+#ProteinSearchResultsTbl table { /* details tables in the main result set*/
+	margin: 0;
+	width: 100%;
+	border: 0;
+	border-collapse: collapse;
+	text-align: center;
+}
+#ProteinSearchResultsTbl table tr {	border: 0; } /* details tables in the main result set */
+#ProteinSearchResultsTbl table td {	margin: 0; padding: 2px; } /* details tables in the main result set */
 .protSearchMidLine { border-left: 1px solid #909090; }
+#ProteinSearchResultsTbl tr.protSearchDetailsBox { padding: 2px 0; border-top: 0; text-align: left; }
+#ProteinSearchResultsTbl p { padding: 2px; margin: 0 0 0.3em 0; }
+.protSearchDetailsOpened { background-color: #e0e0e0; }
+
 
 /* DOWNLOAD DB */
 #DownloadForm { text-align: left; margin-top: 1em; }

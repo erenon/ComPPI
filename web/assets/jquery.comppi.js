@@ -53,27 +53,18 @@ $(document).ready(function(){
 			}
 		});
 	});
-	/*radioButtons = $();
-	$("#fProtSearchSpecHsBtn, #fProtSearchSpecDmBtn, #fProtSearchSpecCeBtn, #fProtSearchSpecScBtn").click(function() {
-		var field_name = "#" + $(this).attr("id").replace("Btn", "");
-		current_is_active = $(this).hasClass('btn_green');
-		
-		switch($(this).attr("id")) {
-			case 'fDownloadIntByLoc': value=1; break; // locsbyint
-			case 'fDownloadInts': value=2; break; // interactions
-			case 'fDownloadLocs': value=3; break; // localizations
-			default: value=0;
-		}
-		
-		$("#fDownloadIntByLoc, #fDownloadInts, #fDownloadLocs").removeClass('btn_green');
-		
-		if ( current_is_active ) {
-			$("#fDownloadDataset").attr('value', 0);
+	
+	// Protein Search - Interaction Details
+	$(".protSearchDetailsBox").hide();
+	$(".protSearchDetailsLink").click(function(){
+		$(this).parents("tr").next("tr").toggle();
+		if ($(this).parents("tr").hasClass("protSearchDetailsOpened")) {
+			$(this).parents("tr").removeClass("protSearchDetailsOpened").next("tr").removeClass("protSearchDetailsOpened");
 		} else {
-			$(this).addClass('btn_green');
-			$("#fDownloadDataset").attr('value', value);
+			$(this).parents("tr").addClass("protSearchDetailsOpened").next("tr").addClass("protSearchDetailsOpened");
 		}
-	});*/
+		return false;
+	});
 });
 
 // LOCTREE
