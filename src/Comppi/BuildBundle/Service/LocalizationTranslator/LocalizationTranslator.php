@@ -151,18 +151,11 @@ class LocalizationTranslator
     private function loadIdToLargeloc() {
         foreach ($this->idToIndex as $id => $index) {
             // search for largeloc
-            $largelocFound = false;
-
             foreach ($this->largelocs as $largeloc => $ids) {
                 if (array_search($id, $ids) !== false) {
                     $this->idToLargeloc[$id] = $largeloc;
-                    $largelocFound = true;
                     break;
                 }
-            }
-
-            if ($largelocFound === false) {
-                $this->idToLargeloc[$id] = false;
             }
         }
     }
