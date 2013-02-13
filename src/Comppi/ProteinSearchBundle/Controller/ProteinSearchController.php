@@ -22,7 +22,13 @@ class ProteinSearchController extends Controller
 	private $search_range_start = 0; // current page * search_result_per_page -> search query limit from here
 	private $search_result_per_page = 10; // search query limit offset (0: no limit)
 	
-	
+	/* PROTEIN SEARCH
+	 * This function provides a search form and display the results of the protein search.
+	 * Protein details are loaded for the whole result set, not one by one (via AJAX) because
+	 * 	1) it is faster to open huge MySQL tables only once, not as many times as an interaction detail is displayed,
+	 * 	2) it scales better (speed is basically the same for 10 and for 50 results too),
+	 *	3) we have to display the large localizations in the result set even when no details are shown...
+	 */
 	public function proteinSearchAction($protein_name, $requested_species, $current_page)
     {
 		$keyword = $this->initKeyword($protein_name);
@@ -73,7 +79,6 @@ class ProteinSearchController extends Controller
 					INNER JOIN Protein p2 ON i.actorBId=p2.id
 					WHERE "
 						.join(' AND ', $db_cond)
-						//.(!$this->null_loc_needed ? " AND (ptl1.localizationId IS NOT NULL AND ptl2.localizationId IS NOT NULL)" : '')
 						.($this->search_result_per_page ? " LIMIT ".$this->search_range_start.", ".$this->search_result_per_page : '');
 				
 				$this->verbose ? $this->verbose_log[] =  "$sql_i" : '';
@@ -83,6 +88,7 @@ class ProteinSearchController extends Controller
 				if (!$r_i) throw new \ErrorException('Interaction query failed!');
 				while ($p = $r_i->fetchObject())
 				{
+					// skeleton of the template
 					$T['ls'][$p->iid] = array(
 						'iid' => $p->iid,
 						'protA' => $p->protA,
@@ -90,27 +96,30 @@ class ProteinSearchController extends Controller
 						'p1id' => $p->p1id,
 						'p2id' => $p->p2id,
 					);
-					$actor_ids[] = $p->p1id;
-					$actor_ids[] = $p->p2id;
+					// we collect the interactor IDs and protein names (and make them unique by adding by index!) to get the localizations and synonyms
+					$actor_ids[$p->p1id] = $p->p1id;
+					$actor_ids[$p->p2id] = $p->p2id;
+					$protein_names[$p->protA] = $p->protA;
+					$protein_names[$p->protB] = $p->protB;
 				}
 				
 				// CONFIDENCE SCORES
 				//die(var_dump( $T['ls'] ));
 				
 				// INTERACTIONS 2 - FILL THE INTERACTION SKELETON WITH DETAILS
-				// two-step interaction processing is necessary because we have to display the large localizations even when no other details are shown
-				// also it is much faster and scales better! (the cost is elegancy...)
-				// (e.g. 10 -> 20 rows in the result set and still the same number of queries...)
 				if (!empty($actor_ids))
 				{
 					// localizations: large & small
 					$prot_loc_data = $this->getProteinLocalizations($a_protein_ids);
 					//die(var_dump($prot_loc_data));
+					$synonyms = $this->getProteinSynonyms($protein_names, $species);
 					
 					foreach ($T['ls'] as $iid => $data) // notice that we don't touch the original data!
 					{
 						$p1id = $data['p1id'];
 						$p2id = $data['p2id'];
+						$p1name = $data['protA'];
+						$p2name = $data['protB'];
 						
 						// large loc(s) for protein A
 						if (isset($prot_loc_data[$p1id])) {
@@ -139,17 +148,11 @@ class ProteinSearchController extends Controller
 						}
 						
 						// synonyms
-						
+						if (isset($synonyms[$p1name]))
+							$T['ls'][$iid]['protA_synonyms'] = join(', ', $synonyms[$p1name]);
+						if (isset($synonyms[$p2name]))
+							$T['ls'][$iid]['protB_synonyms'] = join(', ', $synonyms[$p2name]);
 					
-						/*$T['ls'][] = array(
-							'protA' => $p['protA']. ' | '.$p['p1id'],
-							'locA' => '',//$prot_loc_data[$p['p1id']][], (empty($p['locAId']) ? 'N/A' : $locs->getHumanReadableLocalizationById($p['locAId']))
-							//'locASrcUrl' => (empty($p['locAId']) ? '' : $this->linkToPubmed($p['locASrc'])),
-							'protB' => $p['protB']. ' | '.$p['p2id'],
-							'locB' => (empty($p['locBId']) ? 'N/A' : $locs->getHumanReadableLocalizationById($p['locBId'])),
-							//'locBSrcUrl' => (empty($p['locBId']) ? '' : $this->linkToPubmed($p['locBSrc']))'',
-							'iid' => $p['iid']
-						);*/
 					}
 				}
 				else
@@ -209,7 +212,12 @@ class ProteinSearchController extends Controller
 			);
 		}
 		
-		$sql_pl = 'SELECT DISTINCT ptl.proteinId, ptl.localizationId AS locId, ptl.sourceDb, ptl.pubmedId, st.name AS exp_sys_type FROM ProteinToLocalization ptl, ProtLocToSystemType pltst, SystemType st WHERE ptl.id=pltst.protLocId AND pltst.systemTypeId=st.id AND (proteinId='.join(' OR proteinId=', $protein_ids).');';
+		$sql_pl = 'SELECT DISTINCT
+				ptl.proteinId, ptl.localizationId AS locId, ptl.sourceDb, ptl.pubmedId, st.name AS exp_sys_type
+			FROM ProteinToLocalization ptl, ProtLocToSystemType pltst, SystemType st
+			WHERE ptl.id=pltst.protLocId
+				AND pltst.systemTypeId=st.id
+				AND (proteinId='.join(' OR proteinId=', $protein_ids).');';
 		$this->verbose ? $this->verbose_log[] = $sql_pl : '';
 		
 		if (!$pl = $this->DB->executeQuery($sql_pl))
@@ -240,11 +248,33 @@ class ProteinSearchController extends Controller
 	
 	
 	// GET THE SYNONYMS OF PROTEINS BY THEIR COMPPI IDS
-	// @var array the list of comppi ids of proteins
-	private function getProteinSynonyms($protein_ids)
+	// @var array the list of names of proteins
+	// @var array list of species
+	private function getProteinSynonyms($protein_names, $species)
 	{
-		// @ TODO: because synonyms can be selected only by protein NAMES, this is not implemented...
-		return array();
+		foreach($protein_names AS $name)
+			$cond[] = "(proteinNameA='".mysql_real_escape_string($name)
+				 ."' OR proteinNameB='".mysql_real_escape_string($name)."')";
+		
+		$sql_syn = "SELECT proteinNameA, namingConventionA, proteinNameB, namingConventionB
+			FROM ProteinNameMap
+			WHERE (".join(" OR ", $cond).")"
+			  ." AND (specieId=".join(' OR specieId=', $species).")";
+		$this->verbose ? $this->verbose_log[] = $sql_syn : '';
+
+		if (!$syn = $this->DB->executeQuery($sql_syn))
+			throw new \ErrorException('ProteinNameMap query (in getProteinSynonyms) failed!');
+		
+		$protein_synonyms = array();
+		while ($s = $syn->fetchObject())
+		{
+			if (in_array($s->proteinNameA, $protein_names) ) {
+				$protein_synonyms[$s->proteinNameA][] = $s->proteinNameB.' ('.$s->namingConventionB.')';
+			} else {
+				$protein_synonyms[$s->proteinNameB][] = $s->proteinNameA.' ('.$s->namingConventionA.')';
+			}
+		}
+		return $protein_synonyms;
 	}
 
 	

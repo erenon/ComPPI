@@ -26,7 +26,7 @@
 		{% endfor %}
 
 		<br />
-		<input class="btn btn_submit" type="submit" name="fProtSearchSubmit" value="Submit Search" />
+		<input class="btn btn_submit" type="submit" name="fProtSearchSubmit" id="fProtSearchSubmit" value="Submit Search" />
 	</form>
 	
 	{% if result_msg %}
@@ -36,13 +36,14 @@
 	{% if ls %}
 	{{ pagination.pages(pagination_max_page, pagination_curr_page, pagination_base_url) }}
 
-	<table id="ProteinSearchResultsTbl" class="hovered_list" valign="top">
-		<tr class="not_hovered_line">
+	<table id="ProteinSearchResultsTbl">
+		<tr id="ProtSearchHeader">
 			<th id="ProteinSearchThLocA">Localization A</th>
 			<th id="ProteinSearchThProtA">Protein A</th>
 			<th id="ProteinSearchThCS" class="protSearchMidLine">CS</th>
 			<th id="ProteinSearchThProtB" class="protSearchMidLine">Protein B</th>
-			<th id="ProteinSearchThLocB">Localization B</th><th>Details</th></tr>
+			<th id="ProteinSearchThLocB">Localization B</th><th>Details</th>
+		</tr>
 		{% for p in ls %}
 		<tr>
 			<td>{% if p.locA['-'] is defined %}
@@ -65,35 +66,38 @@
 			<td>{% if (p.protA_small_locs is defined or p.protB_small_locs is defined) %}<a href="{{ path('ComppiProteinSearchBundle_interaction') }}/{{ p.iid }}" class="protSearchDetailsLink" id="{{ p.iid }}">Details</a>{% else %}N/A{% endif %}</td>
 		</tr>
 		<tr class="protSearchDetailsBox">
-			<td colspan="6">Details of '{{ p.protA }}':
-				<p>Name:</p>
-				<p>Synonyms:</p>
+			<td colspan="6">
+			<h3>Details of '{{ p.protA }}':</h3>
+				<p><span class="protSearchDetailName">Full name:</span> </p>
+				<p><span class="protSearchDetailName">Synonyms:</span> {% if p.protA_synonyms is defined %}{{ p.protA_synonyms }} {% else %} N/A {% endif %}</p>
 				{% if p.protA_small_locs is defined %}
-				<p>Localizations:
+				<p><span class="protSearchDetailName">Localizations:</span>
 				<table>
-				{% for i,sLocA in p.protA_small_locs %}
+					{% for i,sLocA in p.protA_small_locs %}
 					<tr>
 					<td>{{ p.protA_small_locs[i] }}</td>
 					<td>{{ p.protA_loc_exp_types[i] }}</td>
 					<td>{% if p.protA_source_dbs[i] %} {{ p.protA_source_dbs[i] }} {% endif %}</td>
-					<td>{% if p.protA_pubmed_links[i] %} <a href="{{ p.protA_pubmed_links[i] }}" target="_blank" class="btn btn_src">PubMed</a> {% endif %}</td>
+					<td>{% if p.protA_pubmed_links[i] %} <a href="{{ p.protA_pubmed_links[i] }}" target="_blank">PubMed</a> {% endif %}</td>
 					</tr>
-				{% endfor %}
+					{% endfor %}
 				</table></p>
-			{% endif %}
-			<br /><br />Details of '{{ p.protB }}':
-			{% if p.protB_small_locs is defined %}
-			<br />Localizations:
+				{% endif %}
+			<h3>Details of '{{ p.protB }}':</h3>
+				<p><span class="protSearchDetailName">Full name:</span> </p>
+				<p><span class="protSearchDetailName">Synonyms:</span> {% if p.protB_synonyms is defined %}{{ p.protB_synonyms }} {% else %} N/A {% endif %}</p>
+				{% if p.protB_small_locs is defined %}
+				<p><span class="protSearchDetailName">Localizations:</span>
 				<table>
-				{% for i,sLocB in p.protB_small_locs %}
+					{% for i,sLocB in p.protB_small_locs %}
 					<tr>
 					<td>{{ p.protB_small_locs[i] }}</td>
 					<td>{{ p.protB_loc_exp_types[i] }}</td>
 					<td>{% if p.protB_source_dbs[i] %} {{ p.protB_source_dbs[i] }} {% endif %}</td>
-					<td>{% if p.protB_pubmed_links[i] %} <a href="{{ p.protB_pubmed_links[i] }}" target="_blank" class="btn btn_src">PubMed</a> {% endif %}</td>
+					<td>{% if p.protB_pubmed_links[i] %} <a href="{{ p.protB_pubmed_links[i] }}" target="_blank">PubMed</a> {% endif %}</td>
 					</tr>
-				{% endfor %}
-				</table>
+					{% endfor %}
+				</table></p>
 			{% endif %}
 			</td>
 		</tr>
