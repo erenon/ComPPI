@@ -10,11 +10,9 @@
 	{% if verbose_log %}<p><pre>{{ verbose_log }}</pre></p>{% endif %}
 	
 	<form id="ProteinSearchForm" action="protein_search" method="post">
-		<label for="fProtSearchKeyword">Protein Name:</label>
+		<label for="fProtSearchKeyword" id="fProtSearchKeywordLabel">Protein Name:</label>
 		<input type="text" name="fProtSearchKeyword" id="fProtSearchKeyword" value="{{ keyword }}" />
-		<br />
 		
-		<label>Species:</label>
 		{% for s in species_list %}
 		<input type="radio" name="fProtSearchSpecies[{{ s.abbreviation }}]" id="fProtSearch{{ s.abbreviation }}" class="btn"
 			{% if requested_species[s.abbreviation] is defined %}

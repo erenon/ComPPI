@@ -55,13 +55,15 @@ $(document).ready(function(){
 	});
 	
 	// Protein Search - Interaction Details
-	$(".protSearchDetailsBox").hide();
+	$("#ProteinSearchResultsTbl > tbody > tr:gt(0)").not(".protSearchDetailsBox").filter(":odd").addClass("striped_tbl_row");
+	$("#ProteinSearchResultsTbl > tbody > tr.protSearchDetailsBox").filter(":odd").addClass("striped_tbl_row");
+	$(".protSearchDetailsBox > td").hide();
 	$(".protSearchDetailsLink").click(function(){
-		$(this).parents("tr").next("tr").toggle();
-		if ($(this).parents("tr").hasClass("protSearchDetailsOpened")) {
-			$(this).parents("tr").removeClass("protSearchDetailsOpened").next("tr").removeClass("protSearchDetailsOpened");
+		$(this).parents("tr").next("tr").find("td:first").slideToggle(600);
+		if ($(this).parents("tr").hasClass("protSearchRowOpened")) {
+			$(this).parents("tr").removeClass("protSearchRowOpened").next("tr").removeClass("protSearchDetailsOpened");
 		} else {
-			$(this).parents("tr").addClass("protSearchDetailsOpened").next("tr").addClass("protSearchDetailsOpened");
+			$(this).parents("tr").addClass("protSearchRowOpened").next("tr").addClass("protSearchDetailsOpened");
 		}
 		return false;
 	});
