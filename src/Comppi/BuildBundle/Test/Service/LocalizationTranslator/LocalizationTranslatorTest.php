@@ -115,10 +115,6 @@ class LocalizationTranslatorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetLocalizationTree() {
-        $this->markTestIncomplete('Implement this');
-    }
-
     public function testGetLargelocs() {
         $this->assertEquals(
             array(
@@ -160,11 +156,12 @@ class LocalizationTranslatorTest extends \PHPUnit_Framework_TestCase
             'macromolecular-complex',
             $this->translator->getLargelocById(10)
         );
+    }
 
-        $this->assertEquals(
-            false,
-            $this->translator->getLargelocById(23)
-        );
-
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInvalidgetLargelocById() {
+        $this->translator->getLargelocById(23);
     }
 }
