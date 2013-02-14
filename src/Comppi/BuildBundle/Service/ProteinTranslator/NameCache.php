@@ -16,15 +16,11 @@ class NameCache
      * @param int $specie
      * @param string $namingConvention
      * @param string $name
-     * @return int|bool ComPPI id if cached or false on cache miss
+     * @return array|bool ComPPI id if cached or false on cache miss
      */
-    public function getComppiId($specie, $namingConvention, $name) {
-        if (isset($this->cache[$specie])) {
-            if (isset($this->cache[$specie][$namingConvention])) {
-                if (isset($this->cache[$specie][$namingConvention][$name])) {
-                    return $this->cache[$specie][$namingConvention][$name];
-                }
-            }
+    public function getComppiIds($specie, $namingConvention, $name) {
+        if (isset($this->cache[$specie][$namingConvention][$name])) {
+            return $this->cache[$specie][$namingConvention][$name];
         }
 
         return false;
@@ -36,9 +32,9 @@ class NameCache
      * @param int $specie
      * @param string $namingConvention
      * @param string $name
-     * @param string $comppiId
+     * @param array $comppiIds
      */
-    public function setComppiId($specie, $namingConvention, $name, $comppiId) {
+    public function setComppiIds($specie, $namingConvention, $name, $comppiIds) {
         if (!isset($this->cache[$specie])) {
             if (count($this->cache) >= self::SPECIE_SIZE) {
                 array_shift($this->cache);
@@ -55,6 +51,6 @@ class NameCache
             $this->cache[$specie][$namingConvention] = array();
         }
 
-        $this->cache[$specie][$namingConvention][$name] = $comppiId;
+        $this->cache[$specie][$namingConvention][$name] = $comppiIds;
     }
 }

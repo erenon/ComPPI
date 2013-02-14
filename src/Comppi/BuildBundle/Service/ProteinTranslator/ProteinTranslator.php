@@ -41,29 +41,35 @@ class ProteinTranslator
     }
 
     /**
-     * Gets an existing ComppiId
+     * Gets matching ComppiIds
      *
      * @param string $namingConvention
      * @param string $originalName
      * @param int $specieId
-     * @return int CommpiId
+     * @return array CommpiId
      */
-    public function getComppiId($namingConvention, $originalName, $specieId) {
-        $comppiId = $this->nameCache->getComppiId($specieId, $namingConvention, $originalName);
-        if ($comppiId !== false) {
-            return $comppiId;
+    public function getComppiIds($namingConvention, $originalName, $specieId) {
+        $comppiIds = $this->nameCache->getComppiIds($specieId, $namingConvention, $originalName);
+        if ($comppiIds !== false) {
+            return $comppiIds;
         }
 
-        $translation = $this->getStrongestTranslation($namingConvention, $originalName, $specieId);
-        $comppiId = $this->getExistingComppiId($translation[0], $translation[1], $specieId);
+        $translations = $this->getStrongestTranslations($namingConvention, $originalName, $specieId);
 
-        if ($comppiId === false) {
-            $comppiId = $this->insertProtein($translation[0], $translation[1], $specieId);
+        $comppiIds = array();
+        foreach ($translations as $translation) {
+            $comppiId = $this->getExistingComppiId($translation[0], $translation[1], $specieId);
+
+            if ($comppiId === false) {
+                $comppiId = $this->insertProtein($translation[0], $translation[1], $specieId);
+            }
+
+            $comppiIds[] = $comppiId;
         }
 
-        $this->nameCache->setComppiId($specieId, $namingConvention, $originalName, $comppiId);
+        $this->nameCache->setComppiIds($specieId, $namingConvention, $originalName, $comppiIds);
 
-        return $comppiId;
+        return $comppiIds;
     }
 
     /**
@@ -73,7 +79,7 @@ class ProteinTranslator
      *
      * @return array 0 => naming convention; 1 => protein name
      */
-    private function getStrongestTranslation($namingConvention, $proteinName, $specie) {
+    private function getStrongestTranslations($namingConvention, $proteinName, $specie) {
         /**
          * @var \Doctrine\DBAL\Driver\Statement
          */
@@ -84,16 +90,16 @@ class ProteinTranslator
         $translateStatement->execute(array($specie, $namingConvention, $proteinName));
         $translatedNames = $translateStatement->fetchAll();
 
-        // get strongest translated name
-        // init strongest translation as the current one
-        $strongestTranslation = array($namingConvention, $proteinName);
+        // init strongest translation order to the current order
         $strongestOrder = array_search($namingConvention, $this->namingConventionOrder);
 
         // convention not found in the order
-        // the fixed weakest order (100) is necessary
         if ($strongestOrder === false) {
-            $strongestOrder = 100;
+            $strongestOrder = count($this->namingConventionOrder) + 1;
         }
+
+        // get strongest translated name
+        $translations = array();
 
         foreach ($translatedNames as $translatedName) {
             $translatedNameOrder = array_search(
@@ -101,30 +107,52 @@ class ProteinTranslator
                 $this->namingConventionOrder
             );
 
-            // <= : allow conventionA -> conventionA style maps
-            if ($translatedNameOrder <= $strongestOrder) {
+            if ($translatedNameOrder < $strongestOrder) {
+                // stronger translation found
                 $strongestOrder = $translatedNameOrder;
-                $strongestTranslation = array(
+
+                // discard previous translations
+                $translations = array();
+
+                // add translation
+                $translations[] = array(
                     $translatedName['namingConventionB'],
                     $translatedName['proteinNameB']
                 );
-            }
+
+            } else if ($translatedNameOrder == $strongestOrder) {
+                // == : allow conventionA -> conventionA style maps
+                // this is required because of the UniProtKB-AC secondary names
+
+                // add translation
+                $translations[] = array(
+                    $translatedName['namingConventionB'],
+                    $translatedName['proteinNameB']
+                );
+
+            } // else: translation is weaker, do nothing (discard)
         }
 
-        if (
-            $strongestTranslation[0] != $namingConvention // stronger translation found
-        ||  $strongestTranslation[1] != $proteinName
-        ) {
-            // try to get an even more stronger one
-            // using recursion
-            return $this->getStrongestTranslation(
-                $strongestTranslation[0],
-                $strongestTranslation[1],
-                $specie
-            );
+        if (empty($translations) === false) { // translation found
+            // try to get stronger translations using recursion
+            $strongerTranslations = array();
+
+            foreach ($translations as $translation) {
+                $strongerTranslations = array_merge(
+                    $strongerTranslations,
+                    $this->getStrongestTranslations(
+                        $translation[0],
+                        $translation[1],
+                        $specie
+                    )
+                );
+            }
+
+            return $strongerTranslations;
         } else {
             // no stronger translation found
-            return $strongestTranslation;
+            // return the one we got
+            return array(array($namingConvention, $proteinName));
         }
     }
 
@@ -141,10 +169,6 @@ class ProteinTranslator
 
         if ($getIdStatement->rowCount() > 0) {
             $result = $getIdStatement->fetch();
-
-            /** @TODO remove next debug info line */
-            //echo 'Existing comppiid found: ' . $result['id'] . "\n";
-
             return $result['id'];
         } else {
             return false;
