@@ -4,3 +4,9 @@ ComppiProteinSearchBundle_proteinsearch:
     requirements:
         current_page:  \d+
         protein_name: "[^/]*"
+
+ComppiProteinSearchBundle_interaction:
+    pattern:  /protein_search/interaction/{id}
+    defaults: { _controller: ComppiProteinSearchBundle:ProteinSearch:interactionDetails, id: '' }
+    requirements:
+        id:  \d+

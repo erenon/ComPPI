@@ -28,10 +28,11 @@ body  {
 }
 #Footer { position: fixed; bottom: 0; width: 1000px; height: 50px; padding-top: 10px; background: #fff; border-top: 1px solid #404040; margin: 1em auto 0 auto; text-align: center; }
 
-a { color: #007000; text-decoration: none; font-weight: bold; }
+a { color: #207000; text-decoration: none; font-weight: bold; }
 a:hover { color: #CC0000; }
 a:visited { text-decoration: underline; }
 .hovered_listline { background-color: #e0e0e0; }
+.striped_tbl_row { background-color: #DADAE5; }
 li { margin: 0.5em 0; }
 
 .btn, .btn_green {
@@ -66,14 +67,7 @@ li { margin: 0.5em 0; }
 .infobtn a:hover { color: #fff; }
 .pagination { list-style-type: none; margin: 0; padding: 0; width: 100%; text-align: center; }
 .pagination li { display: inline; margin: 0 4px; font-size: 1.2em; }
-.pagination li.paginationCurrentPage a {
-	margin: 0;
-	padding: 0 4px;
-	font-size: 1.5em; color: #fff; background-color: #007000;
-	border: 1px solid #E0DFDC;
-	border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-khtml-border-radius: 5px; }
+.pagination li.paginationCurrentPage a { color: #fff; }
 
 label { display: block; float: left; width: 200px; margin: 2px; }
 .radioButtonLabel { float: none; width: auto; display: inline; }
@@ -90,9 +84,11 @@ input, select, textarea {
 /*input[type='checkbox'] { padding: 8px; }*/
 
 /* PROTEIN SEARCH */
-#ProteinSearchForm { text-align: left; }
-#fProtSearchKeyword { width: 412px; }
+#ProteinSearchForm { text-align: center; }
+#fProtSearchKeywordLabel { width: 120px; }
+#fProtSearchKeyword { width: 320px; }
 #fProtSearchhsBtn, #fProtSearchdmBtn, #fProtSearchceBtn, #fProtSearchscBtn { font-style: italic; }
+#fProtSearchSubmit {  }
 #protSearchResultMsg { text-align: center; font-weight: bold; }
 #ProteinSearchResultsTbl {
 	margin-top: 1em;
@@ -100,13 +96,38 @@ input, select, textarea {
 	border: 0;
 	border-collapse: collapse;
 	text-align: center;
+	vertical-align: top;
 }
 #ProteinSearchResultsTbl th {
 	font-weight: bold;
-	border-bottom: 1px solid #909090;
+	border-bottom: 2px solid #c0c0c0;
+	border-top: 0;
 }
-#ProteinSearchResultsTbl td { padding: 0 5px; }
+#ProteinSearchThLocA, #ProteinSearchThLocB { width: 13%; }
+#ProteinSearchThProtA, #ProteinSearchThProtB { width: 30%; }
+#ProteinSearchThCS { width: 5%; }
+#ProteinSearchResultsTbl #ProtSearchHeader { background-color: #C8C8E6; }
+#ProteinSearchResultsTbl tr { border-top: 1px dotted #909090; }
+#ProteinSearchResultsTbl tr.not_hovered_line { border-top: 0; }
+#ProteinSearchResultsTbl td { padding: 0; vertical-align: top; }
+#ProteinSearchResultsTbl table { /* details tables in the main result set*/
+	margin: 0 1em;
+	width: 90%;
+	border: 0;
+	border-collapse: collapse;
+	text-align: center;
+}
 .protSearchMidLine { border-left: 1px solid #909090; }
+#ProteinSearchResultsTbl tr.protSearchDetailsBox { border-top: 0; text-align: left; }
+#ProteinSearchResultsTbl tr.protSearchDetailsBox td { padding: 2px 1em; }
+#ProteinSearchResultsTbl tr.protSearchDetailsBox h3 { font-size: 1em; margin: 0; padding: 1.5em 0 0 0; }
+#ProteinSearchResultsTbl tr.protSearchDetailsBox .protSearchDetailName { font-weight: bold; }
+#ProteinSearchResultsTbl tr.protSearchDetailsBox p { padding: 0 0.3em; margin: 0; }
+#ProteinSearchResultsTbl tr.protSearchDetailsBox td table tr {	border: 0; }
+#ProteinSearchResultsTbl tr.protSearchDetailsBox td table td { margin: 0; padding: 0; }
+.protSearchRowOpened { border: 1px dotted #207000; border-bottom: 0; }
+.protSearchDetailsOpened { border: 1px dotted #207000; border-top: 0; }
+
 
 /* DOWNLOAD DB */
 #DownloadForm { text-align: left; margin-top: 1em; }
