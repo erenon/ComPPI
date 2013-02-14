@@ -67,32 +67,33 @@ class LocalizationStatController extends Controller
      * @Template()
      */
     public function majorlocAction() {
-        $majorlocGo = array (
-            'GO:0043226',
-    		'GO:0005739',
-    		'GO:0005634',
-    		'GO:0005576',
-    		'GO:secretory_pathway',
-    		'GO:0016020'
-        );
-
         $translator = $this->get('comppi.build.localizationTranslator');
-        $majorLocs = array();
-        foreach ($majorlocGo as $go) {
-            $id = $translator->getIdByLocalization($go);
-            $loc = array(
-                'go' => $go,
-                'id' => $id,
-                'humanReadable' => $translator->getHumanReadableLocalizationById($id)
-            );
+        $largelocs = $translator->getLargelocs();
 
-            $majorLocs[] = $loc;
+        foreach ($largelocs as &$largeloc) {
+            foreach ($largeloc as $key => $id) {
+                $child = array();
+                $child['localizationId'] = $id;
+                try {
+                    $child['localizationName'] =
+                        $translator->getHumanReadableLocalizationById($id);
+                } catch (\InvalidArgumentException $e) {
+                    $child['localizationName'] = 'N/A';
+                }
+
+                try {
+                    $child['goAccession'] =
+                        $translator->getLocalizationById($id);
+                } catch (\InvalidArgumentException $e) {
+                    $child['goAccession'] = 'N/A';
+                }
+
+                $largeloc[$key] = $child;
+            }
         }
 
-        usort($majorLocs, array($this, 'sortByIdCallback'));
-
-        return array (
-            'majorLocs' => $majorLocs
+        return array(
+            'largelocs' => $largelocs
         );
     }
 
