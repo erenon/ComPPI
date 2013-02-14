@@ -25,6 +25,8 @@
         <parameter key="comppi.build.systemTypeTranslator.testSystemFile">%kernel.root_dir%/../src/Comppi/BuildBundle/Test/databases/systemtypes/system.csv</parameter>
         
         <parameter key="comppi.build.confidenceScore.class">Comppi\BuildBundle\Service\ConfidenceScore\ConfidenceScore</parameter>
+        
+        <parameter key="comppi.build.gexfWriter.class">Comppi\BuildBundle\Service\GexfWriter\GexfWriter</parameter>
     </parameters>
 
     <services>
@@ -54,6 +56,9 @@
         <service id="comppi.build.confidenceScore" class="%comppi.build.confidenceScore.class%">
             <argument type="service" id="doctrine.orm.default_entity_manager" />
             <argument type="service" id="comppi.build.localizationTranslator" />
+        </service>
+        
+        <service id="comppi.build.gexfWriter" class="%comppi.build.gexfWriter.class%">
         </service>
     </services>
     
