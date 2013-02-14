@@ -24,7 +24,7 @@
     <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}
     
-    <meta id="histogram-path" name="histogramPath" content="http://localhost/comppi/web/dbreleases/stable/interactionHistogram.json" />
+    <meta id="histogram-path" name="histogramPath" content="{{ asset('dbreleases/stable/interactionHistogram.json') }}" />
  
 {% endblock %}
 
