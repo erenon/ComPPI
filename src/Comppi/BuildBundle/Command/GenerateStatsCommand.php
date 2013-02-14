@@ -45,15 +45,27 @@ class GenerateStatsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output) {
         $histogram = array();
         foreach ($this->species->getDescriptors() as $specie) {
-            $histogram[$specie->id] =
-                $this->statistics->getInteractionHistogram(10, $specie->id);
+            $specieStat = $this->statistics->getInteractionHistogram(10, $specie->id);
+
+            foreach ($specieStat as $index => $column) {
+                $label = ($column['min'] == $column['max'])
+                    ? $column['min']
+                    : $column['min'] . " - ". $column['max'];
+
+                $specieStat[$index] = array(
+                	'label' => $label,
+                    'values' => $column['count']
+                );
+            }
+
+            $histogram[$specie->id] = $specieStat;
         }
 
         $this->checkBuildDir();
 
         file_put_contents(
             $this->buildPath . DIRECTORY_SEPARATOR . 'interactionHistogram.json',
-            json_encode($histogram, JSON_FORCE_OBJECT)
+            json_encode($histogram, JSON_PRETTY_PRINT)
         );
     }
 
