@@ -15,6 +15,7 @@
             <tr>
                 <td class="tcell-numeric">ID</td>
                 <td>{% trans %}Localization{% endtrans %}</td>
+                <td>{% trans %}GO Accession{% endtrans %}</td>
                 <td class="tcell-numeric">{% trans %}Protein Count{% endtrans %}</td>
             </tr> 
         </thead>
@@ -23,6 +24,7 @@
             <tr>
                 <td class="tcell-numeric">{{ localization.localizationId }}</td>
                 <td>{{ localization.localizationName }}</td>
+                <td>{{ localization.goAccession }}</td>
                 <td class="tcell-numeric">{{ localization.proteinCount }}</td>
             </tr>    
     {% else %}

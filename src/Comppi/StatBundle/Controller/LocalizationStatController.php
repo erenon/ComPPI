@@ -37,11 +37,19 @@ class LocalizationStatController extends Controller
             // transform localizationId to localization name
             foreach ($specieStats as $key => $stat) {
                 try {
-                    $specieStats[$key]['localizationName'] = $translator->getLocalizationById(
+                    $specieStats[$key]['localizationName'] = $translator->getHumanReadableLocalizationById(
                         $stat['localizationId']
                     );
                 } catch (\InvalidArgumentException $e) {
                     $specieStats[$key]['localizationName'] = 'N/A';
+                }
+
+                try {
+                    $specieStats[$key]['goAccession'] = $translator->getLocalizationById(
+                        $stat['localizationId']
+                    );
+                } catch (\InvalidArgumentException $e) {
+                    $specieStats[$key]['goAccession'] = 'N/A';
                 }
             }
 
