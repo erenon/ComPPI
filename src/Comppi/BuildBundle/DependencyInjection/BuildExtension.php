@@ -46,6 +46,8 @@ class BuildExtension extends Extension
         }
 
         $container->setParameter('comppi.build.databaseProvider.databaseRootDir', $databaseRootPath);
+
+        $container->setParameter('comppi.build.buildPath', $config['build_path']);
     }
 
     public function getNamespace()

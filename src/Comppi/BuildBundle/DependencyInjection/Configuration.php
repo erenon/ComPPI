@@ -29,6 +29,10 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('database_path')
                 ->defaultValue('src/Comppi/BuildBundle/Resources/databases')
                 ->end()
+
+                ->scalarNode('build_path')
+                ->defaultValue('/var/tmp/comppi-build')
+                ->end()
             ->end()
         ;
 
