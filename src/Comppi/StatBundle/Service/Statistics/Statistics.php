@@ -95,4 +95,53 @@ class Statistics
 
         return $mapStats;
     }
+
+    public function getInteractionHistogram($columnCount, $specieId) {
+        $this->connection->executeQuery(
+            'CREATE TEMPORARY TABLE _InteractionCount AS (' .
+                'SELECT COUNT(Interaction.id) as interactionCount FROM Protein' .
+                ' LEFT JOIN Interaction ON Protein.id = Interaction.actorAid OR Protein.id = Interaction.actorBid' .
+                ' WHERE Protein.specieId = ?' .
+                ' GROUP BY Protein.id' .
+            ');',
+            array($specieId)
+        );
+
+        // get highest interaction count -> $countMax
+        $selCountMax = $this->connection->executeQuery(
+            'SELECT MAX(interactionCount) as max FROM _InteractionCount;'
+        );
+        $countMax = $selCountMax->fetchColumn();
+
+        // calculate bin size
+        $binSize = floor($countMax / $columnCount);
+
+        // create bins, init bin table with (0,0)
+        $this->connection->executeQuery(
+        	'CREATE TEMPORARY TABLE _InteractionCountBin AS (SELECT 0 as min, 0 as max);'
+        );
+
+        $binMin = 1;
+        $insertBin = $this->connection->prepare('INSERT INTO _InteractionCountBin VALUES (?, ?);');
+        while ($binMin < $countMax) {
+            $insertBin->execute(array($binMin, $binMin + $binSize));
+            $binMin += ($binSize + 1);
+        }
+
+        // get bins
+        $selBins = $this->connection->executeQuery(
+        	'SELECT bins.*, SUM(interactionCount.interactionCount IS NOT NULL) AS count' .
+            ' FROM _InteractionCountBin bins' .
+            ' LEFT JOIN _InteractionCount interactionCount ON' .
+            ' interactionCount.interactionCount BETWEEN bins.min AND bins.max' .
+            ' GROUP BY bins.min;'
+        );
+
+        $histogram = $selBins->fetchAll(\PDO::FETCH_ASSOC);
+
+        $this->connection->executeQuery('DROP TABLE _InteractionCountBin');
+        $this->connection->executeQuery('DROP TABLE _InteractionCount');
+
+        return $histogram;
+    }
 }
