@@ -54,7 +54,7 @@ class GenerateStatsCommand extends ContainerAwareCommand
 
                 $specieStat[$index] = array(
                 	'label' => $label,
-                    'values' => $column['count']
+                    'values' => (int)$column['count']
                 );
             }
 
@@ -65,7 +65,7 @@ class GenerateStatsCommand extends ContainerAwareCommand
 
         file_put_contents(
             $this->buildPath . DIRECTORY_SEPARATOR . 'interactionHistogram.json',
-            json_encode($histogram, JSON_PRETTY_PRINT)
+            json_encode($histogram)
         );
     }
 
