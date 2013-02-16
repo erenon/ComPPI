@@ -8,10 +8,13 @@
 
 <form action="{{ path('stat_search_search') }}" method="post" {{ form_enctype(searchForm) }}>
     {{ form_errors(searchForm.searchTerm) }}
-    {{ form_widget(searchForm.searchTerm, { 'attr': {'size': 60} }) }}
-    <input type="submit" value="{% trans %}Search{% endtrans %}" />
     
-<p class="shy-text">Examples: 
+    <div class="input-append">
+    {{ form_widget(searchForm.searchTerm, { 'attr': {'class': 'input-xxlarge'} }) }}
+    <button class="btn" type="submit" value="submit">{% trans %}Search{% endtrans %}</button>
+    </div>   
+    
+<p class="muted"><span class="label label-info">Examples</span>
 {% for example in examples %}
     {% if loop.last %}
         {{ example }}

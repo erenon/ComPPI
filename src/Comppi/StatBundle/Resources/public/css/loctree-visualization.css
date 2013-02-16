@@ -1,14 +1,3 @@
-#loctree-visualization-log {
-    position:absolute;
-    top:10px;
-    font-size:1.0em;
-    font-weight:bold;
-    color:#444;
-    padding: 4px;
-    background: #F1ECDF;
-    border: 1px solid #D4C9AD;
-}
-
 #loctree-visualization {
     color:#1a1a1a;
     width:600px;
@@ -33,4 +22,5 @@
     font-size:10px;
     font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
     padding:7px;
+    text-align: center;
 }

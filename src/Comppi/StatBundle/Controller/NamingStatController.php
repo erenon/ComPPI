@@ -69,7 +69,8 @@ class NamingStatController extends Controller
         uasort($namingStats['total']['stat'], array($this, 'sortByProteinCountCallback'));
 
         return array (
-            'namingStats' => $namingStats
+            'namingStats' => $namingStats,
+            '_action' => 'distribution'
         );
     }
 
@@ -134,15 +135,8 @@ class NamingStatController extends Controller
         }
 
         return array(
-            'mapStats' => $mapStats
+            'mapStats' => $mapStats,
+            '_action' => 'mapping'
         );
-    }
-
-    /**
-     * @Route("/naming/conventions", name="stat_naming_conventions")
-     * @Template()
-     */
-    public function conventionsAction() {
-        return array();
     }
 }

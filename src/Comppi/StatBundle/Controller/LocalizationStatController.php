@@ -58,7 +58,8 @@ class LocalizationStatController extends Controller
         }
 
         return array (
-            'specieLocalizationStats' => $locStats
+            'specieLocalizationStats' => $locStats,
+            '_action' => 'index'
         );
     }
 
@@ -93,7 +94,8 @@ class LocalizationStatController extends Controller
         }
 
         return array(
-            'largelocs' => $largelocs
+            'largelocs' => $largelocs,
+            '_action' => 'majorloc'
         );
     }
 
@@ -134,7 +136,8 @@ class LocalizationStatController extends Controller
         $jsonTree = addslashes($jsonTree);
 
         return array (
-            'jsonTree' => $jsonTree
+            'jsonTree' => $jsonTree,
+            '_action' => 'visualization'
         );
     }
 

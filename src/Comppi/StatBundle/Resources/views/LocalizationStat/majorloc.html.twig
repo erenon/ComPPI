@@ -4,21 +4,17 @@
 
 {% block body %}
 
-<div class="headline">
-<h2>{% trans %}Major Localizations{% endtrans %}</h2>
-</div>
+<h1>{% trans %}Major Localizations{% endtrans %}</h1>
 
 {% for name, children in largelocs %}
-    <div class="headline">
     <h2>{{ name }}</h2>
-    </div>
  
-    <table>
+    <table class="table table-striped table-hover table-bordered">
         <thead>
             <tr>
-                <td class="tcell-numeric">ID</td>
-                <td>{% trans %}Localization{% endtrans %}</td>
-                <td>{% trans %}GO Accession{% endtrans %}</td>
+                <th class="tcell-numeric">ID</th>
+                <th>{% trans %}Localization{% endtrans %}</th>
+                <th>{% trans %}GO Accession{% endtrans %}</th>
             </tr> 
         </thead>
         <tbody>   
@@ -29,10 +25,11 @@
             <td>{{ child.goAccession }}</td>
         </tr>    
     {% else %}
-        <div class="message message-notice">
-            {% trans %}
-                No localization found
-            {% endtrans %}
+        <div class="alert alert-info">
+        <h4>{% trans %}Not found{% endtrans %}</h4>
+        {% trans %}
+            No localization found
+        {% endtrans %}
         </div>
     {% endfor %}
         </tbody>

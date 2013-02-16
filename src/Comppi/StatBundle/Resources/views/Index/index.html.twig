@@ -1,0 +1,34 @@
+{% extends 'StatBundle::base.html.twig' %}
+
+{% block title %}ComPPI Stat{% endblock %}
+
+{% block body %}
+
+      <div class="jumbotron">
+        <h1>ComPPI Statistics</h1>
+        <p class="lead">Take a look behind the scenes of a <span class="text-success">Com</span>partmentalized <span class="text-success">P</span>rotein-<span class="text-success">P</span>rotein <span class="text-success">I</span>nteraction databse, 
+        check out statistics and search data or download the full database.</p>
+        <a class="btn btn-large btn-success" href="{{ path('stat_download_index') }}"><i class="icon-download-alt icon-white"></i>Download</a>
+      </div>
+
+      <hr>
+
+      <div class="row-fluid">
+        <div class="span4">
+          <h2>Localizations</h2>
+          <p>Check out the <a href="{{ path('stat_localization_index') }}">Distribution</a> of proteins amongst the localizations, 
+          take a look at the visualization of the <a href="{{ path('stat_localization_visualization') }}">Localization Tree</a>
+          or check the <a href="{{ path('stat_localization_majorloc') }}">Major Localizations</a>.</p>
+        </div>
+        <div class="span4">
+          <h2>Mapping</h2>
+          <p>On the <a href="{{ path('stat_naming_distribution') }}">Naming Conventions page</a>, the distribution of the various conventions are shown and the corresponding proteins of each convention can be listed also using the <em>proteins</em> link.</p>
+          <p>To check the maps used to translate one naming convention into another while building the database, visit the <a href="{{ path('stat_naming_mapping') }}">Mapping page</a>.
+       </div>
+        <div class="span4">
+          <h2>Get involved</h2>
+          <p>Do you want to get a closer look? On the <a href="{{ path('stat_download_index') }}">Download page</a> you can access to the raw MySQL database export, to the Gephi compatible interaction networks or event to the <a href="https://github.com/erenon/ComPPI">source code</a>.</p>
+        </div>
+      </div>
+
+{% endblock %}

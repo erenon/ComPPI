@@ -26,9 +26,7 @@
 
 {% block body %}
 
-<div class="headline">
-<h2>{% trans %}Loctree visualization{% endtrans %}</h2>
-</div>
+<h1>{% trans %}Loctree visualization{% endtrans %} <small id="loctree-visualization-log"></small></h1>
 
 {% autoescape false %}
 <script>
@@ -39,6 +37,5 @@ function getLocalizationTree() {
 {% endautoescape %}
 
 <div id="loctree-visualization"></div>
-<div id="loctree-visualization-log"></div>
 
 {% endblock %}

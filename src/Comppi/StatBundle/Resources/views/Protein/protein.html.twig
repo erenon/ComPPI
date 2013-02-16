@@ -28,18 +28,23 @@
 
 {% block body %}
 
-<div class="headline">
-<h2>{{ main.name }}</h2><h3 title="{% trans %}naming convention{% endtrans %}"> - {{ main.namingConvention }}</h3>
+<h1>{{ main.name }}</h1>
+
+<span class="label label-info" title="{% trans %}Naming Convention{% endtrans %}"><i class="icon-globe icon-white"></i> {{ main.namingConvention }}</span>
+<span class="label label-success" title="{% trans %}Species{% endtrans %}"><i class="icon-tag icon-white"></i> {{ main.specie.name }}</span>
+<div class="pull-right">
+    <a href="http://www.uniprot.org/uniprot/{{ main.name }}">View in UniProtKB</a>
+    <i class="icon-chevron-right"></i>
 </div>
 
 {% if synonyms %}
     <h3>{% trans %}Synonyms{% endtrans %}</h3>
 
-    <table>
+    <table class="table table-striped table-hover table-bordered">
         <thead>
             <tr>
-                <td>{% trans %}Naming Convention{% endtrans %}</td>
-                <td>{% trans %}Protein Name{% endtrans %}</td>
+                <th>{% trans %}Naming Convention{% endtrans %}</th>
+                <th>{% trans %}Protein Name{% endtrans %}</th>
             </tr> 
         </thead>
         <tbody>
@@ -53,16 +58,16 @@
 {% endif %}
 
 {% if localizations %}
-    <h3>{% trans %}Localizations{% endtrans %}</h3>
+    <h2>{% trans %}Localizations{% endtrans %}</h2>
 
-    <table>
+    <table class="table table-striped table-hover table-bordered">
         <thead>
             <tr>
-                <td>{% trans %}Localization{% endtrans %}</td>
-                <td>{% trans %}Source database{% endtrans %}</td>
-                <td class="tcell-numeric">{% trans %}Pubmed ID{% endtrans %}</td>
-                <td>{% trans %}Details{% endtrans %}</td>
-                {# <td class="tcell-numeric">{% trans %}View in tree{% endtrans %}</td> #}
+                <th>{% trans %}Localization{% endtrans %}</th>
+                <th>{% trans %}Source database{% endtrans %}</th>
+                <th class="tcell-middle">{% trans %}Pubmed ID{% endtrans %}</th>
+                <th class="tcell-middle">{% trans %}Details{% endtrans %}</th>
+                {# <th class="tcell-middle">{% trans %}View in tree{% endtrans %}</th> #}
             </tr> 
         </thead>
         <tbody>
@@ -70,29 +75,29 @@
         <tr>
             <td>{{ localization.localizationName }}</td>
             <td>{{ localization.sourceDb }}</td>
-            <td class="tcell-numeric">{{ localization.pubmedId }}</td>
-            <td>
+            <td class="tcell-middle">{{ localization.pubmedId }}</td>
+            <td class="tcell-middle">
                 <a class="trow-dynamic-expander-link" href="{{ path('stat_protein_locdetails', {'id': localization.id }) }}" data-jstemplate="localizationDetails">
                 {% trans %}details{% endtrans %}
                 </a>
             </td>
-            {# <td class="tcell-numeric">view {{ localization.localizationId }}</td> #}
+            {# <td class="tcell-middle">view {{ localization.localizationId }}</td> #}
         </tr>    
     {% endfor %}
     </table>
 {% endif %}
 
 {% if interactions %}
-    <h3>{% trans %}Interactions{% endtrans %}</h3>
+    <h2>{% trans %}Interactions{% endtrans %}</h2>
 
-    <table>
+    <table class="table table-striped table-hover table-bordered">
         <thead>
             <tr>
-                <td>{% trans %}Naming Convention{% endtrans %}</td>
-                <td>{% trans %}Protein Name{% endtrans %}</td>
-                <td>{% trans %}Source database{% endtrans %}</td>
-                <td class="tcell-numeric">{% trans %}Pubmed ID{% endtrans %}</td>
-                <td class="tcell-numeric">{% trans %}Details{% endtrans %}</td>
+                <th>{% trans %}Naming Convention{% endtrans %}</thd>
+                <th>{% trans %}Protein Name{% endtrans %}</th>
+                <th>{% trans %}Source database{% endtrans %}</th>
+                <th class="tcell-middle">{% trans %}Pubmed ID{% endtrans %}</th>
+                <th class="tcell-middle">{% trans %}Details{% endtrans %}</th>
             </tr> 
         </thead>
         <tbody>
@@ -105,8 +110,8 @@
                 </a>
             </td>
             <td>{{ interaction.sourceDb }}</td>
-            <td class="tcell-numeric">{{ interaction.pubmedId }}</td>
-            <td class="tcell-numeric">
+            <td class="tcell-middle">{{ interaction.pubmedId }}</td>
+            <td class="tcell-middle">
                 <a class="trow-dynamic-expander-link" href="{{ path('stat_protein_intdetails', {'id': interaction.id }) }}" data-jstemplate="interactionDetails">
                 {% trans %}details{% endtrans %}
                 </a>
