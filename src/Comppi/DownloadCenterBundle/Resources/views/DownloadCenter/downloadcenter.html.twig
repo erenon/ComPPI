@@ -1,0 +1,15 @@
+{# src/Comppi/DownloadCenterBundle/Resources/views/downloadcenter.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %}ComPPI - Downloads - The Compartmentalized Protein-Protein Interaction Database{% endblock %}
+
+{% block bundlecontent %}
+<ul id="dlCenterMenu">
+	<li id="dlCenterMenu-Current"><a href="{{ path('DownloadCenterBundle_currentrelease') }}">Current Release</a></li>
+	<li id="dlCenterMenu-Previous"><a href="{{ path('DownloadCenterBundle_previousreleases') }}">Previous Releases</a></li>
+	{#<li id="dlCenterMenu-Custom" class="btn"><a href="{{ path('DownloadCenterBundle_customdl') }}">Other Downloads</a></li>#}
+</ul>
+
+{% block download_content %}Download Center{% endblock %}
+
+{% endblock %}

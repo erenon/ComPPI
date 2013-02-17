@@ -21,7 +21,7 @@ class AppKernel extends Kernel
 			new Comppi\ProteinSearchBundle\ComppiProteinSearchBundle(),
             new Comppi\DescriptionBundle\ComppiDescriptionBundle(),            
 			new Comppi\StatBundle\StatBundle(),
-            new Comppi\DownloadDbBundle\DownloadDbBundle(),
+            //new Comppi\DownloadDbBundle\DownloadDbBundle(),
             new Comppi\DownloadCenterBundle\DownloadCenterBundle(),
         );
 
