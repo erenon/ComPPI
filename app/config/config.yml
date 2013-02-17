@@ -65,3 +65,4 @@ jms_security_extra:
 #ComPPI BuildBundle configuration
 comppi_build:
     database_path: "%kernel.root_dir%/../databases"
+    build_path: "%kernel.root_dir%/../build"

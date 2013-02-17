@@ -1,0 +1,38 @@
+{% extends 'StatBundle:InteractionStat:container.html.twig' %}
+
+{% block title %}Interaction distribution{% endblock %}
+
+{% block stylesheetAssets %}
+    {{ parent() }}
+
+    {% stylesheets
+        '@StatBundle/Resources/public/css/interaction-histogram.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+{% endblock %}
+
+{% block javascriptAssets %}
+    {{ parent() }}
+
+    {% javascripts
+        '@StatBundle/Resources/public/js/jquery.js'
+        '@StatBundle/Resources/public/js/jit.js'
+        '@StatBundle/Resources/public/js/interaction-distribution.js'
+    %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+    
+    <meta id="histogram-path" name="histogramPath" content="{{ asset('dbreleases/stable/interactionHistogram.json') }}" />
+ 
+{% endblock %}
+
+{% block body %}
+
+{% for specie in species %}
+    <h2>{{ specie.name }}</h2>
+    <div id="interaction-histogram-{{ specie.id}}" class="interaction-histogram-container"></div>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'StatBundle:Download:container.html.twig' %}
+
+{% block title %}Download Resources{% endblock %}
+
+{% block body %}
+
+<h1>Download Resources <small>Latest stable build</small></h1>
+
+<h3>ComPPI MySQL database</h3>
+    <p>Complete database containing proteins, interactions, localizatins and protein name translations in sql format.</p>
+    <a class="btn btn-success" href="{{ asset('dbreleases/stable/comppi.sql') }}">ComPPI MySQL database</a>
+    
+<hr/>
+<h3>Gephi interaction graph</h3>
+    <p>Interaction network of proteins per species in a <a href="http://gephi.org/">Gephi</a> compatible, .gefx format.</p>
+    <ul>
+        <li><a href="{{ asset('dbreleases/stable/comppi-hs.gexf') }}">Homo Sapiens</a></li>
+        <li><a href="{{ asset('dbreleases/stable/comppi-dm.gexf') }}">Drosophila melanogaster</a></li>
+        <li><a href="{{ asset('dbreleases/stable/comppi-ce.gexf') }}">Caenorhabditis elegans</a></li>
+        <li><a href="{{ asset('dbreleases/stable/comppi-sc.gexf') }}">Saccharomyces cerevisiae</a></li>
+    </ul>
+    
+<hr/>
+<h3>ComPPI Source Code</h3>
+    <p>The ComPPI project is open source, you can find and fork the source on <a href="https://github.com/erenon/ComPPI">GitHub</a>.</p>
+
+{% endblock %}

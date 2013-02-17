@@ -8,13 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class SourceStatController extends Controller
 {
-    protected $species = array(
-        'hs' => 'Homo Sapiens',
-        'dm' => 'Drosophila Melanogaster',
-        'ce' => 'Caernohabditis Elegans',
-        'sc' => 'Saccaromicies Cervisae'
-    );
-
     /**
      * @Route("/source", name="stat_source_index")
      * @Template()

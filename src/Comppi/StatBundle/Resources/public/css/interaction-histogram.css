@@ -1,6 +1,6 @@
-#loctree-visualization {
+.interaction-histogram-container {
     color:#1a1a1a;
-    width:600px;
+    width:80%;
     height:600px;
     margin:auto;
     overflow:hidden;

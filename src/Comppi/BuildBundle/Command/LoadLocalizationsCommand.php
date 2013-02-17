@@ -69,13 +69,7 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
             $this->insertLocalizationStatement->bindValue(3, $sourceDb);
 
             foreach ($database as $localization) {
-                // get translated protein name
-                $proteinComppiId = $this->proteinTranslator->getComppiId(
-                    $localization['namingConvention'],
-                    $localization['proteinId'],
-                    $this->specie->id
-                );
-
+                // get localizationId
                 try {
                     $localizationId = $this->localizationTranslator->getIdByLocalization($localization['localization']);
                 } catch (\InvalidArgumentException $e) {
@@ -83,31 +77,40 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
                     continue;
                 }
 
-                $this->addDatabaseRefToId($sourceDb, $proteinComppiId);
+                // get translated protein names
+                $proteinComppiIds = $this->proteinTranslator->getComppiIds(
+                    $localization['namingConvention'],
+                    $localization['proteinId'],
+                    $this->specie->id
+                );
 
-                $this->insertLocalizationStatement->bindValue(1, $proteinComppiId);
-                $this->insertLocalizationStatement->bindValue(2, $localizationId);
-                $this->insertLocalizationStatement->bindValue(4, $localization['pubmedId']);
-                $this->insertLocalizationStatement->execute();
+                foreach ($proteinComppiIds as $proteinComppiId) {
+                    $this->addDatabaseRefToId($sourceDb, $proteinComppiId);
 
-                $id = $this->connection->lastInsertId();
+                    $this->insertLocalizationStatement->bindValue(1, $proteinComppiId);
+                    $this->insertLocalizationStatement->bindValue(2, $localizationId);
+                    $this->insertLocalizationStatement->bindValue(4, $localization['pubmedId']);
+                    $this->insertLocalizationStatement->execute();
 
-                if ($id !== intval($lastInsertId) && $id != 0) {
-                    $lastInsertId = $id;
+                    $id = $this->connection->lastInsertId();
 
-                    $this->addSystemTypes($id, $localization['experimentalSystemType']);
+                    if ($id !== intval($lastInsertId) && $id != 0) {
+                        $lastInsertId = $id;
 
-                    // flush transaction
-                    $recordIdx++;
-                    if ($recordIdx == $recordsPerTransaction) {
-                        $recordIdx = 0;
+                        $this->addSystemTypes($id, $localization['experimentalSystemType']);
 
-                        $connection->commit();
-                        $connection->beginTransaction();
+                        // flush transaction
+                        $recordIdx++;
+                        if ($recordIdx == $recordsPerTransaction) {
+                            $recordIdx = 0;
 
-                        $output->writeln('  > ' . $recordsPerTransaction . ' records loaded');
-                    }
-                } // else ON DUPLICATE KEY => update
+                            $connection->commit();
+                            $connection->beginTransaction();
+
+                            $output->writeln('  > ' . $recordsPerTransaction . ' records loaded');
+                        }
+                    } // else ON DUPLICATE KEY => update
+                }
             }
 
             $connection->commit();

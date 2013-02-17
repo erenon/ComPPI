@@ -1,9 +1,13 @@
 {% extends 'StatBundle::base.html.twig' %}
 
 {% block subnav %}
-<ul id="sub-nav" class="navigation">
+<ul class="nav nav-tabs">
     {% for sd in species %}
-        <li><a href="{{ path('stat_source_specie', { 'specieAbbr': sd.abbreviation }) }}">{{ sd.name }}</a></li>
+        <li{% if specieName is defined and sd.name == specieName %} class="active"{% endif %}>
+            <a href="{{ path('stat_source_specie', { 'specieAbbr': sd.abbreviation }) }}">
+                {{ sd.name }}
+            </a>
+        </li>
     {% endfor %}
 </ul>
 {% endblock %}

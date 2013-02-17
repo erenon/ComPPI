@@ -69,37 +69,43 @@ class LoadInteractionsCommand extends AbstractLoadCommand
                 // get proteinA name
                 $proteinAOriginalName = $interaction['proteinAName'];
                 $proteinANamingConvention = $interaction['proteinANamingConvention'];
-                $proteinAComppiId = $translator->getComppiId(
+                $proteinAComppiIds = $translator->getComppiIds(
                     $proteinANamingConvention, $proteinAOriginalName, $this->specie->id
                 );
 
                 // get proteinB name
                 $proteinBOriginalName = $interaction['proteinBName'];
                 $proteinBNamingConvention = $interaction['proteinBNamingConvention'];
-                $proteinBComppiId = $translator->getComppiId(
+                $proteinBComppiIds = $translator->getComppiIds(
                     $proteinBNamingConvention, $proteinBOriginalName, $this->specie->id
                 );
 
-                $this->addDatabaseRefToId($sourceDb, $proteinAComppiId);
-                $this->addDatabaseRefToId($sourceDb, $proteinBComppiId);
+                foreach ($proteinAComppiIds as $proteinAComppiId) {
+                    foreach ($proteinBComppiIds as $proteinBComppiId) {
 
-                $this->insertInteractionStatement->bindValue(1, $proteinAComppiId);
-                $this->insertInteractionStatement->bindValue(2, $proteinBComppiId);
-                $this->insertInteractionStatement->bindValue(4, $interaction['pubmedId']);
-                $this->insertInteractionStatement->execute();
+                        $this->addDatabaseRefToId($sourceDb, $proteinAComppiId);
+                        $this->addDatabaseRefToId($sourceDb, $proteinBComppiId);
 
-                $id = $this->connection->lastInsertId();
+                        $this->insertInteractionStatement->bindValue(1, $proteinAComppiId);
+                        $this->insertInteractionStatement->bindValue(2, $proteinBComppiId);
+                        $this->insertInteractionStatement->bindValue(4, $interaction['pubmedId']);
+                        $this->insertInteractionStatement->execute();
 
-                $this->addSystemTypes($id, $interaction['experimentalSystemType']);
+                        $id = $this->connection->lastInsertId();
 
-                $recordIdx++;
-                if ($recordIdx == $recordsPerTransaction) { // flush transaction
-                    $recordIdx = 0;
+                        $this->addSystemTypes($id, $interaction['experimentalSystemType']);
 
-                    $connection->commit();
-                    $connection->beginTransaction();
+                        $recordIdx++;
+                        if ($recordIdx == $recordsPerTransaction) { // flush transaction
+                            $recordIdx = 0;
 
-                    $output->writeln('  > ' . $recordsPerTransaction . ' records loaded');
+                            $connection->commit();
+                            $connection->beginTransaction();
+
+                            $output->writeln('  > ' . $recordsPerTransaction . ' records loaded');
+                        }
+
+                    }
                 }
             }
 

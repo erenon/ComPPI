@@ -1,8 +1,8 @@
 {% extends 'StatBundle::base.html.twig' %}
 
 {% block subnav %}
-<ul id="sub-nav" class="navigation">
-    <li><a href="{{ path('stat_naming_distribution') }}">Distribution</a></li>
-    <li><a href="{{ path('stat_naming_mapping') }}">Mapping</a></li>
+<ul class="nav nav-tabs">
+    <li{% if _action == 'distribution' %} class="active"{% endif %}><a href="{{ path('stat_naming_distribution') }}">Distribution</a></li>
+    <li{% if _action == 'mapping' %} class="active"{% endif %}><a href="{{ path('stat_naming_mapping') }}">Mapping</a></li>
 </ul>
 {% endblock %}

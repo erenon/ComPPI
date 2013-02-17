@@ -4,27 +4,36 @@
 
 {% block body %}
 
-<div class="headline">
-<h2>{% trans %}Major Localizations{% endtrans %}</h2>
-</div>
+<h1>{% trans %}Major Localizations{% endtrans %}</h1>
 
-<table>
-    <thead>
+{% for name, children in largelocs %}
+    <h2>{{ name }}</h2>
+ 
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                <th class="tcell-numeric">ID</th>
+                <th>{% trans %}Localization{% endtrans %}</th>
+                <th>{% trans %}GO Accession{% endtrans %}</th>
+            </tr> 
+        </thead>
+        <tbody>   
+    {% for child in children %}
         <tr>
-            <td>{% trans %}Localization{% endtrans %}</td>
-            <td>{% trans %}GO Accession{% endtrans %}</td>
-            <td class="tcell-numeric">{% trans %}Loctree ID{% endtrans %}</td>
-        </tr> 
-    </thead>
-    <tbody>
-{% for majorLoc in majorLocs %}
-    <tr>
-        <td>{{ majorLoc.humanReadable }}</td>
-        <td>{{ majorLoc.go }}</td>
-        <td class="tcell-numeric">{{ majorLoc.id }}</td>
-    </tr>    
+            <td class="tcell-numeric">{{ child.localizationId }}</td>
+            <td>{{ child.localizationName }}</td>
+            <td>{{ child.goAccession }}</td>
+        </tr>    
+    {% else %}
+        <div class="alert alert-info">
+        <h4>{% trans %}Not found{% endtrans %}</h4>
+        {% trans %}
+            No localization found
+        {% endtrans %}
+        </div>
+    {% endfor %}
+        </tbody>
+    </table>
 {% endfor %}
-    </tbody>
-</table>
 
 {% endblock %}

@@ -45,7 +45,7 @@ Visit demo page
 
 Assuming you put the project under your HTTP servers document root into the directory named `comppi`, you can access to the demo page via the following url:
 
-    http://localhost/comppi/web/app_dev.php/stat/source/hs
+    http://localhost/comppi/web/app_dev.php/stat
     
 If everything went fine (including you have already loaded the plaintext files into your database), you should see some statistics about the database.
 
