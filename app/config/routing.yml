@@ -1,3 +1,7 @@
+DownloadCenterBundle:
+    resource: "@DownloadCenterBundle/Resources/config/routing.yml"
+    prefix:   /
+
 home:
     pattern: /
     defaults: { _controller: ComppiDescriptionBundle:Description:About }
