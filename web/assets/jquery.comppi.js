@@ -1,6 +1,10 @@
 $(document).ready(function(){
 	// first input autofokus
 	$("input[type='text']:eq(0)").focus();
+	
+	// outlinks
+	//$('a[target="_blank"]').append(' <img src="outlink.png" alt="Link goes out from comppi." />');
+	// this does not work - what the FUCK, Symfony?!
 
 	// highlighted list lines
 	$(".hovered_list li:not(.not_hovered_line)").hover(
