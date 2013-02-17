@@ -67,6 +67,7 @@
 			<td colspan="6">
 			<h3>Details of '{{ p.protA }}':</h3>
 				<p><span class="protSearchDetailName">Full name:</span> </p>
+				<p><span class="protSearchDetailName">Uniprot profile:</span> <a href="{{ uniprot_root }}{{ p.protA }}" target="_blank">{{ p.protA }}</a></p>
 				<p><span class="protSearchDetailName">Synonyms:</span> {% if p.protA_synonyms is defined %}{{ p.protA_synonyms }} {% else %} N/A {% endif %}</p>
 				{% if p.protA_small_locs is defined %}
 				<p><span class="protSearchDetailName">Localizations:</span>
@@ -83,6 +84,7 @@
 				{% endif %}
 			<h3>Details of '{{ p.protB }}':</h3>
 				<p><span class="protSearchDetailName">Full name:</span> </p>
+				<p><span class="protSearchDetailName">Uniprot profile:</span> <a href="{{ uniprot_root }}{{ p.protA }}">{{ p.protA }}</a></p>
 				<p><span class="protSearchDetailName">Synonyms:</span> {% if p.protB_synonyms is defined %}{{ p.protB_synonyms }} {% else %} N/A {% endif %}</p>
 				{% if p.protB_small_locs is defined %}
 				<p><span class="protSearchDetailName">Localizations:</span>

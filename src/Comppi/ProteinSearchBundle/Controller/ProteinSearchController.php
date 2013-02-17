@@ -21,6 +21,7 @@ class ProteinSearchController extends Controller
 	private $verbose_log = array();
 	private $search_range_start = 0; // current page * search_result_per_page -> search query limit from here
 	private $search_result_per_page = 10; // search query limit offset (0: no limit)
+	private $uniprot_root = 'http://www.uniprot.org/uniprot/';
 	
 	/* PROTEIN SEARCH
 	 * This function provides a search form and display the results of the protein search.
@@ -42,7 +43,8 @@ class ProteinSearchController extends Controller
 			'species_list' => $descriptors,
             'ls' => array(),
 			'keyword' => '',
-			'result_msg' => ''
+			'result_msg' => '',
+			'uniprot_root' => $this->uniprot_root
         );
 
 		$request = $this->getRequest();
