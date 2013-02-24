@@ -28,3 +28,7 @@ O46199	A53E_DROME	reviewed	Accessory gland protein Acp53Ea
 P91927	A60DA_DROME	reviewed	LETM1 and EF-hand domain-containing protein anon-60Da, mitochondrial (Leucine zipper-EF-hand-containing transmembrane protein 1)
 O46202	A62F_DROME	reviewed	Accessory gland protein Acp62F
 O46200	A63F_DROME	reviewed	Accessory gland protein Acp63F
+Q8IPN6	Q8IPN6_DROME	unreviewed	L(3)82Fd, isoform H (L(3)82Fd, isoform Q) (L82G)
+P52654	TF2AA_DROME	reviewed	Transcription initiation factor IIA subunit 1 (General transcription factor IIA subunit 1) (dTFIIA-L) [Cleaved into: Transcription initiation factor IIA alpha chain (TFIIA p30 subunit); Transcription initiation factor IIA beta chain (TFIIA p20 subunit)]
+P0CG69	UBIQP_DROME	reviewed	Polyubiquitin [Cleaved into: Ubiquitin]
+P28668	SYEP_DROME	reviewed	Bifunctional glutamate/proline--tRNA ligase (Bifunctional aminoacyl-tRNA synthetase) [Includes: Glutamate--tRNA ligase (EC 6.1.1.17) (Glutamyl-tRNA synthetase) (GluRS); Proline--tRNA ligase (EC 6.1.1.15) (Prolyl-tRNA synthetase) (ProRS)]

@@ -46,14 +46,28 @@ class UniprotFullname extends AbstractMapParser
         $recordArray = explode("\t", $line);
         $this->checkRecordFieldCount($recordArray, 4);
 
-        $firstParenPos = strpos($recordArray[3], '(');
+        // strip [Cleaved into
+        $cleavedPos = strpos($recordArray[3], ' [Cleaved into');
+        if ($cleavedPos !== false) {
+            $strippedNameString = substr($recordArray[3], 0, $cleavedPos);
+        } else {
+            $strippedNameString = $recordArray[3];
+        }
+
+        // strip [Includes
+        $includesPos = strpos($recordArray[3], ' [Includes');
+        if ($includesPos !== false) {
+            $strippedNameString = substr($strippedNameString, 0, $includesPos);
+        }
+
+        $firstParenPos = strpos($strippedNameString, ' (');
 
         if ($firstParenPos !== false) {
             // alt name found, strip "full name" (the first one)
-            $fullName = substr($recordArray[3], 0, $firstParenPos - 1);
+            $fullName = substr($strippedNameString, 0, $firstParenPos);
 
             // extract alt names
-            $altNameString = substr($recordArray[3], $firstParenPos+1, -1);
+            $altNameString = substr($strippedNameString, $firstParenPos+2, -1);
             $altNames = explode(') (', $altNameString);
 
             foreach ($altNames as $altName) {
@@ -69,7 +83,7 @@ class UniprotFullname extends AbstractMapParser
                 );
             }
         } else {
-            $fullName = $recordArray[3];
+            $fullName = $strippedNameString;
         }
 
         if (in_array($fullName, $this->fullNameBlacklist) === false) {
