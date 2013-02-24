@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(
  *     indexes={
- *         @ORM\index(name="search_idx", columns={"proteinName", "proteinNamingConvention"})
+ *         @ORM\index(name="search_idx", columns={"proteinName", "proteinNamingConvention"}),
  *         @ORM\index(name="species_idx", columns={"specieId"})
  *     }
  * )
