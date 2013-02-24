@@ -15,6 +15,7 @@ class LocalizationTranslator
 
     private $largelocs;
     private $idToLargeloc = array();
+    private $idsWithoutLargeloc = array();
 
     public function __construct($localizationFile, $largelocFile) {
         $this->loadLocalizations($localizationFile);
@@ -150,12 +151,23 @@ class LocalizationTranslator
 
     private function loadIdToLargeloc() {
         foreach ($this->idToIndex as $id => $index) {
+            // ignore root
+            if ($id === 0) { continue; }
+
             // search for largeloc
+            $largelocFound = false;
+
             foreach ($this->largelocs as $largeloc => $ids) {
                 if (array_search($id, $ids) !== false) {
                     $this->idToLargeloc[$id] = $largeloc;
+                    $largelocFound = true;
                     break;
                 }
+            }
+
+            if ($largelocFound === false) {
+                $this->idToLargeloc[$id] = 'N/A';
+                $this->idsWithoutLargeloc[] = $id;
             }
         }
     }
@@ -214,6 +226,10 @@ class LocalizationTranslator
         } else {
             throw new \InvalidArgumentException("Given id ('".$id."') is not valid primary localization id");
         }
+    }
+
+    public function getIdsWithoutLargeloc() {
+        return $this->idsWithoutLargeloc;
     }
 
     /**
