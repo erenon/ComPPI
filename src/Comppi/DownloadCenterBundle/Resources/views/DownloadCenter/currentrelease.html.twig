@@ -1,0 +1,13 @@
+{# src/Comppi/DownloadCenterBundle/Resources/views/currentrelease.html.twig #}
+{% extends 'DownloadCenterBundle:DownloadCenter:downloadcenter.html.twig' %}
+
+{% block title %}ComPPI - Download The Current Release - The Compartmentalized Protein-Protein Interaction Database{% endblock %}
+
+{% block download_content %}
+	<h3>Current Release:</h3>
+	{% if size is defined %}
+	<h1 class="center"><a href="{{ path('DownloadCenterBundle_getcurrentrelease') }}">{{ mtime }} ({{ size }} MB)</a></h1>
+	{% else %}
+	<p class="center">Current release is temporary unavailable.</p>
+	{% endif %}
+{% endblock %}

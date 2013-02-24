@@ -3,12 +3,15 @@ app/logs
 app/config/parameters.ini
 
 vendor
+
 web/bundles
 web/comppi--2012-11-23.zip
 web/css
 web/js
+web/dbreleases
 
 #eclipse
+
 .buildpath
 .project
 .settings
@@ -21,4 +24,4 @@ databases/sc
 databases2
 
 #build
-build
+build 

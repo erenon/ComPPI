@@ -1,0 +1,20 @@
+{# src/Comppi/DownloadCenterBundle/Resources/views/currentrelease.html.twig #}
+{% extends 'DownloadCenterBundle:DownloadCenter:downloadcenter.html.twig' %}
+
+{% block title %}ComPPI - Download The Previous Releases - The Compartmentalized Protein-Protein Interaction Database{% endblock %}
+
+{% block download_content %}
+	<h3>Previous Releases</h3>
+	{% if ls|length > 0 %}
+	<p class="help">Click on any of these files to download:</p>
+	<div class="center">
+		<ul id="dlCenterPrevReleases">
+		{% for f in ls %}
+		<li><a href="{{ path('DownloadCenterBundle_getpreviousrelease', {'file': f.file }) }}">{{ f.file }} ({{ f.mtime }}, {{ f.size }} MB)</a></li>
+		{% endfor %}
+	</ul>
+	</div>
+	{% else %}
+	<p class="help">Previous releases are not available yet.</p>
+	{% endif %}
+{% endblock %}

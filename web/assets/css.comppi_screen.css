@@ -51,6 +51,7 @@ li { margin: 0.5em 0; }
 .btn_submit { color: #000; background: #E49E32 url("btn_bg_orange.png") repeat-x top left; border: 1px solid #E49E32; }
 .btn_submit:hover { color: #800000; }
 
+.center { text-align: center; }
 .help { margin: 0; }
 .help_details {}
 .infobtn {
@@ -129,10 +130,14 @@ input, select, textarea {
 .protSearchDetailsOpened { border: 1px dotted #207000; border-top: 0; }
 
 
-/* DOWNLOAD DB */
-#DownloadForm { text-align: left; margin-top: 1em; }
+/* DOWNLOADS */
+/*#DownloadForm { text-align: left; margin-top: 1em; }
 #fDownloadLocFine { width: 780px; height: 10em; background: #505050; }
-#fDownloadSpecHsBtn, #fDownloadSpecDmBtn, #fDownloadSpecCeBtn, #fDownloadSpecScBtn { font-style: italic; }
+#fDownloadSpecHsBtn, #fDownloadSpecDmBtn, #fDownloadSpecCeBtn, #fDownloadSpecScBtn { font-style: italic; }*/
+#dlCenterMenu { list-style-type: none; margin: 0; padding: 0; text-align: center; width: 100%; font-size: 1.2em; }
+#dlCenterMenu li { margin: 0 1em; padding: 0; display: inline; }
+#dlCenterPrevReleases { margin: 0 auto; text-align: left; width: 70%; }
+#dlCenterPrevReleases li { list-style-type: square; }
 
 
 #fCommentForm { margin: 1em auto; width: 650px; text-align: center; }
