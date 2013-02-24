@@ -28,15 +28,15 @@
                 <li{% if controller == 'InteractionStat'%} class="active"{% endif %}><a href="{{ path('stat_interaction_index') }}">Interactions</a></li>
                 <li{% if controller == 'NamingStat'%} class="active"{% endif %}><a href="{{ path('stat_naming_index') }}">Naming conventions</a></li>
                 <li{% if controller == 'Download'%} class="active"{% endif %}><a href="{{ path('stat_download_index') }}">Download</a></li>
-                <li{% if controller == 'Search'%} class="active"{% endif %}><a href="{{ path('stat_search_index') }}">Search</a></li>
+                {# <li{% if controller == 'Search'%} class="active"{% endif %}><a href="{{ path('stat_search_index') }}">Search</a></li> #}
                 
-                {#
+                
                 <li class="navbar-search-item">
-                <form class="navbar-form pull-right">
-                  <input type="text" class="navbar-search-input" placeholder="Search">
+                <form class="navbar-form pull-right" method="GET" action="{{ path('stat_search_search') }}">
+                  <input type="text" name="form[searchTerm]" class="navbar-search-input" placeholder="Search">
                 </form>
                 </li>
-                #}
+                
               </ul>
           </div>
         </div><!-- /.navbar -->
