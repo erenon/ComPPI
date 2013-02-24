@@ -15,11 +15,6 @@ class SearchController extends Controller
      */
     public function indexAction()
     {
-        $searchForm = $this->createFormBuilder(null)
-            ->add('searchTerm', 'text')
-            ->setAttribute('csrf_protection', false)
-            ->getForm();
-
         $search = $this->get('comppi.stat.search');
 
         $examples = $search->getExamples();
@@ -30,6 +25,8 @@ class SearchController extends Controller
         }
 
         uasort($exampleNames, 'strcmp');
+
+        $searchForm = $this->getSearchForm();
 
         return array(
             'searchForm' => $searchForm->createView(),
@@ -43,17 +40,20 @@ class SearchController extends Controller
      */
     public function searchAction(Request $request)
     {
-        $searchForm = $this->createFormBuilder(null)
-            ->add('searchTerm', 'text')
-            ->setAttribute('csrf_protection', false)
-            ->getForm();
-
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() == 'GET') {
+            $searchForm = $this->getSearchForm();
             $searchForm->bindRequest($request);
 
             if ($searchForm->isValid()) {
                 $data = $searchForm->getData();
                 $searchTerm = trim($data['searchTerm']);
+
+                if (empty($searchTerm)) {
+                    return $this->redirect(
+                        $this->generateUrl('stat_search_index'),
+                        303 // See Other
+                    );
+                }
 
                 $search = $this->get('comppi.stat.search');
                 $results = $search->searchByName($searchTerm);
@@ -69,5 +69,18 @@ class SearchController extends Controller
             'searchForm' => $searchForm->createView(),
         	'results' => array()
         );
+    }
+
+    private function getSearchForm() {
+        $searchForm = $this->createFormBuilder(
+            null,
+            array(
+                'csrf_protection' => false
+            )
+        )
+            ->add('searchTerm', 'text')
+            ->getForm();
+
+        return $searchForm;
     }
 }
