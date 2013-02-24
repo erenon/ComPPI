@@ -35,7 +35,8 @@ class LoadInteractionsCommand extends AbstractLoadCommand
 
         // init insert statement
         $this->insertInteractionStatement = $this->connection->prepare(
-        	"INSERT INTO Interaction VALUES ('', ?, ?, ?, ?)"
+        	'INSERT INTO Interaction VALUES (NULL, ?, ?, ?, ?)' .
+        	' ON DUPLICATE KEY UPDATE id=id'
         );
 
         // init add system type statement
@@ -49,6 +50,7 @@ class LoadInteractionsCommand extends AbstractLoadCommand
 
         $connection = $this->connection;
         $translator = $this->proteinTranslator;
+        $lastInsertId = 0;
 
         $this->openConnection();
 
@@ -93,18 +95,22 @@ class LoadInteractionsCommand extends AbstractLoadCommand
 
                         $id = $this->connection->lastInsertId();
 
-                        $this->addSystemTypes($id, $interaction['experimentalSystemType']);
+                        if ($id !== intval($lastInsertId) && $id != 0) {
+                            $lastInsertId = $id;
 
-                        $recordIdx++;
-                        if ($recordIdx == $recordsPerTransaction) { // flush transaction
-                            $recordIdx = 0;
+                            $this->addSystemTypes($id, $interaction['experimentalSystemType']);
 
-                            $connection->commit();
-                            $connection->beginTransaction();
+                            // flush transaction
+                            $recordIdx++;
+                            if ($recordIdx == $recordsPerTransaction) { // flush transaction
+                                $recordIdx = 0;
 
-                            $output->writeln('  > ' . $recordsPerTransaction . ' records loaded');
-                        }
+                                $connection->commit();
+                                $connection->beginTransaction();
 
+                                $output->writeln('  > ' . $recordsPerTransaction . ' records loaded');
+                            }
+                        } // else ON DUPLICATE KEY => update
                     }
                 }
             }
