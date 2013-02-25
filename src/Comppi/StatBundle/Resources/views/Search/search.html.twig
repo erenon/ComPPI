@@ -35,7 +35,16 @@
         <tr>
             <td>{{ result.specie.name }}</td>
             <td>{{ result.namingConvention }}</td>
-            <td>{{ result.name }}</td>
+            <td>
+                {{ result.name }}
+                {% if result.altName is defined and result.altConvention is defined%}
+                    <span class="muted pull-right">
+                    ({% trans with {'%convention%': result.altConvention, '%name%': result.altName} %}
+                        It's %convention% name is %name%
+                    {% endtrans %})
+                    </span>
+                {% endif %}
+            </td>
             <td class="tcell-middle">
                 <a href="{{ path('stat_protein_protein', {'specieAbbr': result.specie.abbreviation, 'id': result.proteinId }) }}">
                 {% trans %}details{% endtrans %}

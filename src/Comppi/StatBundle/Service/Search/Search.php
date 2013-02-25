@@ -38,12 +38,31 @@ class Search
 
         if ($select->rowCount() > 0) {
             $results = $select->fetchAll(\PDO::FETCH_ASSOC);
+
+            // exclude synonyms with the same name and same protein
+            $synonymInClause = ' AND np.proteinId NOT IN (?)';
+
+            // create the parameter of the IN clause
+            $ids = array();
+            foreach ($results as $result) {
+                $ids[] = $result['proteinId'];
+            }
+            $synonymParameters = array($name, join(',',$ids));
+        } else {
+            // no protein found yet, IN clause not needed
+            $synonymInClause = '';
+            $synonymParameters = array($name);
         }
 
+
         $select = $this->connection->executeQuery(
-            'SELECT proteinId, specieId, name, namingConvention FROM NameToProtein' .
-        	' WHERE name = ?',
-            array($name)
+            'SELECT np.proteinId, np.specieId, p.proteinName as name, p.proteinNamingConvention as namingConvention, np.name as altName, np.namingConvention as altConvention' .
+            ' FROM NameToProtein np' .
+            ' LEFT JOIN Protein p ON p.id = np.proteinId' .
+            ' WHERE name = ?' .
+            $synonymInClause .
+            ' GROUP BY np.proteinId',
+            $synonymParameters
         );
 
         if ($select->rowCount() > 0) {
