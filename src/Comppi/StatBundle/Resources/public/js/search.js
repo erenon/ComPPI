@@ -11,6 +11,11 @@ var initProteinSearchbars = function() {
                 $.getJSON(resourceUrl + query, function(data) {
                     finishCb(data.names);
                 });
+            },
+            'updater' : function(item) {
+                this.$element[0].value = item;
+                this.$element[0].form.submit();
+                return item;
             }
         });
         bar.data('items', 10);
