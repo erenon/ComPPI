@@ -21,6 +21,8 @@
             <script src="{{ asset_url }}" type="text/javascript"></script>
             {% endjavascripts %}
         {% endblock %}
+        <meta id="autocomplete-url" name="autocompleteUrl" content="{{ path('stat_search_autocomplete', {'query': ''}) }}/" />
+        
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         {% include '::google_analytics.html.twig' %}
     </head>

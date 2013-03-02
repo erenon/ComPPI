@@ -1,5 +1,6 @@
 var initProteinSearchbars = function() {
-	var resourceUrl = 'http://localhost/comppi/web/app_dev.php/stat/search/autocomplete/';
+	var resourceUrl = $('#autocomplete-url').attr('content');
+	console.log(resourceUrl);
 	
 	$('.protein-search-input').each(function(index, searchbar) {
 		var bar = $(searchbar);
