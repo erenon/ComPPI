@@ -84,6 +84,7 @@ class Search
         $select = $this->connection->executeQuery(
         	'SELECT name FROM ProteinName' .
         	' WHERE name LIKE ?' .
+            ' ORDER BY LENGTH(name)' .
             ' LIMIT 10',
             array('%' . $needle . '%')
         );
