@@ -69,6 +69,9 @@ php $console comppi:build:localizations ce
 echo "Load C'Elegans name lookup table"
 php $console comppi:build:namelookup ce
 
+echo "Load protein names (mainly for autocomplete support)"
+php $console comppi:build:names
+
 echo "Calculate Confidence Scores"
 php $console comppi:build:confidenceScores
 
