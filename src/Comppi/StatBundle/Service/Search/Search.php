@@ -79,4 +79,20 @@ class Search
 
         return $results;
     }
+
+    public function getNamesContaining($needle) {
+        $select = $this->connection->executeQuery(
+        	'SELECT name FROM ProteinName' .
+        	' WHERE name LIKE ?' .
+            ' LIMIT 10',
+            array('%' . $needle . '%')
+        );
+
+        if ($select->rowCount() > 0) {
+            $results = $select->fetchAll(\PDO::FETCH_ASSOC);
+            return $results;
+        }
+
+        return array();
+    }
 }

@@ -2,6 +2,8 @@
 
 namespace Comppi\StatBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -69,6 +71,22 @@ class SearchController extends Controller
             'searchForm' => $searchForm->createView(),
         	'results' => array()
         );
+    }
+
+    /**
+     * @Route("/search/autocomplete/{query}", name="stat_search_autocomplete")
+     */
+    public function autocompleteAction($query) {
+        $search = $this->get('comppi.stat.search');
+        $names = $search->getNamesContaining($query);
+
+        $response = array();
+        $response['names'] = array();
+        foreach ($names as $name) {
+            $response['names'][] = $name['name'];
+        }
+
+        return new Response(json_encode($response));
     }
 
     private function getSearchForm() {
