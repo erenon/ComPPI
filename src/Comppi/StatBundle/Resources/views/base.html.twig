@@ -12,7 +12,15 @@
             <link rel="stylesheet" href="{{ asset_url }}" />
             {% endstylesheets %}
         {% endblock %}
-        {% block javascriptAssets %}{% endblock %}
+        {% block javascriptAssets %}
+            {% javascripts
+                '@StatBundle/Resources/public/js/jquery.js'
+                '@StatBundle/Resources/public/js/bootstrap.min.js'
+                '@StatBundle/Resources/public/js/search.js'
+            %}
+            <script src="{{ asset_url }}" type="text/javascript"></script>
+            {% endjavascripts %}
+        {% endblock %}
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         {% include '::google_analytics.html.twig' %}
     </head>
@@ -33,7 +41,7 @@
                 
                 <li class="navbar-search-item">
                 <form class="navbar-form pull-right" method="GET" action="{{ path('stat_search_search') }}">
-                  <input type="text" name="form[searchTerm]" class="navbar-search-input" placeholder="Search">
+                  <input type="text" name="form[searchTerm]" class="navbar-search-input protein-search-input" placeholder="Search">
                 </form>
                 </li>
                 
