@@ -1,6 +1,31 @@
 largelocs:
     cytoplasm:
         childrenIncluded:
+            - GO:0032994
+            - GO:0002189
+            - GO:0031501
+            - GO:0034464
+            - GO:0032992
+            - GO:0097057
+            - GO:0008247
+            - GO:0009341
+            - GO:0000151
+            - GO:0005942
+            - GO:0070864
+            - GO:0043025
+            - GO:0000502
+            - GO:0035693
+            - GO:0035859
+            - GO:0000131
+            - GO:0097169
+            - GO:0072559
+            - GO:0072557
+            - GO:0044609
+            - GO:0017122
+            - GO:0033256
+            - GO:0031074
+            - GO:0030956
+            - GO:0043226
             - GO:0042763
             - GO:0019008
             - GO:0008287
@@ -8,7 +33,6 @@ largelocs:
             - GO:0030256
             - GO:0015627
             - GO:0012505
-            - GO:0043025
             - GO:0000267
             - GO:0032153
             - GO:0044297
@@ -21,10 +45,7 @@ largelocs:
             - GO:0005727
             - GO:0009368
             - GO:0000178
-            - GO:0045252
-            - GO:0017122
             - GO:0032144
-            - GO:0033256
             - GO:0032996
             - GO:0005956
             - GO:0033593
@@ -45,7 +66,6 @@ largelocs:
             - GO:0005852
             - GO:0016281
             - GO:0009318
-            - GO:0031501
             - GO:0034708
             - GO:0000307
             - GO:0017122
@@ -57,10 +77,8 @@ largelocs:
             - GO:0070438
             - GO:0072558
             - GO:0070419
-            - GO:0031074
             - GO:0045252
             - GO:0043626
-            - GO:0000502
             - GO:0032299
             - GO:0071141
             - GO:0032797
@@ -71,7 +89,6 @@ largelocs:
             - GO:0031371
             - GO:0034657
             - GO:0033202
-            - GO:0031501
             - GO:0031074
             - GO:0034518
             - GO:0044446
@@ -91,7 +108,9 @@ largelocs:
             - GO:0031974
 
         childrenExcluded:
-            - GO:0043226
+            - GO:0005623
+            - GO:0044464
+            - GO:0043231
             - GO:0043232
             - GO:0043229
             - GO:0044424
@@ -100,18 +119,32 @@ largelocs:
     mitochondrion:
         childrenIncluded:
             - GO:0005739
+            - GO:0070069
+            - GO:0016507
+            - GO:0097136
         childrenExcluded:
 
     nucleus:
         childrenIncluded:
             - GO:0005634
             - GO:0005694
+            - GO:0005667
+            - GO:0035649
+            - GO:0000974
+            - GO:0002193
+            - GO:0097196
+            - GO:0000441
+
         childrenExcluded:
 
     extracellular:
         childrenIncluded:
             - GO:0005576
             - GO:0031012
+            - GO:0043033
+            - GO:0031838
+            - GO:0097179            
+            
         childrenExcluded:
 
     secretory-pathway:
@@ -125,11 +158,23 @@ largelocs:
             - GO:0005768
             - GO:0031410
             - GO:0042175
-            - GO:0031982  
+            - GO:0031982
+            
         childrenExcluded:
 
-    plasma-membrane:
+    membrane:
         childrenIncluded:
+            - GO:0038037
+            - GO:0070195
+            - GO:0002116
+            - GO:0035692
+            - GO:0005892
+            - GO:0048179
+            - GO:0008328
+            - GO:0042101
+            - GO:0008305
+            - GO:0019814
+            - GO:0002133
             - GO:0009986
             - GO:0042597
             - GO:0071944
