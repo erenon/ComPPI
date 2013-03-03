@@ -58,6 +58,16 @@ class SearchController extends Controller
                 }
 
                 $search = $this->get('comppi.stat.search');
+
+                // replace * with %
+                if ($searchTerm[0] === '*') {
+                    $searchTerm[0] = '%';
+                }
+
+                if ($searchTerm[strlen($searchTerm) - 1] === '*') {
+                    $searchTerm[strlen($searchTerm) - 1] = '%';
+                }
+
                 $results = $search->searchByName($searchTerm);
 
                 return array(

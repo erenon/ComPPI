@@ -32,8 +32,9 @@ class Search
 
         $select = $this->connection->executeQuery(
         	'SELECT id as proteinId, specieId, proteinName as name, proteinNamingConvention as namingConvention FROM Protein' .
-        	' WHERE proteinName LIKE ?',
-            array('%' . $name . '%')
+        	' WHERE proteinName LIKE ?' .
+            ' ORDER BY LENGTH(name)',
+            array($name)
         );
 
         if ($select->rowCount() > 0) {
@@ -47,11 +48,11 @@ class Search
             foreach ($results as $result) {
                 $ids[] = $result['proteinId'];
             }
-            $synonymParameters = array('%' . $name . '%', join(',',$ids));
+            $synonymParameters = array($name, join(',',$ids));
         } else {
             // no protein found yet, IN clause not needed
             $synonymInClause = '';
-            $synonymParameters = array('%' . $name . '%');
+            $synonymParameters = array($name);
         }
 
 
@@ -61,7 +62,8 @@ class Search
             ' LEFT JOIN Protein p ON p.id = np.proteinId' .
             ' WHERE name LIKE ?' .
             $synonymInClause .
-            ' GROUP BY np.proteinId',
+            ' GROUP BY np.proteinId' .
+            ' ORDER BY LENGTH(altName)',
             $synonymParameters
         );
 

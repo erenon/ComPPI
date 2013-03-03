@@ -13,7 +13,10 @@
     {{ form_widget(searchForm.searchTerm, { 'attr': {'class': 'input-xxlarge protein-search-input'} }) }}
     <button class="btn" type="submit" value="submit">{% trans %}Search{% endtrans %}</button>
     </div>   
-    
+ 
+<p class="muted"><span class="label label-warning">Tip</span>
+Use <strong>*</strong> character to search by name fragment: *p53, p53* or *p53*
+</p>   
 <p class="muted"><span class="label label-info">Examples</span>
 {% for example in examples %}
     {% if loop.last %}
