@@ -41,7 +41,8 @@ class LoadInteractionsCommand extends AbstractLoadCommand
 
         // init add system type statement
         $this->addSystemTypeStatement = $this->connection->prepare(
-            'INSERT INTO InteractionToSystemType VALUES (?, ?)'
+            'INSERT INTO InteractionToSystemType VALUES (?, ?)' .
+            ' ON DUPLICATE KEY UPDATE interactionId = interactionId'
         );
     }
 
