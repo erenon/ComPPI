@@ -1,0 +1,164 @@
+two-hybrid screening;1
+yeast display                                          ;1
+x-ray fiber diffraction                                ;1
+x-ray diffraction                                      ;1
+x-ray crystallography                                  ;1
+physical interaction;0
+unspecified method                                     ;0
+ubiquitinase assay                                     ;1
+ubiquitin reconstruction                               ;1
+two hybrid fragment pooling approach                   ;1
+transmission electron microscopy                       ;1
+transcriptional complementation assay                  ;1
+tox-r dimerization assay                               ;1
+three-hybrid screening;1
+tap tag coimmunoprecipitation                          ;1
+t7 phage display                                       ;1
+SVM decision tree;2
+surface plasmon resonance array                        ;1
+structure based prediction                             ;2
+static light scattering                                ;1
+surface plasmon resonance;1
+staining;1
+Split renilla luciferase complementation               ;1
+spike;1
+solid phase assay                                      ;1
+silicon nanowire field-effect transistor               ;1
+scintillation proximity assay                          ;1
+saturation binding                                     ;1
+rna interference                                       ;1
+ribonuclease assay                                     ;1
+reverse two hybrid                                     ;1
+reverse phase chromatography                           ;1
+pull down                                              ;1
+PTM-Switchboard                                        ;1
+pTarget method;2
+proximity enzyme linked immunosorbent assay            ;1
+proteinchip;1
+protein kinase assay                                   ;1
+protein cross-linking with a bifunctional reagent      ;1
+protein complementation assay                          ;1
+protein cleavage                                       ;1
+protein array                                          ;1
+protease assay                                         ;1
+protease accessibility laddering                       ;1
+predicted                                              ;2
+polymerization                                         ;1
+PIN                                                    ;1
+phosphotransferase assay                               ;1
+phosphorylation reaction                               ;1
+phosphatase assay                                      ;1
+PhosphoPOINT                                           ;2
+phage display                                          ;1
+peptide array                                          ;1
+PDZBase                                                ;1
+PA ML algorythm;2
+oxidoreductase activity electron transfer assay        ;1
+nuclear magnetic resonance                             ;1
+NetPath                                                ;1
+molecular sieving                                      ;1
+MIPS-MPPI                                              ;1
+MINT                                                   ;1
+methyltransferase radiometric assay                    ;1
+methylation reaction                                   ;1
+MatrixDB                                               ;1
+mass spectrometry study of hydrogen/deuterium exchange ;1
+mass spectrometry studies of complexes                 ;1
+mammalian protein protein interaction trap             ;1
+light scattering                                       ;1
+light microscopy                                       ;1
+lex-a dimerization assay                               ;1
+lambda repressor two hybrid                            ;1
+lambda phage display                                   ;1
+kinase scintillation proximity assay                   ;1
+kinase homogeneous time resolved fluorescence          ;1
+isothermal titration calorimetry                       ;1
+ion exchange chromatography                            ;1
+intermolecular force                                   ;1
+interactome parallel affinity capture                  ;1
+IntAct;1
+InnateDB                                               ;1
+inhibitor small molecules                              ;1
+in-gel kinase assay                                    ;1
+inferred by curator                                    ;0
+inferred by author                                     ;0
+in vivo                                                ;1
+in vitro                                               ;1
+immunodepleted coimmunoprecipitation                   ;1
+imaging technique                                      ;1
+HPRD                                                   ;0
+DIP                                                    ;1
+CORUM                                                  ;1
+Biogrid                                                ;2
+BIND                                                   ;2
+APE                        ;1
+homogeneous time resolved fluorescence                 ;1
+gtpase assay                                           ;1
+gst pull down                                          ;1
+genetic;3
+gdp/gtp exchange assay                                 ;1
+gal4 vp16 complementation                              ;1
+enzymatic footprinting;1
+fluorescent resonance energy transfer                  ;1
+fluorescence-activated cell sorting                    ;1
+fluorescence technology                                ;1
+fluorescence polarization spectroscopy                 ;1
+fluorescence microscopy                                ;1
+fluorescence correlation spectroscopy                  ;1
+filter binding                                         ;1
+filamentous phage display                              ;1
+far western blotting                                   ;1
+experimental;1
+elisa;1
+electrophoretic mobility shift assay;1
+electrophoretic mobility supershift assay              ;1
+enzymatic study                                        ;1
+electron paramagnetic resonance                        ;1
+electron tomography                                    ;1
+electron microscopy                                    ;1
+electron diffraction                                   ;1
+dynamic light scattering                               ;1
+disulfide bond                                         ;1
+display technology                                     ;1
+deubiquitinase assay                                   ;1
+dihydrofolate reductase reconstruction                 ;1
+detection by mass spectrometry                         ;1
+dephosphorylation reaction                             ;1
+cosedimentation through density gradient;1
+cosedimentation in solution                            ;1
+copurification                                         ;1
+covalent binding                                       ;1
+demethylase assay;1
+deacetylase assay                                      ;1
+cross-linking study                                    ;1
+confocal microscopy                                    ;1
+competition binding                                    ;1
+comigration in sds page                                ;1
+comigration in non denaturing gel electrophoresis      ;1
+comigration in gel electrophoresis                     ;1
+colocalization by fluorescent probes cloning           ;1
+coimmunoprecipitation                                  ;1
+cleavage reaction                                      ;1
+classical fluorescence spectroscopy                    ;1
+circular dichroism                                     ;1
+chromatography technology                              ;1
+chromatin immunoprecipitation assay                    ;1
+blue native page                                       ;1
+biophysical                                            ;1
+bioluminescence resonance energy transfer              ;1
+biochemical                                            ;1
+bimolecular fluorescence complementation               ;1
+beta lactamase complementation                         ;1
+beta galactosidase complementation                     ;1
+affinity chromatography technology                     ;1
+bead aggregation assay                                 ;1
+atpase assay                                           ;1
+atomic force microscopy                                ;1
+array technology                                       ;1
+antisense rna                                          ;1
+antibody array                                         ;1
+anti tag coimmunoprecipitation                         ;1
+anti bait coimmunoprecipitation                        ;1
+amplified luminescent proximity homogeneous assay      ;1
+adp ribosylation reaction                              ;1
+acetylase assay                                        ;1
