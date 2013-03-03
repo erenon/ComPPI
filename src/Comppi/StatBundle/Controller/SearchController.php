@@ -17,22 +17,10 @@ class SearchController extends Controller
      */
     public function indexAction()
     {
-        $search = $this->get('comppi.stat.search');
-
-        $examples = $search->getExamples();
-        $exampleNames = array();
-
-        foreach ($examples as $example) {
-            $exampleNames[] = $example['name'];
-        }
-
-        uasort($exampleNames, 'strcmp');
-
         $searchForm = $this->getSearchForm();
 
         return array(
             'searchForm' => $searchForm->createView(),
-            'examples' => $exampleNames
         );
     }
 

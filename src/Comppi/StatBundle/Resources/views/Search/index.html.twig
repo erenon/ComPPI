@@ -17,15 +17,6 @@
 <p class="muted"><span class="label label-warning">Tip</span>
 Use <strong>*</strong> character to search by name fragment: *p53, p53* or *p53*
 </p>   
-<p class="muted"><span class="label label-info">Examples</span>
-{% for example in examples %}
-    {% if loop.last %}
-        {{ example }}
-    {% else %}
-        {{ example }},
-    {% endif %}
-{% endfor %}
-</p>
 
     {{ form_rest(searchForm) }}
 </form>
