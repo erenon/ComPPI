@@ -65,6 +65,19 @@
 		</tr>
 		<tr class="protSearchDetailsBox">
 			<td colspan="6">
+			<h3>Interaction details:</h3>
+			<p><span class="protSearchDetailName">Type determined in:</span> </p>
+			{#<p><span class="protSearchDetailName">Source database(s):</span>
+			<table>
+				{% for i,intDetail in p.interact_db %}
+				<tr>
+				<td>{% if p.interact_db[i] %} {{ p.interact_db[i] }} {% endif %}</td>
+				<td>{% if p.interact_pubmed_links[i] %} <a href="{{ p.protA_pubmed_links[i] }}" target="_blank">PubMed</a> {% endif %}</td>
+				</tr>
+				{% endfor %}
+			</table>
+			</p>#}
+				
 			<h3>Details of '{{ p.protA }}':</h3>
 				<p><span class="protSearchDetailName">Full name:</span> </p>
 				<p><span class="protSearchDetailName">Uniprot profile:</span> <a href="{{ uniprot_root }}{{ p.protA }}" target="_blank">{{ p.protA }}</a></p>
