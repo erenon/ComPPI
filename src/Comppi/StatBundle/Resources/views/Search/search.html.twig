@@ -6,13 +6,19 @@
 
 <h2>{% trans %}Search{% endtrans %}</h2>
 
-<form action="{{ path('stat_search_search') }}" method="post" {{ form_enctype(searchForm) }}>
+<form action="{{ path('stat_search_search') }}" method="GET" {{ form_enctype(searchForm) }}>
     {{ form_errors(searchForm.searchTerm) }}
     
     <div class="input-append">
-    {{ form_widget(searchForm.searchTerm, { 'attr': {'class': 'input-xxlarge'} }) }}
+    {{ form_widget(searchForm.searchTerm, { 'attr': {'class': 'input-xxlarge protein-search-input'} }) }}
     <button class="btn" type="submit" value="submit">{% trans %}Search{% endtrans %}</button>
     </div>    
+
+<p class="muted"><span class="label label-warning">Tip</span>
+{% trans %}
+Use <strong>*</strong> character to search by name fragment: *p53, p53* or *p53*
+{% endtrans %}
+</p> 
     
     {{ form_rest(searchForm) }}
 </form>
@@ -35,7 +41,16 @@
         <tr>
             <td>{{ result.specie.name }}</td>
             <td>{{ result.namingConvention }}</td>
-            <td>{{ result.name }}</td>
+            <td>
+                {{ result.name }}
+                {% if result.altName is defined and result.altConvention is defined%}
+                    <span class="muted pull-right">
+                    ({% trans with {'%convention%': result.altConvention, '%name%': result.altName} %}
+                        It's %convention% name is %name%
+                    {% endtrans %})
+                    </span>
+                {% endif %}
+            </td>
             <td class="tcell-middle">
                 <a href="{{ path('stat_protein_protein', {'specieAbbr': result.specie.abbreviation, 'id': result.proteinId }) }}">
                 {% trans %}details{% endtrans %}

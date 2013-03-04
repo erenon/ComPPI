@@ -2,6 +2,8 @@
 
 namespace Comppi\StatBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -15,25 +17,10 @@ class SearchController extends Controller
      */
     public function indexAction()
     {
-        $searchForm = $this->createFormBuilder(null)
-            ->add('searchTerm', 'text')
-            ->setAttribute('csrf_protection', false)
-            ->getForm();
-
-        $search = $this->get('comppi.stat.search');
-
-        $examples = $search->getExamples();
-        $exampleNames = array();
-
-        foreach ($examples as $example) {
-            $exampleNames[] = $example['name'];
-        }
-
-        uasort($exampleNames, 'strcmp');
+        $searchForm = $this->getSearchForm();
 
         return array(
             'searchForm' => $searchForm->createView(),
-            'examples' => $exampleNames
         );
     }
 
@@ -43,19 +30,32 @@ class SearchController extends Controller
      */
     public function searchAction(Request $request)
     {
-        $searchForm = $this->createFormBuilder(null)
-            ->add('searchTerm', 'text')
-            ->setAttribute('csrf_protection', false)
-            ->getForm();
-
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() == 'GET') {
+            $searchForm = $this->getSearchForm();
             $searchForm->bindRequest($request);
 
             if ($searchForm->isValid()) {
                 $data = $searchForm->getData();
                 $searchTerm = trim($data['searchTerm']);
 
+                if (empty($searchTerm)) {
+                    return $this->redirect(
+                        $this->generateUrl('stat_search_index'),
+                        303 // See Other
+                    );
+                }
+
                 $search = $this->get('comppi.stat.search');
+
+                // replace * with %
+                if ($searchTerm[0] === '*') {
+                    $searchTerm[0] = '%';
+                }
+
+                if ($searchTerm[strlen($searchTerm) - 1] === '*') {
+                    $searchTerm[strlen($searchTerm) - 1] = '%';
+                }
+
                 $results = $search->searchByName($searchTerm);
 
                 return array(
@@ -69,5 +69,34 @@ class SearchController extends Controller
             'searchForm' => $searchForm->createView(),
         	'results' => array()
         );
+    }
+
+    /**
+     * @Route("/search/autocomplete/{query}", name="stat_search_autocomplete")
+     */
+    public function autocompleteAction($query) {
+        $search = $this->get('comppi.stat.search');
+        $names = $search->getNamesContaining($query);
+
+        $response = array();
+        $response['names'] = array();
+        foreach ($names as $name) {
+            $response['names'][] = $name['name'];
+        }
+
+        return new Response(json_encode($response));
+    }
+
+    private function getSearchForm() {
+        $searchForm = $this->createFormBuilder(
+            null,
+            array(
+                'csrf_protection' => false
+            )
+        )
+            ->add('searchTerm', 'text')
+            ->getForm();
+
+        return $searchForm;
     }
 }

@@ -33,6 +33,10 @@ abstract class AbstractParser
         return $this->databaseIdentifier;
     }
 
+    public function getFileInfo() {
+        return $this->fileName;
+    }
+
     protected function readline() {
         $line = fgets($this->fileHandle);
 

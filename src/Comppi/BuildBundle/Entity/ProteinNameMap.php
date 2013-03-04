@@ -8,8 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(
  *     indexes={
- *         @ORM\index(name="search_idx", columns={"specieId", "namingConventionA", "proteinNameA"}),
- *         @ORM\index(name="reverse_search_idx", columns={"specieId", "namingConventionB", "proteinNameB"})
+ *         @ORM\index(name="search_idx", columns={"proteinNameA", "namingConventionA", "specieId"}),
+ *         @ORM\index(name="reverse_search_idx", columns={"proteinNameB", "namingConventionB", "specieId"})
  *     },
  *     uniqueConstraints={
  *         @ORM\UniqueConstraint(name="unique_translation", columns={"namingConventionA", "proteinNameA", "namingConventionB", "proteinNameB"})

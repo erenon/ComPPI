@@ -158,10 +158,10 @@ class LocalizationTranslatorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testInvalidgetLargelocById() {
-        $this->translator->getLargelocById(23);
+        $this->assertEquals(
+            'N/A',
+            $this->translator->getLargelocById(23)
+        );
     }
 }

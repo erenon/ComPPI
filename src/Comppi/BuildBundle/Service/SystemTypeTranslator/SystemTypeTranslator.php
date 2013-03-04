@@ -45,7 +45,7 @@ class SystemTypeTranslator
         );
 
         $this->systemTypeInsert = $this->connection->prepare(
-        	'INSERT INTO SystemType VALUES ("", ?, ?)'
+        	'INSERT INTO SystemType VALUES (NULL, ?, ?)'
         );
 
         $this->loadSynonyms($synonymFile);
@@ -64,15 +64,19 @@ class SystemTypeTranslator
 
         while (($row = fgetcsv($handle, 0, ";")) !== false) {
             $this->systemTypeInsert->execute(array(
-                $row[0],
-                $row[1]
+                trim($row[0]),
+                intval($row[1])
             ));
         }
 
         $this->connection->commit();
+
+        fclose($handle);
     }
 
     public function getSystemTypeId($systemTypeName) {
+        $systemTypeName = trim($systemTypeName);
+
         // try cache
         $id = $this->systemTypeCache->getSystemTypeId($systemTypeName);
 
@@ -115,12 +119,12 @@ class SystemTypeTranslator
 
         while (($row = fgetcsv($handle, 0, ";")) !== false) {
             if (is_array($row)) {
-                $mainName = array_shift($row);
+                $mainName = trim(array_shift(($row)));
 
                 $this->synonyms[$mainName] = $mainName;
 
                 foreach ($row as $synonym) {
-                    $this->synonyms[$synonym] = $mainName;
+                    $this->synonyms[trim($synonym)] = $mainName;
                 }
             }
         }

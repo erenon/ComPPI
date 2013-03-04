@@ -27,14 +27,9 @@ class CheckLocalizationsCommand extends ContainerAwareCommand
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        foreach ($this->localizationTranslator->localizations as $localzation) {
-            $id = $localzation['id'];
-
-            try {
-                $largeloc = $this->localizationTranslator->getLargelocById($id);
-            } catch (\InvalidArgumentException $e) {
-                $output->writeln("<error>No largeloc found for id: '" . $id . "'</error>");
-            }
+        $missings = $this->localizationTranslator->getIdsWithoutLargeloc();
+        foreach ($missings as $missing) {
+            $output->writeln("<error>No largeloc found for id: '" . $missing . "'</error>");
         }
     }
 }

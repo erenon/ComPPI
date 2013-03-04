@@ -43,7 +43,8 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
 
         // init add system type statement
         $this->addSystemTypeStatement = $this->connection->prepare(
-            'INSERT INTO ProtLocToSystemType VALUES (?, ?)'
+            'INSERT INTO ProtLocToSystemType VALUES (?, ?)' .
+        	' ON DUPLICATE KEY UPDATE protLocId = protLocId'
         );
     }
 

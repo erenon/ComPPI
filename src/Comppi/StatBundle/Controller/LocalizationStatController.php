@@ -70,6 +70,7 @@ class LocalizationStatController extends Controller
     public function majorlocAction() {
         $translator = $this->get('comppi.build.localizationTranslator');
         $largelocs = $translator->getLargelocs();
+        $largelocs['N/A'] = $translator->getIdsWithoutLargeloc();
 
         foreach ($largelocs as &$largeloc) {
             foreach ($largeloc as $key => $id) {

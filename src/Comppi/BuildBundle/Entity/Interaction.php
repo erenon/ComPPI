@@ -6,7 +6,15 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(indexes={@ORM\index(name="search_idx_aid", columns={"actorAId"}), @ORM\index(name="search_idx_bid", columns={"actorBId"})})
+ * @ORM\Table(
+ * 		indexes={
+ * 			@ORM\index(name="search_idx_aid", columns={"actorAId"}),
+ * 			@ORM\index(name="search_idx_bid", columns={"actorBId"})
+ * 		},
+ * 		uniqueConstraints={
+ * 			@ORM\UniqueConstraint(name="single_interaction_per_source", columns={"actorAId", "actorBId", "sourceDb"})
+ * 		}
+ * )
  */
 class Interaction
 {

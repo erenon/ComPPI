@@ -8,6 +8,15 @@
 
 {% for name, children in largelocs %}
     <h2>{{ name }}</h2>
+    
+    {% if name == 'N/A' %}
+        <div class="alert alert-warning">
+        <h4>{% trans %}No major localization{% endtrans %}</h4>
+        {% trans %}
+            The following localizations do not belong to any major localization.
+        {% endtrans %}
+        </div>    
+    {% endif %}
  
     <table class="table table-striped table-hover table-bordered">
         <thead>
