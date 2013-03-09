@@ -23,7 +23,7 @@ class UniprotSecondary extends AbstractMapParser
 
         $this->currentRecord = array (
             'namingConventionA' => 'UniProtKB-AC',
-            'namingConventionB'	=> 'UniProtKB-AC',
+            'namingConventionB'	=> 'UniProtKB-AC/Primary',
             'proteinNameA'	=> $recordArray[0],
             'proteinNameB'	=> $recordArray[1]
         );
