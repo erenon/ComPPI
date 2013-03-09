@@ -12,7 +12,13 @@ use Doctrine\ORM\Mapping as ORM;
  *         @ORM\index(name="reverse_search_idx", columns={"proteinNameB", "namingConventionB", "specieId"})
  *     },
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="unique_translation", columns={"namingConventionA", "proteinNameA", "namingConventionB", "proteinNameB"})
+ *         @ORM\UniqueConstraint(name="unique_translation", columns={
+ *         		"proteinNameA",
+ *         		"proteinNameB",
+ *         		"namingConventionA",
+ *         		"namingConventionB",
+ *         		"specieId"
+ *         })
  *     }
  * )
  */
