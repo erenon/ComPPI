@@ -58,9 +58,14 @@ class SearchController extends Controller
 
                 $results = $search->searchByName($searchTerm);
 
+                // check overflow
+                $overflow = $results['_overflow'];
+                unset($results['_overflow']);
+
                 return array(
                     'searchForm' => $searchForm->createView(),
-                    'results' => $results
+                    'results' => $results,
+                    'overflow' => $overflow
                 );
             }
         }

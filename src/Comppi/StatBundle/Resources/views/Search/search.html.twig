@@ -60,6 +60,15 @@ Use <strong>*</strong> character to search by name fragment: *p53, p53* or *p53*
     {% endfor %}
     </table>
     
+    {% if overflow %}
+        <div class="alert alert-block">
+        <h4>{% trans %}Too many proteins{% endtrans %}</h4>
+        {% trans %}
+            Other proteins also matched your request. Try to refine your criteria.
+        {% endtrans %}  
+        </div>
+    {% endif %}
+    
 {% else %}
     <div class="alert alert-block">
     <h4>{% trans %}Not found{% endtrans %}</h4>

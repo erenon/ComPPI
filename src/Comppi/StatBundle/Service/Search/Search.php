@@ -29,11 +29,14 @@ class Search
 
     public function searchByName($name) {
         $results = array();
+        $overflow = false;
+        $maxResultCount = 50;
 
         $select = $this->connection->executeQuery(
         	'SELECT id as proteinId, specieId, proteinName as name, proteinNamingConvention as namingConvention FROM Protein' .
         	' WHERE proteinName LIKE ?' .
-            ' ORDER BY LENGTH(name)',
+            ' ORDER BY LENGTH(name)' .
+            ' LIMIT ' . $maxResultCount,
             array($name)
         );
 
@@ -49,6 +52,11 @@ class Search
                 $ids[] = $result['proteinId'];
             }
             $synonymParameters = array($name, join(',',$ids));
+
+            // check for overflow
+            if ($select->rowCount() == $maxResultCount) {
+                $overflow = true;
+            }
         } else {
             // no protein found yet, IN clause not needed
             $synonymInClause = '';
@@ -63,13 +71,19 @@ class Search
             ' WHERE name LIKE ?' .
             $synonymInClause .
             ' GROUP BY np.proteinId' .
-            ' ORDER BY LENGTH(altName)',
+            ' ORDER BY LENGTH(altName)' .
+            ' LIMIT ' . $maxResultCount,
             $synonymParameters
         );
 
         if ($select->rowCount() > 0) {
            $synonyms  = $select->fetchAll(\PDO::FETCH_ASSOC);
            $results = array_merge($results, $synonyms);
+
+            // check for overflow
+            if ($select->rowCount() == $maxResultCount) {
+                $overflow = true;
+            }
         }
 
         // change specie ids to specie descriptors
@@ -78,6 +92,9 @@ class Search
         foreach ($results as &$result) {
             $result['specie'] = $specieDescriptors[$result['specieId']];
         }
+
+        // set overflow bit
+        $results['_overflow'] = $overflow;
 
         return $results;
     }
