@@ -97,8 +97,8 @@ class UniprotFullname extends AbstractMapParser
 
         if ($recordArray[2] == 'reviewed') {
             $this->currentRecord = array(
-                'namingConventionA'	=> 'UniProtKB/Swiss-Prot',
-                'namingConventionB' => 'UniProtKB-AC',
+                'namingConventionA' => 'UniProtKB-AC',
+                'namingConventionB'	=> 'UniProtKB/Swiss-Prot',
                 'proteinNameA'	=> $recordArray[0],
                 'proteinNameB'	=> $recordArray[0]
             );
