@@ -52,7 +52,7 @@ Use <strong>*</strong> character to search by name fragment: *p53, p53* or *p53*
                 {% endif %}
             </td>
             <td class="tcell-middle">
-                <a href="{{ path('stat_protein_protein', {'specieAbbr': result.specie.abbreviation, 'id': result.proteinId }) }}">
+                <a href="{{ path('stat_protein_protein', {'id': result.proteinId }) }}">
                 {% trans %}details{% endtrans %}
                 </a>
             </td>

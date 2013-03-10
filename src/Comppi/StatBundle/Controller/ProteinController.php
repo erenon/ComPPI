@@ -11,28 +11,27 @@ use Symfony\Component\HttpFoundation\Response;
 class ProteinController extends Controller
 {
     /**
-     * @Route("/protein/{specieAbbr}/{id}", requirements={"id" = "\d+"}, name="stat_protein_protein")
+     * @Route("/protein/{id}", requirements={"id" = "\d+"}, name="stat_protein_protein")
      * @Template()
      */
-    public function proteinAction($specieAbbr, $id)
+    public function proteinAction($id)
     {
-        /**
-         * @var Comppi\BuildBundle\Service\SpecieProvider\SpecieProvider
-         */
-        $specieProvider = $this->container->get('comppi.build.specieProvider');
-
-        try {
-            $specie = $specieProvider->getSpecieByAbbreviation($specieAbbr);
-        } catch (\InvalidArgumentException $e) {
-            throw $this->createNotFoundException('Invalid species specified');
-        }
-
         $pservice = $this->get('comppi.stat.protein');
-
-        $protein = $pservice->get($specie->id, $id);
+        $protein = $pservice->get($id);
 
         if ($protein === false) {
             throw $this->createNotFoundException('Requested protein does not exist');
+        }
+
+        // get species
+        try {
+            /**
+             * @var Comppi\BuildBundle\Service\SpecieProvider\SpecieProvider
+             */
+            $specieProvider = $this->container->get('comppi.build.specieProvider');
+            $specie = $specieProvider->getSpecieById($protein['specieId']);
+        } catch (\InvalidArgumentException $e) {
+            throw new Exception("Invalid specieId found in database", 500, $e);
         }
 
         $synonyms = $pservice->getSynonyms($id);
