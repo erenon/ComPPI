@@ -12,7 +12,6 @@ class ProteinTranslator
     private $namingConventionOrder = array(
         'UniProtKB/Swiss-Prot',
         'UniProtKB/TrEmbl',
-    	'UniProtKB-AC/Primary',
         'UniProtKB-AC',
         'UniProtFull',
         'UniProtKB-ID',
