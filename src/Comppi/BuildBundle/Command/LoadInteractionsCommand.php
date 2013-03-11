@@ -89,8 +89,18 @@ class LoadInteractionsCommand extends AbstractLoadCommand
                         $this->addDatabaseRefToId($sourceDb, $proteinAComppiId);
                         $this->addDatabaseRefToId($sourceDb, $proteinBComppiId);
 
-                        $this->insertInteractionStatement->bindValue(1, $proteinAComppiId);
-                        $this->insertInteractionStatement->bindValue(2, $proteinBComppiId);
+                        // let $proteinAComppiId always the smaller id
+                        // this is an efficient way to help filter duplicated interacitons
+                        if ($proteinAComppiId < $proteinBComppiId) {
+                            $smallerId = $proteinAComppiId;
+                            $greaterId = $proteinBComppiId;
+                        } else {
+                            $smallerId = $proteinBComppiId;
+                            $greaterId = $proteinAComppiId;
+                        }
+
+                        $this->insertInteractionStatement->bindValue(1, $smallerId);
+                        $this->insertInteractionStatement->bindValue(2, $greaterId);
                         $this->insertInteractionStatement->bindValue(4, $interaction['pubmedId']);
                         $this->insertInteractionStatement->execute();
 
