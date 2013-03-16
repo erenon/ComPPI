@@ -236,18 +236,6 @@ fi
 # UniprotDeleted Swissprot
 if [ ! -f delac_sp.txt ]
 then
-    ln -s ../../hs/map/delac_sp.txt delac_sp.txt
-fi
-
-# UniproDeleted Trembl
-if [ ! -f delac_tr.txt ]
-then
-    ln -s ../../hs/map/delac_tr.txt delac_tr.txt
-fi
-
-# UniprotDeleted Swissprot
-if [ ! -f delac_sp.txt ]
-then
     wget "ftp://ftp.uniprot.org/pub/databases/uniprot/knowledgebase/docs/delac_sp.txt" -O ./delac_sp.txt
 fi
 
