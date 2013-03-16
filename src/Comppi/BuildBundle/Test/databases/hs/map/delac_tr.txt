@@ -1,0 +1,60 @@
+----------------------------------------------------------------------------
+        UniProtKB/UniProtKB/TrEMBL Protein Database
+        European Bioinformatics Institute (EBI); Hinxton, United Kingdom
+        SIB Swiss Institute of Bioinformatics; Geneva, Switzerland
+        Protein Information Resource (PIR); Washington DC, USA
+----------------------------------------------------------------------------
+
+Description: List of accession numbers deleted from UniProtKB/TrEMBL
+Name:        DELAC_TR.TXT
+Release:     2013_03 of 06-Mar-2013
+
+----------------------------------------------------------------------------
+
+This file lists the accession numbers of UniProtKB/TrEMBL entries which have
+been deleted from the database. Most deletions are due to the deletion of
+the corresponding CDS in the source nucleotide sequence databases EMBL-
+Bank/DDBJ/GenBank. In addition, some entries are recognised to be Open
+Reading frames (ORFs) that have been wrongly predicted to code for
+proteins. When there is enough evidence that these hypothetical proteins
+are not real, we take the decision to remove them from UniProtKB/TrEMBL.
+
+Also see the file DELAC_SP.TXT for the list of accession numbers which
+have been deleted in UniProtKB/Swiss-Prot.
+
+
+Accession number
+________________
+A0A3F0
+A0A3F3
+A0A3G3
+A0A3G4
+A0A4V9
+A0A4W0
+A0A551
+A0A553
+A0A5C9
+A0A5D7
+A0A5D8
+A0A5D9
+A0A5E0
+A0A5E5
+A0A5E6
+A0A5F4
+A0A5F5
+A0A5F6
+A0A5F7
+A0A5F8
+A0A5F9
+A0A5G0
+A0A5G1
+A0A5G2
+A0A5G3
+A0A5G4
+A0A5G5
+A0A5G6
+A0A5G7
+A0A5G8
+A0A5G9
+A0A5H0
+A0A5H1

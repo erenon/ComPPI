@@ -68,6 +68,12 @@ abstract class AbstractParser
         }
     }
 
+    protected function dropHeader() {
+        for ($i = 0; $i < $this->headerCount; $i++) {
+            fgets($this->fileHandle);
+        }
+    }
+
     protected abstract function readRecord();
 
     /* Iterator methods */
@@ -85,10 +91,7 @@ abstract class AbstractParser
             rewind($this->fileHandle);
         }
 
-        // drop headers
-        for ($i = 0; $i < $this->headerCount; $i++) {
-            fgets($this->fileHandle);
-        }
+        $this->dropHeader();
 
         $this->readRecord();
     }
