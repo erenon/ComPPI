@@ -50,23 +50,27 @@ class UniprotFullname extends AbstractMapParser
         $names = $this->extractNames($strippedName);
 
         foreach ($names['alt'] as $altName) {
-            $this->recordReady[] = array(
-                'namingConventionA'	=> 'UniProtAlt',
-                'namingConventionB' => 'UniProtKB-AC',
-                'proteinNameA'	=> $altName,
-                'proteinNameB'	=> $recordArray[0]
-            );
+            if (in_array($altName, $this->altNameBlacklist) === false) {
+                $this->recordReady[] = array(
+                    'namingConventionA'	=> 'UniProtAlt',
+                    'namingConventionB' => 'UniProtKB-AC',
+                    'proteinNameA'	=> $altName,
+                    'proteinNameB'	=> $recordArray[0]
+                );
+            }
         }
 
-        $fullName = $names['full'];
+        if (isset($names['full'])) {
+            $fullName = $names['full'];
 
-        if (in_array($fullName, $this->fullNameBlacklist) === false) {
-            $this->recordReady[] = array(
-                'namingConventionA'	=> 'UniProtFull',
-                'namingConventionB' => 'UniProtKB-AC',
-                'proteinNameA'	=> $fullName,
-                'proteinNameB'	=> $recordArray[0]
-            );
+            if (in_array($fullName, $this->fullNameBlacklist) === false) {
+                $this->recordReady[] = array(
+                    'namingConventionA'	=> 'UniProtFull',
+                    'namingConventionB' => 'UniProtKB-AC',
+                    'proteinNameA'	=> $fullName,
+                    'proteinNameB'	=> $recordArray[0]
+                );
+            }
         }
 
         if ($recordArray[2] == 'reviewed') {
@@ -131,17 +135,25 @@ class UniprotFullname extends AbstractMapParser
                     // start of name found
                     $names['alt'][] = substr($strippedName, $i+1, $altNameEnd - $i);
 
-                    // check for other alt names
-                    if ($strippedName[$i - 2] !== ')') {
-                        // no other alt name found, mark and terminate
-                        $fullNameEnd = $i - 1;
+                    if ($i >= 2) {
+                        // check for other alt names
+                        if ($strippedName[$i - 2] !== ')') {
+                            // no other alt name found, mark and terminate
+                            $fullNameEnd = $i - 1;
+                            $i = -1;
+                        }
+                    } else {
+                        // no full name provided
+                        $fullNameEnd = 0;
                         $i = -1;
                     }
                 }
             }
         }
 
-        $names['full'] = substr($strippedName, 0, $fullNameEnd);
+        if ($fullNameEnd > 0) { // full name found
+            $names['full'] = substr($strippedName, 0, $fullNameEnd);
+        }
 
         return $names;
     }
