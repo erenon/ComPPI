@@ -104,7 +104,7 @@
         <tr>
             <td>{{ interaction.actorNamingConvention }}</td>
             <td>
-                <a href="{{ path('stat_protein_protein', {'specieAbbr': main.specie.abbreviation, 'id': interaction.actorId }) }}">
+                <a href="{{ path('stat_protein_protein', {'id': interaction.actorId }) }}">
                 {{ interaction.actorName }}
                 </a>
             </td>

@@ -1,101 +1,101 @@
-UniProtKB/Swiss-Prot;UniProtKB-AC;P32234;P32234
+UniProtKB-AC;UniProtKB/Swiss-Prot;P32234;P32234
 UniProtFull;UniProtKB-AC;GTP-binding protein 128up;P32234
-UniProtKB/Swiss-Prot;UniProtKB-AC;P81928;P81928
+UniProtKB-AC;UniProtKB/Swiss-Prot;P81928;P81928
 UniProtFull;UniProtKB-AC;RPII140-upstream gene protein;P81928
-UniProtKB/Swiss-Prot;UniProtKB-AC;P92177;P92177
+UniProtKB-AC;UniProtKB/Swiss-Prot;P92177;P92177
 UniProtAlt;UniProtKB-AC;Suppressor of Ras1 3-9;P92177
 UniProtFull;UniProtKB-AC;14-3-3 protein epsilon;P92177
-UniProtKB/Swiss-Prot;UniProtKB-AC;P29310;P29310
-UniProtAlt;UniProtKB-AC;14-3-3-like protein;P29310
+UniProtKB-AC;UniProtKB/Swiss-Prot;P29310;P29310
 UniProtAlt;UniProtKB-AC;Protein Leonardo;P29310
+UniProtAlt;UniProtKB-AC;14-3-3-like protein;P29310
 UniProtFull;UniProtKB-AC;14-3-3 protein zeta;P29310
-UniProtKB/Swiss-Prot;UniProtKB-AC;P16909;P16909
+UniProtKB-AC;UniProtKB/Swiss-Prot;P16909;P16909
 UniProtFull;UniProtKB-AC;Histone-like protein 18C;P16909
-UniProtKB/Swiss-Prot;UniProtKB-AC;P36179;P36179
-UniProtAlt;UniProtKB-AC;PR65;P36179
+UniProtKB-AC;UniProtKB/Swiss-Prot;P36179;P36179
 UniProtAlt;UniProtKB-AC;Protein phosphatase PP2A regulatory subunit A;P36179
+UniProtAlt;UniProtKB-AC;PR65;P36179
 UniProtFull;UniProtKB-AC;Serine/threonine-protein phosphatase PP2A 65 kDa regulatory subunit;P36179
-UniProtKB/Swiss-Prot;UniProtKB-AC;P36872;P36872
-UniProtAlt;UniProtKB-AC;PR55;P36872
-UniProtAlt;UniProtKB-AC;Protein phosphatase PP2A regulatory subunit B;P36872
+UniProtKB-AC;UniProtKB/Swiss-Prot;P36872;P36872
 UniProtAlt;UniProtKB-AC;Protein twins;P36872
+UniProtAlt;UniProtKB-AC;Protein phosphatase PP2A regulatory subunit B;P36872
+UniProtAlt;UniProtKB-AC;PR55;P36872
 UniProtFull;UniProtKB-AC;Protein phosphatase PP2A 55 kDa regulatory subunit;P36872
-UniProtKB/Swiss-Prot;UniProtKB-AC;Q9V785;Q9V785
+UniProtKB-AC;UniProtKB/Swiss-Prot;Q9V785;Q9V785
 UniProtAlt;UniProtKB-AC;Protein parcase;Q9V785
 UniProtFull;UniProtKB-AC;SH3 domain-binding protein 5 homolog;Q9V785
-UniProtKB/Swiss-Prot;UniProtKB-AC;Q9V8M5;Q9V8M5
-UniProtAlt;UniProtKB-AC;HIBADH;Q9V8M5
+UniProtKB-AC;UniProtKB/Swiss-Prot;Q9V8M5;Q9V8M5
 UniProtAlt;UniProtKB-AC;EC 1.1.1.31;Q9V8M5
+UniProtAlt;UniProtKB-AC;HIBADH;Q9V8M5
 UniProtFull;UniProtKB-AC;Probable 3-hydroxyisobutyrate dehydrogenase, mitochondrial;Q9V8M5
-UniProtKB/Swiss-Prot;UniProtKB-AC;Q9V8R9;Q9V8R9
+UniProtKB-AC;UniProtKB/Swiss-Prot;Q9V8R9;Q9V8R9
 UniProtAlt;UniProtKB-AC;Protein coracle;Q9V8R9
 UniProtFull;UniProtKB-AC;Protein 4.1 homolog;Q9V8R9
-UniProtKB/Swiss-Prot;UniProtKB-AC;P20905;P20905
-UniProtAlt;UniProtKB-AC;5-HT receptor;P20905
-UniProtAlt;UniProtKB-AC;5HT-dro;P20905
+UniProtKB-AC;UniProtKB/Swiss-Prot;P20905;P20905
 UniProtAlt;UniProtKB-AC;Serotonin receptor 1;P20905
+UniProtAlt;UniProtKB-AC;5HT-dro;P20905
+UniProtAlt;UniProtKB-AC;5-HT receptor;P20905
 UniProtFull;UniProtKB-AC;5-hydroxytryptamine receptor 1;P20905
-UniProtKB/Swiss-Prot;UniProtKB-AC;P28285;P28285
-UniProtAlt;UniProtKB-AC;5-HT receptor 2A;P28285
+UniProtKB-AC;UniProtKB/Swiss-Prot;P28285;P28285
 UniProtAlt;UniProtKB-AC;Serotonin receptor 2A;P28285
+UniProtAlt;UniProtKB-AC;5-HT receptor 2A;P28285
 UniProtFull;UniProtKB-AC;5-hydroxytryptamine receptor 2A;P28285
-UniProtKB/Swiss-Prot;UniProtKB-AC;P28286;P28286
-UniProtAlt;UniProtKB-AC;5-HT receptor 2B;P28286
-UniProtAlt;UniProtKB-AC;5-hydroxytryptamine receptor 1B;P28286
-UniProtAlt;UniProtKB-AC;5-HT receptor 1B;P28286
-UniProtAlt;UniProtKB-AC;Serotonin receptor 1B;P28286
+UniProtKB-AC;UniProtKB/Swiss-Prot;P28286;P28286
 UniProtAlt;UniProtKB-AC;Serotonin receptor 2B;P28286
+UniProtAlt;UniProtKB-AC;Serotonin receptor 1B;P28286
+UniProtAlt;UniProtKB-AC;5-HT receptor 1B;P28286
+UniProtAlt;UniProtKB-AC;5-hydroxytryptamine receptor 1B;P28286
+UniProtAlt;UniProtKB-AC;5-HT receptor 2B;P28286
 UniProtFull;UniProtKB-AC;5-hydroxytryptamine receptor 2B;P28286
-UniProtKB/Swiss-Prot;UniProtKB-AC;P27091;P27091
+UniProtKB-AC;UniProtKB/Swiss-Prot;P27091;P27091
 UniProtAlt;UniProtKB-AC;Protein glass bottom boat;P27091
 UniProtFull;UniProtKB-AC;Protein 60A;P27091
-UniProtKB/Swiss-Prot;UniProtKB-AC;P41572;P41572
+UniProtKB-AC;UniProtKB/Swiss-Prot;P41572;P41572
 UniProtAlt;UniProtKB-AC;EC 1.1.1.44;P41572
 UniProtFull;UniProtKB-AC;6-phosphogluconate dehydrogenase, decarboxylating;P41572
-UniProtKB/Swiss-Prot;UniProtKB-AC;Q9VZ64;Q9VZ64
-UniProtAlt;UniProtKB-AC;6PGL;Q9VZ64
+UniProtKB-AC;UniProtKB/Swiss-Prot;Q9VZ64;Q9VZ64
 UniProtAlt;UniProtKB-AC;EC 3.1.1.31;Q9VZ64
+UniProtAlt;UniProtKB-AC;6PGL;Q9VZ64
 UniProtFull;UniProtKB-AC;Probable 6-phosphogluconolactonase;Q9VZ64
-UniProtKB/Swiss-Prot;UniProtKB-AC;P13368;P13368
+UniProtKB-AC;UniProtKB/Swiss-Prot;P13368;P13368
 UniProtAlt;UniProtKB-AC;EC 2.7.10.1;P13368
 UniProtFull;UniProtKB-AC;Protein sevenless;P13368
-UniProtKB/Swiss-Prot;UniProtKB-AC;P16375;P16375
+UniProtKB-AC;UniProtKB/Swiss-Prot;P16375;P16375
 UniProtAlt;UniProtKB-AC;Nuclear receptor subfamily 2 group F member 3, isoforms B/C;P16375
 UniProtFull;UniProtKB-AC;Steroid receptor seven-up, isoforms B/C;P16375
-UniProtKB/Swiss-Prot;UniProtKB-AC;P16376;P16376
+UniProtKB-AC;UniProtKB/Swiss-Prot;P16376;P16376
 UniProtAlt;UniProtKB-AC;Nuclear receptor subfamily 2 group F member 3, isoform A;P16376
 UniProtFull;UniProtKB-AC;Steroid receptor seven-up, isoform A;P16376
-UniProtKB/Swiss-Prot;UniProtKB-AC;O46197;O46197
+UniProtKB-AC;UniProtKB/Swiss-Prot;O46197;O46197
 UniProtFull;UniProtKB-AC;Accessory gland protein Acp29AB;O46197
-UniProtKB/Swiss-Prot;UniProtKB-AC;O46203;O46203
+UniProtKB-AC;UniProtKB/Swiss-Prot;O46203;O46203
 UniProtFull;UniProtKB-AC;Accessory gland protein Acp32CD;O46203
-UniProtKB/Swiss-Prot;UniProtKB-AC;O46227;O46227
+UniProtKB-AC;UniProtKB/Swiss-Prot;O46227;O46227
 UniProtFull;UniProtKB-AC;Accessory gland peptide Acp33A;O46227
-UniProtKB/Swiss-Prot;UniProtKB-AC;Q9V3R1;Q9V3R1
+UniProtKB-AC;UniProtKB/Swiss-Prot;Q9V3R1;Q9V3R1
 UniProtFull;UniProtKB-AC;Accessory gland protein Acp36DE;Q9V3R1
-UniProtKB/Swiss-Prot;UniProtKB-AC;P18487;P18487
+UniProtKB-AC;UniProtKB/Swiss-Prot;P18487;P18487
 UniProtFull;UniProtKB-AC;Protein anon-37Cs;P18487
-UniProtKB/Swiss-Prot;UniProtKB-AC;P14599;P14599
+UniProtKB-AC;UniProtKB/Swiss-Prot;P14599;P14599
 UniProtFull;UniProtKB-AC;Beta-amyloid-like protein;P14599
-UniProtKB/Swiss-Prot;UniProtKB-AC;O46199;O46199
+UniProtKB-AC;UniProtKB/Swiss-Prot;O46199;O46199
 UniProtFull;UniProtKB-AC;Accessory gland protein Acp53Ea;O46199
-UniProtKB/Swiss-Prot;UniProtKB-AC;P91927;P91927
+UniProtKB-AC;UniProtKB/Swiss-Prot;P91927;P91927
 UniProtAlt;UniProtKB-AC;Leucine zipper-EF-hand-containing transmembrane protein 1;P91927
 UniProtFull;UniProtKB-AC;LETM1 and EF-hand domain-containing protein anon-60Da, mitochondrial;P91927
-UniProtKB/Swiss-Prot;UniProtKB-AC;O46202;O46202
+UniProtKB-AC;UniProtKB/Swiss-Prot;O46202;O46202
 UniProtFull;UniProtKB-AC;Accessory gland protein Acp62F;O46202
-UniProtKB/Swiss-Prot;UniProtKB-AC;O46200;O46200
+UniProtKB-AC;UniProtKB/Swiss-Prot;O46200;O46200
 UniProtFull;UniProtKB-AC;Accessory gland protein Acp63F;O46200
-UniProtKB/TrEmbl;UniProtKB-AC;Q8IPN6;Q8IPN6
-UniProtAlt;UniProtKB-AC;L(3)82Fd, isoform Q;Q8IPN6
+UniProtKB-AC;UniProtKB/TrEmbl;Q8IPN6;Q8IPN6
 UniProtAlt;UniProtKB-AC;L82G;Q8IPN6
+UniProtAlt;UniProtKB-AC;L(3)82Fd, isoform Q;Q8IPN6
 UniProtFull;UniProtKB-AC;L(3)82Fd, isoform H;Q8IPN6
-UniProtKB/Swiss-Prot;UniProtKB-AC;P52654;P52654
-UniProtAlt;UniProtKB-AC;General transcription factor IIA subunit 1;P52654
+UniProtKB-AC;UniProtKB/Swiss-Prot;P52654;P52654
 UniProtAlt;UniProtKB-AC;dTFIIA-L;P52654
+UniProtAlt;UniProtKB-AC;General transcription factor IIA subunit 1;P52654
 UniProtFull;UniProtKB-AC;Transcription initiation factor IIA subunit 1;P52654
-UniProtKB/Swiss-Prot;UniProtKB-AC;P0CG69;P0CG69
+UniProtKB-AC;UniProtKB/Swiss-Prot;P0CG69;P0CG69
 UniProtFull;UniProtKB-AC;Polyubiquitin;P0CG69
-UniProtKB/Swiss-Prot;UniProtKB-AC;P28668;P28668
+UniProtKB-AC;UniProtKB/Swiss-Prot;P28668;P28668
 UniProtAlt;UniProtKB-AC;Bifunctional aminoacyl-tRNA synthetase;P28668
 UniProtFull;UniProtKB-AC;Bifunctional glutamate/proline--tRNA ligase;P28668

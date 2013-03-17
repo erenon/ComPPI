@@ -13,11 +13,11 @@ class Protein
         $this->connection = $em->getConnection();
     }
 
-    public function get($specieId, $id) {
+    public function get($id) {
         $protein = $this->connection->executeQuery(
-            'SELECT proteinName as name, proteinNamingConvention as namingConvention FROM Protein' .
-        	' WHERE id = ? AND specieId = ? LIMIT 1',
-            array($id, $specieId)
+            'SELECT specieId, proteinName as name, proteinNamingConvention as namingConvention FROM Protein' .
+        	' WHERE id = ? LIMIT 1',
+            array($id)
         );
 
         if ($protein->rowCount() > 0) {

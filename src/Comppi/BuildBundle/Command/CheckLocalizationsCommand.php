@@ -29,7 +29,11 @@ class CheckLocalizationsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output) {
         $missings = $this->localizationTranslator->getIdsWithoutLargeloc();
         foreach ($missings as $missing) {
-            $output->writeln("<error>No largeloc found for id: '" . $missing . "'</error>");
+            $output->writeln(
+            	"<error>No largeloc found for loc: '" .
+                $this->localizationTranslator->getHumanReadableLocalizationById($missing) .
+                "'</error>"
+            );
         }
     }
 }

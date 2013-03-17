@@ -46,35 +46,11 @@ class UniprotFullname extends AbstractMapParser
         $recordArray = explode("\t", $line);
         $this->checkRecordFieldCount($recordArray, 4);
 
-        // strip [Cleaved into
-        $cleavedPos = strpos($recordArray[3], ' [Cleaved into');
-        if ($cleavedPos !== false) {
-            $strippedNameString = substr($recordArray[3], 0, $cleavedPos);
-        } else {
-            $strippedNameString = $recordArray[3];
-        }
+        $strippedName = $this->stripNameMeta($recordArray[3]);
+        $names = $this->extractNames($strippedName);
 
-        // strip [Includes
-        $includesPos = strpos($recordArray[3], ' [Includes');
-        if ($includesPos !== false) {
-            $strippedNameString = substr($strippedNameString, 0, $includesPos);
-        }
-
-        $firstParenPos = strpos($strippedNameString, ' (');
-
-        if ($firstParenPos !== false) {
-            // alt name found, strip "full name" (the first one)
-            $fullName = substr($strippedNameString, 0, $firstParenPos);
-
-            // extract alt names
-            $altNameString = substr($strippedNameString, $firstParenPos+2, -1);
-            $altNames = explode(') (', $altNameString);
-
-            foreach ($altNames as $altName) {
-                if (in_array($altName, $this->altNameBlacklist)) {
-                    continue;
-                }
-
+        foreach ($names['alt'] as $altName) {
+            if (in_array($altName, $this->altNameBlacklist) === false) {
                 $this->recordReady[] = array(
                     'namingConventionA'	=> 'UniProtAlt',
                     'namingConventionB' => 'UniProtKB-AC',
@@ -82,33 +58,103 @@ class UniprotFullname extends AbstractMapParser
                     'proteinNameB'	=> $recordArray[0]
                 );
             }
-        } else {
-            $fullName = $strippedNameString;
         }
 
-        if (in_array($fullName, $this->fullNameBlacklist) === false) {
-            $this->recordReady[] = array(
-                'namingConventionA'	=> 'UniProtFull',
-                'namingConventionB' => 'UniProtKB-AC',
-                'proteinNameA'	=> $fullName,
-                'proteinNameB'	=> $recordArray[0]
-            );
+        if (isset($names['full'])) {
+            $fullName = $names['full'];
+
+            if (in_array($fullName, $this->fullNameBlacklist) === false) {
+                $this->recordReady[] = array(
+                    'namingConventionA'	=> 'UniProtFull',
+                    'namingConventionB' => 'UniProtKB-AC',
+                    'proteinNameA'	=> $fullName,
+                    'proteinNameB'	=> $recordArray[0]
+                );
+            }
         }
 
         if ($recordArray[2] == 'reviewed') {
             $this->currentRecord = array(
-                'namingConventionA'	=> 'UniProtKB/Swiss-Prot',
-                'namingConventionB' => 'UniProtKB-AC',
+                'namingConventionA' => 'UniProtKB-AC',
+                'namingConventionB'	=> 'UniProtKB/Swiss-Prot',
                 'proteinNameA'	=> $recordArray[0],
                 'proteinNameB'	=> $recordArray[0]
             );
         } else {
             $this->currentRecord = array(
-                'namingConventionA'	=> 'UniProtKB/TrEmbl',
-                'namingConventionB' => 'UniProtKB-AC',
+                'namingConventionA' => 'UniProtKB-AC',
+                'namingConventionB'	=> 'UniProtKB/TrEmbl',
                 'proteinNameA'	=> $recordArray[0],
                 'proteinNameB'	=> $recordArray[0]
             );
         }
+    }
+
+    private function stripNameMeta($name) {
+        // strip [Cleaved into
+        $cleavedPos = strpos($name, ' [Cleaved into');
+        if ($cleavedPos !== false) {
+            $name = substr($name, 0, $cleavedPos);
+        }
+
+        // strip [Includes
+        $includesPos = strpos($name, ' [Includes');
+        if ($includesPos !== false) {
+            $name = substr($name, 0, $includesPos);
+        }
+
+        return $name;
+    }
+
+    private function extractNames($strippedName) {
+        $names = array();
+        $names['alt'] = array();
+
+        $len = strlen($strippedName);
+
+        if ($strippedName[$len - 1] !== ')') {
+            // no alt name found
+            $names['full'] = $strippedName;
+            return $names;
+        }
+
+        // extract alt names
+        $parentCount = 0;
+        $fullNameEnd = 0;
+        for ($i = strlen($strippedName) - 1; $i >= 0; $i--) {
+            if ($strippedName[$i] === ')') {
+                if ($parentCount == 0) {
+                    $altNameEnd = $i - 1;
+                }
+
+                $parentCount++;
+            } else if ($strippedName[$i] === '(') {
+                $parentCount--;
+
+                if ($parentCount == 0) {
+                    // start of name found
+                    $names['alt'][] = substr($strippedName, $i+1, $altNameEnd - $i);
+
+                    if ($i >= 2) {
+                        // check for other alt names
+                        if ($strippedName[$i - 2] !== ')') {
+                            // no other alt name found, mark and terminate
+                            $fullNameEnd = $i - 1;
+                            $i = -1;
+                        }
+                    } else {
+                        // no full name provided
+                        $fullNameEnd = 0;
+                        $i = -1;
+                    }
+                }
+            }
+        }
+
+        if ($fullNameEnd > 0) { // full name found
+            $names['full'] = substr($strippedName, 0, $fullNameEnd);
+        }
+
+        return $names;
     }
 }

@@ -1,0 +1,51 @@
+----------------------------------------------------------------------------
+        UniProt - Swiss-Prot Protein Knowledgebase
+        SIB Swiss Institute of Bioinformatics; Geneva, Switzerland
+        European Bioinformatics Institute (EBI); Hinxton, United Kingdom
+        Protein Information Resource (PIR); Washington DC, USA
+----------------------------------------------------------------------------
+
+Description: Accession numbers deleted from UniProtKB/Swiss-Prot
+Name:        delac_sp.txt
+Release:     2013_03 of 06-Mar-2013
+
+----------------------------------------------------------------------------
+
+This file lists the accession numbers of UniProtKB/Swiss-Prot entries
+which have been deleted from the database.
+
+Deleted entries are almost exclusively Open Reading Frames (ORFs) that
+have been wrongly predicted to code for proteins. When there is enough
+evidence that  these  hypothetical  proteins  are not real we take the
+decision to remove them from UniProtKB/Swiss-Prot.
+
+Also see the file delac_tr.txt for the list of accession numbers which
+have been deleted in UniProtKB/TrEMBL.
+
+
+Accession number
+________________
+A0AV18
+A1A4V6
+A1A4Z6
+A2RRP3
+A2RUD1
+Q9UMX8
+Q9UN11
+Q9UP62
+Q9UT65
+Q9UUM4
+Q9VMN8
+Q9XUA5
+Q9Y3K8
+Q9Y3P0
+Q9Y569
+Q9Y690
+Q9Y7R0
+Q9Z1S4
+Q9ZB75
+
+-----------------------------------------------------------------------
+Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+Distributed under the Creative Commons Attribution-NoDerivs License
+-----------------------------------------------------------------------

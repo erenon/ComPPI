@@ -10,10 +10,10 @@ class ProteinTranslator
      * @var array
      */
     private $namingConventionOrder = array(
-        'UniProtKB-AC',
-        'UniProtFull',
         'UniProtKB/Swiss-Prot',
         'UniProtKB/TrEmbl',
+        'UniProtKB-AC',
+        'UniProtFull',
         'UniProtKB-ID',
         'UniProtAlt',
         'EnsemblGeneId',
