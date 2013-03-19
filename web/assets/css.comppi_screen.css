@@ -31,8 +31,14 @@ body  {
 a { color: #207000; text-decoration: none; font-weight: bold; }
 a:hover { color: #CC0000; }
 a:visited { text-decoration: underline; }
-.hovered_listline { background-color: #e0e0e0; }
-.striped_tbl_row { background-color: #DADAE5; }
+.hovered_listline {
+	background-color: #F0FFC4;
+    -o-transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+}
 li { margin: 0.5em 0; }
 
 .btn, .btn_green {
@@ -70,6 +76,92 @@ li { margin: 0.5em 0; }
 .pagination li { display: inline; margin: 0 4px; font-size: 1.2em; }
 .pagination li.paginationCurrentPage a { color: #fff; }
 
+.rounded_table {
+	width: 100%;
+	margin: 1em 0 2em 0;
+	border-spacing: 0;
+	border: 0px solid #ccc;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 10px 10px #aaa; 
+    -moz-box-shadow: 0 10px 10px #aaa; 
+    box-shadow: 0 10px 10px #ccc;
+}
+.rounded_table th {
+	font-weight: normal;
+	font-size: 1.3em;
+	color: #EAE9E8;
+	background: #222 url("header_bg.png") repeat-x top left;
+	padding: 2px;
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+}
+.rounded_table th:first-child {
+	border-radius: 7px 0 0 0;
+	-moz-border-radius: 7px 0 0 0;
+    -webkit-border-radius: 7px 0 0 0;
+}
+.rounded_table th:last-child {
+	border-radius: 0 7px 0 0;
+	-moz-border-radius: 0 7px 0 0;
+    -webkit-border-radius: 0 7px 0 0;
+}
+.rounded_table th:only-child {
+	border-radius: 7px 7px 0 0;
+	-moz-border-radius: 7px 7px 0 0;
+    -webkit-border-radius: 7px 7px 0 0;
+}
+.rounded_table td, .rounded_table th {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+	vertical-align: top;
+}
+.rounded_table tr:last-child td:first-child {
+    -moz-border-radius: 0 0 0 7px;
+    -webkit-border-radius: 0 0 0 7px;
+    border-radius: 0 0 0 7px;
+}
+.rounded_table tr:last-child td:last-child {
+    -moz-border-radius: 0 0 7px 0;
+    -webkit-border-radius: 0 0 7px 0;
+    border-radius: 0 0 7px 0;
+}
+
+.rounded_box {
+	/*width: 100%;*/
+	margin: 1em 0;
+	border: 1px solid #ccc;
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+    border-radius: 7px;
+    -webkit-box-shadow: 0 10px 10px #aaa; 
+    -moz-box-shadow: 0 10px 10px #aaa; 
+    box-shadow: 0 10px 10px #ccc;
+}
+.rounded_box_body {
+	padding: 10px;
+}
+.rounded_box h1 {
+	margin: 0;
+	padding: 50px;
+	font-weight: normal;
+	font-size: 1.3em;
+	color: #EAE9E8;
+	color: red;
+	background: #222 url("header_bg.png") repeat-x top left;
+	padding: 2px;
+	border: 1px solid #ccc;	border: 1px solid #ccc;
+    -moz-border-radius: 7px 7px 0 0;
+    -webkit-border-radius: 7px 7px 0 0;
+    border-radius: 7px 7px 0 0;
+}
+
+.striped_row { background-color: #DADAE5; }
+
+.taxonomic_name { font-style: italic; }
+
 label { display: block; float: left; width: 200px; margin: 2px; }
 .radioButtonLabel { float: none; width: auto; display: inline; }
 #Content form br { clear: left; }
@@ -90,7 +182,53 @@ input, select, textarea {
 #fProtSearchKeyword { width: 320px; }
 #fProtSearchhsBtn, #fProtSearchdmBtn, #fProtSearchceBtn, #fProtSearchscBtn { font-style: italic; }
 #fProtSearchSubmit {  }
-#protSearchResultMsg { text-align: center; font-weight: bold; }
+.ui-autocomplete-loading {
+	background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat;
+}
+
+/*#ps-keyProtein h1 {
+	display: inline;
+	font-size: 1.2em;
+	font-weight: bold;
+	margin: 0;
+	padding: 0;
+}*/
+
+#ProteinSearchSelectorTbl td:last-child { width: 10%; text-align: center; }
+
+.ps-actorA { padding: 10px; border-top: 1px dotted #909090; height:  100%; }
+.ps-actorA h1 { font-size: 1.5em; font-weight: normal; margin: 0; padding: 0; display: inline; }
+.ps-CS {
+	margin: 0.5em 0 0 0;
+	padding: 5px 5px 10px 5px;
+	font-size: 10px;
+	text-align: center;
+	color: #fff;
+	background: #333;
+	border: 1px solid #333;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+}
+.ps-CS div { margin: 0; padding: 0; font-size: 30px; }
+.ps-actorB { padding: 10px; border-top: 1px dotted #909090; border-left: 1px dotted #909090; }
+.ps-detailLabel { font-weight: bold; }
+.ps-actorB h1, .ps-actorB h2, .ps-actorB h3 { font-size: 1.5em; font-weight: bold; margin: 0; padding: 0; display: inline; }
+.ps-actorB h2 { font-size: 1em; display: block; }
+#ps-keyProtein h3, .ps-actorB h3 { font-size: 1em; display: inline; }
+.ps-actorBDetails { margin: 0; }
+.ps-stripeEven { background-color: white; }
+.ps-stripeOdd { background-color: #efeff2; }
+.ps-sysType1 { font-weight: bold; }
+
+.ps-actorB table, #ps-keyProtein table { border-spacing: 0; width: 100%; }
+.ps-actorB table th, #ps-keyProtein table th { font-size: 1em; margin: 0; padding: 2px 4px; background: #c0c0c0; border-color: #c0c0c0; color: #000; text-align: center; }
+.ps-actorB table td, #ps-keyProtein table td { margin: 0; padding: 2px; }
+.ps-actorB table tr td:last-child, #ps-keyProtein table tr td:last-child { text-align: center; }
+
+/*.ps-actorDetails p { margin: 0 0 0 1em; }*/
+
+/*#protSearchResultMsg { text-align: center; font-weight: bold; }
 #ProteinSearchResultsTbl {
 	margin-top: 1em;
 	width: 100%;
@@ -111,7 +249,7 @@ input, select, textarea {
 #ProteinSearchResultsTbl tr { border-top: 1px dotted #909090; }
 #ProteinSearchResultsTbl tr.not_hovered_line { border-top: 0; }
 #ProteinSearchResultsTbl td { padding: 0; vertical-align: top; }
-#ProteinSearchResultsTbl table { /* details tables in the main result set*/
+#ProteinSearchResultsTbl table {
 	margin: 0 1em;
 	width: 90%;
 	border: 0;
@@ -127,7 +265,7 @@ input, select, textarea {
 #ProteinSearchResultsTbl tr.protSearchDetailsBox td table tr {	border: 0; }
 #ProteinSearchResultsTbl tr.protSearchDetailsBox td table td { margin: 0; padding: 0; }
 .protSearchRowOpened { border: 1px dotted #207000; border-bottom: 0; }
-.protSearchDetailsOpened { border: 1px dotted #207000; border-top: 0; }
+.protSearchDetailsOpened { border: 1px dotted #207000; border-top: 0; }*/
 
 
 /* DOWNLOADS */

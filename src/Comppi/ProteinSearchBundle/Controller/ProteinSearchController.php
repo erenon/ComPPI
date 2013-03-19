@@ -3,10 +3,12 @@
 namespace Comppi\ProteinSearchBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class ProteinSearchController extends Controller
 {
+	// private $DB; use $this->getDBConnection() @TODO: switch to the conn representation of the controller
 	private $speciesProvider = null;
 	private $localizationTranslator = null;
 	private $major_loc_gos = array (
@@ -22,317 +24,253 @@ class ProteinSearchController extends Controller
 	private $search_range_start = 0; // current page * search_result_per_page -> search query limit from here
 	private $search_result_per_page = 10; // search query limit offset (0: no limit)
 	private $uniprot_root = 'http://www.uniprot.org/uniprot/';
+	private $exptype = array(
+		0 => 'Unknown',
+		1 => 'Experimental',
+		2 => 'Predicted'
+	);
 	
-	/* PROTEIN SEARCH
-	 * This function provides a search form and display the results of the protein search.
-	 * Protein details are loaded for the whole result set, not one by one (via AJAX) because
-	 * 	1) it is faster to open huge MySQL tables only once, not as many times as an interaction detail is displayed,
-	 * 	2) it scales better (speed is basically the same for 10 and for 50 results too),
-	 *	3) we have to display the large localizations in the result set even when no details are shown...
-	 */
-	public function proteinSearchAction($protein_name, $requested_species, $current_page)
+	// PROTEIN SEARCH
+	//public function proteinSearchAction($protein_name, $requested_species, $current_page)
+	public function proteinSearchAction()
     {
+		$protein_name = '';
+		$requested_species = '';
+		$current_page = '';
 		$keyword = $this->initKeyword($protein_name);
 		$species = $this->initSpecies($requested_species);
 		$current_page = $this->initPageNum($current_page);
-		$specprov = $this->getSpeciesProvider();
-		$descriptors = $specprov->getDescriptors();
+		$sp = $this->getSpeciesProvider();
+		$spDescriptors = $sp->getDescriptors();
+		
 		
 		$T = array(
 			'verbose_log' => '',
-			'species_list' => $descriptors,
+			'species_list' => $spDescriptors,
+			'requested_species' => array('hs'=>1),
             'ls' => array(),
 			'keyword' => '',
 			'result_msg' => '',
 			'uniprot_root' => $this->uniprot_root
         );
 
-		$request = $this->getRequest();
-		if (!empty($keyword) and !empty($species))
+		//$request = $this->getRequest();
+		if (!empty($keyword)) // @TODO: require species
 		{
 			$DB = $this->getDbConnection();
-			$T['keyword']  = htmlspecialchars(strip_tags($keyword));
-			$a_protein_ids = array(); // container for protein IDs from both names and synonyms
+			// @TODO: save keyword to session $T['keyword']  = htmlspecialchars(strip_tags($keyword));
 			
-			// Comppi IDs from protein names
-			$d_names_found = $this->getProteinIdsFromNames($keyword, $species, $a_protein_ids);
+			$r_prots_by_name = $DB->query("SELECT
+				n2p.name, n2p.specieId, n2p.proteinId, p.proteinName
+			  FROM
+				NameToProtein n2p, Protein p
+			  WHERE
+					n2p.proteinId=p.id
+				AND n2p.name='".mysql_real_escape_string($keyword)."'"
+			);
+			if (!$r_prots_by_name)
+				throw new \ErrorException('Interaction query failed!');
 			
-			// Comppi IDs from synonyms
-			// we have to search amongst synonyms too even if we haven't found anything in protein names...
-			$d_synonyms_found = $this->getProteinIdsFromSynonyms($keyword, $species, $a_protein_ids);
-
-			// INTERACTIONS 1 - GET THE INTERACTOR IDS FROM DATABASE
-			// we have to get first the interaction rows (and can attach the details later)
-			if (!empty($a_protein_ids))
+			// exact match to a protein -> we show its interactions
+			if ($r_prots_by_name->rowCount()==1)
 			{
-				$db_cond[] = "((p1.specieId=".join(' OR p1.specieId=', $species)
-					.") AND (p2.specieId=".join(' OR p2.specieId=', $species)."))";
-				$db_cond[] = "(i.actorAId=".join(' OR i.actorAId=', $a_protein_ids).") OR (i.actorBId=".join(' OR i.actorBId=', $a_protein_ids).")";
-				
-				$sql_i = "
-					SELECT DISTINCT
-						p1.proteinName AS protA,
-						p2.proteinName AS protB,
-						i.id AS iid,
-						i.actorAId AS p1id,
-						i.actorBId AS p2id
-					FROM Interaction i
-					INNER JOIN Protein p1 ON i.actorAId=p1.id
-					INNER JOIN Protein p2 ON i.actorBId=p2.id
-					WHERE "
-						.join(' AND ', $db_cond)
-						.($this->search_result_per_page ? " LIMIT ".$this->search_range_start.", ".$this->search_result_per_page : '');
-				
-				$this->verbose ? $this->verbose_log[] =  "$sql_i" : '';
-				//exit($sql_i);
-				
-				$r_i = $DB->query($sql_i);
-				if (!$r_i) throw new \ErrorException('Interaction query failed!');
-				while ($p = $r_i->fetchObject())
-				{
-					// skeleton of the template
-					$T['ls'][$p->iid] = array(
-						'iid' => $p->iid,
-						'protA' => $p->protA,
-						'protB' => $p->protB,
-						'p1id' => $p->p1id,
-						'p2id' => $p->p2id,
-					);
-					// we collect the interactor IDs and protein names (and make them unique by adding by index!) to get the localizations and synonyms
-					$actor_ids[$p->p1id] = $p->p1id;
-					$actor_ids[$p->p2id] = $p->p2id;
-					$protein_names[$p->protA] = $p->protA;
-					$protein_names[$p->protB] = $p->protB;
-				}
-				
-				// CONFIDENCE SCORES
-				//die(var_dump( $T['ls'] ));
-				
-				// INTERACTIONS 2 - FILL THE INTERACTION SKELETON WITH DETAILS
-				if (!empty($actor_ids))
-				{
-					// localizations: large & small
-					$prot_loc_data = $this->getProteinLocalizations($a_protein_ids);
-					//die(var_dump($prot_loc_data));
-					$synonyms = $this->getProteinSynonyms($protein_names, $species);
-					
-					foreach ($T['ls'] as $iid => $data) // notice that we don't touch the original data!
-					{
-						$p1id = $data['p1id'];
-						$p2id = $data['p2id'];
-						$p1name = $data['protA'];
-						$p2name = $data['protB'];
-						
-						// large loc(s) for protein A
-						if (isset($prot_loc_data[$p1id])) {
-							foreach($prot_loc_data[$p1id] AS $loc1_id => $ld) {
-								$T['ls'][$iid]['locA'][ucfirst(substr($ld['large_loc_name'], 0,  1))] = $ld['large_loc_name'];
-								$T['ls'][$iid]['protA_small_locs'][] = $ld['small_loc_name'];
-								$T['ls'][$iid]['protA_source_dbs'][] = $ld['source_db'];
-								$T['ls'][$iid]['protA_pubmed_links'][] = $this->linkToPubmed($ld['pubmed_id']);
-								$T['ls'][$iid]['protA_loc_exp_types'][] = $ld['loc_exp_sys_type'];
-							}
-						} else {
-							$T['ls'][$iid]['locA']['-'] = 'N/A';
-						}
-	
-						// large loc(s) for protein B
-						if (isset($prot_loc_data[$p2id])) {
-							foreach($prot_loc_data[$p2id] AS $loc2_id => $ld) {
-								$T['ls'][$iid]['locB'][ucfirst(substr($ld['large_loc_name'], 0,  1))] = $ld['large_loc_name'];
-								$T['ls'][$iid]['protB_small_locs'][] = $ld['small_loc_name'];
-								$T['ls'][$iid]['protB_source_dbs'][] = $ld['source_db'];
-								$T['ls'][$iid]['protB_pubmed_links'][] = $this->linkToPubmed($ld['pubmed_id']);
-								$T['ls'][$iid]['protB_loc_exp_types'][] = $ld['loc_exp_sys_type'];
-							}
-						} else {
-							$T['ls'][$iid]['locB']['-'] = 'N/A';
-						}
-						
-						// synonyms
-						if (isset($synonyms[$p1name]))
-							$T['ls'][$iid]['protA_synonyms'] = join(', ', $synonyms[$p1name]);
-						if (isset($synonyms[$p2name]))
-							$T['ls'][$iid]['protB_synonyms'] = join(', ', $synonyms[$p2name]);
-					
-					}
-				}
-				else
-				{
-					$T['result_msg'] = 'No interactions were found for these proteins.';
-				}
-				
-				// PAGINATION
-				$sql_pg = "SELECT COUNT(i.id) AS proteinCount
-					FROM Interaction i
-					LEFT JOIN Protein p1 ON i.actorAId=p1.id
-					LEFT JOIN Protein p2 ON i.actorBId=p2.id WHERE ".join(' AND ', $db_cond);
-				$r_pg = $DB->query($sql_pg);
-				$this->verbose ? $this->verbose_log[] =  "Pagination: $sql_pg" : '';
-				$a_rownum = $r_pg->fetch();
-				$sum_interaction_count = (int)$a_rownum['proteinCount'];
-				
-				$T['pagination_ls'] = array();
-				$T['pagination_base_url'] = './protein_search/'
-					.urlencode($keyword).'/'
-					.join(',', array_keys($species)).'/';
-				$T['pagination_curr_page'] = $current_page;
-				$T['pagination_max_page'] = floor($sum_interaction_count/$this->search_result_per_page);
-				
-				// RESULT LINE
-				$result_msg_text = '%d protein'.($d_names_found>1 ? 's' : '')
-					.' with %d synonym'.($d_synonyms_found>1 ? 's' : '')
-					.' and %d interaction'.($sum_interaction_count>1 ? 's' : '')
-					.' were found.';
-				$T['result_msg'] = sprintf($result_msg_text, $d_names_found, $d_synonyms_found, $sum_interaction_count);
+				$prot_details = $r_prots_by_name->fetchObject();
+				//die(var_dump($prot_details->proteinId));
+				// forward creates an internal call to a controller and returns a Response
+				return $this->redirect($this->generateUrl(
+					'ComppiProteinSearchBundle_interactors',
+					array('comppi_id' => $prot_details->proteinId))
+                );
 			}
+			// multiple proteins found -> user has to select
+			elseif ($r_prots_by_name->rowCount()>1) {
+				while ($p = $r_prots_by_name->fetchObject())
+				{
+					$T['ls'][] = array(
+						'comppi_id' => $p->proteinId,
+						'name' => $p->name,
+						'name2' => $p->proteinName,
+						'species' => $spDescriptors[$p->specieId]->shortname,
+						'uniprot_link' => $this->uniprot_root.$p->proteinName
+					);
+				}
+				return $this->render('ComppiProteinSearchBundle:ProteinSearch:middlepage.html.twig', $T);
+			}
+			// no protein was found
 			else
 			{
-				$T['result_msg'] = 'No matching protein name (or synonym) was found.';
+				throw new \NotFoundException('Requested protein was not found!');
 			}
+		} else {
+			return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
+		}
+	}
+	
+	
+	public function interactorsAction($comppi_id)
+	{
+		$DB = $this->getDbConnection();
+		$locs = $this->getLocalizationTranslator();
+		$sp = $this->getSpeciesProvider();
+		$spDescriptors = $sp->getDescriptors();
+		$T = array();
+
+		// details of requested protein
+		$T['protein'] = $this->getProteinDetails($comppi_id);
+		
+		// @TODO: interakciók száma,
+		// @TODO: letölthető dataset
+		
+		// interactors
+		$sql_interactors = 
+		"SELECT DISTINCT
+			i.id AS iid, i.sourceDb, i.pubmedId,
+			p.id as pid, p.proteinName as name, p.proteinNamingConvention as namingConvention
+		FROM Interaction i
+		LEFT JOIN Protein p ON p.id=IF(actorAId = $comppi_id, i.actorBId, i.actorAId)
+		WHERE actorAId = $comppi_id OR actorBId = $comppi_id
+		LIMIT ".$this->search_result_per_page;
+		
+		if (!$r_interactors=$DB->query($sql_interactors))
+			throw new \ErrorException('Interactor query failed!');
+
+		while ($i = $r_interactors->fetchObject())
+		{
+			$T['ls'][$i->pid]['prot_name'] = $i->name;
+			$T['ls'][$i->pid]['prot_naming'] = $i->namingConvention;
+			//if ($i->namingConvention=='UniProtKB-AC')
+				$T['ls'][$i->pid]['uniprot_outlink'] = $this->uniprot_root.$i->name;
+			
+			$protein_ids[$i->pid] = $i->pid;
 		}
 		
-		$T['requested_species'] = $species;
-		$T['verbose_log'] = str_replace("\t", "", join("\n-----\n", $this->verbose_log));
+		if (empty($protein_ids)) throw new \ErrorException('No proteins found by that protein ID!');
 		
-		return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
+		// localizations for the protein and its interactors
+		$protein_locs = $this->getProteinLocalizations($protein_ids);
+		
+		// synonyms for the protein and its interactors
+		$protein_synonyms = $this->getProteinSynonyms($protein_ids);
+		
+		foreach($T['ls'] as $pid => &$actor)
+		{
+			// localizations to interactors
+			if (!empty($protein_locs[$pid]))
+				$actor['locs'] = $protein_locs[$pid];
+			// synonyms to interactors
+			if (!empty($protein_synonyms[$pid]['syn_fullname']))
+				$actor['syn_fullname'] =  $protein_synonyms[$pid]['syn_fullname'];
+			if (!empty($protein_synonyms[$pid]['synonyms']))
+				$actor['synonyms'] = $protein_synonyms[$pid]['synonyms'];
+			//$actor['syn_namings'] = (empty($protein_synonyms[$pid]['syn_namings']) ? array() : $protein_synonyms[$pid]['syn_namings']);
+		}
+		//die( var_dump( $T ) );
+		
+		return $this->render('ComppiProteinSearchBundle:ProteinSearch:interactors.html.twig',$T);
+	}
+	
+	
+	public function autocompleteAction($keyword)
+	{
+		$DB = $this->getDbConnection();
+		$r_i = $DB->query("SELECT name FROM ProteinName WHERE name LIKE '%".mysql_real_escape_string($keyword)."%' ORDER BY LENGTH(name) LIMIT 15");
+		if (!$r_i) throw new \ErrorException('Autocomplete query failed!');
+		
+		$list = array();
+		while ($p = $r_i->fetchObject())
+			$list[] = $p->name;
+
+        return new Response(json_encode($list));
+	}
+	
+	
+	private function getProteinDetails($comppi_id)
+	{
+		$DB = $this->getDbConnection();
+		$r_p = $DB->query("SELECT proteinName AS name, proteinNamingConvention AS naming, specieId FROM Protein WHERE id=".mysql_real_escape_string($comppi_id));
+		if (!$r_p) throw new \ErrorException('Protein query failed!');
+		
+		$prot_details = $r_p->fetch(\PDO::FETCH_ASSOC);
+		$prot_details['species'] = $prot_details['specieId']; // @TODO: map name to id
+		$prot_details['locs'] = $this->getProteinLocalizations(array($comppi_id));
+		$prot_details['locs'] = (!empty($prot_details['locs'][$comppi_id]) ? $prot_details['locs'][$comppi_id] : array());
+		
+		$syns = $this->getProteinSynonyms(array($comppi_id));
+		$prot_details['synonyms'] = $syns[$comppi_id]['synonyms'];
+		$prot_details['fullname'] = $syns[$comppi_id]['syn_fullname'];
+		
+		return $prot_details;
 	}
 
 	
 	// @var array The list of comppi ids
-	private function getProteinLocalizations($protein_ids)
+	private function getProteinLocalizations($comppi_ids)
 	{
-		// Get the branch left and right borders of major locs - between the primary and secondary id of a major loc are the loc ids of that branch
+		$DB = $this->getDbConnection();
 		$locs = $this->getLocalizationTranslator();
-		$major_locs = array();
-		foreach($this->major_loc_gos as $i => $go)
-		{
-			$major_locs[$i] = array(
-				'id1' => $locs->getIdByLocalization($go),
-				'id2' => $locs->getSecondaryIdByLocalization($go),
-				'name' => $locs->getHumanReadableLocalizationById($locs->getIdByLocalization($go))
-			);
-		}
 		
-		$sql_pl = 'SELECT DISTINCT
-				ptl.proteinId, ptl.localizationId AS locId, ptl.sourceDb, ptl.pubmedId, st.name AS exp_sys_type
+		$sql_pl = 'SELECT
+				ptl.proteinId as pid, ptl.localizationId AS locId, ptl.sourceDb, ptl.pubmedId,
+				st.name AS exp_sys, st.confidenceType AS exp_sys_type
 			FROM ProteinToLocalization ptl, ProtLocToSystemType pltst, SystemType st
 			WHERE ptl.id=pltst.protLocId
 				AND pltst.systemTypeId=st.id
-				AND (proteinId='.join(' OR proteinId=', $protein_ids).');';
+				AND proteinId IN ('.join(',', $comppi_ids).')';
 		$this->verbose ? $this->verbose_log[] = $sql_pl : '';
 		
-		if (!$pl = $this->DB->executeQuery($sql_pl))
+		if (!$r_pl = $DB->executeQuery($sql_pl))
 			throw new \ErrorException('ProteinToLocalization query failed!');
-
-		$protein_locs = array();
-		while ($p = $pl->fetchObject())
+		
+		$i = 0;
+		while ($p = $r_pl->fetchObject())
 		{
-			// build the human readable localization tree for the requested proteins
-			foreach($major_locs as $l)
-			{
-				//echo $l["name"].': '.$l["id1"] .' / '/*.$p->locId.' < '*/. $l["id2"] . "\n";
-				if ($l["id1"]<=$p->locId and $l["id2"]>$p->locId) {
-					$protein_locs[$p->proteinId][$p->locId] = array(
-						'small_loc_name' => ucfirst($locs->getHumanReadableLocalizationById($p->locId)),
-						'large_loc_name' => $l['name'],
-						'source_db' => $p->sourceDb,
-						'pubmed_id' => $p->pubmedId,
-						'loc_exp_sys_type' => $p->exp_sys_type,
-					);
-				}
+			$i++;
+			
+			$pl[$p->pid][$i]['source_db'] = $p->sourceDb;
+			$pl[$p->pid][$i]['pubmed_link'] = $this->linkToPubmed($p->pubmedId);
+			$pl[$p->pid][$i]['loc_exp_sys'] = $this->exptype[$p->exp_sys_type].': '.$p->exp_sys;
+			$pl[$p->pid][$i]['loc_exp_sys_type'] = $p->exp_sys_type;
+			try {
+				$pl[$p->pid][$i]['small_loc'] = ucfirst($locs->getHumanReadableLocalizationById($p->locId));
+			} catch (\InvalidArgumentException $e) {
+				$pl[$p->pid][$i]['small_loc'] = 'N/A';
+			}
+			try {
+				$pl[$p->pid][$i]['large_loc'] = ucfirst($locs->getLargelocById($p->locId));
+			} catch (\InvalidArgumentException $e) {
+				$pl[$p->pid][$i]['large_loc'] = 'N/A';
 			}
 		}
-		$this->verbose ? $this->verbose_log[] = count($protein_locs).' protein locations found' : '';
+		$this->verbose ? $this->verbose_log[] = count($pl).' protein locations found' : '';
 
-        return $protein_locs;
+		// if a single id was requested, we return data directly for that
+        //return (count($comppi_ids)==1 ? $pl[$comppi_ids[0]] : $pl);
+		return (!empty($pl) ? $pl : array());
 	}
 	
 	
-	// GET THE SYNONYMS OF PROTEINS BY THEIR COMPPI IDS
-	// @var array the list of names of proteins
-	// @var array list of species
-	private function getProteinSynonyms($protein_names, $species)
+	private function getProteinSynonyms($comppi_ids)
 	{
-		foreach($protein_names AS $name)
-			$cond[] = "(proteinNameA='".mysql_real_escape_string($name)
-				 ."' OR proteinNameB='".mysql_real_escape_string($name)."')";
-		
-		$sql_syn = "SELECT proteinNameA, namingConventionA, proteinNameB, namingConventionB
-			FROM ProteinNameMap
-			WHERE (".join(" OR ", $cond).")"
-			  ." AND (specieId=".join(' OR specieId=', $species).")";
+		$DB = $this->getDbConnection();
+		$sql_syn = "SELECT proteinId AS pid, name, namingConvention FROM NameToProtein WHERE proteinId IN(".join(',', $comppi_ids).")";
 		$this->verbose ? $this->verbose_log[] = $sql_syn : '';
 
-		if (!$syn = $this->DB->executeQuery($sql_syn))
-			throw new \ErrorException('ProteinNameMap query (in getProteinSynonyms) failed!');
+		if (!$r_syn = $DB->query($sql_syn))
+			throw new \ErrorException('getProteinSynonyms query failed!');
 		
-		$protein_synonyms = array();
-		while ($s = $syn->fetchObject())
+		$syns = array();
+		while ($s = $r_syn->fetch(\PDO::FETCH_OBJ))
 		{
-			if (in_array($s->proteinNameA, $protein_names) ) {
-				$protein_synonyms[$s->proteinNameA][] = $s->proteinNameB.' ('.$s->namingConventionB.')';
+			if ($s->namingConvention=='UniProtFull') {
+				$syns[$s->pid]['syn_fullname'] = $s->name; // we have to highlight the full name...
 			} else {
-				$protein_synonyms[$s->proteinNameB][] = $s->proteinNameA.' ('.$s->namingConventionA.')';
+				$syns[$s->pid]['synonyms'][] = $s->name.'&nbsp;('.$s->namingConvention.')';
 			}
 		}
-		return $protein_synonyms;
-	}
-
-	
-	// PROTEIN IDS FROM NAMES
-	// @var string keyword (protein name)
-	// @var array the list of species IDs
-	// @var array reference to the protein ID container (more efficient than passing by copy)
-	private function getProteinIdsFromNames($keyword, $species, &$protein_ids)
-	{
-		$names_found = 0;
 		
-		$sql_prot_ids_from_name = "SELECT DISTINCT id AS proteinId
-			FROM Protein
-			WHERE (specieId=".join(' OR specieId=', $species).")
-			  AND proteinName LIKE '%".mysql_real_escape_string($keyword)."%'";
-		$this->verbose ? $this->verbose_log[] = "$sql_prot_ids_from_name" : '';
-		
-		if (!$r_prot_ids_from_name = $this->DB->executeQuery($sql_prot_ids_from_name))
-			throw new \ErrorException('Protein name query failed!');
-		
-		while($r = $r_prot_ids_from_name->fetchObject()) // DBAL fetch is a fuckin memory hog
-		{
-			$protein_ids[$r->proteinId] = (int)$r->proteinId;
-			$names_found++;
-		}
-		$this->verbose ? $this->verbose_log[] = "$names_found protein names found" : '';
-		
-		return $names_found;
-	}
-
-	
-	// PROTEIN IDS FROM SYNONYMS
-	// @var string keyword (protein name)
-	// @var array the list of species IDs
-	// @var array reference to the protein ID container (more efficient than passing by copy)
-	private function getProteinIdsFromSynonyms($keyword, $species, &$protein_ids)
-	{
-		$synonyms_found = 0;
-		
-		$sql_prot_ids_from_synonyms = "SELECT DISTINCT proteinId
-			FROM NameToProtein
-			WHERE (specieId=".join(' OR specieId=', $species).")
-			  AND name LIKE '%".mysql_real_escape_string($keyword)."%'";
-		$this->verbose ? $this->verbose_log[] = "$sql_prot_ids_from_synonyms" : '';
-		
-		if (!$r_prot_ids_from_synonyms = $this->DB->executeQuery($sql_prot_ids_from_synonyms))
-			throw new \ErrorException('Protein synonyms query failed!');
-		
-		while($r = $r_prot_ids_from_synonyms->fetchObject())
-		{
-			$protein_ids[$r->proteinId] = (int)$r->proteinId;
-			$synonyms_found++;
-		}
-		$this->verbose ? $this->verbose_log[] = "$synonyms_found synonyms found" : '';
-		
-		return $synonyms_found;
+		// if a single id was requested, we return data directly for that
+        //return (count($comppi_ids)==1 ? $syns[$comppi_ids[0]] : $syns);
+		return $syns;
 	}
 	
 	

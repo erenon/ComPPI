@@ -7,11 +7,7 @@ $(document).ready(function(){
 	// this does not work - what the FUCK, Symfony?!
 
 	// highlighted list lines
-	$(".hovered_list li:not(.not_hovered_line)").hover(
-		function() { $(this).addClass('hovered_listline'); },
-		function() { $(this).removeClass('hovered_listline'); }
-	);
-	$(".hovered_list tr:not(.not_hovered_line)").hover(
+	$(".hovered_list li, .hovered_list tr").not(":first").hover(
 		function() { $(this).addClass('hovered_listline'); },
 		function() { $(this).removeClass('hovered_listline'); }
 	);
@@ -128,4 +124,20 @@ $(document).ready(function(){
 			$(obj).next('label').removeClass('LocTree-has_checked');
 		}
 	}
+});
+
+// search autocomplete
+$(function() {
+	$("#fProtSearchKeyword").autocomplete({
+		source: function(request, response){
+			url = "/comppi/ComPPI_dualon/web/app_dev.php/protein_search/autocomplete/" + request.term;
+			$.getJSON(url, function(data){
+				response(data);
+			});
+		},
+		minLength: 2,
+		select: function( event, ui ) {
+			// submit?
+		}
+	});
 });

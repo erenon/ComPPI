@@ -1,12 +1,13 @@
 ComppiProteinSearchBundle_proteinsearch:
-    pattern:  /protein_search/{protein_name}/{requested_species}/{current_page}
-    defaults: { _controller: ComppiProteinSearchBundle:ProteinSearch:proteinSearch, protein_name: '', requested_species: 'hs', current_page: 0 }
-    requirements:
-        current_page:  \d+
-        protein_name: "[^/]*"
+    pattern:  /protein_search
+    defaults: { _controller: ComppiProteinSearchBundle:ProteinSearch:proteinSearch }
 
-ComppiProteinSearchBundle_interaction:
-    pattern:  /protein_search/interaction/{id}
-    defaults: { _controller: ComppiProteinSearchBundle:ProteinSearch:interactionDetails, id: '' }
+ComppiProteinSearchBundle_interactors:
+    pattern:  /protein_search/interactors/{comppi_id}
+    defaults: { _controller: ComppiProteinSearchBundle:ProteinSearch:interactors }
     requirements:
         id:  \d+
+        
+ComppiProteinSearchBundle_proteinsearch_autocomplete:
+    pattern:  /protein_search/autocomplete/{keyword}
+    defaults: { _controller: ComppiProteinSearchBundle:ProteinSearch:autocomplete }
