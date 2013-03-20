@@ -145,13 +145,11 @@ li { margin: 0.5em 0; }
 }
 .rounded_box h1 {
 	margin: 0;
-	padding: 50px;
+	padding: 10px;
 	font-weight: normal;
 	font-size: 1.3em;
 	color: #EAE9E8;
-	color: red;
 	background: #222 url("header_bg.png") repeat-x top left;
-	padding: 2px;
 	border: 1px solid #ccc;	border: 1px solid #ccc;
     -moz-border-radius: 7px 7px 0 0;
     -webkit-border-radius: 7px 7px 0 0;
@@ -220,10 +218,10 @@ input, select, textarea {
 .ps-stripeEven { background-color: white; }
 .ps-stripeOdd { background-color: #efeff2; }
 .ps-sysType1 { font-weight: bold; }
-
+#ps-keyProtein table { margin: 0; }
 .ps-actorB table, #ps-keyProtein table { border-spacing: 0; width: 100%; }
 .ps-actorB table th, #ps-keyProtein table th { font-size: 1em; margin: 0; padding: 2px 4px; background: #c0c0c0; border-color: #c0c0c0; color: #000; text-align: center; }
-.ps-actorB table td, #ps-keyProtein table td { margin: 0; padding: 2px; }
+.ps-actorB table td, #ps-keyProtein table td { margin: 0; padding: 2px; border: 1px solid #c0c0c0; }
 .ps-actorB table tr td:last-child, #ps-keyProtein table tr td:last-child { text-align: center; }
 
 /*.ps-actorDetails p { margin: 0 0 0 1em; }*/
