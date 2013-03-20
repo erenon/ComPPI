@@ -234,18 +234,6 @@ then
     wget "ftp://ftp.uniprot.org/pub/databases/uniprot/knowledgebase/docs/sec_ac.txt" -O ./sec_ac.txt
 fi
 
-# UniprotDeleted Swissprot
-if [ ! -f delac_sp.txt ]
-then
-    wget "ftp://ftp.uniprot.org/pub/databases/uniprot/knowledgebase/docs/delac_sp.txt" -O ./delac_sp.txt
-fi
-
-# UniproDeleted Trembl
-if [ ! -f delac_tr.txt ]
-then
-    wget "ftp://ftp.uniprot.org/pub/databases/uniprot/knowledgebase/docs/delac_tr.txt" -O ./delac_tr.txt
-fi
-
 # Hprd
 if [ ! -f HPRD_ID_MAPPINGS.txt ]
 then
@@ -406,18 +394,6 @@ then
     ln -s ../../hs/map/sec_ac.txt sec_ac.txt
 fi
 
-# UniprotDeleted Swissprot
-if [ ! -f delac_sp.txt ]
-then
-    ln -s ../../hs/map/delac_sp.txt delac_sp.txt
-fi
-
-# UniproDeleted Trembl
-if [ ! -f delac_tr.txt ]
-then
-    ln -s ../../hs/map/delac_tr.txt delac_tr.txt
-fi
-
 # Netbiol refseq->uniprot
 if [ ! -f comppi_refseq_uniprot.csv ]
 then
@@ -549,18 +525,6 @@ fi
 if [ ! -f sec_ac.txt ]
 then
     ln -s ../../hs/map/sec_ac.txt sec_ac.txt
-fi
-
-# UniprotDeleted Swissprot
-if [ ! -f delac_sp.txt ]
-then
-    ln -s ../../hs/map/delac_sp.txt delac_sp.txt
-fi
-
-# UniproDeleted Trembl
-if [ ! -f delac_tr.txt ]
-then
-    ln -s ../../hs/map/delac_tr.txt delac_tr.txt
 fi
 
 # NetBiol WBGeneId -> uniprot
@@ -706,18 +670,6 @@ fi
 if [ ! -f sec_ac.txt ]
 then
     ln -s ../../hs/map/sec_ac.txt sec_ac.txt
-fi
-
-# UniprotDeleted Swissprot
-if [ ! -f delac_sp.txt ]
-then
-    ln -s ../../hs/map/delac_sp.txt delac_sp.txt
-fi
-
-# UniproDeleted Trembl
-if [ ! -f delac_tr.txt ]
-then
-    ln -s ../../hs/map/delac_tr.txt delac_tr.txt
 fi
 
 # Netbiol refseq->uniprot
