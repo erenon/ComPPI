@@ -39,7 +39,7 @@
 			<td>{{ l.small_loc }}</td>
 			<td>{{ l.loc_exp_sys }}</td>
 			<td>{% if l.source_db %} {{ l.source_db }} {% endif %}</td>
-			<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank">PubMed</a> {% endif %}</td>
+			<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank">PubMed <img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
 			</tr>
 			{% endfor %}
 		</table></p>
@@ -66,6 +66,7 @@
 		</td>
 		<td class="ps-actorB">
 			<h1>{{ p.prot_name }}</h1> ({{ p.prot_naming }})
+			<a href="#" class="ps-detailsOpener">Details</a>
 			
 			{% if p.syn_fullname is defined %}<h2 class="ps-detailLabel">{{ p.syn_fullname }}</h2>{% endif %}
 			
@@ -94,7 +95,7 @@
 				<td>{{ l.small_loc }}</td>
 				<td>{{ l.loc_exp_sys }}</td>
 				<td>{% if l.source_db %} {{ l.source_db }} {% endif %}</td>
-				<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank">PubMed</a> {% endif %}</td>
+				<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank">PubMed <img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
 				</tr>
 				{% endfor %}
 			</table></p>

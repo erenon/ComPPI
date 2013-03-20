@@ -136,8 +136,8 @@ li { margin: 0.5em 0; }
     -moz-border-radius: 7px;
     -webkit-border-radius: 7px;
     border-radius: 7px;
-    -webkit-box-shadow: 0 10px 10px #aaa; 
-    -moz-box-shadow: 0 10px 10px #aaa; 
+    -webkit-box-shadow: 0 10px 10px #ccc; 
+    -moz-box-shadow: 0 10px 10px #ccc; 
     box-shadow: 0 10px 10px #ccc;
 }
 .rounded_box_body {
@@ -194,11 +194,11 @@ input, select, textarea {
 
 #ProteinSearchSelectorTbl td:last-child { width: 10%; text-align: center; }
 
-.ps-actorA { padding: 10px; border-top: 1px dotted #909090; height:  100%; }
+.ps-actorA { padding: 10px; width: 80px; border-top: 1px dotted #909090; height:  100%; }
 .ps-actorA h1 { font-size: 1.5em; font-weight: normal; margin: 0; padding: 0; display: inline; }
 .ps-CS {
 	margin: 0.5em 0 0 0;
-	padding: 5px 5px 10px 5px;
+	padding: 3px 3px 5px 3px;
 	font-size: 10px;
 	text-align: center;
 	color: #fff;
@@ -207,8 +207,12 @@ input, select, textarea {
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-khtml-border-radius: 5px;
+    -webkit-box-shadow: 0 5px 5px #999; 
+    -moz-box-shadow: 0 5px 5px #999; 
+    box-shadow: 0 5px 5px #999;
 }
-.ps-CS div { margin: 0; padding: 0; font-size: 30px; }
+.ps-CS div { margin: 0; padding: 0; font-size: 25px; }
+.ps-detailsOpener { display: block; float: right; font-variant: small-caps; font-size: 1.2em; }
 .ps-actorB { padding: 10px; border-top: 1px dotted #909090; border-left: 1px dotted #909090; }
 .ps-detailLabel { font-weight: bold; }
 .ps-actorB h1, .ps-actorB h2, .ps-actorB h3 { font-size: 1.5em; font-weight: bold; margin: 0; padding: 0; display: inline; }
@@ -223,47 +227,6 @@ input, select, textarea {
 .ps-actorB table th, #ps-keyProtein table th { font-size: 1em; margin: 0; padding: 2px 4px; background: #c0c0c0; border-color: #c0c0c0; color: #000; text-align: center; }
 .ps-actorB table td, #ps-keyProtein table td { margin: 0; padding: 2px; border: 1px solid #c0c0c0; }
 .ps-actorB table tr td:last-child, #ps-keyProtein table tr td:last-child { text-align: center; }
-
-/*.ps-actorDetails p { margin: 0 0 0 1em; }*/
-
-/*#protSearchResultMsg { text-align: center; font-weight: bold; }
-#ProteinSearchResultsTbl {
-	margin-top: 1em;
-	width: 100%;
-	border: 0;
-	border-collapse: collapse;
-	text-align: center;
-	vertical-align: top;
-}
-#ProteinSearchResultsTbl th {
-	font-weight: bold;
-	border-bottom: 2px solid #c0c0c0;
-	border-top: 0;
-}
-#ProteinSearchThLocA, #ProteinSearchThLocB { width: 13%; }
-#ProteinSearchThProtA, #ProteinSearchThProtB { width: 30%; }
-#ProteinSearchThCS { width: 5%; }
-#ProteinSearchResultsTbl #ProtSearchHeader { background-color: #C8C8E6; }
-#ProteinSearchResultsTbl tr { border-top: 1px dotted #909090; }
-#ProteinSearchResultsTbl tr.not_hovered_line { border-top: 0; }
-#ProteinSearchResultsTbl td { padding: 0; vertical-align: top; }
-#ProteinSearchResultsTbl table {
-	margin: 0 1em;
-	width: 90%;
-	border: 0;
-	border-collapse: collapse;
-	text-align: center;
-}
-.protSearchMidLine { border-left: 1px solid #909090; }
-#ProteinSearchResultsTbl tr.protSearchDetailsBox { border-top: 0; text-align: left; }
-#ProteinSearchResultsTbl tr.protSearchDetailsBox td { padding: 2px 1em; }
-#ProteinSearchResultsTbl tr.protSearchDetailsBox h3 { font-size: 1em; margin: 0; padding: 1.5em 0 0 0; }
-#ProteinSearchResultsTbl tr.protSearchDetailsBox .protSearchDetailName { font-weight: bold; }
-#ProteinSearchResultsTbl tr.protSearchDetailsBox p { padding: 0 0.3em; margin: 0; }
-#ProteinSearchResultsTbl tr.protSearchDetailsBox td table tr {	border: 0; }
-#ProteinSearchResultsTbl tr.protSearchDetailsBox td table td { margin: 0; padding: 0; }
-.protSearchRowOpened { border: 1px dotted #207000; border-bottom: 0; }
-.protSearchDetailsOpened { border: 1px dotted #207000; border-top: 0; }*/
 
 
 /* DOWNLOADS */
