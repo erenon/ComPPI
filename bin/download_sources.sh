@@ -213,6 +213,9 @@ check_comppi_custom hs comppi_human_refseq-uniprotkbac.txt
 check_comppi_custom hs comppi_human_uniprotgenename-uniprotkbac.txt
 check_comppi_custom hs human_organelle.csv
 check_comppi_custom hs comppi_uniprot_deleted_hs.txt
+check_comppi_custom hs comppi_hs_uniprotkb-ac_uniprotkb-swissprot.txt
+check_comppi_custom hs comppi_hs_uniprotkb-ac_uniprotkb-trembl.txt
+
 
 # Uniprot
 if [ ! -f HUMAN_9606_idmapping_selected.tab ]
@@ -373,6 +376,8 @@ check_comppi_custom dm comppi_drosi_refseq-uniprotkbac.txt
 check_comppi_custom dm comppi_drosi_uniparc-uniprotkbac.txt
 check_comppi_custom dm drosi_organelle.csv
 check_comppi_custom dm comppi_uniprot_deleted_dm.txt
+check_comppi_custom dm comppi_dm_uniprotkb-ac_uniprotkb-swissprot.txt
+check_comppi_custom dm comppi_dm_uniprotkb-ac_uniprotkb-trembl.txt
 
 # Uniprot
 if [ ! -f DROME_7227_idmapping_selected.tab ]
@@ -506,6 +511,8 @@ check_comppi_custom ce comppi_worm_wbgeneid-uniprotkbac.txt
 check_comppi_custom ce comppi_worm_wormbase-uniprotkbac.txt
 check_comppi_custom ce worm_organelle.csv
 check_comppi_custom ce comppi_uniprot_deleted_ce.txt
+check_comppi_custom ce comppi_ce_uniprotkb-ac_uniprotkb-swissprot.txt
+check_comppi_custom ce comppi_ce_uniprotkb-ac_uniprotkb-trembl.txt
 
 # Uniprot
 if [ ! -f CAEEL_6239_idmapping_selected.tab ]
@@ -651,6 +658,8 @@ cd ../map
 check_comppi_custom sc comppi_yeast_ensemblpeptideid-uniprotkbac.txt
 check_comppi_custom sc yeast_organelle.csv
 check_comppi_custom sc comppi_uniprot_deleted_sc.txt
+check_comppi_custom sc comppi_sc_uniprotkb-ac_uniprotkb-swissprot.txt
+check_comppi_custom sc comppi_sc_uniprotkb-ac_uniprotkb-trembl.txt
 
 # Uniprot
 if [ ! -f YEAST_559292_idmapping_selected.tab ]
