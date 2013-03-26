@@ -6,7 +6,7 @@
 {% block download_content %}
 	<h3>Current Release:</h3>
 	{% if size is defined %}
-	<h1 class="center"><a href="{{ path('DownloadCenterBundle_getcurrentrelease') }}">{{ mtime }} ({{ size }} MB)</a></h1>
+	<p class="center"><a href="{{ path('DownloadCenterBundle_getcurrentrelease') }}" class="btn_green" style="text-decoration: none;">{{ mtime }} ({{ size }} MB)</a></p>
 	{% else %}
 	<p class="center">Current release is temporary unavailable.</p>
 	{% endif %}
