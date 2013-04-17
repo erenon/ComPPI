@@ -14,7 +14,7 @@ class UniprotDeleted extends AbstractMapParser
     public function __construct($fileName) {
         parent::__construct($fileName);
 
-        file_put_contents(STDERR, 'UniprotDeleted parser is deprecated and will be removed.' .
+        file_put_contents("php://stderr", 'UniprotDeleted parser is deprecated and will be removed.' .
          ' Delete all delac_[sp|tr].txt sources as they are no longer needed.');
     }
 
