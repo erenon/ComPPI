@@ -76,7 +76,8 @@ echo "Load protein names (mainly for autocomplete support)"
 php $console comppi:build:names
 
 echo "Calculate Confidence Scores"
-php $console comppi:build:confidenceScores
+echo "disabled"
+#php $console comppi:build:confidenceScores
 
 endTime=$(date +"%s")
 diffTime=$(($endTime - $startTime))
