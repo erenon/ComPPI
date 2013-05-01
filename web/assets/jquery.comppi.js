@@ -7,11 +7,7 @@ $(document).ready(function(){
 	// this does not work - what the FUCK, Symfony?!
 
 	// highlighted list lines
-	$(".hovered_list li:not(.not_hovered_line)").hover(
-		function() { $(this).addClass('hovered_listline'); },
-		function() { $(this).removeClass('hovered_listline'); }
-	);
-	$(".hovered_list tr:not(.not_hovered_line)").hover(
+	$(".hovered_list li, .hovered_list tr").not(":first").hover(
 		function() { $(this).addClass('hovered_listline'); },
 		function() { $(this).removeClass('hovered_listline'); }
 	);
@@ -56,20 +52,6 @@ $(document).ready(function(){
 				$('#'+id).attr('checked', 'checked').attr('value', 1);
 			}
 		});
-	});
-	
-	// Protein Search - Interaction Details
-	$("#ProteinSearchResultsTbl > tbody > tr:gt(0)").not(".protSearchDetailsBox").filter(":odd").addClass("striped_tbl_row");
-	$("#ProteinSearchResultsTbl > tbody > tr.protSearchDetailsBox").filter(":odd").addClass("striped_tbl_row");
-	$(".protSearchDetailsBox > td").hide();
-	$(".protSearchDetailsLink").click(function(){
-		$(this).parents("tr").next("tr").find("td:first").slideToggle(600);
-		if ($(this).parents("tr").hasClass("protSearchRowOpened")) {
-			$(this).parents("tr").removeClass("protSearchRowOpened").next("tr").removeClass("protSearchDetailsOpened");
-		} else {
-			$(this).parents("tr").addClass("protSearchRowOpened").next("tr").addClass("protSearchDetailsOpened");
-		}
-		return false;
 	});
 });
 
@@ -128,4 +110,29 @@ $(document).ready(function(){
 			$(obj).next('label').removeClass('LocTree-has_checked');
 		}
 	}
+});
+
+// search autocomplete
+$(function() {
+	$("#fProtSearchKeyword").autocomplete({
+		source: function(request, response){
+			url = "/comppi/ComPPI_dualon/web/app_dev.php/protein_search/autocomplete/" + request.term;
+			$.getJSON(url, function(data){
+				response(data);
+			});
+		},
+		minLength: 2,
+		select: function( event, ui ) {
+			// submit?
+		}
+	});
+});
+
+// show/hide protein interaction details
+$(function() {
+	$(".ps-actorBDetails").hide();
+	$(".ps-detailsOpener").click(function() {
+		$(this).siblings(".ps-actorBDetails:first").slideToggle();
+		return false;
+	});
 });

@@ -1,0 +1,116 @@
+{# src/Comppi/ProteinSearchBundle/Resources/views/index.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %}ComPPI - Select Protein - The Compartmentalized Protein-Protein Interaction Database{% endblock %}
+
+{% block bundlecontent %}
+	{# include ':searchform.html.twig' with {'foo': 'bar'} #}
+	
+	<p class="help"></p>
+	
+	<div id="ps-keyProtein" class="rounded_box">
+	<h1>{{ protein.name }}</h1>
+	<div class="rounded_box_body">
+		{% if protein.fullname is defined %}
+		<span class="ps-detailLabel"> {{ protein.fullname }} </span>
+		{% endif %}
+		
+		{% if protein.synonyms is defined %}
+		<p><span class="ps-detailLabel">Synonyms:</span>
+		{% for s in protein.synonyms %}
+			{{ s|raw }}{% if not loop.last %},{% endif %}
+		{% endfor %}
+		</p>
+		{% endif %}
+		
+		<p><h3 class="ps-detailLabel">Localizations:</h3>
+		{% if protein.locs is not empty %}
+		<table class="rounded_table hovered_list">
+			<tr>
+			<th>Major Loc.</th>
+			<th>Minor Loc.</th>
+			<th>Experiment Type</th>
+			<th>Source Database</th>
+			<th>PubMed</th>
+			</tr>
+			{% for l in protein.locs %}
+			<tr class="ps-sysType{{ l.loc_exp_sys_type }}">
+			<td>{{ l.large_loc }}</td>
+			<td>{{ l.small_loc }}</td>
+			<td>{{ l.loc_exp_sys }}</td>
+			<td>{% if l.source_db %} {{ l.source_db }} {% endif %}</td>
+			<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank">PubMed <img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
+			</tr>
+			{% endfor %}
+		</table></p>
+		{% else %}
+			Not available.
+		{% endif %}
+		
+		{% if p.uniprot_outlink is defined %}
+		<p><a href="{{ p.uniprot_outlink }}" class="ps-detailLabel">UniProtKB Profile</a></p>
+	{% endif %}
+	</div>
+	</div>
+	
+	{% if ls %}
+	<table class="rounded_table striped_table hovered_list">
+	<tr>
+		<th colspan="2" class="ps-resultsHeader">Interactions</th>
+	</tr>
+	{% for p in ls %}
+	<tr class="{% if loop.index is odd %}ps-stripeEven{% else %}ps-stripeOdd{% endif %}">
+		<td class="ps-actorA">
+			<h1>{{ protein.name }}</h1>
+			<div class="ps-CS">C.S. <div>90%</div></div>
+		</td>
+		<td class="ps-actorB">
+			<h1>{{ p.prot_name }}</h1> ({{ p.prot_naming }})
+			<a href="#" class="ps-detailsOpener">Details</a>
+			
+			{% if p.syn_fullname is defined %}<h2 class="ps-detailLabel">{{ p.syn_fullname }}</h2>{% endif %}
+			
+			<div class="ps-actorBDetails">
+			{% if p.synonyms is defined %}
+			<p><h3 class="ps-detailLabel">Synonyms:</h3>
+			{% for s in p.synonyms %}
+				{{ s|raw }}{% if not loop.last %}, {% endif %}
+			{% endfor %}
+			</p>
+			{% endif %}
+			
+			<p><h3 class="ps-detailLabel">Localizations:</h3>
+			{% if p['locs'] is defined %}
+			<table class="rounded_table hovered_list">
+				<tr>
+				<th>Major Loc.</th>
+				<th>Minor Loc.</th>
+				<th>Experiment Type</th>
+				<th>Source Database</th>
+				<th>PubMed</th>
+				</tr>
+				{% for l in p['locs'] %}
+				<tr class="ps-sysType{{ l.loc_exp_sys_type }}">
+				<td>{{ l.large_loc }}</td>
+				<td>{{ l.small_loc }}</td>
+				<td>{{ l.loc_exp_sys }}</td>
+				<td>{% if l.source_db %} {{ l.source_db }} {% endif %}</td>
+				<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank">PubMed <img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
+				</tr>
+				{% endfor %}
+			</table></p>
+			{% else %}
+			Not available.
+			{% endif %}
+			
+			{% if p.uniprot_outlink is defined %}
+			<p><a href="{{ p.uniprot_outlink }}" class="ps-detailLabel">UniProtKB Profile</a></p>
+			{% endif %}
+			</div>
+		</td>
+	</tr>
+	{% endfor %}
+	</table>
+	{% endif %}
+
+{% endblock %}

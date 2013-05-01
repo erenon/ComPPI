@@ -1,0 +1,24 @@
+{# src/Comppi/ProteinSearchBundle/Resources/views/searchform.html.twig #}
+<p class="help">1. Start typing to get a list of suggested proteins.<br />2.Click on species to select one.<br/>3. Click 'Submit Search' to send your request.</p>
+
+<form id="ProteinSearchForm" action="protein_search" method="post">
+	<label for="fProtSearchKeyword" id="fProtSearchKeywordLabel">Protein Name:</label>
+	<input type="text" name="fProtSearchKeyword" id="fProtSearchKeyword" value="{{ keyword }}" />
+	
+	{% for s in species_list %}
+	<input type="radio" name="fProtSearchSpecies[{{ s.abbreviation }}]" id="fProtSearch{{ s.abbreviation }}" class="btn"
+		{% if requested_species[s.abbreviation] is defined %}
+		value="1" checked="checked"
+		{% else %}
+		value="0"
+		{% endif %}/>
+	<label for="fProtSearch{{ s.abbreviation }}" class="radioButtonLabel">{{ s.shortname }}</label>
+	{% endfor %}
+
+	<br />
+	<input class="btn btn_submit" type="submit" name="fProtSearchSubmit" id="fProtSearchSubmit" value="Submit Search" />
+</form>
+
+{% if result_msg %}
+	<p id="protSearchResultMsg">{{ result_msg }}</p>
+{% endif %}
