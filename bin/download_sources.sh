@@ -212,6 +212,10 @@ check_comppi_custom hs comppi_human_genebankproteinid-uniprotkbac.txt
 check_comppi_custom hs comppi_human_refseq-uniprotkbac.txt
 check_comppi_custom hs comppi_human_uniprotgenename-uniprotkbac.txt
 check_comppi_custom hs human_organelle.csv
+check_comppi_custom hs comppi_uniprot_deleted_hs.txt
+check_comppi_custom hs comppi_hs_uniprotkb-ac_uniprotkb-swissprot.txt
+check_comppi_custom hs comppi_hs_uniprotkb-ac_uniprotkb-trembl.txt
+
 
 # Uniprot
 if [ ! -f HUMAN_9606_idmapping_selected.tab ]
@@ -231,18 +235,6 @@ fi
 if [ ! -f sec_ac.txt ]
 then
     wget "ftp://ftp.uniprot.org/pub/databases/uniprot/knowledgebase/docs/sec_ac.txt" -O ./sec_ac.txt
-fi
-
-# UniprotDeleted Swissprot
-if [ ! -f delac_sp.txt ]
-then
-    wget "ftp://ftp.uniprot.org/pub/databases/uniprot/knowledgebase/docs/delac_sp.txt" -O ./delac_sp.txt
-fi
-
-# UniproDeleted Trembl
-if [ ! -f delac_tr.txt ]
-then
-    wget "ftp://ftp.uniprot.org/pub/databases/uniprot/knowledgebase/docs/delac_tr.txt" -O ./delac_tr.txt
 fi
 
 # Hprd
@@ -383,6 +375,9 @@ check_comppi_custom dm comppi_drosi_enterzgene-uniprotkbac.txt
 check_comppi_custom dm comppi_drosi_refseq-uniprotkbac.txt
 check_comppi_custom dm comppi_drosi_uniparc-uniprotkbac.txt
 check_comppi_custom dm drosi_organelle.csv
+check_comppi_custom dm comppi_uniprot_deleted_dm.txt
+check_comppi_custom dm comppi_dm_uniprotkb-ac_uniprotkb-swissprot.txt
+check_comppi_custom dm comppi_dm_uniprotkb-ac_uniprotkb-trembl.txt
 
 # Uniprot
 if [ ! -f DROME_7227_idmapping_selected.tab ]
@@ -402,18 +397,6 @@ fi
 if [ ! -f sec_ac.txt ]
 then
     ln -s ../../hs/map/sec_ac.txt sec_ac.txt
-fi
-
-# UniprotDeleted Swissprot
-if [ ! -f delac_sp.txt ]
-then
-    ln -s ../../hs/map/delac_sp.txt delac_sp.txt
-fi
-
-# UniproDeleted Trembl
-if [ ! -f delac_tr.txt ]
-then
-    ln -s ../../hs/map/delac_tr.txt delac_tr.txt
 fi
 
 # Netbiol refseq->uniprot
@@ -527,6 +510,9 @@ check_comppi_custom ce comppi_worm_refseq-uniprotkbac.txt
 check_comppi_custom ce comppi_worm_wbgeneid-uniprotkbac.txt
 check_comppi_custom ce comppi_worm_wormbase-uniprotkbac.txt
 check_comppi_custom ce worm_organelle.csv
+check_comppi_custom ce comppi_uniprot_deleted_ce.txt
+check_comppi_custom ce comppi_ce_uniprotkb-ac_uniprotkb-swissprot.txt
+check_comppi_custom ce comppi_ce_uniprotkb-ac_uniprotkb-trembl.txt
 
 # Uniprot
 if [ ! -f CAEEL_6239_idmapping_selected.tab ]
@@ -546,18 +532,6 @@ fi
 if [ ! -f sec_ac.txt ]
 then
     ln -s ../../hs/map/sec_ac.txt sec_ac.txt
-fi
-
-# UniprotDeleted Swissprot
-if [ ! -f delac_sp.txt ]
-then
-    ln -s ../../hs/map/delac_sp.txt delac_sp.txt
-fi
-
-# UniproDeleted Trembl
-if [ ! -f delac_tr.txt ]
-then
-    ln -s ../../hs/map/delac_tr.txt delac_tr.txt
 fi
 
 # NetBiol WBGeneId -> uniprot
@@ -683,6 +657,9 @@ cd ../map
 
 check_comppi_custom sc comppi_yeast_ensemblpeptideid-uniprotkbac.txt
 check_comppi_custom sc yeast_organelle.csv
+check_comppi_custom sc comppi_uniprot_deleted_sc.txt
+check_comppi_custom sc comppi_sc_uniprotkb-ac_uniprotkb-swissprot.txt
+check_comppi_custom sc comppi_sc_uniprotkb-ac_uniprotkb-trembl.txt
 
 # Uniprot
 if [ ! -f YEAST_559292_idmapping_selected.tab ]
@@ -702,18 +679,6 @@ fi
 if [ ! -f sec_ac.txt ]
 then
     ln -s ../../hs/map/sec_ac.txt sec_ac.txt
-fi
-
-# UniprotDeleted Swissprot
-if [ ! -f delac_sp.txt ]
-then
-    ln -s ../../hs/map/delac_sp.txt delac_sp.txt
-fi
-
-# UniproDeleted Trembl
-if [ ! -f delac_tr.txt ]
-then
-    ln -s ../../hs/map/delac_tr.txt delac_tr.txt
 fi
 
 # Netbiol refseq->uniprot

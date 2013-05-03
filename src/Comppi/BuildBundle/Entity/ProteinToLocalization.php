@@ -26,7 +26,7 @@ class ProteinToLocalization
 
     /**
      * @ORM\Column(type="integer")
-     * @ORM\ManyToOne(targetEntity="ProteinCe")
+     * @ORM\ManyToOne(targetEntity="Protein")
      */
     protected $proteinId;
 

@@ -69,11 +69,15 @@ php $console comppi:build:localizations ce
 echo "Load C'Elegans name lookup table"
 php $console comppi:build:namelookup ce
 
+echo "Clean names"
+php $console comppi:build:nameClean
+
 echo "Load protein names (mainly for autocomplete support)"
 php $console comppi:build:names
 
 echo "Calculate Confidence Scores"
-php $console comppi:build:confidenceScores
+echo "disabled"
+#php $console comppi:build:confidenceScores
 
 endTime=$(date +"%s")
 diffTime=$(($endTime - $startTime))
