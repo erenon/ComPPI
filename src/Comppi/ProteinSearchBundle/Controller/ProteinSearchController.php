@@ -62,22 +62,21 @@ class ProteinSearchController extends Controller
 		{
 			$DB = $this->getDbConnection();
 			// @TODO: save keyword to session $T['keyword']  = htmlspecialchars(strip_tags($keyword));
-			
-			$r_prots_by_name = $DB->query("SELECT
+
+			$r_prots_by_name = $DB->executeQuery("SELECT
 				n2p.name, n2p.specieId, n2p.proteinId, p.proteinName
 			  FROM
 				NameToProtein n2p, Protein p
 			  WHERE
 					n2p.proteinId=p.id
-				AND n2p.name='".mysql_real_escape_string($keyword)."'"
-			);
+				AND n2p.name=?", array($keyword));
 			if (!$r_prots_by_name)
 				throw new \ErrorException('Interaction query failed!');
 			
 			// exact match to a protein -> we show its interactions
 			if ($r_prots_by_name->rowCount()==1)
 			{
-				$prot_details = $r_prots_by_name->fetchObject();
+				$prot_details = $r_prots_by_name->fetch(\PDO::FETCH_OBJ);
 				//die(var_dump($prot_details->proteinId));
 				// forward creates an internal call to a controller and returns a Response
 				return $this->redirect($this->generateUrl(
@@ -87,7 +86,7 @@ class ProteinSearchController extends Controller
 			}
 			// multiple proteins found -> user has to select
 			elseif ($r_prots_by_name->rowCount()>1) {
-				while ($p = $r_prots_by_name->fetchObject())
+				while ($p = $r_prots_by_name->fetch(\PDO::FETCH_OBJ))
 				{
 					$T['ls'][] = array(
 						'comppi_id' => $p->proteinId,
@@ -102,7 +101,9 @@ class ProteinSearchController extends Controller
 			// no protein was found
 			else
 			{
-				throw new \NotFoundException('Requested protein was not found!');
+				//throw new \NotFoundException('Requested protein was not found!');
+				throw new \ErrorException('ProteinToLocalization query failed!');
+				//echo 'Requested protein was not found!';
 			}
 		} else {
 			return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
@@ -124,20 +125,20 @@ class ProteinSearchController extends Controller
 		// @TODO: interakciók száma,
 		// @TODO: letölthető dataset
 		
-		// interactors
-		$sql_interactors = 
-		"SELECT DISTINCT
-			i.id AS iid, i.sourceDb, i.pubmedId,
-			p.id as pid, p.proteinName as name, p.proteinNamingConvention as namingConvention
-		FROM Interaction i
-		LEFT JOIN Protein p ON p.id=IF(actorAId = $comppi_id, i.actorBId, i.actorAId)
-		WHERE actorAId = $comppi_id OR actorBId = $comppi_id
-		LIMIT ".$this->search_result_per_page;
+		$comppi_id = intval($comppi_id);
 		
-		if (!$r_interactors=$DB->query($sql_interactors))
+		// interactors
+		$r_interactors = $DB->executeQuery("SELECT DISTINCT
+			i.id AS iid, i.sourceDb, i.pubmedId,
+				p.id as pid, p.proteinName as name, p.proteinNamingConvention as namingConvention
+			FROM Interaction i
+			LEFT JOIN Protein p ON p.id=IF(actorAId = $comppi_id, i.actorBId, i.actorAId)
+			WHERE actorAId = $comppi_id OR actorBId = $comppi_id
+			LIMIT ".$this->search_result_per_page);
+		if (!$r_interactors)
 			throw new \ErrorException('Interactor query failed!');
 
-		while ($i = $r_interactors->fetchObject())
+		while ($i = $r_interactors->fetch(\PDO::FETCH_OBJ))
 		{
 			$T['ls'][$i->pid]['prot_name'] = $i->name;
 			$T['ls'][$i->pid]['prot_naming'] = $i->namingConvention;
@@ -176,11 +177,11 @@ class ProteinSearchController extends Controller
 	public function autocompleteAction($keyword)
 	{
 		$DB = $this->getDbConnection();
-		$r_i = $DB->query("SELECT name FROM ProteinName WHERE name LIKE '%".mysql_real_escape_string($keyword)."%' ORDER BY LENGTH(name) LIMIT 15");
+		$r_i = $DB->executeQuery("SELECT name FROM ProteinName WHERE name LIKE ? ORDER BY LENGTH(name) LIMIT 15", array("%$keyword%"));
 		if (!$r_i) throw new \ErrorException('Autocomplete query failed!');
 		
 		$list = array();
-		while ($p = $r_i->fetchObject())
+		while ($p = $r_i->fetch(\PDO::FETCH_OBJ))
 			$list[] = $p->name;
 
         return new Response(json_encode($list));
@@ -190,7 +191,7 @@ class ProteinSearchController extends Controller
 	private function getProteinDetails($comppi_id)
 	{
 		$DB = $this->getDbConnection();
-		$r_p = $DB->query("SELECT proteinName AS name, proteinNamingConvention AS naming, specieId FROM Protein WHERE id=".mysql_real_escape_string($comppi_id));
+		$r_p = $DB->executeQuery("SELECT proteinName AS name, proteinNamingConvention AS naming, specieId FROM Protein WHERE id=?", array($comppi_id));
 		if (!$r_p) throw new \ErrorException('Protein query failed!');
 		
 		$prot_details = $r_p->fetch(\PDO::FETCH_ASSOC);
@@ -225,7 +226,7 @@ class ProteinSearchController extends Controller
 			throw new \ErrorException('ProteinToLocalization query failed!');
 		
 		$i = 0;
-		while ($p = $r_pl->fetchObject())
+		while ($p = $r_pl->fetch(\PDO::FETCH_OBJ))
 		{
 			$i++;
 			
@@ -258,7 +259,7 @@ class ProteinSearchController extends Controller
 		$sql_syn = "SELECT proteinId AS pid, name, namingConvention FROM NameToProtein WHERE proteinId IN(".join(',', $comppi_ids).")";
 		$this->verbose ? $this->verbose_log[] = $sql_syn : '';
 
-		if (!$r_syn = $DB->query($sql_syn))
+		if (!$r_syn = $DB->executeQuery($sql_syn))
 			throw new \ErrorException('getProteinSynonyms query failed!');
 		
 		$syns = array();
