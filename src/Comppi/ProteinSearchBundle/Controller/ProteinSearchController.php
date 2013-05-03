@@ -29,6 +29,8 @@ class ProteinSearchController extends Controller
 		1 => 'Experimental',
 		2 => 'Predicted'
 	);
+	private $autocomplete_url = "./protein_search/autocomplete/";
+	private $autocomplete_url_dev = "/comppi/ComPPI_dualon/web/app_dev.php/protein_search/autocomplete/";
 	
 	// PROTEIN SEARCH
 	//public function proteinSearchAction($protein_name, $requested_species, $current_page)
@@ -52,6 +54,7 @@ class ProteinSearchController extends Controller
 			'keyword' => '',
 			'result_msg' => '',
 			'uniprot_root' => $this->uniprot_root
+			//'autocomplete_url' = $this->autocomplete
         );
 
 		//$request = $this->getRequest();

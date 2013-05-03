@@ -116,7 +116,8 @@ $(document).ready(function(){
 $(function() {
 	$("#fProtSearchKeyword").autocomplete({
 		source: function(request, response){
-			url = "/comppi/ComPPI_dualon/web/app_dev.php/protein_search/autocomplete/" + request.term;
+			// hardcoded URL for live environment: ugly, but it works..
+			url = "/protein_search/autocomplete/" + request.term;
 			$.getJSON(url, function(data){
 				response(data);
 			});
