@@ -15,14 +15,14 @@
 			<th>Name</th>
 			<th>UniProt Profile</th>
 			<th>Species</th>
-			<th>Details</th>
+			<th>ComPPI Details</th>
 		</tr>
 		{% for p in ls %}
 		<tr>
-			<td>{{ p.name }}</td>
+			<td><b>{{ p.name }}</b> ({{ p.namingConvention }})</td>
 			<td><a href="{{ p.uniprot_link }}" target="_blank">{{ p.name2 }} <img src="{{ asset('assets/linkout.png') }}" alt="Link to Uniprot" /></a></td>
 			<td class="taxonomic_name">{{ p.species }}</td>
-			<td><a href="{{ path('ComppiProteinSearchBundle_interactors', {'comppi_id': p.comppi_id }) }}">Details</a></td>
+			<td><a href="{{ path('ComppiProteinSearchBundle_interactors', {'comppi_id': p.comppi_id }) }}" class="btn_green">Details</a></td>
 		</tr>
 		{% endfor %}
 	</table>

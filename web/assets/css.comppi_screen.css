@@ -192,7 +192,7 @@ input, select, textarea {
 	padding: 0;
 }*/
 
-#ProteinSearchSelectorTbl td:last-child { width: 10%; text-align: center; }
+#ProteinSearchSelectorTbl td:last-child { width: 20%; text-align: center; }
 #ProteinSearchSelectorTbl { width: auto; margin: 1em auto; }
 
 .ps-actorA { padding: 10px; width: 80px; border-top: 1px dotted #909090; height:  100%; }

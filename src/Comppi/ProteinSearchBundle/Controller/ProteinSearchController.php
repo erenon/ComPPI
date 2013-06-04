@@ -64,12 +64,13 @@ class ProteinSearchController extends Controller
 			// @TODO: save keyword to session $T['keyword']  = htmlspecialchars(strip_tags($keyword));
 
 			$r_prots_by_name = $DB->executeQuery("SELECT
-				n2p.name, n2p.specieId, n2p.proteinId, p.proteinName
+				n2p.name, n2p.specieId, n2p.proteinId, n2p.namingConvention, p.proteinName
 			  FROM
 				NameToProtein n2p, Protein p
 			  WHERE
 					n2p.proteinId=p.id
-				AND n2p.name=?", array($keyword));
+				AND n2p.name=?
+			  ORDER BY p.proteinName", array($keyword));
 			if (!$r_prots_by_name)
 				throw new \ErrorException('Interaction query failed!');
 			
@@ -92,6 +93,7 @@ class ProteinSearchController extends Controller
 						'comppi_id' => $p->proteinId,
 						'name' => $p->name,
 						'name2' => $p->proteinName,
+						'namingConvention' => $p->namingConvention,
 						'species' => $spDescriptors[$p->specieId]->shortname,
 						'uniprot_link' => $this->uniprot_root.$p->proteinName
 					);
