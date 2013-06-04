@@ -188,6 +188,63 @@ class ProteinSearchController extends Controller
 	}
 	
 	
+	/**
+	 * Gets the first neighbours of a node with their connections to earch other (or optionally all of their interactions). Writes a tab-separated text file with rows like: "locA.nodeA\tlocB.nodeB\n".
+	 * @param int $comppi_id The ComPPI ID of the starting node */
+	public function subgraphAction($comppi_id)
+	{
+		$neighbours_with_interactions = true; // further interactions of first neighbours are included
+		$joined_node_names = true; // node name = major_loc.protein_name (to display in Cytoscape for example)
+		
+		// get the comppi IDs of the first neighbours
+		$DB = $this->getDbConnection();
+		$r_actor_ids = $DB->executeQuery("SELECT IF(actorAId=?, actorBId, actorAId) as actorId FROM Interaction WHERE actorAId=? OR actorBId=?", array($comppi_id, $comppi_id, $comppi_id));
+		$first_neighbours = $r_actor_ids->fetchAll(\PDO::FETCH_COLUMN, 0);
+		
+		// get the interactions of the first neighbours
+		$sql_neighbour_links = "SELECT p1.proteinName as proteinA, p2.proteinName as proteinB, ptl1.localizationId as locAId, ptl2.localizationId as locBId
+		FROM Interaction i
+		LEFT JOIN Protein p1 ON p1.id=i.actorAId
+		LEFT JOIN ProteinToLocalization ptl1 ON p1.id=ptl1.proteinId
+		LEFT JOIN Protein p2 ON p2.id=i.actorBId
+		LEFT JOIN ProteinToLocalization ptl2 ON p2.id=ptl2.proteinId
+		WHERE (i.actorAId IN(".join(',', $first_neighbours).") OR i.actorBId IN(".join(',', $first_neighbours)."))
+		GROUP BY ptl1.localizationId, ptl2.localizationId";
+		
+		//die($sql_neighbour_links);
+		$r_neighbour_links = $DB->executeQuery($sql_neighbour_links, array(join(',', $first_neighbours), join(',', $first_neighbours)));
+		
+		$locs = $this->getLocalizationTranslator();
+		if ($neighbours_with_interactions) {
+			$filename = date("YmdHis").'_subgraph_of_'.$comppi_id;
+			$fp = fopen("/var/www/comppi/$filename", "w");
+			
+			$interaction_count = 0;
+			while($link = $r_neighbour_links->fetch(\PDO::FETCH_OBJ)) {
+				$interaction_count++;
+				
+				$line = (empty($link->locAId) ? "unknown_loc" : $locs->getLargelocById($link->locAId))
+					.($joined_node_names ? "." : "\t")
+					.$link->proteinA
+					."\t"
+					.(empty($link->locBId) ? "N/A" : $locs->getLargelocById($link->locBId))
+					.($joined_node_names ? "." : "\t")
+					.$link->proteinB
+					."\n";
+				fwrite($fp, $line);
+			}
+			
+			fclose($fp);
+			chmod("/var/www/comppi/$filename", 0777);
+			//echo "[OK] $filename";
+		} else {
+			// @TODO: remove those links of the neighbours which are not only between them
+		}
+		
+		return new Response("[ OK ]<br>First neighbours: ".$r_actor_ids->rowCount()."<br>Interactions: $interaction_count");
+	}
+	
+	
 	private function getProteinDetails($comppi_id)
 	{
 		$DB = $this->getDbConnection();

@@ -11,3 +11,9 @@ ComppiProteinSearchBundle_interactors:
 ComppiProteinSearchBundle_proteinsearch_autocomplete:
     pattern:  /protein_search/autocomplete/{keyword}
     defaults: { _controller: ComppiProteinSearchBundle:ProteinSearch:autocomplete }
+
+ComppiProteinSearchBundle_subgraph:
+    pattern:  /protein_search/subgraph/{comppi_id}
+    defaults: { _controller: ComppiProteinSearchBundle:ProteinSearch:subgraph }
+    requirements:
+        id:  \d+
