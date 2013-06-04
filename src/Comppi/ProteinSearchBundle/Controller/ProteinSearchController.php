@@ -70,6 +70,7 @@ class ProteinSearchController extends Controller
 			  WHERE
 					n2p.proteinId=p.id
 				AND n2p.name=?
+			  GROUP BY p.proteinName
 			  ORDER BY p.proteinName", array($keyword));
 			if (!$r_prots_by_name)
 				throw new \ErrorException('Interaction query failed!');
