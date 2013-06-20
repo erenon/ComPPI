@@ -132,12 +132,12 @@ class ProteinSearchController extends Controller
 		
 		// interactors
 		$r_interactors = $DB->executeQuery("SELECT DISTINCT
-			i.id AS iid, i.sourceDb, i.pubmedId,
+				i.id AS iid, i.sourceDb, i.pubmedId,
 				p.id as pid, p.proteinName as name, p.proteinNamingConvention as namingConvention
 			FROM Interaction i
 			LEFT JOIN Protein p ON p.id=IF(actorAId = $comppi_id, i.actorBId, i.actorAId)
-			WHERE actorAId = $comppi_id OR actorBId = $comppi_id
-			LIMIT ".$this->search_result_per_page);
+			WHERE actorAId = $comppi_id OR actorBId = $comppi_id");
+		//	LIMIT ".$this->search_result_per_page);
 		if (!$r_interactors)
 			throw new \ErrorException('Interactor query failed!');
 
@@ -171,7 +171,6 @@ class ProteinSearchController extends Controller
 				$actor['synonyms'] = $protein_synonyms[$pid]['synonyms'];
 			//$actor['syn_namings'] = (empty($protein_synonyms[$pid]['syn_namings']) ? array() : $protein_synonyms[$pid]['syn_namings']);
 		}
-		//die( var_dump( $T ) );
 		
 		return $this->render('ComppiProteinSearchBundle:ProteinSearch:interactors.html.twig',$T);
 	}
@@ -192,57 +191,121 @@ class ProteinSearchController extends Controller
 	
 	
 	/**
+	 * Current test protein: P04637 = ComPPI ID: 17387
 	 * Gets the first neighbours of a node with their connections to earch other (or optionally all of their interactions). Writes a tab-separated text file with rows like: "locA.nodeA\tlocB.nodeB\n".
 	 * @param int $comppi_id The ComPPI ID of the starting node */
 	public function subgraphAction($comppi_id)
 	{
-		$neighbours_with_interactions = true; // further interactions of first neighbours are included
 		$joined_node_names = true; // node name = major_loc.protein_name (to display in Cytoscape for example)
+		$interaction_count = 0;
 		
-		// get the comppi IDs of the first neighbours
+		$interaction_sql = "INSERT INTO Interaction (id, actorAId, actorBId) VALUES \n";
+		$interaction_rows = array();
+		$protein_sql = "INSERT INTO Protein (id, specieId, proteinName) VALUES \n";
+		$protein_rows = array();
+		$prot_to_loc_sql = "INSERT INTO ProteinToLocalization (id, proteinId, localizationId) VALUES \n";
+		$prot_to_loc_rows = array();
+		$protloc_to_systype_sql = "INSERT INTO ProtLocToSystemType (protLocId, systemTypeId) VALUES \n";
+		$protloc_to_systype_rows = array();
+		$systype_sql = "INSERT INTO SystemType (id, confidenceType) VALUES \n";
+		$systype_rows = array();
+		
+		// GET THE STAR-SHAPED NETWORK OF THE REQUESTED PROTEIN AND ITS FIRST NEIGHBOURS
 		$DB = $this->getDbConnection();
-		$r_actor_ids = $DB->executeQuery("SELECT IF(actorAId=?, actorBId, actorAId) as actorId FROM Interaction WHERE actorAId=? OR actorBId=?", array($comppi_id, $comppi_id, $comppi_id));
-		$first_neighbours = $r_actor_ids->fetchAll(\PDO::FETCH_COLUMN, 0);
+		$r_actor_ids = $DB->executeQuery(
+			"SELECT DISTINCT
+				i.id AS iid,
+				IF(actorAId=?, actorBId, actorAId) as actorId,
+				p.id as proteinId, p.proteinName
+			FROM Interaction i
+			LEFT JOIN Protein p ON p.id=IF(actorAId = ?, i.actorBId, i.actorAId)
+			WHERE actorAId = ? OR actorBId = ?",
+			array($comppi_id, $comppi_id, $comppi_id, $comppi_id)
+		);
 		
-		// get the interactions of the first neighbours
-		$sql_neighbour_links = "SELECT p1.proteinName as proteinA, p2.proteinName as proteinB, ptl1.localizationId as locAId, ptl2.localizationId as locBId
+		while($actor = $r_actor_ids->fetch(\PDO::FETCH_OBJ)) {
+			$first_neighbour_ids[$actor->actorId] = $actor->actorId;
+			$interaction_rows[$actor->iid] = '('.$actor->iid.', '.$comppi_id.', '.$actor->actorId.')';
+			$protein_rows[$actor->proteinId] = '('.$actor->proteinId.", 0, '".$actor->proteinName."')";
+		}
+
+		//die(var_dump($first_neighbours));
+		
+		// GET THE INTERACTIONS AMONG THE FIRST NEIGHBOURS
+		$sql_neighbour_links = "SELECT DISTINCT i.id as iid, p1.id as p1id, p1.proteinName as proteinA, p2.id as p2id, p2.proteinName as proteinB, ptl1.id as protLocAId, ptl1.localizationId as locAId, ptl2.id as protLocBId, ptl2.localizationId as locBId, st1.id as sysTypeAId, st1.confidenceType as confTypeA, st2.id as sysTypeBId, st1.confidenceType as confTypeB
 		FROM Interaction i
 		LEFT JOIN Protein p1 ON p1.id=i.actorAId
 		LEFT JOIN ProteinToLocalization ptl1 ON p1.id=ptl1.proteinId
+		LEFT JOIN ProtLocToSystemType ptst1 ON ptl1.id=ptst1.protLocId
+		LEFT JOIN SystemType st1 ON ptst1.systemTypeId=st1.id
 		LEFT JOIN Protein p2 ON p2.id=i.actorBId
 		LEFT JOIN ProteinToLocalization ptl2 ON p2.id=ptl2.proteinId
-		WHERE (i.actorAId IN(".join(',', $first_neighbours).") OR i.actorBId IN(".join(',', $first_neighbours)."))
+		LEFT JOIN ProtLocToSystemType ptst2 ON ptl2.id=ptst2.protLocId
+		LEFT JOIN SystemType st2 ON ptst2.systemTypeId=st2.id
+		WHERE (i.actorAId IN(".join(',', $first_neighbour_ids).") OR i.actorBId IN(".join(',', $first_neighbour_ids)."))
 		GROUP BY ptl1.localizationId, ptl2.localizationId";
 		
 		//die($sql_neighbour_links);
-		$r_neighbour_links = $DB->executeQuery($sql_neighbour_links, array(join(',', $first_neighbours), join(',', $first_neighbours)));
+		
+		$r_neighbour_links = $DB->executeQuery($sql_neighbour_links);
 		
 		$locs = $this->getLocalizationTranslator();
-		if ($neighbours_with_interactions) {
-			$filename = date("YmdHis").'_subgraph_of_'.$comppi_id;
-			$fp = fopen("/var/www/comppi/$filename", "w");
+
+		while($link = $r_neighbour_links->fetch(\PDO::FETCH_OBJ)) {
+			$large_loc_a = (empty($link->locAId) ? "N/A" : $locs->getLargelocById($link->locAId));
+			$large_loc_b = (empty($link->locBId) ? "N/A" : $locs->getLargelocById($link->locBId));
 			
-			$interaction_count = 0;
-			while($link = $r_neighbour_links->fetch(\PDO::FETCH_OBJ)) {
+			// take those and only those interactions,
+			// where the interactors are in the same known localization -> POSITIVE DATA SET
+			if ($large_loc_a == $large_loc_b AND $large_loc_a != 'N/A') {
 				$interaction_count++;
 				
-				$line = (empty($link->locAId) ? "unknown_loc" : $locs->getLargelocById($link->locAId))
-					.($joined_node_names ? "." : "\t")
-					.$link->proteinA
-					."\t"
-					.(empty($link->locBId) ? "N/A" : $locs->getLargelocById($link->locBId))
-					.($joined_node_names ? "." : "\t")
-					.$link->proteinB
-					."\n";
-				fwrite($fp, $line);
+				// Interaction
+				$interaction_tmp_row = '('.$link->iid.', '.$link->p1id.', '.$link->p2id.')';
+				if (!in_array($interaction_tmp_row, $interaction_rows))
+					$interaction_rows[$link->iid] = $interaction_tmp_row;
+				
+				// Protein
+				$protein_rows[$link->p1id] = '('.$link->p1id.", 0, '".$link->proteinA."')";
+				$protein_rows[$link->p2id] = '('.$link->p2id.", 0, '".$link->proteinB."')";
+				
+				// ProteinToLocalization
+				$prot_to_loc_rows[$link->protLocAId] = '('.$link->protLocAId.', '.$link->p1id.', '.$link->locAId.')';
+				$prot_to_loc_rows[$link->protLocBId] = '('.$link->protLocBId.', '.$link->p2id.', '.$link->locBId.')';
+	
+				// ProtLocToSystemType
+				$protloc_to_systype_rows[$link->protLocAId] = '('.$link->protLocAId.', '.$link->sysTypeAId.')';
+				$protloc_to_systype_rows[$link->protLocBId] = '('.$link->protLocBId.', '.$link->sysTypeBId.')';
+				
+				// SystemType
+				$systype_rows[$link->sysTypeAId] = '('.$link->sysTypeAId.', '.$link->confTypeA.')';
+				$systype_rows[$link->sysTypeBId] = '('.$link->sysTypeBId.', '.$link->confTypeB.')';
 			}
-			
-			fclose($fp);
-			chmod("/var/www/comppi/$filename", 0777);
-			//echo "[OK] $filename";
-		} else {
-			// @TODO: remove those links of the neighbours which are not only between them
 		}
+		
+		$interaction_sql .= join(", \n", $interaction_rows);
+		$protein_sql .= join(", \n", $protein_rows);
+		$prot_to_loc_sql .= join(", \n", $prot_to_loc_rows);
+		$protloc_to_systype_sql .= join(", \n", $protloc_to_systype_rows);
+		$systype_sql .= join(", \n", $systype_rows);
+		
+		$file_tbl_structure = "/var/www/comppi/comppi_positive_dataset_structure-trimmed.sql";
+		$fp_structure = fopen($file_tbl_structure, "r");
+		$tbl_structures = fread($fp_structure, filesize($file_tbl_structure));
+		fclose($fp_structure);
+		
+		$filename = date("YmdHis").'_subgraph_of_'.$comppi_id.".sql";
+		$fp = fopen("/var/www/comppi/$filename", "a");
+		fwrite($fp,
+			 $tbl_structures."\n"
+			.$interaction_sql.";\n\n"
+			.$protein_sql.";\n\n"
+			.$prot_to_loc_sql.";\n\n"
+			.$protloc_to_systype_sql.";\n\n"
+			.$systype_sql.";\n\n"
+		);
+		fclose($fp);
+		chmod("/var/www/comppi/$filename", 0777);
 		
 		return new Response("[ OK ]<br>First neighbours: ".$r_actor_ids->rowCount()."<br>Interactions: $interaction_count");
 	}
