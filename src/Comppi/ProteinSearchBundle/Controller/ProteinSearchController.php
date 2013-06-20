@@ -245,6 +245,19 @@ class ProteinSearchController extends Controller
 		WHERE (i.actorAId IN(".join(',', $first_neighbour_ids).") OR i.actorBId IN(".join(',', $first_neighbour_ids)."))
 		GROUP BY ptl1.localizationId, ptl2.localizationId";
 		
+		$sql_neighbour_links_for_negative_set = "SELECT DISTINCT i.id as iid, p1.id as p1id, p1.proteinName as proteinA, p2.id as p2id, p2.proteinName as proteinB, ptl1.id as protLocAId, ptl1.localizationId as locAId, ptl2.id as protLocBId, ptl2.localizationId as locBId, st1.id as sysTypeAId, st1.confidenceType as confTypeA, st2.id as sysTypeBId, st1.confidenceType as confTypeB
+		FROM Interaction i
+		LEFT JOIN Protein p1 ON p1.id=i.actorAId
+		LEFT JOIN ProteinToLocalization ptl1 ON p1.id=ptl1.proteinId
+		LEFT JOIN ProtLocToSystemType ptst1 ON ptl1.id=ptst1.protLocId
+		LEFT JOIN SystemType st1 ON ptst1.systemTypeId=st1.id
+		LEFT JOIN Protein p2 ON p2.id=i.actorBId
+		LEFT JOIN ProteinToLocalization ptl2 ON p2.id=ptl2.proteinId
+		LEFT JOIN ProtLocToSystemType ptst2 ON ptl2.id=ptst2.protLocId
+		LEFT JOIN SystemType st2 ON ptst2.systemTypeId=st2.id
+		WHERE (i.actorAId IN(".join(',', $first_neighbour_ids).") OR i.actorBId IN(".join(',', $first_neighbour_ids)."))
+		GROUP BY ptl1.localizationId, ptl2.localizationId LIMIT 20000";
+		
 		//die($sql_neighbour_links);
 		
 		$r_neighbour_links = $DB->executeQuery($sql_neighbour_links);
@@ -257,6 +270,7 @@ class ProteinSearchController extends Controller
 			
 			// take those and only those interactions,
 			// where the interactors are in the same known localization -> POSITIVE DATA SET
+			// for NEGATIVE DATA SET: $large_loc_a != $large_loc_b
 			if ($large_loc_a == $large_loc_b AND $large_loc_a != 'N/A') {
 				$interaction_count++;
 				
