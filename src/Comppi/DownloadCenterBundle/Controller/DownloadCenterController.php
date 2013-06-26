@@ -47,10 +47,12 @@ class DownloadCenterController extends Controller
                     'size' => number_format((filesize($this->releases_dir.$entry)/1048576), 2, '.', ' '),
                     'mtime' => date("Y-m-d. H:i:s", filemtime($this->releases_dir.$entry))
                 );
-                $T['ls'][] = $entry;
+                $T['ls'][$entry['mtime']] = $entry;
             }
         }
         $d->close();
+        
+        ksort($T['ls']);
         
         return $this->render('DownloadCenterBundle:DownloadCenter:previousreleases.html.twig', $T);
     }
