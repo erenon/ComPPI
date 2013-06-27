@@ -192,6 +192,7 @@ input, select, textarea {
 	padding: 0;
 }*/
 
+#protSearchResultMsg { text-align: center; font-weight: bold; font-size: 1.2em; }
 #ProteinSearchSelectorTbl td:last-child { width: 20%; text-align: center; }
 #ProteinSearchSelectorTbl { width: auto; margin: 1em auto; }
 

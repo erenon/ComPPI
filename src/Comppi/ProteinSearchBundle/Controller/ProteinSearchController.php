@@ -40,7 +40,7 @@ class ProteinSearchController extends Controller
 		$requested_species = '';
 		$current_page = '';
 		$keyword = $this->initKeyword($protein_name);
-		$species = $this->initSpecies($requested_species);
+		$species_id = $this->initSpecies($requested_species);
 		$current_page = $this->initPageNum($current_page);
 		$sp = $this->getSpeciesProvider();
 		$spDescriptors = $sp->getDescriptors();
@@ -61,7 +61,7 @@ class ProteinSearchController extends Controller
 		if (!empty($keyword)) // @TODO: require species
 		{
 			$DB = $this->getDbConnection();
-			// @TODO: save keyword to session $T['keyword']  = htmlspecialchars(strip_tags($keyword));
+			$T['keyword'] = htmlspecialchars(strip_tags($keyword));
 
 			$r_prots_by_name = $DB->executeQuery("SELECT
 				n2p.name, n2p.specieId, n2p.proteinId, n2p.namingConvention, p.proteinName
@@ -70,8 +70,9 @@ class ProteinSearchController extends Controller
 			  WHERE
 					n2p.proteinId=p.id
 				AND n2p.name=?
+				AND p.specieId=?
 			  GROUP BY p.proteinName
-			  ORDER BY p.proteinName", array($keyword));
+			  ORDER BY p.proteinName", array($keyword, $species_id));
 			if (!$r_prots_by_name)
 				throw new \ErrorException('Interaction query failed!');
 			
@@ -104,9 +105,8 @@ class ProteinSearchController extends Controller
 			// no protein was found
 			else
 			{
-				//throw new \NotFoundException('Requested protein was not found!');
-				throw new \ErrorException('ProteinToLocalization query failed!');
-				//echo 'Requested protein was not found!';
+				$T['result_msg'] = 'The requested protein was not found.';
+				return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
 			}
 		} else {
 			return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
@@ -433,10 +433,10 @@ class ProteinSearchController extends Controller
 			$keyword = $protein_name;
 		}
 		// Form was submitted, but we haven't had any keyword
-		elseif (isset($_POST['fProtSearchSubmit']))
+		elseif (isset($_SESSION['protein_search_keyword']))
 		{
-			$this->get('session')->getFlashBag()->add('no_keyword_err', 'Please fill in a keyword!');
-			$keyword = '';
+			//$this->get('session')->getFlashBag()->add('no_keyword_err', 'Please fill in a keyword!');
+			$keyword = $_SESSION['protein_search_keyword'];
 		}
 		else
 		{
@@ -450,27 +450,18 @@ class ProteinSearchController extends Controller
 	*/
 	private function initSpecies($requested_species = '')
 	{
-		$species = array();
 		$species_provider = $this->getSpeciesProvider();
 		
-		if (!empty($_POST['fProtSearchSpecies']) and is_array($_POST['fProtSearchSpecies'])) {
-			$sp = $_POST['fProtSearchSpecies'];
-		} else if (!empty($requested_species)) {
-			$sp = array_fill_keys(explode(',', $requested_species), 1);
-		} else {
-			$sp = array('hs'=>1);
-		}
-		
-		// array of species requested in the form
-		// currently one species per request, but this block ensures it can be extended easily
-		foreach($sp as $sp_key => $needed)
-		{
+		if (!empty($_POST['fProtSearchSpecies'])) {
 			// this ensures that we need an exact match from the input to be valid
 			// if we don't get back an object, then the form was forged
-			$descriptor = @$species_provider->getSpecieByAbbreviation($sp_key); 
-			if (is_object($descriptor)) {
-				$species[$sp_key] = $descriptor->id;
-			}
+			$o_sp_descriptor = $species_provider->getSpecieByAbbreviation($_POST['fProtSearchSpecies']);
+			$species_id = $o_sp_descriptor->id;
+		} elseif (!empty($requested_species)) {
+			$o_sp_descriptor = $species_provider->getSpecieByAbbreviation($requested_species);
+			$species_id = $o_sp_descriptor->id;
+		} else {
+			$species_id = 0; // human
 		}
 		
 		// add the taxonomical abbreviations of all species, they'll be needed on the species selector buttons
@@ -480,12 +471,7 @@ class ProteinSearchController extends Controller
 			$o->shortname = substr_replace($o->name, '. ', 1, strpos($o->name, ' '));
 		}
 		
-		if (empty($species)) {
-			$this->get('session')->getFlashBag()->add('no_species_err', 'Please select at least one species!');
-			return false;
-		} else {
-			return $species;
-		}
+		return $species_id;
 	}
 	
 	private function initPageNum($curr_page)
