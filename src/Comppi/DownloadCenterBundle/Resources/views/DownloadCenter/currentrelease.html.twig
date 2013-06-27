@@ -4,10 +4,79 @@
 {% block title %}ComPPI - Download The Current Release - The Compartmentalized Protein-Protein Interaction Database{% endblock %}
 
 {% block download_content %}
+	{#
 	<h3>Current Release:</h3>
 	{% if size is defined %}
-	<p class="center"><a href="{{ path('DownloadCenterBundle_getcurrentrelease') }}" class="btn_green" style="text-decoration: none;">{{ mtime }} ({{ size }} MB)</a></p>
+	<p class="center"><a href="{{ path('DownloadCenterBundle_currentrelease') }}" class="btn_green" style="text-decoration: none;">{{ mtime }} ({{ size }} MB)</a></p>
 	{% else %}
 	<p class="center">Current release is temporary unavailable.</p>
 	{% endif %}
+	#}
+
+	<form id="DownloadCenterForm" action="{{ path('DownloadCenterBundle_currentrelease') }}" method="post">
+		<table><tr><td>
+		
+			<label>Dataset:</label><br />
+			
+			<div id="DlSetButtons">
+			<input type="radio" name="fDlSet" value="all" id="fDlSetAll" class="" checked="checked" />
+			<label for="fDlSetAll" class="radioButtonLabel">All Data (SQL, {{ dset_all_size }} MB, {{ dset_all_mtime }})</label><br />
+			
+			{#<input type="radio" name="fDlSet" value="comp" id="fDlSetComp" class="" />
+			<label for="fDlSetComp" class="radioButtonLabel">Compartmentalized Data</label><br />
+			
+			<input type="radio" name="fDlSet" value="detailedint" id="fDlSetDetaledInt" class="" />
+			<label for="fDlSetDetaledInt" class="radioButtonLabel">Detailed interactions with confidence scores</label><br />#}
+			
+			<input type="radio" name="fDlSet" value="int" id="fDlSetInt" class="" />
+			<label for="fDlSetInt" class="radioButtonLabel">Interactions</label><br />
+			
+			<input type="radio" name="fDlSet" value="protnloc" id="fDlSetProtNLoc" class="" />
+			<label for="fDlSetProtNLoc" class="radioButtonLabel">Proteins with localizations</label>
+			</div>
+			
+		</td><td>
+			
+			<label>Species:</label><br />
+			<div id="DlSpeciesButtons">
+			<input type="radio" name="fDlSpec" value="all" id="fDlSpecAll"{% if need_all==1 %} checked="checked"{% endif %} /><label for="fDlSpecAll" class="radioButtonLabel">All species</label><br />
+			<input type="radio" name="fDlSpec" value="hs" id="fDlSpecHs"{% if need_hs==1 %} checked="checked"{% endif %} /><label for="fDlSpecHs" class="radioButtonLabel">H. sapiens</label><br />
+			<input type="radio" name="fDlSpec" value="dm" id="fDlSpecDm"{% if need_dm==1 %} checked="checked"{% endif %} /><label for="fDlSpecDm" class="radioButtonLabel">D. melanogaster</label><br />
+			<input type="radio" name="fDlSpec" value="ce" id="fDlSpecCe"{% if need_ce==1 %} checked="checked"{% endif %} /><label for="fDlSpecCe" class="radioButtonLabel">C. elegans</label><br />
+			<input type="radio" name="fDlSpec" value="sc" id="fDlSpecSc"{% if need_sc==1 %} checked="checked"{% endif %} /><label for="fDlSpecSc" class="radioButtonLabel">S. cerevisiae</label><br />
+			</div>
+		
+		</td><td>
+		
+			<label>Low-Def. Localizations:</label><br />
+			<div id="DlLocButtons">
+			<input type="checkbox" name="fDlMLocCytoplasm" id="fDlMLocCytoplasm" class="btn toggleButton"{% if need_cytoplasm==1 %} checked="checked"{% endif %} /><label for="fDlMLocCytoplasm" class="radioButtonLabel">Cytoplasm</label><br />
+			<input type="checkbox" name="fDlMLocMito" id="fDlMLocMito" class="btn toggleButton"{% if need_mito==1 %} checked="checked"{% endif %} /><label for="fDlMLocMito" class="radioButtonLabel">Mitochondrion</label><br />
+			<input type="checkbox" name="fDlMLocNucleus" id="fDlMLocNucleus" class="btn toggleButton"{% if need_nucleus==1 %} checked="checked"{% endif %} /><label for="fDlMLocNucleus" class="radioButtonLabel">Nucleus</label><br />
+			<input type="checkbox" name="fDlMLocEC" id="fDlMLocEC" class="btn toggleButton"{% if need_ec==1 %} checked="checked"{% endif %} /><label for="fDlMLocEC" class="radioButtonLabel">Extracellular</label><br />
+			<input type="checkbox" name="fDlMLocSecr" id="fDlMLocSecr" class="btn toggleButton"{% if need_secr==1 %} checked="checked"{% endif %} /><label for="fDlMLocSecr" class="radioButtonLabel">Secretory Pathway</label><br />
+			<input type="checkbox" name="fDlMLocPlasMembr" id="fDlMLocPlasMembr" class="btn toggleButton"{% if need_plasmembr==1 %} checked="checked"{% endif %} /><label for="fDlMLocPlasMembr" class="radioButtonLabel">Plasma Membrane</label>
+			</div>
+		
+		</td></tr></table>
+		
+				
+		
+		
+		
+				
+		<br />
+{#}
+		cytoplasm:			GO:0043226 = 3134
+		mitochondrion: 		+GO:0005739 = 863
+		nucleus:			GO:0005634 = 1005
+		extracellular:		GO:0005576 = 2582
+		secretory pathway:	secretory pathway = 1
+		plasma membrane:	+GO:0016020 = 2796
+#}
+		
+	
+		<br />
+		<input type="submit" name="fDlSubmit" id="fDlSubmit" class="btn btn_submit" value="Download" />
+	</form>
 {% endblock %}

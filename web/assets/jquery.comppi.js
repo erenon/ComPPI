@@ -13,14 +13,14 @@ $(document).ready(function(){
 	);
 
 	// Search / Download Advanced Parameters
-	$("#AdvSearchFrame").hide();
+	/*$("#AdvSearchFrame").hide();
 	$("#AdvSearchBtn").click(function() {
 		$("#AdvSearchFrame").slideToggle(500);
-	});
+	});*/
 	
 	// ToggleButtons
 	// @TODO: create an abstract solution for this
-	$(".toggleButton").click(function() {
+	/*$(".toggleButton").click(function() {
 		var field_name = "#" + $(this).attr("id").replace("Btn", "");
 		if ( $(this).hasClass('btn_green') ) {
 			$(this).removeClass('btn_green');
@@ -29,10 +29,16 @@ $(document).ready(function(){
 			$(this).addClass('btn_green');
 			$(field_name).attr('value', 1);
 		}
-	});
+	});*/
 	
 	// radio buttons
-	$(':radio').each(function(){
+	/*$("#ProteinSearchSpecies").buttonset();
+	$("#DlSetButtons").buttonset();
+	$("#DlSpeciesButtons").buttonset();
+	$("#DlLocButtons").buttonset();*/
+	
+	
+	/*$('#ProteinSearchForm:radio').each(function(){
 		var id = $(this).attr("id");
 		var label = $('label[for="' + id + '"]');
 		
@@ -52,7 +58,7 @@ $(document).ready(function(){
 				$('#'+id).attr('checked', 'checked').attr('value', 1);
 			}
 		});
-	});
+	});*/
 });
 
 // LOCTREE

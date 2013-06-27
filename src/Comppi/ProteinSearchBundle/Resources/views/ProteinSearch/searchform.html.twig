@@ -4,7 +4,7 @@
 <form id="ProteinSearchForm" action="protein_search" method="post">
 	<label for="fProtSearchKeyword" id="fProtSearchKeywordLabel">Protein Name:</label>
 	<input type="text" name="fProtSearchKeyword" id="fProtSearchKeyword" value="{{ keyword }}" />
-	
+
 	{% for s in species_list %}
 	<input type="radio" name="fProtSearchSpecies[{{ s.abbreviation }}]" id="fProtSearch{{ s.abbreviation }}" class="btn"
 		{% if requested_species[s.abbreviation] is defined %}

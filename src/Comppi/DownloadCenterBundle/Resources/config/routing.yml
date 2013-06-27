@@ -6,9 +6,9 @@ DownloadCenterBundle_currentrelease:
     pattern:  /downloads/current_release
     defaults: { _controller: DownloadCenterBundle:DownloadCenter:currentReleaseGui }
 
-DownloadCenterBundle_getcurrentrelease:
-    pattern:  /downloads/get_current_release
-    defaults: { _controller: DownloadCenterBundle:DownloadCenter:currentRelease }
+DownloadCenterBundle_currentrelease:
+    pattern:  /downloads/current_release
+    defaults: { _controller: DownloadCenterBundle:DownloadCenter:currentReleaseGui }
 
 DownloadCenterBundle_previousreleases:
     pattern:  /downloads/previous_releases
@@ -17,7 +17,3 @@ DownloadCenterBundle_previousreleases:
 DownloadCenterBundle_getpreviousrelease:
     pattern:  /downloads/get_previous_release/{file}
     defaults: { _controller: DownloadCenterBundle:DownloadCenter:previousRelease }
-
-DownloadCenterBundle_customdl:
-    pattern:  /downloads/custom_download
-    defaults: { _controller: DownloadCenterBundle:DownloadCenter:customDownloadsGui }
