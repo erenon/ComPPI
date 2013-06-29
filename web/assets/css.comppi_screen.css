@@ -31,6 +31,7 @@ body  {
 a { color: #207000; text-decoration: none; font-weight: bold; }
 a:hover { color: #CC0000; }
 a:visited { text-decoration: underline; }
+.msg_error { font-size: 1.2em; font-weight: bold; color: red; text-align: center; }
 .hovered_listline {
 	background-color: #F0FFC4;
     -o-transition: all 0.1s ease-in-out;

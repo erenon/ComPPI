@@ -51,9 +51,14 @@ class DownloadCenterController extends Controller
 		$T['need_plasmembr'] = (isset($_POST['fDlSpecSc']) ? 1 : 0);
 		
 		$sp = $this->speciesProvider = $this->get('comppi.build.specieProvider');
-		
 		$request = $this->getRequest();
-		if ($request->getMethod() == 'POST') {
+		
+		if (isset($_SESSION['messages']['compartment_error'])) {
+			$T['error_msgs'] = $_SESSION['messages']['compartment_error'];
+			unset($_SESSION['messages']['compartment_error']);
+		}
+		elseif ($request->getMethod() == 'POST')
+		{
 			if (!isset($_POST['fDlSpec']) or $_POST['fDlSpec']=='all') {
 				$species = 'all';
 			} else {
@@ -124,31 +129,152 @@ class DownloadCenterController extends Controller
 	
 	public function serveComparmentalizedDataAction($species)
 	{
+		// we define which compartments are needed... (keys are the same as to be found in $locs->getLargelocs(), see buildComparmentalizedData() method)
 		$compartments = array();
 		isset($_POST['fDlMLocCytoplasm']) ? $compartments['cytoplasm'] = true : '';
-		isset($_POST['fDlMLocMito']) ? $compartments['mito'] = true : '';
+		isset($_POST['fDlMLocMito']) ? $compartments['mitochondrion'] = true : '';
 		isset($_POST['fDlMLocNucleus']) ? $compartments['nucleus'] = true : '';
-		isset($_POST['fDlMLocEC']) ? $compartments['ec'] = true : '';
-		isset($_POST['fDlMLocSecr']) ? $compartments['secr'] = true : '';
-		isset($_POST['fDlMLocPlasMembr']) ? $compartments['plasmembr'] = true : '';
-		
-		$locs = $this->get('comppi.build.localizationTranslator');
-		die(var_dump($locs->getLargelocs()));
-		
+		isset($_POST['fDlMLocEC']) ? $compartments['extracellular'] = true : '';
+		isset($_POST['fDlMLocSecr']) ? $compartments['secretory-pathway'] = true : '';
+		isset($_POST['fDlMLocPlasMembr']) ? $compartments['membrane'] = true : '';
+
+		if (empty($compartments)) {
+			$_SESSION['messages']['compartment_error'] = "Please select at least one compartment!";
+			return $this->forward('DownloadCenterBundle:DownloadCenter:currentReleaseGui');
+		}
 		
 		$filename = 'comppi--interactions_'.$species.'.csv';
 		$output_filename = $filename.($this->zipped_outputs ? '.zip' : '');
         
-        if (!file_exists($this->downloads_dir.$output_filename))
-            $this->buildInteractions($filename, $species);
+        //if (!file_exists($this->downloads_dir.$output_filename))
+            $this->buildComparmentalizedData($filename, $species, $compartments);
         
         return $this->serveFile($this->downloads_dir.$output_filename);
 	}
 	
 	
-	private function buildComparmentalizedData()
+	private function buildComparmentalizedData($filename, $species, $compartments)
 	{
+		$this->setTimeout(240);
 		$locs = $this->get('comppi.build.localizationTranslator');
+		$DB = $this->get('database_connection');
+		
+		// iterate the requested major locs to get all the localization IDs which belong to them
+		$major_locs = $locs->getLargelocs();
+		$loc_id_pool = array();
+		foreach($compartments as $comp_name => $needed) {
+			$loc_id_pool = array_merge($loc_id_pool, $major_locs[$comp_name]);
+		}
+		$loc_id_pool = array_unique($loc_id_pool);
+		
+		// INTERACTIONS IN THE REQUESTED COMPARTMENTS
+		$sql_i = "SELECT
+			i.id as iid, i.sourceDb, i.pubmedId,
+			GROUP_CONCAT(DISTINCT cs.score ORDER BY cs.score) as confScore,
+			GROUP_CONCAT(DISTINCT ist.name ORDER BY ist.name) AS expSysType,
+			p1.id as p1id, p1.proteinName as actorA,
+			GROUP_CONCAT(DISTINCT ptl1.localizationId ORDER BY ptl1.localizationId) as locAId,
+			GROUP_CONCAT(DISTINCT ptl1.sourceDb ORDER BY ptl1.sourceDb) as locASourceDb,
+			GROUP_CONCAT(DISTINCT ptl1.pubmedId ORDER BY ptl1.pubmedId) as locAPubmedId,
+			p2.id as p2id, p2.proteinName as actorB,
+			GROUP_CONCAT(DISTINCT ptl2.localizationId ORDER BY ptl2.localizationId) as locBId,
+			GROUP_CONCAT(DISTINCT ptl2.sourceDb ORDER BY ptl2.sourceDb) as locBSourceDb,
+			GROUP_CONCAT(DISTINCT ptl2.pubmedId ORDER BY ptl2.pubmedId) as locBPubmedId
+		FROM Interaction i
+        LEFT JOIN InteractionToSystemType itst ON i.id=itst.interactionId
+        LEFT JOIN SystemType ist ON itst.interactionId=ist.id
+		LEFT JOIN ConfidenceScore cs ON i.id=cs.interactionId
+		LEFT JOIN Protein p1 ON p1.id=i.actorAId
+		LEFT JOIN ProteinToLocalization ptl1 ON p1.id=ptl1.proteinId
+		LEFT JOIN Protein p2 ON p2.id=i.actorBId
+		LEFT JOIN ProteinToLocalization ptl2 ON p2.id=ptl2.proteinId
+		WHERE (ptl1.localizationId IN(".join(',', $loc_id_pool).") OR ptl2.localizationId IN(".join(',', $loc_id_pool)."))";
+		$sql_i .= ($species=='all' ? '' : " AND (p1.specieId=? AND p2.specieId=?)");
+		$sql_i .= " GROUP BY i.id";
+		//$sql_i .= " LIMIT 1000";
+		
+		if (!$r = $DB->executeQuery($sql_i, array($species, $species)))
+			throw new \ErrorException('buildFullInteractions query failed!');
+
+		$fp = fopen($this->downloads_dir.$filename, "w");
+
+		// OUTPUT IN CSV
+		// file header
+		fwrite($fp, "Interactor A\tInteractor B\tConfidence Score\tExpSysType\tSourceDB\tPubmed\tMajor Loc. A\tMinor Loc. A\tLoc. A Source DB\tLoc. A Pubmed\tMajor Loc. B\tMinor Loc. B\tLoc. B Source DB\tLoc. B Pubmed\n");
+		// file content
+		while ($i = $r->fetch(\PDO::FETCH_OBJ))
+		{
+			// localizations for protein A
+			if (!empty($i->locAId)) {
+				$locAIds = explode(',', $i->locAId);
+				foreach ($locAIds as $lid) {
+					$tmp_majorLocAs[$lid] = (empty($lid) ? 'N/A' : $locs->getLargelocById($lid));
+					$tmp_minorLocAs[$lid] = (empty($lid) ? 'N/A' : $locs->getHumanReadableLocalizationById($lid));
+				}
+				$majorLocAs = join(',', $tmp_majorLocAs);
+				unset($tmp_majorLocAs); // reset or accumulates over the lines...
+				$minorLocAs = join(',', $tmp_minorLocAs);
+				unset($tmp_minorLocAs); // reset or accumulates over the lines...
+			} else {
+				$majorLocAs = 'N/A';
+				$minorLocAs = 'N/A';
+			}
+			
+			// localizations for protein B
+			if (!empty($i->locBId)) {
+				$locBIds = explode(',', $i->locBId);
+				foreach ($locBIds as $lid) {
+					$tmp_majorLocBs[$lid] = (empty($lid) ? 'N/A' : $locs->getLargelocById($lid));
+					$tmp_minorLocBs[$lid] = (empty($lid) ? 'N/A' : $locs->getHumanReadableLocalizationById($lid));
+				}
+				$majorLocBs = join(',', $tmp_majorLocBs);
+				unset($tmp_majorLocBs); // reset or accumulates over the lines...
+				$minorLocBs = join(',', $tmp_minorLocBs);
+				unset($tmp_minorLocBs); // reset or accumulates over the lines...
+			} else {
+				$majorLocBs = 'N/A';
+				$minorLocBs = 'N/A';
+			}
+			
+			fwrite($fp,
+				 $i->actorA."\t"
+				.$i->actorB."\t"
+				.$i->confScore."\t"
+				.$i->expSysType."\t"
+				.$i->sourceDb."\t"
+				.(!empty($i->pubmedId) ? $this->pubmed_link.$i->pubmedId : 'N/A')."\t"
+				.$majorLocAs."\t"
+				.$minorLocAs."\t"
+				//.'sourceLocA'."\t"
+				.$i->locASourceDb."\t"
+				//.'pubmedLocA'."\t"
+				.$this->pubmed_link.str_replace(',', ','.$this->pubmed_link, $i->locAPubmedId)."\t" // 123,456 -> http://.../123,http://.../456
+				.$majorLocBs."\t"
+				.$minorLocBs."\t"
+				//.'sourceLocB'."\t"
+				.$i->locBSourceDb."\t"
+				//.'pubmedLocB'
+				.$this->pubmed_link.str_replace(',', ','.$this->pubmed_link, $i->locBPubmedId)."\t"// 123,456 -> http://.../123,http://.../456
+				."\n"
+			);
+		}
+		
+		fclose($fp);
+		chmod($this->downloads_dir.$filename, 0777);
+		
+		if ($this->zipped_outputs) {
+			if (!file_exists($this->downloads_dir.$filename))
+				throw new \ErrorException('Source file not available to be zipped in buildFullInteractions()!');
+			$zip = new ZipArchive();
+			$zip->open($this->downloads_dir.$filename.'.zip',  ZipArchive::CREATE) OR die('ZIP ERROR!');
+			$zip->addFile($this->downloads_dir.$filename);
+			$zip->close();
+			chmod($this->downloads_dir.$filename.'.zip', 0777);
+		}
+		
+		$this->setTimeout(); // reset max execution time
+		
+		return true;
 	}
 
 
@@ -222,7 +348,7 @@ class DownloadCenterController extends Controller
         $filename = 'comppi--interactions_with_details_'.$species.'.csv';
 		$output_filename = $filename.($this->zipped_outputs ? '.zip' : '');
         
-        if (!file_exists($this->downloads_dir.$output_filename))
+        //if (!file_exists($this->downloads_dir.$output_filename))
             $this->buildDetailedInteractions($filename, $species);
         
         return $this->serveFile($this->downloads_dir.$output_filename);
@@ -232,9 +358,10 @@ class DownloadCenterController extends Controller
     private function buildDetailedInteractions($filename, $species)
     {
 		$this->setTimeout(240);
+		ini_set('memory_limit', '512M');
 		$DB = $this->get('database_connection');
-		
-
+//phpinfo();
+//die();
 		// @TODO: species, locs!
         $sql = "SELECT
 			i.sourceDb, i.pubmedId, cs.score as ConfScore,
@@ -250,33 +377,100 @@ class DownloadCenterController extends Controller
 		LEFT JOIN Protein p2 ON p2.id=i.actorBId
 		LEFT JOIN ProteinToLocalization ptl2 ON p2.id=ptl2.proteinId";
 		$sql .= ($species=='all' ? '' : " WHERE p1.specieId=? AND p2.specieId=?");
-        
-		if (!$r = $DB->executeQuery($sql, array($species, $species)))
-			throw new \ErrorException('buildFullInteractions query failed!');
-
-		$fp = fopen($this->downloads_dir.$filename, "w");
-		$locs = $this->get('comppi.build.localizationTranslator');
+		$sql .= " LIMIT 100";
 		
+		// SELECT THE INTERACTIONS WITH THEIR DETAILS
+		$sql_i = "SELECT
+			i.id as iid, i.sourceDb, i.pubmedId,
+			GROUP_CONCAT(cs.score ORDER BY cs.score) as confScore,
+			GROUP_CONCAT(ist.name ORDER BY ist.name) AS expSysType,
+			p1.id as p1id, p1.proteinName as actorA,
+			p2.id as p2id, p2.proteinName as actorB
+		FROM Interaction i
+        LEFT JOIN InteractionToSystemType itst ON i.id=itst.interactionId
+        LEFT JOIN SystemType ist ON itst.interactionId=ist.id
+		LEFT JOIN ConfidenceScore cs ON i.id=cs.interactionId
+		LEFT JOIN Protein p1 ON p1.id=i.actorAId
+		LEFT JOIN Protein p2 ON p2.id=i.actorBId";
+		$sql_i .= ($species=='all' ? '' : " WHERE p1.specieId=? AND p2.specieId=?");
+		$sql_i .= " GROUP BY i.id";
+		//$sql_i .= " LIMIT 1000";
+        
+		if (!$r_i = $DB->executeQuery($sql_i, array($species, $species)))
+			throw new \ErrorException('buildDetailedInteractions interaction query failed!');
+
+		// CREATE THE SKELETON AND FILL WITH INTERACTION DETAILS
+		//$protein_id_pool = array();
+		while ($i = $r_i->fetch(\PDO::FETCH_OBJ))
+		{	
+			//die(var_dump($i));
+			$content[] = array(
+				'p1id' => $i->p1id,
+				'p2id' => $i->p2id,
+				'actorA' => $i->actorA,
+				'actorB' => $i->actorB,
+				'confScore' => (!isset($i->confScore) ? 'N/A' : $i->confScore),
+				'expSysType' => (!isset($i->expSysType) ? 'N/A' : $i->expSysType),
+				'sourceDb' => (empty($i->sourceDb) ? 'N/A' : $i->sourceDb),
+				'pubmed_link' => (empty($i->pubmedId) ? 'N/A' : $this->pubmed_link.$i->pubmedId)
+			);
+			
+			$protein_id_pool[$i->p1id] = $i->p1id;
+			$protein_id_pool[$i->p2id] = $i->p2id;
+		}
+		$r_i->free();
+
+		// SELECT LOCALIZATION DETAILS (FOR INTERACTIONS)
+		$sql_locs = "SELECT
+			proteinId, localizationId as locId, sourceDb as locSourceDb, pubmedId as locPubmedId
+		FROM ProteinToLocalization ptl
+		WHERE ptl.proteinId IN(".join(',', $protein_id_pool).")";
+		if (!$r_locs = $DB->executeQuery($sql_locs))
+			throw new \ErrorException('buildDetailedInteractions localization query failed!');
+		
+		// PARSE THE LOCALIZATION DETAILS
+		$locs = $this->get('comppi.build.localizationTranslator');
+		while ($l = $r_locs->fetch(\PDO::FETCH_OBJ))
+		{
+			$loc_data[$l->proteinId]['majorLoc'][] = (empty($l->locId) ? 'N/A' : ucfirst($locs->getLargelocById($l->locId)));
+			$loc_data[$l->proteinId]['minorLoc'][] = (empty($l->locId) ? 'N/A' : ucfirst($locs->getHumanReadableLocalizationById($l->locId)));
+			$loc_data[$l->proteinId]['sourceLoc'][] = (empty($l->locSourceDb) ? 'N/A' : $l->locSourceDb);
+			$loc_data[$l->proteinId]['pubmedLoc'][] = (empty($l->locPubmedId) ? 'N/A' : $this->pubmed_link.$l->locPubmedId);
+		}
+		$r_locs->free();
+
+		// FILL IN THE INTERACTION SKELETON WITH LOCALIZATION DATA AND WRITE TO FILE
+		$fp = fopen($this->downloads_dir.$filename, "w");
 		// file header
 		fwrite($fp, "Interactor A\tInteractor B\tConfidence Score\tExpSysType\tSourceDB\tPubmed\tMajor Loc. A\tMinor Loc. A\tLoc. A Source DB\tLoc. A Pubmed\tMajor Loc. B\tMinor Loc. B\tLoc. B Source DB\tLoc. B Pubmed\n");
 		// file content
-		while ($i = $r->fetch(\PDO::FETCH_OBJ))
-		{
+		foreach($content as $row) {
+			$row['majorLocA'] = (isset($loc_data[$row['p1id']]['majorLoc']) ? join(',', array_unique($loc_data[$row['p1id']]['majorLoc'])) : 'N/A');
+			$row['minorLocA'] = (isset($loc_data[$row['p1id']]['minorLoc']) ? join(',', array_unique($loc_data[$row['p1id']]['minorLoc'])) : 'N/A');
+			$row['sourceLocA'] = (isset($loc_data[$row['p1id']]['sourceLoc']) ? join(',', array_unique($loc_data[$row['p1id']]['sourceLoc'])) : 'N/A');
+			$row['pubmedLocA'] = (isset($loc_data[$row['p1id']]['pubmedLoc']) ? join(',', array_unique($loc_data[$row['p1id']]['pubmedLoc'])) : 'N/A');
+			
+			$row['majorLocB'] = (isset($loc_data[$row['p2id']]['majorLoc']) ? join(',', array_unique($loc_data[$row['p2id']]['majorLoc'])) : 'N/A');
+			$row['minorLocB'] = (isset($loc_data[$row['p2id']]['minorLoc']) ? join(',', array_unique($loc_data[$row['p2id']]['minorLoc'])) : 'N/A');
+			$row['sourceLocB'] = (isset($loc_data[$row['p2id']]['sourceLoc']) ? join(',', array_unique($loc_data[$row['p2id']]['sourceLoc'])) : 'N/A');
+			$row['pubmedLocB'] = (isset($loc_data[$row['p2id']]['pubmedLoc']) ? join(',', array_unique($loc_data[$row['p2id']]['pubmedLoc'])) : 'N/A');
+
 			fwrite($fp,
-				 $i->actorA."\t"
-				.$i->actorB."\t"
-				.$i->ConfScore."\t"
-				.$i->expSysType."\t"
-				.$i->sourceDb."\t"
-				.$this->pubmed_link.$i->pubmedId."\t"
-				.(empty($p->locAId) ? 'N/A' : ucfirst($locs->getLargelocById($p->locAId)))."\t"
-				.(empty($p->locAId) ? 'N/A' : ucfirst($locs->getHumanReadableLocalizationById($p->locAId)))."\t"
-				.$i->locASourceDb."\t"
-				.$this->pubmed_link.$i->locAPubmedId."\t"
-				.(empty($p->locBId) ? 'N/A' : ucfirst($locs->getLargelocById($p->locBId)))."\t"
-				.(empty($p->locBId) ? 'N/A' : ucfirst($locs->getHumanReadableLocalizationById($p->locBId)))."\t"
-				.$i->locBSourceDb."\t"
-				.$this->pubmed_link.$i->locBPubmedId."\n"
+				 $row['actorA']."\t"
+				.$row['actorB']."\t"
+				.$row['confScore']."\t"
+				.$row['expSysType']."\t"
+				.$row['sourceDb']."\t"
+				.$row['pubmed_link']."\t"
+				.$row['majorLocA']."\t"
+				.$row['minorLocA']."\t"
+				.$row['sourceLocA']."\t"
+				.$row['pubmedLocA']."\t"
+				.$row['majorLocB']."\t"
+				.$row['minorLocB']."\t"
+				.$row['sourceLocB']."\t"
+				.$row['pubmedLocB']
+				."\n"
 			);
 		}
 		

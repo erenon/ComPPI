@@ -12,6 +12,10 @@
 	<p class="center">Current release is temporary unavailable.</p>
 	{% endif %}
 	#}
+	
+	{% if error_msgs is defined %}
+	<p class="msg_error">{{error_msgs}}</p>
+	{% endif %}
 
 	<form id="DownloadCenterForm" action="{{ path('DownloadCenterBundle_currentrelease') }}" method="post">
 		<table><tr><td>
@@ -21,19 +25,26 @@
 			<div id="DlSetButtons">
 			<input type="radio" name="fDlSet" value="all" id="fDlSetAll" class="" checked="checked" />
 			<label for="fDlSetAll" class="radioButtonLabel">All Data (SQL, {{ dset_all_size }} MB, {{ dset_all_mtime }})</label><br />
+			{# csak első oszlop #}
 			
-			{#<input type="radio" name="fDlSet" value="comp" id="fDlSetComp" class="" />
+			<input type="radio" name="fDlSet" value="comp" id="fDlSetComp" class="" />
 			<label for="fDlSetComp" class="radioButtonLabel">Compartmentalized Data</label><br />
+			{# 3 oszlop #}
 			
+			
+			{# EATS MORE THAN 512 MB OF MEMORY...
 			<input type="radio" name="fDlSet" value="detailedint" id="fDlSetDetaledInt" class="" />
 			<label for="fDlSetDetaledInt" class="radioButtonLabel">Detailed interactions with confidence scores</label><br />#}
+			{# csak első oszlop #}
 			
 			<input type="radio" name="fDlSet" value="int" id="fDlSetInt" class="" />
 			<label for="fDlSetInt" class="radioButtonLabel">Interactions</label><br />
+			{# csak első oszlop? #}
 			
 			<input type="radio" name="fDlSet" value="protnloc" id="fDlSetProtNLoc" class="" />
 			<label for="fDlSetProtNLoc" class="radioButtonLabel">Proteins with localizations</label>
 			</div>
+			{#  #}
 			
 		</td><td>
 			
