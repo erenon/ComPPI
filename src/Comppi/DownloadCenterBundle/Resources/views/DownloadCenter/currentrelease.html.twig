@@ -23,42 +23,45 @@
 			<label>Dataset:</label><br />
 			
 			<div id="DlSetButtons">
-			<input type="radio" name="fDlSet" value="all" id="fDlSetAll" class="" checked="checked" />
+			<input type="radio" name="fDlSet" value="all" id="fDlSetAll" class="btn" checked="checked" />
 			<label for="fDlSetAll" class="radioButtonLabel">All Data (SQL, {{ dset_all_size }} MB, {{ dset_all_mtime }})</label><br />
 			{# csak első oszlop #}
 			
-			<input type="radio" name="fDlSet" value="comp" id="fDlSetComp" class="" />
+			<input type="radio" name="fDlSet" value="comp" id="fDlSetComp" class="btn" />
 			<label for="fDlSetComp" class="radioButtonLabel">Compartmentalized Data</label><br />
 			{# 3 oszlop #}
 			
 			
 			{# EATS MORE THAN 512 MB OF MEMORY...
-			<input type="radio" name="fDlSet" value="detailedint" id="fDlSetDetaledInt" class="" />
+			<input type="radio" name="fDlSet" value="detailedint" id="fDlSetDetaledInt" class="btn" />
 			<label for="fDlSetDetaledInt" class="radioButtonLabel">Detailed interactions with confidence scores</label><br />#}
 			{# csak első oszlop #}
 			
-			<input type="radio" name="fDlSet" value="int" id="fDlSetInt" class="" />
+			<input type="radio" name="fDlSet" value="int" id="fDlSetInt" class="btn" />
 			<label for="fDlSetInt" class="radioButtonLabel">Interactions</label><br />
 			{# csak első oszlop? #}
 			
-			<input type="radio" name="fDlSet" value="protnloc" id="fDlSetProtNLoc" class="" />
+			<input type="radio" name="fDlSet" value="protnloc" id="fDlSetProtNLoc" class="btn" />
 			<label for="fDlSetProtNLoc" class="radioButtonLabel">Proteins with localizations</label>
 			</div>
 			{# 2 oszlop #}
 			
-		</td><td id="DLSpeciesContainer">
-			
+		</td><td style="width: 300px;">
+
+			<div id="DLSpeciesContainer">
 			<label>Species:</label><br />
 			<div id="DlSpeciesButtons">
-			<input type="radio" name="fDlSpec" value="all" id="fDlSpecAll"{% if need_all==1 %} checked="checked"{% endif %} /><label for="fDlSpecAll" class="radioButtonLabel">All species</label><br />
-			<input type="radio" name="fDlSpec" value="hs" id="fDlSpecHs"{% if need_hs==1 %} checked="checked"{% endif %} /><label for="fDlSpecHs" class="radioButtonLabel">H. sapiens</label><br />
-			<input type="radio" name="fDlSpec" value="dm" id="fDlSpecDm"{% if need_dm==1 %} checked="checked"{% endif %} /><label for="fDlSpecDm" class="radioButtonLabel">D. melanogaster</label><br />
-			<input type="radio" name="fDlSpec" value="ce" id="fDlSpecCe"{% if need_ce==1 %} checked="checked"{% endif %} /><label for="fDlSpecCe" class="radioButtonLabel">C. elegans</label><br />
-			<input type="radio" name="fDlSpec" value="sc" id="fDlSpecSc"{% if need_sc==1 %} checked="checked"{% endif %} /><label for="fDlSpecSc" class="radioButtonLabel">S. cerevisiae</label><br />
+			<input type="radio" name="fDlSpec" value="all" id="fDlSpecAll" class="btn"{% if need_all==1 %} checked="checked"{% endif %} /><label for="fDlSpecAll" class="radioButtonLabel">All species</label><br />
+			<input type="radio" name="fDlSpec" value="hs" id="fDlSpecHs" class="btn"{% if need_hs==1 %} checked="checked"{% endif %} /><label for="fDlSpecHs" class="radioButtonLabel">H. sapiens</label><br />
+			<input type="radio" name="fDlSpec" value="dm" id="fDlSpecDm" class="btn"{% if need_dm==1 %} checked="checked"{% endif %} /><label for="fDlSpecDm" class="radioButtonLabel">D. melanogaster</label><br />
+			<input type="radio" name="fDlSpec" value="ce" id="fDlSpecCe" class="btn"{% if need_ce==1 %} checked="checked"{% endif %} /><label for="fDlSpecCe" class="radioButtonLabel">C. elegans</label><br />
+			<input type="radio" name="fDlSpec" value="sc" id="fDlSpecSc" class="btn"{% if need_sc==1 %} checked="checked"{% endif %} /><label for="fDlSpecSc" class="radioButtonLabel">S. cerevisiae</label><br />
+			</div>
 			</div>
 		
-		</td><td id="DLLocContainer">
+		</td><td style="width: 300px;">
 		
+			<div id="DLLocContainer">
 			<label>Low-Def. Localizations:</label><br />
 			<div id="DlLocButtons">
 			<input type="checkbox" name="fDlMLocCytoplasm" id="fDlMLocCytoplasm" class="btn toggleButton"{% if need_cytoplasm==1 %} checked="checked"{% endif %} /><label for="fDlMLocCytoplasm" class="radioButtonLabel">Cytoplasm</label><br />
@@ -67,6 +70,7 @@
 			<input type="checkbox" name="fDlMLocEC" id="fDlMLocEC" class="btn toggleButton"{% if need_ec==1 %} checked="checked"{% endif %} /><label for="fDlMLocEC" class="radioButtonLabel">Extracellular</label><br />
 			<input type="checkbox" name="fDlMLocSecr" id="fDlMLocSecr" class="btn toggleButton"{% if need_secr==1 %} checked="checked"{% endif %} /><label for="fDlMLocSecr" class="radioButtonLabel">Secretory Pathway</label><br />
 			<input type="checkbox" name="fDlMLocPlasMembr" id="fDlMLocPlasMembr" class="btn toggleButton"{% if need_plasmembr==1 %} checked="checked"{% endif %} /><label for="fDlMLocPlasMembr" class="radioButtonLabel">Plasma Membrane</label>
+			</div>
 			</div>
 		
 		</td></tr></table>

@@ -32,6 +32,13 @@ $(document).ready(function(){
 	});*/
 	
 	// radio buttons
+	
+	/*$("#ProteinSearchSpecies").buttonset();
+	$("#DlSetButtons").buttonset();
+	$("#DlSpeciesButtons").buttonset();
+	$("#DlLocButtons").buttonset();*/
+	
+	// PROTEIN SEARCH
 	$("input[name='fDlSet']").change(function() {
 		switch(this.value) {
 			case "comp":
@@ -40,6 +47,7 @@ $(document).ready(function(){
 			case "int":
 			case "protnloc":
 				$("#DLSpeciesContainer").fadeIn();
+				$("#DLLocContainer").fadeOut();
 				break;
 			case "all":
 			default:
@@ -47,10 +55,18 @@ $(document).ready(function(){
 		}
 	});
 	$("input[name='fDlSet']:checked").change(); // trigger the event for first time
-	/*$("#ProteinSearchSpecies").buttonset();
-	$("#DlSetButtons").buttonset();
-	$("#DlSpeciesButtons").buttonset();
-	$("#DlLocButtons").buttonset();*/
+	
+	//$(":radio.btn").hide();
+	/*$(":radio.btn + label").addClass("btn").click(function(){
+		if ( $(this).hasClass('btn_green') ) {
+			$(this).removeClass('btn_green').prev(":radio").prop("checked", false);
+		} else {
+			$(":radio.btn_green").removeClass('btn_green').prev(":radio").prop("checked", false);
+			$(this).addClass('btn_green').prev(":radio").prop("checked", true);
+			$(this).siblings(":radio").removeClass('btn_green').prop("checked", false);
+		}
+	});*/
+	//$(":radio.btn:checked + label").addClass("btn_green");
 	
 	
 	/*$('#ProteinSearchForm:radio').each(function(){
@@ -74,63 +90,6 @@ $(document).ready(function(){
 			}
 		});
 	});*/
-});
-
-// LOCTREE
-$(document).ready(function(){
-	$("#LocTree li > ul").hide();
-	//$(".LocTreeParent").next("input").after('<a href="#" class="CategoryOpener"><img src="arrow_down.gif" width="22" height="22" alt="Open Branch" /></a>');
-	
-	
-	$('#LocTree li a').focus(function() { $(this).blur(); });
-	$('#LocTree li a.CategoryOpener').toggle(function() {
-		$(this).next('ul').slideDown(500);
-		$(this).find('img').attr('src', './web/assets/arrow_up.gif');
-		
-	}, function() {
-		$(this).next('ul').slideUp(500);
-		$(this).find('img').attr('src', './web/assets/arrow_down.gif');
-		
-	});
-	
-	$('#LocTree input:checkbox:checked').each(function() {
-		checkCatTree(this, $(this).is(':checked'));
-	})
-	$('#LocTree input:checkbox').change(function() {
-		checkCatTree(this, $(this).is(':checked'));
-	});
-	
-	function checkCatTree(obj, orig_checked) {
-		// felmenok, leszarmazottak ellenorzese
-		var parent = $(obj).parent();
-		if (parent[0].tagName=='LI') {
-			var label = $(parent).find('label').eq(0);
-			if (orig_checked) {
-				if (!$(label).hasClass('LocTree-has_checked')) {
-					$(label).addClass('LocTree-has_checked');
-				}
-			} else {
-				if ($(label).prev('input').is(':checked') || $(parent).find('input').is(':checked')) {
-					return; // ha o maga, v. leszarmazottak barmelyike checked
-				} else {
-					$(label).removeClass('LocTree-has_checked');
-				}
-			}
-			
-			if ($(parent).parent().attr('id')!='LocTree') {
-				checkCatTree($(parent).parent(), orig_checked);
-			} else {
-				return;
-			}
-		}
-
-		// sajat sor ellenorzese
-		if (orig_checked) {
-			$(obj).next('label').addClass('LocTree-has_checked');
-		} else {
-			$(obj).next('label').removeClass('LocTree-has_checked');
-		}
-	}
 });
 
 // search autocomplete
