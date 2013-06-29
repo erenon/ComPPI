@@ -32,6 +32,20 @@ $(document).ready(function(){
 	});*/
 	
 	// radio buttons
+	$("input[name='fDlSet']").change(function() {
+		switch(this.value) {
+			case "comp":
+				$("#DLSpeciesContainer, #DLLocContainer").fadeIn();
+				break;
+			case "all":
+			case "int":
+			case "protnloc":
+				$("#DLSpeciesContainer, #DLLocContainer").fadeOut();
+			default:
+				$("#DLSpeciesContainer, #DLLocContainer").fadeOut();
+		}
+	});
+	$("input[name='fDlSet']:checked").change(); // trigger the event for first time
 	/*$("#ProteinSearchSpecies").buttonset();
 	$("#DlSetButtons").buttonset();
 	$("#DlSpeciesButtons").buttonset();

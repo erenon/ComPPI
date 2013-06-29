@@ -241,7 +241,8 @@ input, select, textarea {
 #dlCenterPrevReleases { margin: 0 auto; text-align: left; width: 70%; }
 #dlCenterPrevReleases li { list-style-type: square; }
 
-#DownloadCenterForm table { border: 0; border-collapse: collapse; width: 100%; }
+#DownloadCenterForm { text-align: center; }
+#DownloadCenterForm table { border: 0; border-collapse: collapse; width: 100%; text-align: left; }
 #DownloadCenterForm td { padding: 5px; vertical-align: top; }
 
 
