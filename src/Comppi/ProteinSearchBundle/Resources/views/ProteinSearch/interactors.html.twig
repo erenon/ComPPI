@@ -62,7 +62,7 @@
 	<tr class="{% if loop.index is odd %}ps-stripeEven{% else %}ps-stripeOdd{% endif %}">
 		<td class="ps-actorA">
 			<h1>{{ protein.name }}</h1>
-			<div class="ps-CS">C.S. <div>90%</div></div>
+			<div class="ps-CS" title="Confidence Score">C.S. <div>{{ p.confScore }}</div></div>
 		</td>
 		<td class="ps-actorB">
 			<h1>{{ p.prot_name }}</h1> ({{ p.prot_naming }})

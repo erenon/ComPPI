@@ -129,13 +129,15 @@ class ProteinSearchController extends Controller
 		// @TODO: letölthető dataset
 		
 		$comppi_id = intval($comppi_id);
-		
+
 		// interactors
 		$r_interactors = $DB->executeQuery("SELECT DISTINCT
 				i.id AS iid, i.sourceDb, i.pubmedId,
+				cs.score as confScore,
 				p.id as pid, p.proteinName as name, p.proteinNamingConvention as namingConvention
 			FROM Interaction i
 			LEFT JOIN Protein p ON p.id=IF(actorAId = $comppi_id, i.actorBId, i.actorAId)
+			LEFT JOIN ConfidenceScore cs ON i.id=cs.interactionId
 			WHERE actorAId = $comppi_id OR actorBId = $comppi_id");
 		//	LIMIT ".$this->search_result_per_page);
 		if (!$r_interactors)
@@ -147,6 +149,7 @@ class ProteinSearchController extends Controller
 			$T['ls'][$i->pid]['prot_naming'] = $i->namingConvention;
 			//if ($i->namingConvention=='UniProtKB-AC')
 				$T['ls'][$i->pid]['uniprot_outlink'] = $this->uniprot_root.$i->name;
+			$T['ls'][$i->pid]['confScore'] = $i->confScore;
 			
 			$protein_ids[$i->pid] = $i->pid;
 		}
