@@ -149,7 +149,7 @@ class ProteinSearchController extends Controller
 			$T['ls'][$i->pid]['prot_naming'] = $i->namingConvention;
 			//if ($i->namingConvention=='UniProtKB-AC')
 				$T['ls'][$i->pid]['uniprot_outlink'] = $this->uniprot_root.$i->name;
-			$T['ls'][$i->pid]['confScore'] = $i->confScore;
+			$T['ls'][$i->pid]['confScore'] = round($i->confScore, 2);
 			
 			$protein_ids[$i->pid] = $i->pid;
 		}
