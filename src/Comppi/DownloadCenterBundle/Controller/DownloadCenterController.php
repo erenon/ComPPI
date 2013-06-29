@@ -12,8 +12,8 @@ class DownloadCenterController extends Controller
     private $downloads_dir = './downloads/';
     private $current_db_sql = 'comppi.sql';
 	private $pubmed_link = 'http://www.ncbi.nlm.nih.gov/pubmed/';
-	private $zipped_outputs = false; // UNTESTED WITH TRUE!
-	private $species = array();
+	private $zipped_outputs = true; // UNTESTED WITH TRUE!
+	private $demo_mode = true; // limit output to the first 1000 rows
     
     public function currentReleaseGuiAction()
     {
@@ -23,19 +23,6 @@ class DownloadCenterController extends Controller
 		$path = $this->releases_dir.$this->current_db_sql;
 		$T['dset_all_size'] = number_format((filesize($path)/1048576), 2, '.', ' '); // get it in MB
         $T['dset_all_mtime'] = date("Y-m-d. H:i:s", filemtime($path));
-		
-		
-		/*$T['need_hs'] = ($_POST['fDlSpec']=='hs' ? 1 : 0);
-		$T['need_dm'] = ($_POST['fDlSpec']=='dm' ? 1 : 0);
-		$T['need_ce'] = ($_POST['fDlSpec']=='ce' ? 1 : 0);
-		$T['need_sc'] = ($_POST['fDlSpec']=='sc' ? 1 : 0);
-		
-		$T['need_cytoplasm'] = (isset($_POST['fDlSpecSc']) ? 1 : 0);
-		$T['need_mito'] = (isset($_POST['fDlSpecSc']) ? 1 : 0);
-		$T['need_nucleus'] = (isset($_POST['fDlSpecSc']) ? 1 : 0);
-		$T['need_ec'] = (isset($_POST['fDlSpecSc']) ? 1 : 0);
-		$T['need_secr'] = (isset($_POST['fDlSpecSc']) ? 1 : 0);
-		$T['need_plasmembr'] = (isset($_POST['fDlSpecSc']) ? 1 : 0);*/
 		
 		$T['need_all'] = 1;
 		$T['need_hs'] = 0;
@@ -60,9 +47,11 @@ class DownloadCenterController extends Controller
 		elseif ($request->getMethod() == 'POST')
 		{
 			if (!isset($_POST['fDlSpec']) or $_POST['fDlSpec']=='all') {
-				$species = 'all';
+				$species = array('abbr' => 'all', 'id' => -1);
 			} else {
-				$species = $sp->getSpecieByAbbreviation($_POST['fDlSpec']);
+				// if species is forged, getSpecieByAbbreviation will throw an exception...
+				$species_descriptor = $sp->getSpecieByAbbreviation($_POST['fDlSpec']);
+				$species = array('abbr' => $_POST['fDlSpec'], 'id' => $species_descriptor->id);
 			}
 			
 			
@@ -143,17 +132,20 @@ class DownloadCenterController extends Controller
 			return $this->forward('DownloadCenterBundle:DownloadCenter:currentReleaseGui');
 		}
 		
-		$filename = 'comppi--interactions_'.$species.'.csv';
-		$output_filename = $filename.($this->zipped_outputs ? '.zip' : '');
+		$file = $this->downloads_dir.'comppi--interactions_by_compartments--'.join('_', array_keys($compartments)).'--'.$species['abbr'].'.csv';
         
-        //if (!file_exists($this->downloads_dir.$output_filename))
-            $this->buildComparmentalizedData($filename, $species, $compartments);
-        
-        return $this->serveFile($this->downloads_dir.$output_filename);
+		if (file_exists($file.'.zip')) {
+			return $this->serveFile($file.'.zip');
+		} elseif (file_exists($file)) {
+            return $this->serveFile($file);
+		} else {
+			$this->buildComparmentalizedData(basename($file), $species['id'], $compartments);
+			return $this->serveFile($file);
+		}
 	}
 	
 	
-	private function buildComparmentalizedData($filename, $species, $compartments)
+	private function buildComparmentalizedData($filename, $species_id, $compartments)
 	{
 		$this->setTimeout(240);
 		$locs = $this->get('comppi.build.localizationTranslator');
@@ -189,11 +181,11 @@ class DownloadCenterController extends Controller
 		LEFT JOIN Protein p2 ON p2.id=i.actorBId
 		LEFT JOIN ProteinToLocalization ptl2 ON p2.id=ptl2.proteinId
 		WHERE (ptl1.localizationId IN(".join(',', $loc_id_pool).") OR ptl2.localizationId IN(".join(',', $loc_id_pool)."))";
-		$sql_i .= ($species=='all' ? '' : " AND (p1.specieId=? AND p2.specieId=?)");
+		$sql_i .= ($species_id==-1 ? '' : " AND (p1.specieId=? AND p2.specieId=?)");
 		$sql_i .= " GROUP BY i.id";
-		//$sql_i .= " LIMIT 1000";
+		$this->demo_mode ? $sql_i .= " LIMIT 1000" : '';
 		
-		if (!$r = $DB->executeQuery($sql_i, array($species, $species)))
+		if (!$r = $DB->executeQuery($sql_i, array($species_id, $species_id)))
 			throw new \ErrorException('buildFullInteractions query failed!');
 
 		$fp = fopen($this->downloads_dir.$filename, "w");
@@ -279,17 +271,17 @@ class DownloadCenterController extends Controller
 
 
     public function serveInteractionsAction($species) {
-        $filename = 'comppi--interactions_'.$species.'.csv';
+        $filename = 'comppi--interactions_'.$species['abbr'].'.csv';
 		$output_filename = $filename.($this->zipped_outputs ? '.zip' : '');
         
         if (!file_exists($this->downloads_dir.$output_filename))
-            $this->buildInteractions($filename, $species);
+            $this->buildInteractions($filename, $species['id']);
         
         return $this->serveFile($this->downloads_dir.$output_filename);
     }
     
     
-    private function buildInteractions($filename, $species)
+    private function buildInteractions($filename, $species_id)
     {
 		//$this->setTimeout(240);
 		$DB = $this->get('database_connection');
@@ -304,9 +296,10 @@ class DownloadCenterController extends Controller
         LEFT JOIN SystemType ist ON itst.interactionId=ist.id
 		LEFT JOIN Protein p1 ON p1.id=i.actorAId
 		LEFT JOIN Protein p2 ON p2.id=i.actorBId";
-		$sql .= ($species=='all' ? '' : " WHERE p1.specieId=? AND p2.specieId=?");
+		$sql .= ($species_id==-1 ? '' : " WHERE p1.specieId=? AND p2.specieId=?");
+		$this->demo_mode ? $sql .= " LIMIT 1000" : "";
         
-		if (!$r = $DB->executeQuery($sql, array($species, $species)))
+		if (!$r = $DB->executeQuery($sql, array($species_id, $species_id)))
 			throw new \ErrorException('buildFullInteractions query failed!');
 
 		$fp = fopen($this->downloads_dir.$filename, "w");
@@ -345,17 +338,17 @@ class DownloadCenterController extends Controller
     
     
     public function serveDetailedInteractionsAction($species) {
-        $filename = 'comppi--interactions_with_details_'.$species.'.csv';
+        $filename = 'comppi--interactions_with_details_'.$species['abbr'].'.csv';
 		$output_filename = $filename.($this->zipped_outputs ? '.zip' : '');
         
         //if (!file_exists($this->downloads_dir.$output_filename))
-            $this->buildDetailedInteractions($filename, $species);
+            $this->buildDetailedInteractions($filename, $species['id']);
         
         return $this->serveFile($this->downloads_dir.$output_filename);
     }
     
     
-    private function buildDetailedInteractions($filename, $species)
+    private function buildDetailedInteractions($filename, $species_id)
     {
 		$this->setTimeout(240);
 		ini_set('memory_limit', '512M');
@@ -376,8 +369,8 @@ class DownloadCenterController extends Controller
 		LEFT JOIN ProteinToLocalization ptl1 ON p1.id=ptl1.proteinId
 		LEFT JOIN Protein p2 ON p2.id=i.actorBId
 		LEFT JOIN ProteinToLocalization ptl2 ON p2.id=ptl2.proteinId";
-		$sql .= ($species=='all' ? '' : " WHERE p1.specieId=? AND p2.specieId=?");
-		$sql .= " LIMIT 100";
+		$sql .= ($species_id==-1 ? '' : " WHERE p1.specieId=? AND p2.specieId=?");
+		$this->demo_mode ? $sql .= " LIMIT 100" : "";
 		
 		// SELECT THE INTERACTIONS WITH THEIR DETAILS
 		$sql_i = "SELECT
@@ -392,11 +385,11 @@ class DownloadCenterController extends Controller
 		LEFT JOIN ConfidenceScore cs ON i.id=cs.interactionId
 		LEFT JOIN Protein p1 ON p1.id=i.actorAId
 		LEFT JOIN Protein p2 ON p2.id=i.actorBId";
-		$sql_i .= ($species=='all' ? '' : " WHERE p1.specieId=? AND p2.specieId=?");
+		$sql_i .= ($species_id==-1 ? '' : " WHERE p1.specieId=? AND p2.specieId=?");
 		$sql_i .= " GROUP BY i.id";
-		//$sql_i .= " LIMIT 1000";
+		$this->demo_mode ? $sql_i .= " LIMIT 1000" : "";
         
-		if (!$r_i = $DB->executeQuery($sql_i, array($species, $species)))
+		if (!$r_i = $DB->executeQuery($sql_i, array($species_id, $species_id)))
 			throw new \ErrorException('buildDetailedInteractions interaction query failed!');
 
 		// CREATE THE SKELETON AND FILL WITH INTERACTION DETAILS
@@ -495,17 +488,20 @@ class DownloadCenterController extends Controller
 	
 	public function serveProteinsAndLocsAction($species)
 	{
-		$filename = 'comppi--proteins_and_localizations_'.$species.'.csv';
-		$output_filename = $filename.($this->zipped_outputs ? '.zip' : '');
+		$file = $this->downloads_dir.'comppi--proteins_and_localizations_'.$species['abbr'].'.csv';
         
-        if (!file_exists($this->downloads_dir.$output_filename))
-            $this->buildProteinsAndLocs($filename, $species);
-        
-        return $this->serveFile($this->downloads_dir.$output_filename);
+		if (file_exists($file.'.zip')) {
+			return $this->serveFile($file.'.zip');
+		} elseif (file_exists($file)) {
+            return $this->serveFile($file);
+		} else {
+			$this->buildProteinsAndLocs(basename($file), $species['id']);
+			return $this->serveFile($file);
+		}
 	}
 
 	
-	public function buildProteinsAndLocs($filename, $species)
+	public function buildProteinsAndLocs($filename, $species_id)
 	{
 		$DB = $this->get('database_connection');
 		
@@ -515,9 +511,10 @@ class DownloadCenterController extends Controller
 			LEFT JOIN ProteinToLocalization ptl ON p.id=ptl.proteinId
 			LEFT JOIN ProtLocToSystemType pltst ON ptl.id=pltst.protLocId
 			LEFT JOIN SystemType st ON pltst.systemTypeId=st.id";
-		$sql .= ($species=='all' ? '' : " WHERE p.specieId=?");
+		$sql .= ($species_id==-1 ? '' : " WHERE p.specieId=?");
+		$this->demo_mode ? $sql .= " LIMIT 1000" : "";
         
-		if (!$r = $DB->executeQuery($sql, array($species)))
+		if (!$r = $DB->executeQuery($sql, array($species_id)))
 			throw new \ErrorException('buildFullInteractions query failed!');
 
 		$fp = fopen($this->downloads_dir.$filename, "w");
@@ -544,27 +541,6 @@ class DownloadCenterController extends Controller
 		return true;
 	}
     
-	/*
-	
-	$sql = "SELECT
-			i.id as iid,
-			ist.name,
-			p1.proteinName as actorA, p2.proteinName as actorB,
-			ptl1.id as protLocAId, ptl1.localizationId as locAId,
-			ptl2.id as protLocBId, ptl2.localizationId as locBId,
-			st1.id as sysTypeAId, st1.confidenceType as confTypeA, st2.id as sysTypeBId, st1.confidenceType as confTypeB
-		FROM Interaction i
-        LEFT JOIN InteractionToSystemType itst ON i.id=itst.interactionId
-        LEFT JOIN SystemType ist ON itst.interactionId=ist.id
-		LEFT JOIN Protein p1 ON p1.id=i.actorAId
-		LEFT JOIN ProteinToLocalization ptl1 ON p1.id=ptl1.proteinId
-		LEFT JOIN ProtLocToSystemType ptst1 ON ptl1.id=ptst1.protLocId
-		LEFT JOIN SystemType st1 ON ptst1.systemTypeId=st1.id
-		LEFT JOIN Protein p2 ON p2.id=i.actorBId
-		LEFT JOIN ProteinToLocalization ptl2 ON p2.id=ptl2.proteinId
-		LEFT JOIN ProtLocToSystemType ptst2 ON ptl2.id=ptst2.protLocId
-		LEFT JOIN SystemType st2 ON ptst2.systemTypeId=st2.id";
-	*/
     
     private function setTimeout($seconds = null)
     {
@@ -615,16 +591,4 @@ class DownloadCenterController extends Controller
 		$response->headers->set('Expires', '0');
 		$response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
     }
-}
-
-
-class Compartment
-{
-	public $primaryId;
-	public $secondaryId;
-	
-	public function __construct($go_term)
-	{
-		
-	}
 }
