@@ -12,8 +12,8 @@ class DownloadCenterController extends Controller
     private $downloads_dir = './downloads/';
     private $current_db_sql = 'comppi.sql';
 	private $pubmed_link = 'http://www.ncbi.nlm.nih.gov/pubmed/';
-	private $zipped_outputs = true; // UNTESTED WITH TRUE!
-	private $demo_mode = true; // limit output to the first 1000 rows
+	private $zipped_outputs = false; // UNTESTED WITH TRUE!
+	private $demo_mode = false; // limit output to the first 1000 rows
     
     public function currentReleaseGuiAction()
     {
@@ -288,15 +288,18 @@ class DownloadCenterController extends Controller
 
 		// @TODO: species, locs!
         $sql = "SELECT
-			i.sourceDb, i.pubmedId,
-			ist.name AS expSysType,
+			i.id, i.sourceDb, i.pubmedId,
+			GROUP_CONCAT(DISTINCT ist.name) AS expSysType,
+			GROUP_CONCAT(DISTINCT cs.score) as confScore,
 			p1.proteinName as actorA, p2.proteinName as actorB
 		FROM Interaction i
         LEFT JOIN InteractionToSystemType itst ON i.id=itst.interactionId
         LEFT JOIN SystemType ist ON itst.interactionId=ist.id
+		LEFT JOIN ConfidenceScore cs ON i.id=cs.interactionId
 		LEFT JOIN Protein p1 ON p1.id=i.actorAId
 		LEFT JOIN Protein p2 ON p2.id=i.actorBId";
 		$sql .= ($species_id==-1 ? '' : " WHERE p1.specieId=? AND p2.specieId=?");
+		$sql .= " GROUP BY i.id";
 		$this->demo_mode ? $sql .= " LIMIT 1000" : "";
         
 		if (!$r = $DB->executeQuery($sql, array($species_id, $species_id)))
@@ -305,13 +308,14 @@ class DownloadCenterController extends Controller
 		$fp = fopen($this->downloads_dir.$filename, "w");
 		
 		// file header
-		fwrite($fp, "Interactor A\tInteractor B\tExpSysType\tSourceDB\tPubmed\n");
+		fwrite($fp, "Interactor A\tInteractor B\tConfidence Score\tExpSysType\tSourceDB\tPubmed\n");
 		// file content
 		while ($i = $r->fetch(\PDO::FETCH_OBJ))
 		{
 			fwrite($fp,
 				 $i->actorA."\t"
 				.$i->actorB."\t"
+				.$i->confScore."\t"
 				.$i->expSysType."\t"
 				.$i->sourceDb."\t"
 				.$this->pubmed_link.$i->pubmedId."\n"
@@ -321,11 +325,11 @@ class DownloadCenterController extends Controller
 		fclose($fp);
 		chmod($this->downloads_dir.$filename, 0777);
 		
-		if ($this->zipped_outputs) {
+		if ($this->zipped_outputs and class_exists('ZipArchive')) {
 			if (!file_exists($this->downloads_dir.$filename))
 				throw new \ErrorException('Source file not available to be zipped in buildFullInteractions()!');
 			$zip = new ZipArchive();
-			$zip->open($this->downloads_dir.$filename.'.zip',  ZipArchive::CREATE) OR die('ZIP ERROR!');
+			$zip->open($this->downloads_dir.$filename.'.zip', ZipArchive::CREATE) OR die('ZIP ERROR!');
 			$zip->addFile($this->downloads_dir.$filename);
 			$zip->close();
 			chmod($this->downloads_dir.$filename.'.zip', 0777);
@@ -506,16 +510,22 @@ class DownloadCenterController extends Controller
 		$DB = $this->get('database_connection');
 		
 		// @TODO: species, locs!
-        $sql = "SELECT p.id as pid, p.proteinName, ptl.localizationId as locId, ptl.sourceDb, ptl.pubmedId,st.name as expSysType
+        $sql = "SELECT
+				p.id as pid, p.proteinName,
+				GROUP_CONCAT(DISTINCT ptl.localizationId) as locId,
+				GROUP_CONCAT(DISTINCT ptl.sourceDb ORDER BY ptl.sourceDb) as sourceDb,
+				GROUP_CONCAT(DISTINCT ptl.pubmedId) as pubmedId,
+				GROUP_CONCAT(DISTINCT st.name ORDER BY st.name) as expSysType
 			FROM Protein p
 			LEFT JOIN ProteinToLocalization ptl ON p.id=ptl.proteinId
 			LEFT JOIN ProtLocToSystemType pltst ON ptl.id=pltst.protLocId
 			LEFT JOIN SystemType st ON pltst.systemTypeId=st.id";
 		$sql .= ($species_id==-1 ? '' : " WHERE p.specieId=?");
+		$sql .= " GROUP BY p.id";
 		$this->demo_mode ? $sql .= " LIMIT 1000" : "";
         
 		if (!$r = $DB->executeQuery($sql, array($species_id)))
-			throw new \ErrorException('buildFullInteractions query failed!');
+			throw new \ErrorException('buildProteinsAndLocs query failed!');
 
 		$fp = fopen($this->downloads_dir.$filename, "w");
 		$locs = $this->get('comppi.build.localizationTranslator');
@@ -525,18 +535,46 @@ class DownloadCenterController extends Controller
 		// file content
 		while ($p = $r->fetch(\PDO::FETCH_OBJ))
 		{
+			// localizations
+			if (!empty($p->locId)) {
+				$locIds = explode(',', $p->locId);
+				foreach ($locIds as $lid) {
+					$tmp_majorLocs[$lid] = (empty($lid) ? 'N/A' : $locs->getLargelocById($lid));
+					$tmp_minorLocs[$lid] = (empty($lid) ? 'N/A' : $locs->getHumanReadableLocalizationById($lid));
+				}
+				$majorLocs = join(',', $tmp_majorLocs);
+				unset($tmp_majorLocs); // reset or accumulates over the lines...
+				$minorLocs = join(',', $tmp_minorLocs);
+				unset($tmp_minorLocs); // reset or accumulates over the lines...
+			} else {
+				$majorLocs = 'N/A';
+				$minorLocs = 'N/A';
+			}
+			
+			// output
 			fwrite($fp,
 				 $p->proteinName."\t"
-				.(empty($p->locId) ? 'N/A' : ucfirst($locs->getLargelocById($p->locId)))."\t"
-				.(empty($p->locId) ? 'N/A' : ucfirst($locs->getHumanReadableLocalizationById($p->locId)))."\t"
+				.$majorLocs."\t"
+				.$minorLocs."\t"
 				.$p->expSysType."\t"
 				.$p->sourceDb."\t"
-				.$this->pubmed_link.$p->pubmedId."\n"
+				.(!empty($p->pubmedId) ? $this->pubmed_link.str_replace(',', ','.$this->pubmed_link, $p->pubmedId) : 'N/A')."\n"
 			);
 		}
 		
 		fclose($fp);
 		chmod($this->downloads_dir.$filename, 0777);
+		
+		// compress the output if we can
+		if ($this->zipped_outputs and class_exists('ZipArchive')) {
+			if (!file_exists($this->downloads_dir.$filename))
+				throw new \ErrorException('Source file not available to be zipped in buildFullInteractions()!');
+			$zip = new ZipArchive();
+			$zip->open($this->downloads_dir.$filename.'.zip', ZipArchive::CREATE) OR die('ZIP ERROR!');
+			$zip->addFile($this->downloads_dir.$filename);
+			$zip->close();
+			chmod($this->downloads_dir.$filename.'.zip', 0777);
+		}
 		
 		return true;
 	}

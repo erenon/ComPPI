@@ -37,10 +37,11 @@ $(document).ready(function(){
 			case "comp":
 				$("#DLSpeciesContainer, #DLLocContainer").fadeIn();
 				break;
-			case "all":
 			case "int":
 			case "protnloc":
-				$("#DLSpeciesContainer, #DLLocContainer").fadeOut();
+				$("#DLSpeciesContainer").fadeIn();
+				break;
+			case "all":
 			default:
 				$("#DLSpeciesContainer, #DLLocContainer").fadeOut();
 		}
