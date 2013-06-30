@@ -7,7 +7,7 @@
 
 	{% for s in species_list %}
 	<input type="radio" name="fProtSearchSpecies" id="fProtSearch{{ s.abbreviation }}" value="{{ s.abbreviation }}" class="btn"{% if requested_species[s.abbreviation] is defined %} checked="checked"{% endif %}/>
-	<label for="fProtSearch{{ s.abbreviation }}" class="radioButtonLabel">{{ s.shortname }}</label>
+	<label for="fProtSearch{{ s.abbreviation }}" class="radioButtonLabel taxonomic_name">{{ s.shortname }}</label>
 	{% endfor %}
 
 	<br />
