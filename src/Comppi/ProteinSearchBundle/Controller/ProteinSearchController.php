@@ -143,13 +143,15 @@ class ProteinSearchController extends Controller
 		if (!$r_interactors)
 			throw new \ErrorException('Interactor query failed!');
 
+		$confScoreAvg = 0.0;
 		while ($i = $r_interactors->fetch(\PDO::FETCH_OBJ))
 		{
 			$T['ls'][$i->pid]['prot_name'] = $i->name;
 			$T['ls'][$i->pid]['prot_naming'] = $i->namingConvention;
 			//if ($i->namingConvention=='UniProtKB-AC')
 				$T['ls'][$i->pid]['uniprot_outlink'] = $this->uniprot_root.$i->name;
-			$T['ls'][$i->pid]['confScore'] = round($i->confScore, 2);
+			$T['ls'][$i->pid]['confScore'] = round($i->confScore, 2)*100;
+			$confScoreAvg += $i->confScore;
 			
 			$protein_ids[$i->pid] = $i->pid;
 		}
@@ -174,6 +176,9 @@ class ProteinSearchController extends Controller
 				$actor['synonyms'] = $protein_synonyms[$pid]['synonyms'];
 			//$actor['syn_namings'] = (empty($protein_synonyms[$pid]['syn_namings']) ? array() : $protein_synonyms[$pid]['syn_namings']);
 		}
+		
+		$T['protein']['interactionNumber'] = count($protein_ids);
+		$T['protein']['avgConfScore'] = round(($confScoreAvg/$T['protein']['interactionNumber']), 2)*100;
 		
 		return $this->render('ComppiProteinSearchBundle:ProteinSearch:interactors.html.twig',$T);
 	}

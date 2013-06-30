@@ -197,6 +197,7 @@ input, select, textarea {
 #ProteinSearchSelectorTbl td:last-child { width: 20%; text-align: center; }
 #ProteinSearchSelectorTbl { width: auto; margin: 1em auto; }
 
+#ps-interactionStats { float: right; font-weight: bold; margin-top: 0; padding: 5px; }
 .ps-actorA { padding: 10px; width: 80px; border-top: 1px dotted #909090; height:  100%; }
 .ps-actorA h1 { font-size: 1.5em; font-weight: normal; margin: 0; padding: 0; display: inline; }
 .ps-CS {
