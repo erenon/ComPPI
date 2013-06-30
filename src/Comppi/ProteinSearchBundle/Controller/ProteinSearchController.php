@@ -162,7 +162,7 @@ class ProteinSearchController extends Controller
 		
 		if ($get_interactions) {
 			return $this->forward(
-				'DownloadCenterBundle:DownloadCenter:serveInteractionsAction',
+				'DownloadCenterBundle:DownloadCenter:serveInteractions',
 				array('species' => array('abbr' => 'all', 'id' => -1),
 					  'interaction_ids' => $interaction_ids)
 			);
