@@ -50,8 +50,8 @@
 
 			<div id="DLSpeciesContainer">
 			<label>Species:</label><br />
-			<div id="DlSpeciesButtons">
-			<input type="radio" name="fDlSpec" value="all" id="fDlSpecAll" class="btn"{% if need_all==1 %} checked="checked"{% endif %} /><label for="fDlSpecAll" class="radioButtonLabel">All species</label><br />
+			<div id="DlSpeciesButtons" class="taxonomic_name">
+			<input type="radio" name="fDlSpec" value="all" id="fDlSpecAll" class="btn"{% if need_all==1 %} checked="checked"{% endif %} /><label for="fDlSpecAll" class="radioButtonLabel" id="DlSpeciesButtons-All">All species</label><br />
 			<input type="radio" name="fDlSpec" value="hs" id="fDlSpecHs" class="btn"{% if need_hs==1 %} checked="checked"{% endif %} /><label for="fDlSpecHs" class="radioButtonLabel">H. sapiens</label><br />
 			<input type="radio" name="fDlSpec" value="dm" id="fDlSpecDm" class="btn"{% if need_dm==1 %} checked="checked"{% endif %} /><label for="fDlSpecDm" class="radioButtonLabel">D. melanogaster</label><br />
 			<input type="radio" name="fDlSpec" value="ce" id="fDlSpecCe" class="btn"{% if need_ce==1 %} checked="checked"{% endif %} /><label for="fDlSpecCe" class="radioButtonLabel">C. elegans</label><br />
