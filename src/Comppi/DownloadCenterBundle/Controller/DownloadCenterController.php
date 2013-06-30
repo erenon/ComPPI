@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 class DownloadCenterController extends Controller
 {
     private $releases_dir = './dbreleases/'; // trailing slash is important!
-    private $downloads_dir = './downloads/';
+    private $downloads_dir = './download/';
     private $current_db_sql = 'comppi.sql';
 	private $pubmed_link = 'http://www.ncbi.nlm.nih.gov/pubmed/';
 	private $zipped_outputs = false; // UNTESTED WITH TRUE!
@@ -271,13 +271,16 @@ class DownloadCenterController extends Controller
 
 
     public function serveInteractionsAction($species) {
-        $filename = 'comppi--interactions_'.$species['abbr'].'.csv';
-		$output_filename = $filename.($this->zipped_outputs ? '.zip' : '');
+		$file = $this->downloads_dir.'comppi--interactions_'.$species['abbr'].'.csv';
         
-        if (!file_exists($this->downloads_dir.$output_filename))
-            $this->buildInteractions($filename, $species['id']);
-        
-        return $this->serveFile($this->downloads_dir.$output_filename);
+		if (file_exists($file.'.zip')) {
+			return $this->serveFile($file.'.zip');
+		} elseif (file_exists($file)) {
+            return $this->serveFile($file);
+		} else {
+			$this->buildInteractions($file, $species['id']);
+			return $this->serveFile($file);
+		}
     }
     
     
