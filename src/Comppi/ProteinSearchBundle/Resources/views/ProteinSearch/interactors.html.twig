@@ -58,6 +58,12 @@
 	</div>
 	</div>
 	
+	{# <form action="{{ interactionDlUrl }}" method="post" class="center">
+		<input type="submit" name="fProtSearchDlResults" value="Download The Interactions" class="btn btn_submit" />
+	</form> #}
+	
+	<p class="center"><a href="{{ url('ComppiProteinSearchBundle_interactors', {'comppi_id': comppi_id, 'get_interactions': 1}) }}" class="btn btn_submit">Download The Interactions</a></p>
+	
 	{% if ls %}
 	<table class="rounded_table striped_table hovered_list">
 	<tr>

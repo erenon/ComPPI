@@ -114,7 +114,7 @@ class ProteinSearchController extends Controller
 	}
 	
 	
-	public function interactorsAction($comppi_id)
+	public function interactorsAction($comppi_id, $get_interactions)
 	{
 		$DB = $this->getDbConnection();
 		$locs = $this->getLocalizationTranslator();
@@ -129,6 +129,7 @@ class ProteinSearchController extends Controller
 		// @TODO: letölthető dataset
 		
 		$comppi_id = intval($comppi_id);
+		$T['comppi_id'] = $comppi_id;
 
 		// interactors
 		$r_interactors = $DB->executeQuery("SELECT DISTINCT
@@ -154,9 +155,18 @@ class ProteinSearchController extends Controller
 			$confScoreAvg += $i->confScore;
 			
 			$protein_ids[$i->pid] = $i->pid;
+			$interaction_ids[$i->iid] = $i->iid;
 		}
 		
 		if (empty($protein_ids)) throw new \ErrorException('No proteins found by that protein ID!');
+		
+		if ($get_interactions) {
+			return $this->forward(
+				'DownloadCenterBundle:DownloadCenter:serveInteractionsAction',
+				array('species' => array('abbr' => 'all', 'id' => -1),
+					  'interaction_ids' => $interaction_ids)
+			);
+		}
 		
 		// localizations for the protein and its interactors
 		$protein_locs = $this->getProteinLocalizations($protein_ids);

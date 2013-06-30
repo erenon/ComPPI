@@ -3,8 +3,8 @@ ComppiProteinSearchBundle_proteinsearch:
     defaults: { _controller: ComppiProteinSearchBundle:ProteinSearch:proteinSearch }
 
 ComppiProteinSearchBundle_interactors:
-    pattern:  /protein_search/interactors/{comppi_id}
-    defaults: { _controller: ComppiProteinSearchBundle:ProteinSearch:interactors }
+    pattern:  /protein_search/interactors/{comppi_id}/{get_interactions}
+    defaults: { _controller: ComppiProteinSearchBundle:ProteinSearch:interactors, get_interactions: 0 }
     requirements:
         id:  \d+
         

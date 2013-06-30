@@ -270,21 +270,30 @@ class DownloadCenterController extends Controller
 	}
 
 
-    public function serveInteractionsAction($species) {
-		$file = $this->downloads_dir.'comppi--interactions_'.$species['abbr'].'.csv';
-        
-		if (file_exists($file.'.zip')) {
-			return $this->serveFile($file.'.zip');
-		} elseif (file_exists($file)) {
-            return $this->serveFile($file);
+    public function serveInteractionsAction($species, $interaction_ids = array()) {
+		if (!empty($interaction_ids)) {
+			$file = $this->downloads_dir.'comppi--interactions_custom.csv';
 		} else {
-			$this->buildInteractions($file, $species['id']);
-			return $this->serveFile($file);
+			$file = $this->downloads_dir.'comppi--interactions_'.$species['abbr'].'.csv';
+		}
+        
+		if (!empty($interaction_ids)) {
+			$this->buildInteractions($file, $species['id'], $interaction_ids);
+				return $this->serveFile($file);
+		} else {
+			if (file_exists($file.'.zip')) {
+				return $this->serveFile($file.'.zip');
+			} elseif (file_exists($file)) {
+				return $this->serveFile($file);
+			} else {
+				$this->buildInteractions($file, $species['id']);
+				return $this->serveFile($file);
+			}
 		}
     }
     
     
-    private function buildInteractions($filename, $species_id)
+    private function buildInteractions($filename, $species_id, $interaction_ids = array())
     {
 		//$this->setTimeout(240);
 		$DB = $this->get('database_connection');
@@ -301,7 +310,11 @@ class DownloadCenterController extends Controller
 		LEFT JOIN ConfidenceScore cs ON i.id=cs.interactionId
 		LEFT JOIN Protein p1 ON p1.id=i.actorAId
 		LEFT JOIN Protein p2 ON p2.id=i.actorBId";
-		$sql .= ($species_id==-1 ? '' : " WHERE p1.specieId=? AND p2.specieId=?");
+		if (!empty($interaction_ids)) {
+			$sql .= " WHERE i.id IN(".join(',', $interaction_ids).")";
+		} else {
+			$sql .= ($species_id==-1 ? '' : " WHERE p1.specieId=? AND p2.specieId=?");
+		}
 		$sql .= " GROUP BY i.id";
 		$this->demo_mode ? $sql .= " LIMIT 1000" : "";
         
