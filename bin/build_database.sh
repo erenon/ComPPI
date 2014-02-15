@@ -21,6 +21,9 @@ php $console doctrine:schema:update --force
 echo "Load System Types"
 php $console comppi:build:systems
 
+echo "Load Loctree"
+php $console comppi:build:loctree
+
 echo "Load SacCe maps"
 php $console comppi:build:map sc
 
