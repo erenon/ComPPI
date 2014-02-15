@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class LocalizationScoreAvg
+class ConfidenceScoreAvg
 {
     /**
      * @ORM\Id
@@ -25,5 +25,10 @@ class LocalizationScoreAvg
     /**
      * @ORM\Column(type="float")
      */
-    protected $avgScore;
+    protected $avgInteractionScore;
+    
+    /**
+     * @ORM\Column(type="float")
+     */
+    protected $avgLocalizationScore;
 }
