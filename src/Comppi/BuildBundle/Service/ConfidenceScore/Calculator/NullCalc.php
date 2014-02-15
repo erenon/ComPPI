@@ -24,6 +24,13 @@ class NullCalc implements CalculatorInterface
         );
         
         $nullLocInsert->execute(array($this->id));
+        
+        $nullAvgInsert = $connection->prepare(
+        	'INSERT INTO LocalizationScoreAvg(proteinId, calculatorId, avgScore)' .
+        	' SELECT id, ?, 0 FROM Protein'	
+        );
+        
+        $nullAvgInsert->execute(array($this->id));
     }
 
     public function getName() {
