@@ -120,16 +120,19 @@ class ProteinSearchController extends Controller
 		$locs = $this->getLocalizationTranslator();
 		$sp = $this->getSpeciesProvider();
 		$spDescriptors = $sp->getDescriptors();
-		$T = array();
-
-		// details of requested protein
+		$comppi_id = intval($comppi_id);
+		$protein_ids = []; // collect the interactor IDs
+		
+		$T = array(
+			'comppi_id' => $comppi_id,
+			'ls' => array()
+		);
+		
+		// details of the requested protein
 		$T['protein'] = $this->getProteinDetails($comppi_id);
 		
 		// @TODO: interakciók száma,
 		// @TODO: letölthető dataset
-		
-		$comppi_id = intval($comppi_id);
-		$T['comppi_id'] = $comppi_id;
 
 		// interactors
 		$r_interactors = $DB->executeQuery("SELECT DISTINCT
@@ -158,8 +161,6 @@ class ProteinSearchController extends Controller
 			$interaction_ids[$i->iid] = $i->iid;
 		}
 		
-		if (empty($protein_ids)) throw new \ErrorException('No proteins found by that protein ID!');
-		
 		if ($get_interactions) {
 			return $this->forward(
 				'DownloadCenterBundle:DownloadCenter:serveInteractions',
@@ -168,27 +169,33 @@ class ProteinSearchController extends Controller
 			);
 		}
 		
-		// localizations for the protein and its interactors
-		$protein_locs = $this->getProteinLocalizations($protein_ids);
-		
-		// synonyms for the protein and its interactors
-		$protein_synonyms = $this->getProteinSynonyms($protein_ids);
-		
-		foreach($T['ls'] as $pid => &$actor)
-		{
-			// localizations to interactors
-			if (!empty($protein_locs[$pid]))
-				$actor['locs'] = $protein_locs[$pid];
-			// synonyms to interactors
-			if (!empty($protein_synonyms[$pid]['syn_fullname']))
-				$actor['syn_fullname'] =  $protein_synonyms[$pid]['syn_fullname'];
-			if (!empty($protein_synonyms[$pid]['synonyms']))
-				$actor['synonyms'] = $protein_synonyms[$pid]['synonyms'];
-			//$actor['syn_namings'] = (empty($protein_synonyms[$pid]['syn_namings']) ? array() : $protein_synonyms[$pid]['syn_namings']);
+		if (!empty($protein_ids)) {
+			// localizations for the interactor
+			$protein_locs = $this->getProteinLocalizations($protein_ids);
+			
+			// synonyms for the interactor
+			$protein_synonyms = $this->getProteinSynonyms($protein_ids);
+			
+			foreach($T['ls'] as $pid => &$actor)
+			{
+				// localizations to interactors
+				if (!empty($protein_locs[$pid]))
+					$actor['locs'] = $protein_locs[$pid];
+				// synonyms to interactors
+				if (!empty($protein_synonyms[$pid]['syn_fullname']))
+					$actor['syn_fullname'] =  $protein_synonyms[$pid]['syn_fullname'];
+				if (!empty($protein_synonyms[$pid]['synonyms']))
+					$actor['synonyms'] = $protein_synonyms[$pid]['synonyms'];
+				//$actor['syn_namings'] = (empty($protein_synonyms[$pid]['syn_namings']) ? array() : $protein_synonyms[$pid]['syn_namings']);
+			}
 		}
 		
 		$T['protein']['interactionNumber'] = count($protein_ids);
-		$T['protein']['avgConfScore'] = round(($confScoreAvg/$T['protein']['interactionNumber']), 2)*100;
+		if ($T['protein']['interactionNumber']) {
+			$T['protein']['avgConfScore'] = round(($confScoreAvg/$T['protein']['interactionNumber']), 2)*100;
+		} else {
+			$T['protein']['avgConfScore'] = false;
+		}
 		
 		return $this->render('ComppiProteinSearchBundle:ProteinSearch:interactors.html.twig',$T);
 	}

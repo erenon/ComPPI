@@ -13,7 +13,7 @@
 	<div class="rounded_box_body">
 		<div id="ps-interactionStats" class="rounded_box">
 			Number of Interactions: {{ protein.interactionNumber }}
-			<br>Average Confidence Score: {{ protein.avgConfScore }}%
+			<br>Average Confidence Score: {% if protein.avgConfScore is empty %} N/A {% else %} {{ protein.avgConfScore }}% {% endif %}
 		</div>
 		
 		{% if protein.fullname is defined %}
@@ -122,6 +122,8 @@
 	</tr>
 	{% endfor %}
 	</table>
+	{% else %}
+	<p class="center"><b>No interactions were found.</b></p>
 	{% endif %}
 
 {% endblock %}
