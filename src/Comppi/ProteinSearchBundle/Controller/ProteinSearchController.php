@@ -117,7 +117,6 @@ class ProteinSearchController extends Controller
 	public function interactorsAction($comppi_id, $get_interactions)
 	{
 		$DB = $this->getDbConnection();
-		$locs = $this->getLocalizationTranslator();
 		$sp = $this->getSpeciesProvider();
 		$spDescriptors = $sp->getDescriptors();
 		$comppi_id = intval($comppi_id);
@@ -131,7 +130,6 @@ class ProteinSearchController extends Controller
 		// details of the requested protein
 		$T['protein'] = $this->getProteinDetails($comppi_id);
 		
-		// @TODO: interakciók száma,
 		// @TODO: letölthető dataset
 
 		// interactors
@@ -373,12 +371,13 @@ class ProteinSearchController extends Controller
 	private function getProteinLocalizations($comppi_ids)
 	{
 		$DB = $this->getDbConnection();
-		$locs = $this->getLocalizationTranslator();
 		
 		$sql_pl = 'SELECT
 				ptl.proteinId as pid, ptl.localizationId AS locId, ptl.sourceDb, ptl.pubmedId,
+				lt.name as minorLocName, lt.majorLocName,
 				st.name AS exp_sys, st.confidenceType AS exp_sys_type
-			FROM ProteinToLocalization ptl, ProtLocToSystemType pltst, SystemType st
+			FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
+			LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
 			WHERE ptl.id=pltst.protLocId
 				AND pltst.systemTypeId=st.id
 				AND proteinId IN ('.join(',', $comppi_ids).')';
@@ -396,21 +395,19 @@ class ProteinSearchController extends Controller
 			$pl[$p->pid][$i]['pubmed_link'] = $this->linkToPubmed($p->pubmedId);
 			$pl[$p->pid][$i]['loc_exp_sys'] = $this->exptype[$p->exp_sys_type].': '.$p->exp_sys;
 			$pl[$p->pid][$i]['loc_exp_sys_type'] = $p->exp_sys_type;
-			try {
-				$pl[$p->pid][$i]['small_loc'] = ucfirst($locs->getHumanReadableLocalizationById($p->locId));
-			} catch (\InvalidArgumentException $e) {
+			if (!empty($p->minorLocName)) {
+				$pl[$p->pid][$i]['small_loc'] = ucfirst($p->minorLocName);
+			} else {
 				$pl[$p->pid][$i]['small_loc'] = 'N/A';
 			}
-			try {
-				$pl[$p->pid][$i]['large_loc'] = ucfirst($locs->getLargelocById($p->locId));
-			} catch (\InvalidArgumentException $e) {
+			if (!empty($p->majorLocName)) {
+				$pl[$p->pid][$i]['large_loc'] = ucfirst($p->majorLocName);
+			} else {
 				$pl[$p->pid][$i]['large_loc'] = 'N/A';
 			}
 		}
 		$this->verbose ? $this->verbose_log[] = count($pl).' protein locations found' : '';
 
-		// if a single id was requested, we return data directly for that
-        //return (count($comppi_ids)==1 ? $pl[$comppi_ids[0]] : $pl);
 		return (!empty($pl) ? $pl : array());
 	}
 	
@@ -428,14 +425,12 @@ class ProteinSearchController extends Controller
 		while ($s = $r_syn->fetch(\PDO::FETCH_OBJ))
 		{
 			if ($s->namingConvention=='UniProtFull') {
-				$syns[$s->pid]['syn_fullname'] = $s->name; // we have to highlight the full name...
+				$syns[$s->pid]['syn_fullname'] = $s->name; // full name highlighted...
 			} else {
 				$syns[$s->pid]['synonyms'][] = $s->name.'&nbsp;('.$s->namingConvention.')';
 			}
 		}
 		
-		// if a single id was requested, we return data directly for that
-        //return (count($comppi_ids)==1 ? $syns[$comppi_ids[0]] : $syns);
 		return $syns;
 	}
 	
