@@ -3,30 +3,60 @@ html {
     padding: 0;
     text-align: center;
 }
+body, #Header, #Footer {
+	min-width: 1000px;
+}
 body  {
-	width: 1000px;
-	margin: 0 auto;
+	margin: 50px auto 10px auto;
+	width: 90%;
     padding: 0;
-    background: url("header_bg.png") repeat-x scroll left top #ffffff;
-    font-family: arial,sans-serif;
+    font-family: 'Arial', sans-serif;
     text-align: left;
 }
 #Header  {
-	width: 1000px;
 	margin: 0 auto 2em 0;
     padding: 0;
 }
-#MainMenu { margin: 22px 0 0 0; padding: 0; list-style-type: none; text-align: right; color: #E0DFDC; }
-#MainMenu a { padding-top: 10px; color: #E0DFDC; text-decoration: none; font-weight: bold; font-family: 'Cuprum',serif; }
-#MainMenu a:hover { color: #ffffff; }
-#Logo { float: left; padding: 0; margin: -17px 0 0 0; /*margin: -10px 0 0 0; padding: 0; width: 200px; font-size: 40px; font-weight: normal; font-family:'Cuprum',serif; color: #E0DFDC;*/ }
-#HeaderSlogan { float: left; margin: 0; padding: 0 0 0 10px; color: #E0DFDC; }
+#MainMenu, #Footer {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+#MainMenu li, #Footer li {
+	margin: 0;
+	padding: 0;
+	color: #000;
+	display: inline;
+}
+#MainMenu li:after, #Footer li:after {
+	content: "//";
+	color: #909090;
+	margin: 0 12px;
+}
+#MainMenu li:last-child:after, #Footer li:last-child:after {
+	content: "";
+	margin: 0;
+}
+#MainMenu { margin: 0; padding: 0; text-align: right; text-transform: uppercase; }
+#MainMenu a { padding-top: 10px; text-decoration: none; font-weight: 105%; color: #000;  }
+#MainMenu a:hover { text-decoration: underline; }
+#Logo { float: left; padding: 0; margin: 0; }
+#HeaderSlogan { clear: both; float: left; margin: 0; padding: 0 0 0 10px; color: #E0DFDC; }
+#Header img { border: 0; }
 #Content {
+	clear: both;
 	margin-top: 10px;
 	line-height: 150%;
 	color:  #000;
 }
-#Footer { position: fixed; bottom: 0; width: 1000px; height: 50px; padding-top: 10px; background: #fff; border-top: 1px solid #404040; margin: 1em auto 0 auto; text-align: center; }
+#Footer {
+	clear: both;
+	background: #fff;
+	margin: 5em auto 0 auto;
+	padding: 4em 0 0 0;
+	text-align: center;
+	vertical-align: bottom;
+}
 
 a { color: #207000; text-decoration: none; font-weight: bold; }
 a:hover { color: #CC0000; }
@@ -267,21 +297,16 @@ input, select, textarea {
 #WelcomePanels li {
 	list-style-type: none;
 	float: left;
-	width: 46%;
-	margin: 1em 0.5em;
-	padding: 5px;
+	width: 13%;
+	margin: 10em 0 10px 0;
+	padding: 0 7px;
 	text-align: left;
-	/*border: 1px solid #000;
-	border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-khtml-border-radius: 5px;*/
 }
 #WelcomePanels li h1 {
-	font-size: 1.1em;
-	font-weight: bold;
-	font-variant: small-caps;
-	border-bottom: 1px groove #000;
+	font-size: 1.2em;
+	font-weight: lighter;
+	height: 80px;
 	margin: 0;
-	padding: 0 0 0 2em;
-	width: 93%;
+	padding: 0;
+	border-bottom: 1px solid #000;
 }
