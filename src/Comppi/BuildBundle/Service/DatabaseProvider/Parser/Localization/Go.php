@@ -13,7 +13,12 @@ class Go extends AbstractLocalizationParser
 
     protected $databaseIdentifier = "GO";
 
-    protected $headerCount = 1;
+    protected function dropHeader() {
+    	// Drop lines starting with ! and the true table header
+		do {
+    		$header = fgets($this->fileHandle);
+		} while ($header[0] == '!');
+    }
 
     protected function readRecord() {
         $line = $this->readLine();

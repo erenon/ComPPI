@@ -5,7 +5,7 @@ namespace Comppi\BuildBundle\Service\DatabaseProvider\Parser\Map;
 class Biogrid extends AbstractMapParser
 {
     protected static $parsableFileNames = array(
-        'BIOGRID-IDENTIFIERS-3.1.92.tab.txt',
+        'BIOGRID-IDENTIFIERS.tab.txt',
     );
 
     private $records = array();

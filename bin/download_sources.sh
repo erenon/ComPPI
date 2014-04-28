@@ -60,8 +60,9 @@ fi
 # GO
 if [ ! -f go_hs.csv ]
 then
-    echo "HS GO database missing, please upload it manually as go_hs.csv"
-    echo "Download page: http://jan2013.archive.ensembl.org/biomart/martview/cb8efa77723359a41a24da450c983d85"
+    wget ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/HUMAN/gene_association.goa_human.gz
+    gzip -d -N gene_association.goa_human.gz
+    mv gene_association.goa_human go_hs.csv
 fi    
 
 # Human proteinpedia
@@ -82,19 +83,19 @@ then
 fi   
 
 # MatrixDB Loc
-if [ ! -f ECM_Protein_list_20100825.txt ]
+if [ ! -f ECM_Protein_list.csv ]
 then
-    wget http://matrixdb.ibcp.fr/current/ECM_Protein_list_20100825.txt
+    wget http://matrixdb.ibcp.fr/download/proteins_ECM_20140320.csv -O ECM_Protein_list.csv
 fi
 
-if [ ! -f Secreted_Protein_list_20100825.txt ]
+if [ ! -f Secreted_Protein_list.csv ]
 then
-    wget http://matrixdb.ibcp.fr/current/Secreted_Protein_list_20100825.txt
+    wget http://matrixdb.ibcp.fr/download//proteins_Secreted_20140320.csv -O Secreted_Protein_list.csv
 fi
 
-if [ ! -f Membrane_Protein_list_20100825.txt ]
+if [ ! -f Membrane_Protein_list.csv ]
 then
-    wget http://matrixdb.ibcp.fr/current/Membrane_Protein_list_20100825.txt
+    wget http://matrixdb.ibcp.fr/download//proteins_Membrane_20140320.csv -O Membrane_Protein_list.csv
 fi
 
 # Organelle
@@ -176,9 +177,9 @@ then
 fi
 
 # MINT
-if [ ! -f 2012-02-06-mint-human-binary.mitab26.txt ]
+if [ ! -f 2013-03-26-mint-human-binary.mitab26.txt ]
 then
-    wget "ftp://mint.bio.uniroma2.it/pub/release/mitab26/2012-02-06/2012-02-06-mint-human-binary.mitab26.txt"
+    wget "ftp://mint.bio.uniroma2.it/pub/release/mitab26/current/2013-03-26-mint-human-binary.mitab26.txt"
 fi
 
 # MIPS
@@ -292,8 +293,9 @@ fi
 # GO
 if [ ! -f go_dm.csv ]
 then
-    echo "DM GO database missing, please upload it manually as go_dm.csv"
-    echo "Download page: http://jan2013.archive.ensembl.org/biomart/martview/7f058076dc051108baa18455afce3932"
+    wget "ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/FLY/gene_association.goa_fly.gz"
+    gzip -d -N gene_association.goa_fly.gz
+    mv gene_association.goa_fly go_dm.csv
 fi  
 
 # PaGOSUB
@@ -326,38 +328,39 @@ cd ../interaction
 # @see at the end of this file
 
 # DroID
+
 if [ ! -f finley_yth.txt ]
 then
-    wget http://www.droidb.org/data/Droid_2012_04/finley_yth.txt
+    wget http://www.droidb.org/data/DroID_v2014_01/finley_yth.txt
 fi
 
 if [ ! -f CURAGEN_YTH.txt ]
 then
-    wget http://www.droidb.org/data/Droid_2012_04/CURAGEN_YTH.txt
+    wget http://www.droidb.org/data/DroID_v2014_01/curagen_yth.txt -O CURAGEN_YTH.txt
 fi
 
 if [ ! -f HYBRIGENICS_YTH.txt ]
 then
-    wget http://www.droidb.org/data/Droid_2012_04/HYBRIGENICS_YTH.txt
+    wget http://www.droidb.org/data/DroID_v2014_01/hybrigenics_yth.txt -O HYBRIGENICS_YTH.txt
 fi
 
 if [ ! -f DPIM_COAPCOMPLEX.txt ]
 then
-    wget http://www.droidb.org/data/Droid_2012_04/DPIM_COAPCOMPLEX.txt
+    wget http://www.droidb.org/data/DroID_v2014_01/dpim_coapcomplex.txt -O DPIM_COAPCOMPLEX.txt
 fi
 
 if [ ! -f FLY_OTHER_PHYSICAL.txt ]
 then
-    wget http://www.droidb.org/data/Droid_2012_04/FLY_OTHER_PHYSICAL.txt
+    wget http://www.droidb.org/data/DroID_v2014_01/fly_other_physical.txt -O FLY_OTHER_PHYSICAL.txt
 fi
 
 # IntAct
 # @see at the end of this file
 
 # MINT
-if [ ! -f 2012-02-06-mint-Drosophila-binary.mitab26.txt ]
+if [ ! -f 2013-03-26-mint-Drosophila-binary.mitab26.txt ]
 then
-    wget "ftp://mint.bio.uniroma2.it/pub/release/mitab26/2012-02-06/2012-02-06-mint-Drosophila-binary.mitab26.txt"
+    wget "ftp://mint.bio.uniroma2.it/pub/release/mitab26/current/2013-03-26-mint-Drosophila-binary.mitab26.txt"
 fi
 
 ### Maps
@@ -446,8 +449,9 @@ fi
 # GO
 if [ ! -f go_ce.csv ]
 then
-    echo "CE GO database missing, please upload it manually as go_ce.csv"
-    echo "Download page: http://jan2013.archive.ensembl.org/biomart/martview/bf98d29c4e632817da791a9ee75d302f"
+    wget "ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/WORM/gene_association.goa_worm.gz"
+    gzip -d -N gene_association.goa_worm.gz
+    mv gene_association.goa_worm go_ce.csv
 fi
 
 # Organelle
@@ -489,9 +493,9 @@ fi
 # @see at the end of this file
 
 # MINT
-if [ ! -f 2012-02-06-mint-Caenorhabditis-binary.mitab26.txt ]
+if [ ! -f 2013-03-26-mint-Caenorhabditis-binary.mitab26.txt ]
 then
-    wget "ftp://mint.bio.uniroma2.it/pub/release/mitab26/2012-02-06/2012-02-06-mint-Caenorhabditis-binary.mitab26.txt"
+    wget "ftp://mint.bio.uniroma2.it/pub/release/mitab26/current/2013-03-26-mint-Caenorhabditis-binary.mitab26.txt"
 fi
 
 ### Maps
@@ -587,8 +591,9 @@ fi
 # GO
 if [ ! -f go_sc.csv ]
 then
-    echo "SC GO database missing, please upload it manually as go_sc.csv"
-    echo "Download page: http://jan2013.archive.ensembl.org/biomart/martview/96703a629fd6dded17a13ab9d8b1a70a"
+    wget "ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/YEAST/gene_association.goa_yeast.gz"
+    gzip -d -N gene_association.goa_yeast.gz
+    mv gene_association.goa_yeast go_sc.csv
 fi  
 
 # Organelle
@@ -641,9 +646,9 @@ fi
 # @see at the end of this file
 
 # MINT
-if [ ! -f 2012-02-06-mint-Saccharomyces-binary.mitab26.txt ]
+if [ ! -f 2013-03-26-mint-Saccharomyces-binary.mitab26.txt ]
 then
-    wget "ftp://mint.bio.uniroma2.it/pub/release/mitab26/2012-02-06/2012-02-06-mint-Saccharomyces-binary.mitab26.txt"
+    wget "ftp://mint.bio.uniroma2.it/pub/release/mitab26/current/2013-03-26-mint-Saccharomyces-binary.mitab26.txt"
 fi
 
 ### Maps
@@ -692,103 +697,106 @@ cd ../../
 ### Other sources
 
 # Biogrid
-if [ ! -f ./hs/interaction/BIOGRID-ORGANISM-Homo_sapiens-3.1.81.tab2.txt ] \
-|| [ ! -f ./dm/interaction/BIOGRID-ORGANISM-Drosophila_melanogaster-3.1.81.tab2.txt ] \
-|| [ ! -f ./sc/interaction/BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.1.81.tab2.txt ] \
-|| [ ! -f ./ce/interaction/BIOGRID-ORGANISM-Caenorhabditis_elegans-3.1.81.tab2.txt ]
+if [ ! -f ./hs/interaction/BIOGRID-ORGANISM-Homo_sapiens.tab2.txt ] \
+|| [ ! -f ./dm/interaction/BIOGRID-ORGANISM-Drosophila_melanogaster.tab2.txt ] \
+|| [ ! -f ./sc/interaction/BIOGRID-ORGANISM-Saccharomyces_cerevisiae.tab2.txt ] \
+|| [ ! -f ./ce/interaction/BIOGRID-ORGANISM-Caenorhabditis_elegans.tab2.txt ]
 then
     # download zip
-    if [ ! -f BIOGRID-ORGANISM-3.1.81.tab2.zip ]
+    if [ ! -f BIOGRID-ORGANISM-3.2.111.tab2.zip ]
     then
-        wget "http://thebiogrid.org/downloads/archives/Release%20Archive/BIOGRID-3.1.81/BIOGRID-ORGANISM-3.1.81.tab2.zip"
+        wget "http://thebiogrid.org/downloads/archives/Release%20Archive/BIOGRID-3.2.111/BIOGRID-ORGANISM-3.2.111.tab2.zip"
     fi
     
     # extract files
-    unzip BIOGRID-ORGANISM-3.1.81.tab2.zip BIOGRID-ORGANISM-Homo_sapiens-3.1.81.tab2.txt BIOGRID-ORGANISM-Drosophila_melanogaster-3.1.81.tab2.txt BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.1.81.tab2.txt BIOGRID-ORGANISM-Caenorhabditis_elegans-3.1.81.tab2.txt
+    unzip BIOGRID-ORGANISM-3.2.111.tab2.zip \
+      BIOGRID-ORGANISM-Homo_sapiens-3.2.111.tab2.txt \
+      BIOGRID-ORGANISM-Drosophila_melanogaster-3.2.111.tab2.txt \
+      BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.2.111.tab2.txt \
+      BIOGRID-ORGANISM-Caenorhabditis_elegans-3.2.111.tab2.txt
     
-    mv BIOGRID-ORGANISM-Homo_sapiens-3.1.81.tab2.txt ./hs/interaction/
-    mv BIOGRID-ORGANISM-Drosophila_melanogaster-3.1.81.tab2.txt ./dm/interaction/
-    mv BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.1.81.tab2.txt ./sc/interaction/
-    mv BIOGRID-ORGANISM-Caenorhabditis_elegans-3.1.81.tab2.txt ./ce/interaction/
+    mv BIOGRID-ORGANISM-Homo_sapiens-3.2.111.tab2.txt ./hs/interaction/BIOGRID-ORGANISM-Homo_sapiens.tab2.txt
+    mv BIOGRID-ORGANISM-Drosophila_melanogaster-3.2.111.tab2.txt ./dm/interaction/BIOGRID-ORGANISM-Drosophila_melanogaster.tab2.txt
+    mv BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.2.111.tab2.txt ./sc/interaction/BIOGRID-ORGANISM-Saccharomyces_cerevisiae.tab2.txt
+    mv BIOGRID-ORGANISM-Caenorhabditis_elegans-3.2.111.tab2.txt ./ce/interaction/BIOGRID-ORGANISM-Caenorhabditis_elegans.tab2.txt
     
     # remove zip
-    rm BIOGRID-ORGANISM-3.1.81.tab2.zip     
+    rm BIOGRID-ORGANISM-3.2.111.tab2.zip
 fi
 
 # Biogrid mapping
-if [ ! -f ./hs/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt ] \
-|| [ ! -f ./dm/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt ] \
-|| [ ! -f ./sc/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt ] \
-|| [ ! -f ./ce/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt ]
+if [ ! -f ./hs/map/BIOGRID-IDENTIFIERS.tab.txt ] \
+|| [ ! -f ./dm/map/BIOGRID-IDENTIFIERS.tab.txt ] \
+|| [ ! -f ./sc/map/BIOGRID-IDENTIFIERS.tab.txt ] \
+|| [ ! -f ./ce/map/BIOGRID-IDENTIFIERS.tab.txt ]
 then
     # download zip
-    if [ ! -f BIOGRID-IDENTIFIERS-3.1.92.tab.zip ]
+    if [ ! -f BIOGRID-IDENTIFIERS-3.2.111.tab.zip ]
     then
-        wget "http://thebiogrid.org/downloads/archives/Release%20Archive/BIOGRID-3.1.92/BIOGRID-IDENTIFIERS-3.1.92.tab.zip"
+        wget "http://thebiogrid.org/downloads/archives/Release%20Archive/BIOGRID-3.2.111/BIOGRID-IDENTIFIERS-3.2.111.tab.zip"
     fi
     
     # extract file
-    unzip BIOGRID-IDENTIFIERS-3.1.92.tab.zip
+    unzip BIOGRID-IDENTIFIERS-3.2.111.tab.zip
     
     # filter species
-    grep "Homo sapiens" BIOGRID-IDENTIFIERS-3.1.92.tab.txt > ./hs/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt
-    grep "Drosophila melanogaster" BIOGRID-IDENTIFIERS-3.1.92.tab.txt > ./dm/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt
-    grep "Saccharomyces cerevisiae" BIOGRID-IDENTIFIERS-3.1.92.tab.txt > ./sc/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt
-    grep "Caenorhabditis elegans" BIOGRID-IDENTIFIERS-3.1.92.tab.txt > ./ce/map/BIOGRID-IDENTIFIERS-3.1.92.tab.txt
+    grep "Homo sapiens" BIOGRID-IDENTIFIERS-3.2.111.tab.txt > ./hs/map/BIOGRID-IDENTIFIERS.tab.txt
+    grep "Drosophila melanogaster" BIOGRID-IDENTIFIERS-3.2.111.tab.txt > ./dm/map/BIOGRID-IDENTIFIERS.tab.txt
+    grep "Saccharomyces cerevisiae" BIOGRID-IDENTIFIERS-3.2.111.tab.txt > ./sc/map/BIOGRID-IDENTIFIERS.tab.txt
+    grep "Caenorhabditis elegans" BIOGRID-IDENTIFIERS-3.2.111.tab.txt > ./ce/map/BIOGRID-IDENTIFIERS.tab.txt
     
     # remove zip
-    rm BIOGRID-IDENTIFIERS-3.1.92.tab.zip
-
+    rm BIOGRID-IDENTIFIERS-3.2.111.tab.zip
 fi
 
 # DiP
-if [ ! -f ./hs/interaction/Hsapi20120228.txt ] \
-|| [ ! -f ./dm/interaction/Dmela20120228.txt ] \
-|| [ ! -f ./sc/interaction/Scere20120228.txt ] \
-|| [ ! -f ./ce/interaction/Celeg20120228.txt ]
+if [ ! -f ./hs/interaction/Dip_Hsapi.txt ] \
+|| [ ! -f ./dm/interaction/Dip_Dmela.txt ] \
+|| [ ! -f ./sc/interaction/Dip_Scere.txt ] \
+|| [ ! -f ./ce/interaction/Dip_Celeg.txt ]
 then
     # login
     wget --save-cookies dip-cookies.txt \
      --keep-session-cookies \
-     --post-data 'login=vAirDa99&pass=522QQ&lgn=1&Login=Login' \
+     --post-data 'login=vAirDa98&pass=Csbmq&lgn=1&Login=Login' \
      -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
      http://dip.doe-mbi.ucla.edu/dip/Login.cgi \
      -O /dev/null
      
     # hs
-    if [ ! -f ./hs/interaction/Hsapi20120228.txt ]
+    if [ ! -f ./hs/interaction/Dip_Hsapi.txt ]
     then
         wget --load-cookies dip-cookies.txt \
         -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
-        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Hsapi20120228.txt \
-        -O ./hs/interaction/Hsapi20120228.txt
+        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Hsapi20140117.txt \
+        -O ./hs/interaction/Dip_Hsapi.txt
     fi
     
     # dm
-    if [ ! -f ./dm/interaction/Dmela20120228.txt ]
+    if [ ! -f ./dm/interaction/Dip_Dmela.txt ]
     then
         wget --load-cookies dip-cookies.txt \
         -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
-        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Dmela20120228.txt \
-        -O ./dm/interaction/Dmela20120228.txt
+        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Dmela20140117.txt \
+        -O ./dm/interaction/Dip_Dmela.txt
     fi
     
     # sc
-    if [ ! -f ./sc/interaction/Scere20120228.txt ]
+    if [ ! -f ./sc/interaction/Dip_Scere.txt ]
     then
         wget --load-cookies dip-cookies.txt \
         -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
-        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Scere20120228.txt \
-        -O ./sc/interaction/Scere20120228.txt
+        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Scere20140117.txt \
+        -O ./sc/interaction/Dip_Scere.txt
     fi
     
     # ce
-    if [ ! -f ./ce/interaction/Celeg20120228.txt ]
+    if [ ! -f ./ce/interaction/Dip_Celeg.txt ]
     then
         wget --load-cookies dip-cookies.txt \
         -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
-        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Celeg20120228.txt \
-        -O ./ce/interaction/Celeg20120228.txt
+        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Celeg20140117.txt \
+        -O ./ce/interaction/Dip_Celeg.txt
     fi
     
     # cleanup

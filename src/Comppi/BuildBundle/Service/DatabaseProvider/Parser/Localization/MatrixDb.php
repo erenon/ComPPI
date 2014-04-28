@@ -5,9 +5,9 @@ namespace Comppi\BuildBundle\Service\DatabaseProvider\Parser\Localization;
 class MatrixDb extends AbstractLocalizationParser
 {
     protected static $parsableFileNames = array(
-        'ECM_Protein_list_20100825.txt',
-        'Membrane_Protein_list_20100825.txt',
-        'Secreted_Protein_list_20100825.txt'
+        'ECM_Protein_list.csv',
+        'Secreted_Protein_list.csv',
+        'Membrane_Protein_list.csv'
     );
 
     protected $databaseIdentifier = "MatrixDB";
@@ -23,13 +23,13 @@ class MatrixDb extends AbstractLocalizationParser
 
     private function setLocalizationByFile($fileName) {
         switch ($fileName) {
-            case 'ECM_Protein_list_20100825.txt':
+            case 'ECM_Protein_list.csv':
                 $this->localization = 'GO:0031012';
                 break;
-            case 'Membrane_Protein_list_20100825.txt':
+            case 'Secreted_Protein_list.csv':
                 $this->localization = 'GO:0016020';
                 break;
-            case 'Secreted_Protein_list_20100825.txt':
+            case 'Membrane_Protein_list.csv':
                 $this->localization = 'GO:0005576';
                 break;
             default:
