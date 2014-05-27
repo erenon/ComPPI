@@ -171,7 +171,7 @@ fi
 # Matrix
 if [ ! -f MatrixDB_20120420.txt ]
 then
-    wget http://matrixdb.ibcp.fr/cgi-bin/MatrixDB_20120420.txt.gz -O ./matrix.gz
+    wget http://matrixdb.ibcp.fr/download/MatrixDB_latest.tab.gz -O ./matrix.gz
     gzip -d -N ./matrix.gz
     rm ./matrix.gz
 fi
