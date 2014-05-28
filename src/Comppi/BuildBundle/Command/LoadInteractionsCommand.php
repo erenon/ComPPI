@@ -35,8 +35,8 @@ class LoadInteractionsCommand extends AbstractLoadCommand
 
         // init insert statement
         $this->insertInteractionStatement = $this->connection->prepare(
-        	'INSERT INTO Interaction VALUES (NULL, ?, ?, ?, ?)' .
-        	' ON DUPLICATE KEY UPDATE id=id'
+            'INSERT INTO Interaction VALUES (NULL, ?, ?, ?, ?)' .
+            ' ON DUPLICATE KEY UPDATE id=id'
         );
 
         // init add system type statement
@@ -86,18 +86,16 @@ class LoadInteractionsCommand extends AbstractLoadCommand
                 foreach ($proteinAComppiIds as $proteinAComppiId) {
                     foreach ($proteinBComppiIds as $proteinBComppiId) {
 
+                        // disallow self interaction
+                        if ($proteinAComppiId === $proteinBComppiId) {
+                            continue;
+                        }
+
                         $this->addDatabaseRefToId($sourceDb, $proteinAComppiId);
                         $this->addDatabaseRefToId($sourceDb, $proteinBComppiId);
 
-                        // let $proteinAComppiId always the smaller id
-                        // this is an efficient way to help filter duplicated interacitons
-                        if ($proteinAComppiId < $proteinBComppiId) {
-                            $smallerId = $proteinAComppiId;
-                            $greaterId = $proteinBComppiId;
-                        } else {
-                            $smallerId = $proteinBComppiId;
-                            $greaterId = $proteinAComppiId;
-                        }
+                        $greaterId = max($proteinAComppiId, $proteinBComppiId);
+                        $smallerId = min($proteinAComppiId, $proteinBComppiId);
 
                         $this->insertInteractionStatement->bindValue(1, $smallerId);
                         $this->insertInteractionStatement->bindValue(2, $greaterId);
