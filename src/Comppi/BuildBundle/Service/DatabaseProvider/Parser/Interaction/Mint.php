@@ -27,7 +27,7 @@ class Mint extends AbstractInteractionParser
             }
 
             $recordArray = explode("\t", $line);
-            $this->checkRecordFieldCount($recordArray, 41);
+            $this->checkRecordFieldCount($recordArray, 40);
 
             $proteinA = $this->extractName($recordArray[0]);
             $proteinB = $this->extractName($recordArray[1]);
