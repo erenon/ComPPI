@@ -13,7 +13,7 @@
 	<div class="fancy_box_body">
 		<div id="ps-interactionStats" class="fancy_box_body">
 			Number of Interactions: {{ protein.interactionNumber }}
-			<br>Average Confidence Score: {% if protein.avgConfScore is empty %} N/A {% else %} {{ protein.avgConfScore }}% {% endif %}
+			<br>Average Interaction Score: {% if protein.avgConfScore is empty %} N/A {% else %} {{ protein.avgConfScore }}% {% endif %}
 		</div>
 		
 		{% if protein.fullname is defined %}
@@ -80,7 +80,7 @@
 	<tr class="{% if loop.index is odd %}ps-stripeEven{% else %}ps-stripeOdd{% endif %}">
 		<td class="ps-actorA">
 			<h1>{{ protein.name }}</h1>
-			<div class="ps-CS" title="Confidence Score">Confidence Score <div>{{ p.confScore }}%</div></div>
+			<div class="ps-CS" title="Confidence Score">Interaction Score <div>{{ p.confScore }}%</div></div>
 		</td>
 		<td class="ps-actorB">
 			<h1>{{ p.prot_name }}</h1> ({{ p.prot_naming }})
