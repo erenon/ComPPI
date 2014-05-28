@@ -1,0 +1,30 @@
+!gaf-version: 2.0
+!
+!The set of protein accessions included in this file is based on UniProt complete proteomes, which may provide more than one protein per gene.
+!They include all Swiss-Prot entries for the species plus any TrEMBL entries that have an Ensembl DR line. The TrEMBL entries are likely to overlap with the Swiss-Prot entries or their isoforms.
+!If a particular protein accession is not annotated with GO, then it will not appear in this file.
+!
+!Note that the annotation set in this file is filtered in order to reduce redundancy; the full, unfiltered set can be found in
+!ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gene_association.goa_uniprot.gz
+!
+UniProtKB	A0A183	LCE6A		GO:0031424	GO_REF:0000037	IEA	UniProtKB-KW:KW-0417	P	Late cornified envelope protein 6A	LCE6A_HUMAN|LCE6A|C1orf44	protein	taxon:9606	20140510	UniProt		
+UniProtKB	A0A5B9	TRBC2		GO:0016021	GO_REF:0000037	IEA	UniProtKB-KW:KW-0812	C	T-cell receptor beta-2 chain C region	TRBC2_HUMAN|TRBC2|TCRBC2	protein	taxon:9606	20140510	UniProt		
+UniProtKB	A0AUZ9	KANSL1L		GO:0000123	GO_REF:0000002	IEA	InterPro:IPR026180	C	KAT8 regulatory NSL complex subunit 1-like protein	KAL1L_HUMAN|KANSL1L|C2orf67	protein	taxon:9606	20140510	InterPro		
+UniProtKB	A0AV02	SLC12A8		GO:0006813	GO_REF:0000037	IEA	UniProtKB-KW:KW-0633	P	Solute carrier family 12 member 8	S12A8_HUMAN|SLC12A8|CCC9	protein	taxon:9606	20140510	UniProt		
+UniProtKB	A0AV02	SLC12A8		GO:0015293	GO_REF:0000037	IEA	UniProtKB-KW:KW-0769	F	Solute carrier family 12 member 8	S12A8_HUMAN|SLC12A8|CCC9	protein	taxon:9606	20140510	UniProt		
+UniProtKB	A0AV02	SLC12A8		GO:0016021	GO_REF:0000037	IEA	UniProtKB-KW:KW-0812	C	Solute carrier family 12 member 8	S12A8_HUMAN|SLC12A8|CCC9	protein	taxon:9606	20140510	UniProt		
+UniProtKB	A0AV96	RBM47		GO:0000166	GO_REF:0000002	IEA	InterPro:IPR012677	F	RNA-binding protein 47	RBM47_HUMAN|RBM47	protein	taxon:9606	20140510	InterPro		
+UniProtKB	A0AV96	RBM47		GO:0005634	GO_REF:0000039	IEA	UniProtKB-SubCell:SL-0191	C	RNA-binding protein 47	RBM47_HUMAN|RBM47	protein	taxon:9606	20140510	UniProt		
+UniProtKB	A0AV96	RBM47		GO:0044822	PMID:22658674	IDA		F	RNA-binding protein 47	RBM47_HUMAN|RBM47	protein	taxon:9606	20140203	UniProt		
+UniProtKB	A0AV96	RBM47		GO:0044822	PMID:22681889	IDA		F	RNA-binding protein 47	RBM47_HUMAN|RBM47	protein	taxon:9606	20140203	UniProt		
+UniProtKB	A0AVF1	TTC26		GO:0036064	GO_REF:0000019	IEA	Ensembl:ENSMUSP00000124369	C	Tetratricopeptide repeat protein 26	TTC26_HUMAN|TTC26	protein	taxon:9606	20140510	Ensembl		
+UniProtKB	A0AVF1	TTC26		GO:0042384	GO_REF:0000024	ISS	UniProtKB:Q8BS45	P	Tetratricopeptide repeat protein 26	TTC26_HUMAN|TTC26	protein	taxon:9606	20120730	UniProt		
+UniProtKB	A0AVF1	TTC26		GO:0072372	GO_REF:0000024	ISS	UniProtKB:Q8BS45	C	Tetratricopeptide repeat protein 26	TTC26_HUMAN|TTC26	protein	taxon:9606	20120730	UniProt		
+UniProtKB	A0AVI2	FER1L5		GO:0005886	GO_REF:0000039	IEA	UniProtKB-SubCell:SL-0039	C	Fer-1-like protein 5	FR1L5_HUMAN|FER1L5	protein	taxon:9606	20140510	UniProt		
+UniProtKB	A0AVI2	FER1L5		GO:0016021	GO_REF:0000037	IEA	UniProtKB-KW:KW-0812	C	Fer-1-like protein 5	FR1L5_HUMAN|FER1L5	protein	taxon:9606	20140510	UniProt		
+UniProtKB	A0AVI4	TMEM129		GO:0003674	GO_REF:0000015	ND		F	Transmembrane protein 129	TM129_HUMAN|TMEM129	protein	taxon:9606	20090107	UniProt		
+UniProtKB	A0AVI4	TMEM129		GO:0005575	GO_REF:0000015	ND		C	Transmembrane protein 129	TM129_HUMAN|TMEM129	protein	taxon:9606	20090107	UniProt		
+UniProtKB	A0AVI4	TMEM129		GO:0008150	GO_REF:0000015	ND		P	Transmembrane protein 129	TM129_HUMAN|TMEM129	protein	taxon:9606	20090107	UniProt		
+UniProtKB	A0AVI4	TMEM129		GO:0016021	GO_REF:0000037	IEA	UniProtKB-KW:KW-0812	C	Transmembrane protein 129	TM129_HUMAN|TMEM129	protein	taxon:9606	20140510	UniProt		
+UniProtKB	A0AVK6	E2F8		GO:0000122	GO_REF:0000024	ISS	UniProtKB:Q58FA4	P	Transcription factor E2F8	E2F8_HUMAN|E2F8	protein	taxon:9606	20121102	UniProt		
+UniProtKB	A0AVK6	E2F8		GO:0001047	PMID:22903062	IDA		F	Transcription factor E2F8	E2F8_HUMAN|E2F8	protein	taxon:9606	20121102	UniProt		

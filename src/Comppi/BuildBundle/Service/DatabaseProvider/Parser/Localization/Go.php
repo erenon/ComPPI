@@ -33,13 +33,15 @@ class Go extends AbstractLocalizationParser
          *
          * @var array
          */
-        $recordArray = explode(',', $line);
-        $this->checkRecordFieldCount($recordArray, 2);
+        $recordArray = explode("\t", $line);
+        
+        // Seems to be not deterministic
+        //$this->checkRecordFieldCount($recordArray, 15);
 
         $this->currentRecord = array(
-            'proteinId' => $recordArray[0],
-            'namingConvention' => 'EnsemblGeneId',
-            'localization' => $recordArray[1],
+            'proteinId' => $recordArray[1],
+            'namingConvention' => 'UniProtKB-AC',
+            'localization' => $recordArray[4],
             'pubmedId' => 10802651,
             'experimentalSystemType' => 'not available'
         );

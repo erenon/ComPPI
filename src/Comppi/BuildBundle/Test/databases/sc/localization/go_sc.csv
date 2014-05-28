@@ -1,0 +1,30 @@
+!gaf-version: 2.0
+!
+!The set of protein accessions included in this file is based on UniProt complete proteomes, which may provide more than one protein per gene.
+!They include all Swiss-Prot entries for the species plus any TrEMBL entries that have an Ensembl DR line. The TrEMBL entries are likely to overlap with the Swiss-Prot entries or their isoforms.
+!If a particular protein accession is not annotated with GO, then it will not appear in this file.
+!
+!Note that the annotation set in this file is filtered in order to reduce redundancy; the full, unfiltered set can be found in
+!ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gene_association.goa_uniprot.gz
+!
+UniProtKB	A2P2R3	YMR084W		GO:0003674	GO_REF:0000015	ND		F	Putative glutamine--fructose-6-phosphate aminotransferase [isomerizing]	YM084_YEAST|YMR084W	protein	taxon:559292	20030203	SGD		
+UniProtKB	A2P2R3	YMR084W		GO:0004360	GO_REF:0000003	IEA	EC:2.6.1.16	F	Putative glutamine--fructose-6-phosphate aminotransferase [isomerizing]	YM084_YEAST|YMR084W	protein	taxon:559292	20140510	UniProt		
+UniProtKB	A2P2R3	YMR084W		GO:0005575	GO_REF:0000015	ND		C	Putative glutamine--fructose-6-phosphate aminotransferase [isomerizing]	YM084_YEAST|YMR084W	protein	taxon:559292	20030203	SGD		
+UniProtKB	A2P2R3	YMR084W		GO:0006048	GO_REF:0000041	IEA	UniPathway:UPA00113	P	Putative glutamine--fructose-6-phosphate aminotransferase [isomerizing]	YM084_YEAST|YMR084W	protein	taxon:559292	20140510	UniProt		
+UniProtKB	A2P2R3	YMR084W		GO:0006541	GO_REF:0000037	IEA	UniProtKB-KW:KW-0315	P	Putative glutamine--fructose-6-phosphate aminotransferase [isomerizing]	YM084_YEAST|YMR084W	protein	taxon:559292	20140510	UniProt		
+UniProtKB	A2P2R3	YMR084W		GO:0008150	GO_REF:0000015	ND		P	Putative glutamine--fructose-6-phosphate aminotransferase [isomerizing]	YM084_YEAST|YMR084W	protein	taxon:559292	20030203	SGD		
+UniProtKB	A5Z2X5	YPR010C-A		GO:0003674	GO_REF:0000015	ND		F	UPF0495 protein YPR010C-A	YP010_YEAST|YPR010C-A	protein	taxon:559292	20070510	SGD		
+UniProtKB	A5Z2X5	YPR010C-A		GO:0005575	GO_REF:0000015	ND		C	UPF0495 protein YPR010C-A	YP010_YEAST|YPR010C-A	protein	taxon:559292	20070510	SGD		
+UniProtKB	A5Z2X5	YPR010C-A		GO:0008150	GO_REF:0000015	ND		P	UPF0495 protein YPR010C-A	YP010_YEAST|YPR010C-A	protein	taxon:559292	20070510	SGD		
+UniProtKB	A5Z2X5	YPR010C-A		GO:0016021	GO_REF:0000037	IEA	UniProtKB-KW:KW-0812	C	UPF0495 protein YPR010C-A	YP010_YEAST|YPR010C-A	protein	taxon:559292	20140510	UniProt		
+UniProtKB	D6VPM8	YAR023C		GO:0003674	GO_REF:0000015	ND		F	Putative DUP240 protein YAR023C	YAJ3_YEAST|YAR023C	protein	taxon:559292	20021126	SGD		
+UniProtKB	D6VPM8	YAR023C		GO:0005575	GO_REF:0000015	ND		C	Putative DUP240 protein YAR023C	YAJ3_YEAST|YAR023C	protein	taxon:559292	20021126	SGD		
+UniProtKB	D6VPM8	YAR023C		GO:0008150	GO_REF:0000015	ND		P	Putative DUP240 protein YAR023C	YAJ3_YEAST|YAR023C	protein	taxon:559292	20021126	SGD		
+UniProtKB	D6VPM8	YAR023C		GO:0016021	GO_REF:0000037	IEA	UniProtKB-KW:KW-0812	C	Putative DUP240 protein YAR023C	YAJ3_YEAST|YAR023C	protein	taxon:559292	20140510	UniProt		
+UniProtKB	D6VTK4	STE2		GO:0000750	PMID:3037311	IMP		P	Pheromone alpha factor receptor	STE2_YEAST|STE2|YFL026W	protein	taxon:559292	20070712	SGD		
+UniProtKB	D6VTK4	STE2		GO:0000755	PMID:17369365	IDA		P	Pheromone alpha factor receptor	STE2_YEAST|STE2|YFL026W	protein	taxon:559292	20070712	SGD		
+UniProtKB	D6VTK4	STE2		GO:0000755	PMID:17369365	IMP		P	Pheromone alpha factor receptor	STE2_YEAST|STE2|YFL026W	protein	taxon:559292	20070712	SGD		
+UniProtKB	D6VTK4	STE2		GO:0004934	PMID:2161538	IDA		F	Pheromone alpha factor receptor	STE2_YEAST|STE2|YFL026W	protein	taxon:559292	20050512	SGD		
+UniProtKB	D6VTK4	STE2		GO:0004934	PMID:3001640	ISS		F	Pheromone alpha factor receptor	STE2_YEAST|STE2|YFL026W	protein	taxon:559292	20010118	SGD		
+UniProtKB	D6VTK4	STE2		GO:0004934	PMID:6360378	IMP		F	Pheromone alpha factor receptor	STE2_YEAST|STE2|YFL026W	protein	taxon:559292	20100707	SGD		
+UniProtKB	D6VTK4	STE2		GO:0004934	PMID:9742115	IGI	SGD:S000001047|SGD:S000003846|SGD:S000005738	F	Pheromone alpha factor receptor	STE2_YEAST|STE2|YFL026W	protein	taxon:559292	20050512	SGD		
