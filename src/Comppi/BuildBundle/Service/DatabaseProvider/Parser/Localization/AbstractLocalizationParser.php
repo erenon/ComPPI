@@ -14,7 +14,9 @@ abstract class AbstractLocalizationParser
         if (isset($this->localizationToGoCode[$localization])) {
             return $this->localizationToGoCode[$localization];
         } else {
-            throw new \InvalidArgumentException("No GO code found for localization: '" . $localization . "'");
+            //throw new \InvalidArgumentException("No GO code found for localization: '" . $localization . "'");
+            echo "No GO code found for localization: '" . $localization . "'";
+            return "GO:INVALID";
         }
     }
 }
