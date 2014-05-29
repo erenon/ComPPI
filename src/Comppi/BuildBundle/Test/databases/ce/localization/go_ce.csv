@@ -1,0 +1,30 @@
+!gaf-version: 2.0
+!
+!The set of protein accessions included in this file is based on UniProt complete proteomes, which may provide more than one protein per gene.
+!They include all Swiss-Prot entries for the species plus any TrEMBL entries that have an Ensembl DR line. The TrEMBL entries are likely to overlap with the Swiss-Prot entries or their isoforms.
+!If a particular protein accession is not annotated with GO, then it will not appear in this file.
+!
+!Note that the annotation set in this file is filtered in order to reduce redundancy; the full, unfiltered set can be found in
+!ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gene_association.goa_uniprot.gz
+!
+UniProtKB	A0A9R9	wht-7		GO:0005524	GO_REF:0000002	IEA	InterPro:IPR003439	F	Protein WHT-7, isoform b	A0A9R9_CAEEL|wht-7|CELE_Y42G9A.6|Y42G9A.6	protein	taxon:6239	20140510	InterPro		
+UniProtKB	A0A9R9	wht-7		GO:0016020	GO_REF:0000002	IEA	InterPro:IPR013525	C	Protein WHT-7, isoform b	A0A9R9_CAEEL|wht-7|CELE_Y42G9A.6|Y42G9A.6	protein	taxon:6239	20140510	InterPro		
+UniProtKB	A0A9R9	wht-7		GO:0016887	GO_REF:0000002	IEA	InterPro:IPR003439	F	Protein WHT-7, isoform b	A0A9R9_CAEEL|wht-7|CELE_Y42G9A.6|Y42G9A.6	protein	taxon:6239	20140510	InterPro		
+UniProtKB	A0A9S2	CELE_Y38F2AR.12		GO:0016787	GO_REF:0000002	IEA	InterPro:IPR002821	F	Protein Y38F2AR.12, isoform a	A0A9S2_CAEEL|CELE_Y38F2AR.12|Y38F2AR.12	protein	taxon:6239	20140510	InterPro		
+UniProtKB	A0AAC1	dlc-3		GO:0005875	GO_REF:0000002	IEA	InterPro:IPR001372	C	Protein DLC-3, isoform b	A0AAC1_CAEEL|dlc-3|CELE_Y10G11A.2|Y10G11A.2	protein	taxon:6239	20140510	InterPro		
+UniProtKB	A0AAC1	dlc-3		GO:0007017	GO_REF:0000002	IEA	InterPro:IPR001372	P	Protein DLC-3, isoform b	A0AAC1_CAEEL|dlc-3|CELE_Y10G11A.2|Y10G11A.2	protein	taxon:6239	20140510	InterPro		
+UniProtKB	A0FLQ6	polq-1		GO:0003677	GO_REF:0000002	IEA	InterPro:IPR001098|InterPro:IPR002298	F	Protein POLQ-1	A0FLQ6_CAEEL|polq-1|CELE_W03A3.2|W03A3.2	protein	taxon:6239	20140510	InterPro		
+UniProtKB	A0FLQ6	polq-1		GO:0003887	GO_REF:0000002	IEA	InterPro:IPR001098|InterPro:IPR002298|InterPro:IPR019760	F	Protein POLQ-1	A0FLQ6_CAEEL|polq-1|CELE_W03A3.2|W03A3.2	protein	taxon:6239	20140510	InterPro		
+UniProtKB	A0FLQ6	polq-1		GO:0005524	GO_REF:0000002	IEA	InterPro:IPR001650|InterPro:IPR011545	F	Protein POLQ-1	A0FLQ6_CAEEL|polq-1|CELE_W03A3.2|W03A3.2	protein	taxon:6239	20140510	InterPro		
+UniProtKB	A0FLQ6	polq-1		GO:0008026	GO_REF:0000002	IEA	InterPro:IPR011545	F	Protein POLQ-1	A0FLQ6_CAEEL|polq-1|CELE_W03A3.2|W03A3.2	protein	taxon:6239	20140510	InterPro		
+UniProtKB	A0FLQ8	xbp-1		GO:0000977	PMID:24068940	IDA		F	Protein XBP-1, isoform a	A0FLQ8_CAEEL|xbp-1|CELE_R74.3|R74.3	protein	taxon:6239	20131113	WormBase	happens_during(GO:0030968),has_direct_input(WB:WBGene00004804)	
+UniProtKB	A0FLQ8	xbp-1		GO:0002119	PMID:11779465	IGI	WB:WBGene00003970	P	Protein XBP-1, isoform a	A0FLQ8_CAEEL|xbp-1|CELE_R74.3|R74.3	protein	taxon:6239	20131016	WormBase		
+UniProtKB	A0FLQ8	xbp-1		GO:0003700	GO_REF:0000002	IEA	InterPro:IPR004827	F	Protein XBP-1, isoform a	A0FLQ8_CAEEL|xbp-1|CELE_R74.3|R74.3	protein	taxon:6239	20140510	InterPro		
+UniProtKB	A0FLQ8	xbp-1		GO:0005634	PMID:15317844	IDA		C	Protein XBP-1, isoform a	A0FLQ8_CAEEL|xbp-1|CELE_R74.3|R74.3	protein	taxon:6239	20080108	WormBase		
+UniProtKB	A0FLQ8	xbp-1		GO:0006990	PMID:11779465	IMP	WB:WBRNAi00077405	P	Protein XBP-1, isoform a	A0FLQ8_CAEEL|xbp-1|CELE_R74.3|R74.3	protein	taxon:6239	20131016	WormBase	has_regulation_target(WB:WBGene00002007),in_presence_of(CHEBI:18320)|has_regulation_target(WB:WBGene00002008),in_presence_of(CHEBI:18320)|has_regulation_target(WB:WBGene00002007),in_presence_of(CHEBI:29699)|has_regulation_target(WB:WBGene00002008),in_presence_of(CHEBI:29699)	
+UniProtKB	A0FLQ8	xbp-1		GO:0006990	PMID:11780124	IMP	WB:WBVar00275455	P	Protein XBP-1, isoform a	A0FLQ8_CAEEL|xbp-1|CELE_R74.3|R74.3	protein	taxon:6239	20131025	WormBase	has_regulation_target(WB:WBGene00002008),in_presence_of(CHEBI:29699)	
+UniProtKB	A0FLQ8	xbp-1		GO:0006990	PMID:16184190	IMP		P	Protein XBP-1, isoform a	A0FLQ8_CAEEL|xbp-1|CELE_R74.3|R74.3	protein	taxon:6239	20131015	WormBase	has_regulation_target(WB:WBGene00002783)	
+UniProtKB	A0FLQ8	xbp-1		GO:0030968	PMID:11779465	IEP		P	Protein XBP-1, isoform a	A0FLQ8_CAEEL|xbp-1|CELE_R74.3|R74.3	protein	taxon:6239	20131016	WormBase	in_presence_of(CHEBI:29699)|in_presence_of(CHEBI:18320)	
+UniProtKB	A0FLQ8	xbp-1		GO:0030968	PMID:11779465	IGI	WB:WBGene00003970	P	Protein XBP-1, isoform a	A0FLQ8_CAEEL|xbp-1|CELE_R74.3|R74.3	protein	taxon:6239	20131016	WormBase		
+UniProtKB	A0N8F1	sul-3		GO:0008484	GO_REF:0000002	IEA	InterPro:IPR000917	F	Protein SUL-3, isoform b	A0N8F1_CAEEL|sul-3|C54D2.4|CELE_C54D2.4	protein	taxon:6239	20140510	InterPro		
+UniProtKB	A0PD34	CELE_VM106R.1		GO:0051260	GO_REF:0000002	IEA	InterPro:IPR003131	P	Protein VM106R.1	A0PD34_CAEEL|CELE_VM106R.1|VM106R.1	protein	taxon:6239	20140510	InterPro		

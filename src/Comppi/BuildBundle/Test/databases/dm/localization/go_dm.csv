@@ -1,0 +1,30 @@
+!gaf-version: 2.0
+!
+!The set of protein accessions included in this file is based on UniProt complete proteomes, which may provide more than one protein per gene.
+!They include all Swiss-Prot entries for the species plus any TrEMBL entries that have an Ensembl DR line. The TrEMBL entries are likely to overlap with the Swiss-Prot entries or their isoforms.
+!If a particular protein accession is not annotated with GO, then it will not appear in this file.
+!
+!Note that the annotation set in this file is filtered in order to reduce redundancy; the full, unfiltered set can be found in
+!ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gene_association.goa_uniprot.gz
+!
+UniProtKB	A0A1F4	eys		GO:0000902	PMID:18297055	IMP		P	Protein eyes shut	EYS_DROME|eys|spam|CG33955	protein	taxon:7227	20101021	FlyBase		
+UniProtKB	A0A1F4	eys		GO:0005201	PMID:18297055	IMP		F	Protein eyes shut	EYS_DROME|eys|spam|CG33955	protein	taxon:7227	20101021	FlyBase		
+UniProtKB	A0A1F4	eys		GO:0005509	GO_REF:0000002	IEA	InterPro:IPR001881|InterPro:IPR018097	F	Protein eyes shut	EYS_DROME|eys|spam|CG33955	protein	taxon:7227	20140510	InterPro		
+UniProtKB	A0A1F4	eys		GO:0005515	PMID:19672878	IPI	UniProtKB:O97148	F	Protein eyes shut	EYS_DROME|eys|spam|CG33955	protein	taxon:7227	20091201	UniProt		
+UniProtKB	A0A1F4	eys		GO:0005576	PMID:17036004	IDA		C	Protein eyes shut	EYS_DROME|eys|spam|CG33955	protein	taxon:7227	20130912	FlyBase		
+UniProtKB	A0A1F4	eys		GO:0005615	PMID:17011488	IDA		C	Protein eyes shut	EYS_DROME|eys|spam|CG33955	protein	taxon:7227	20080516	UniProt		
+UniProtKB	A0A1F4	eys		GO:0009986	PMID:17036004	IDA		C	Protein eyes shut	EYS_DROME|eys|spam|CG33955	protein	taxon:7227	20130912	FlyBase		
+UniProtKB	A0A1F4	eys		GO:0010378	PMID:19874792	IMP		P	Protein eyes shut	EYS_DROME|eys|spam|CG33955	protein	taxon:7227	20100325	FlyBase		
+UniProtKB	A0A1F4	eys		GO:0016021	GO_REF:0000037	IEA	UniProtKB-KW:KW-0812	C	Protein eyes shut	EYS_DROME|eys|spam|CG33955	protein	taxon:7227	20140510	UniProt		
+UniProtKB	A0A1F4	eys		GO:0031513	PMID:19097904	IDA		C	Protein eyes shut	EYS_DROME|eys|spam|CG33955	protein	taxon:7227	20131114	FlyBase		
+UniProtKB	A0A1F4	eys		GO:0042052	PMID:17011488	IMP		P	Protein eyes shut	EYS_DROME|eys|spam|CG33955	protein	taxon:7227	20080516	UniProt		
+UniProtKB	A0A1F4	eys		GO:0042052	PMID:17036004	IMP		P	Protein eyes shut	EYS_DROME|eys|spam|CG33955	protein	taxon:7227	20070523	FlyBase		
+UniProtKB	A0AQH0	Prosbeta1		GO:0004298	GO_REF:0000038	IEA	UniProtKB-KW:KW-0888	F	Proteasome subunit beta type	A0AQH0_DROME|Prosbeta1|l(2)05070|l(2)05070-RA|CG8392|Dmel_CG8392	protein	taxon:7227	20140510	UniProt		
+UniProtKB	A0AQH0	Prosbeta1		GO:0005634	GO_REF:0000040	IEA	UniProtKB-SubCell:SL-0191	C	Proteasome subunit beta type	A0AQH0_DROME|Prosbeta1|l(2)05070|l(2)05070-RA|CG8392|Dmel_CG8392	protein	taxon:7227	20140510	UniProt		
+UniProtKB	A0AQH0	Prosbeta1		GO:0005737	GO_REF:0000040	IEA	UniProtKB-SubCell:SL-0086	C	Proteasome subunit beta type	A0AQH0_DROME|Prosbeta1|l(2)05070|l(2)05070-RA|CG8392|Dmel_CG8392	protein	taxon:7227	20140510	UniProt		
+UniProtKB	A0AQH0	Prosbeta1		GO:0005839	PMID:14652013	IDA		C	Proteasome subunit beta type	A0AQH0_DROME|Prosbeta1|l(2)05070|l(2)05070-RA|CG8392|Dmel_CG8392	protein	taxon:7227	20130321	FlyBase		
+UniProtKB	A0AQH0	Prosbeta1		GO:0006974	PMID:19543366	IMP		P	Proteasome subunit beta type	A0AQH0_DROME|Prosbeta1|l(2)05070|l(2)05070-RA|CG8392|Dmel_CG8392	protein	taxon:7227	20090730	FlyBase		
+UniProtKB	A0AQH0	Prosbeta1		GO:0043161	PMID:14652013	IC	GO:0005839	P	Proteasome subunit beta type	A0AQH0_DROME|Prosbeta1|l(2)05070|l(2)05070-RA|CG8392|Dmel_CG8392	protein	taxon:7227	20130321	FlyBase		
+UniProtKB	A0AQH0	Prosbeta1	contributes_to	GO:0004175	PMID:14652013	IC	GO:0005839	F	Proteasome subunit beta type	A0AQH0_DROME|Prosbeta1|l(2)05070|l(2)05070-RA|CG8392|Dmel_CG8392	protein	taxon:7227	20130321	FlyBase		
+UniProtKB	A0AVU4	TkR86C		GO:0004950	GO_REF:0000002	IEA	InterPro:IPR000355	F	Tachykinin-like receptor at 86C, isoform B	A0AVU4_DROME|TkR86C|Takr86C|CG6515|Dmel_CG6515	protein	taxon:7227	20140510	InterPro		
+UniProtKB	A0AVU4	TkR86C		GO:0004995	GO_REF:0000002	IEA	InterPro:IPR001681	F	Tachykinin-like receptor at 86C, isoform B	A0AVU4_DROME|TkR86C|Takr86C|CG6515|Dmel_CG6515	protein	taxon:7227	20140510	InterPro		

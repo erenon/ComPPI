@@ -5,10 +5,10 @@ namespace Comppi\BuildBundle\Service\DatabaseProvider\Parser\Interaction;
 class Mint extends AbstractInteractionParser
 {
     protected static $parsableFileNames = array(
-        '2012-02-06-mint-Caenorhabditis-binary.mitab26.txt',
-        '2012-02-06-mint-Drosophila-binary.mitab26.txt',
-        '2012-02-06-mint-human-binary.mitab26.txt',
-        '2012-02-06-mint-Saccharomyces-binary.mitab26.txt'
+        '2013-03-26-mint-Caenorhabditis-binary.mitab26.txt',
+        '2013-03-26-mint-Drosophila-binary.mitab26.txt',
+        '2013-03-26-mint-human-binary.mitab26.txt',
+        '2013-03-26-mint-Saccharomyces-binary.mitab26.txt'
     );
 
     protected $databaseIdentifier = "MINT";
@@ -27,7 +27,7 @@ class Mint extends AbstractInteractionParser
             }
 
             $recordArray = explode("\t", $line);
-            $this->checkRecordFieldCount($recordArray, 41);
+            $this->checkRecordFieldCount($recordArray, 40);
 
             $proteinA = $this->extractName($recordArray[0]);
             $proteinB = $this->extractName($recordArray[1]);

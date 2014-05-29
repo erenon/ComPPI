@@ -5,10 +5,10 @@ namespace Comppi\BuildBundle\Service\DatabaseProvider\Parser\Interaction;
 class Dip extends AbstractInteractionParser
 {
     protected static $parsableFileNames = array(
-        'Celeg20120228.txt',
-        'Dmela20120228.txt',
-        'Hsapi20120228.txt',
-        'Scere20120228.txt'
+        'Dip_Celeg.txt',
+        'Dip_Dmela.txt',
+        'Dip_Hsapi.txt',
+        'Dip_Scere.txt'
     );
 
     protected $databaseIdentifier = "DIP";

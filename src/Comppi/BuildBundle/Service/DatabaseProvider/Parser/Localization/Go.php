@@ -13,7 +13,12 @@ class Go extends AbstractLocalizationParser
 
     protected $databaseIdentifier = "GO";
 
-    protected $headerCount = 1;
+    protected function dropHeader() {
+    	// Drop lines starting with ! and the true table header
+		do {
+    		$header = fgets($this->fileHandle);
+		} while ($header[0] == '!');
+    }
 
     protected function readRecord() {
         $line = $this->readLine();
@@ -23,20 +28,30 @@ class Go extends AbstractLocalizationParser
         }
 
         /**
-         * 0 => Ensembl Gene ID
-         * 1 => GO Term Accession (localization)
-         *
+		 * 0123456789
+         * abcdefghij
+         * 
+         * 1: uniprotkb-ac name
+         * 4: go code
+         * 6: exp sys type
+         * 8: loc type, only C is needed
+         * 
          * @var array
          */
-        $recordArray = explode(',', $line);
-        $this->checkRecordFieldCount($recordArray, 2);
+        $recordArray = explode("\t", $line);
+        // Seems to be not deterministic
+        //$this->checkRecordFieldCount($recordArray, 15);
+        
+        if ($recordArray[8] != 'C') {
+        	return $this->readRecord();
+        }
 
         $this->currentRecord = array(
-            'proteinId' => $recordArray[0],
-            'namingConvention' => 'EnsemblGeneId',
-            'localization' => $recordArray[1],
+            'proteinId' => $recordArray[1],
+            'namingConvention' => 'UniProtKB-AC',
+            'localization' => $recordArray[4],
             'pubmedId' => 10802651,
-            'experimentalSystemType' => 'not available'
+            'experimentalSystemType' => $recordArray[6]
         );
     }
 }
