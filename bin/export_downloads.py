@@ -37,8 +37,9 @@ class ComppiInterface(object):
 		2 : '6239', # C. elegans
 		3 : '4932' # S. cerevisiae
 	}
-	locs 		= frozenset(['cytoplasm', 'secretory-pathway', 'nucleus', 'membrane'])
-	
+	locs 		= frozenset(['cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane'])
+
+
 	def __init__(self):
 		logging.basicConfig(
 				filename = self.log_file,
@@ -141,17 +142,17 @@ class ComppiInterface(object):
 	def exportEdgesToCsv(self, sp):
 		# @TODO: Syn A (UniProt Full / first mapping)	Syn B (UniProt Full / first mapping)	Interaction Score
 		nodes_iter			= self.loadActors(sp)
-		edges_iter			= self.loadInteractions()
-		#int_exp_sys_types	= self.loadInteractionSysTypes()
-		#edges_iter		= self.loadInteractionsWithExpSysType()
-		#locs		= self.loadLocalizations(loc)
+		#edges_iter			= self.loadInteractions()
+		#int_exp_sys_types	= self.loadInteractionExpSysTypes()
+		edges_iter			= self.loadInteractionsWithExpSysType()
+		#locs				= self.loadLocalizations(loc)
 		
 		# extract protein names as: {comppi_id: (protein name, species)}
 		proteins = {}
-		#species = {}
+		tax_ids = {}
 		for pid, sp, name in nodes_iter:
 			proteins[pid] = name
-			#species[pid] = sp
+			tax_ids[pid] = self.specii.get(int(sp))
 		
 		out_f = os.path.join(self.output_dir, 'interactions.csv')
 		num_rows = 0
@@ -161,24 +162,24 @@ class ComppiInterface(object):
 			csvw.writerow([
 				'Interactor A',
 				'Interactor B',
-				#'Interaction Experimental System Type',
+				'Interaction Experimental System Type',
 				'Interaction Source Database',
 				'PubmedID',
 				#'TaxID'
 			])
 			# data
-			for int_id, actor_a_id, actor_b_id, source_db, pubmed_id in edges_iter:
+			for int_id, actor_a_id, actor_b_id, source_db, pubmed_id, exp_sys_type in edges_iter:
 				num_rows += 1
 				csvw.writerow([
 					proteins.get(actor_a_id),
 					proteins.get(actor_b_id),
-					#exp_sys_type,
+					exp_sys_type,
 					#int_exp_sys_types.get(int_id),
 					source_db,
 					pubmed_id,
 					# it is assumed that both interactors are in the same species
 					# -> species of interactor A is used
-					#self.specii.get(species.get(actor_a_id))
+					tax_ids.get(actor_a_id, 'N/A')
 				])
 			
 		self.log.info("exportEdgesToCsv(), {} rows (+header) written to '{}'".format(num_rows, out_f))
@@ -195,24 +196,24 @@ class ComppiInterface(object):
 		
 		return cur
 	
-	#def loadInteractionsWithExpSysType(self):
-	#	sql = """
-	#		SELECT
-	#			i.id, i.actorAId, i.actorBId, i.sourceDb, i.pubmedId, st.name
-	#		FROM
-	#			Interaction i, InteractionToSystemType itst
-	#		LEFT JOIN
-	#			SystemType st ON itst.systemTypeId=st.id
-	#		WHERE
-	#			i.id=itst.interactionId
-	#	"""
-	#	
-	#	self.log.debug("loadInteractionsWithExpSysType():{}".format(sql))
-	#	cur = self.connect()
-	#	cur.execute(sql)
-	#	self.log.info("loadInteractionsWithExpSysType() returning with {} rows""".format(cur.rowcount))
-	#
-	#	return cur
+	def loadInteractionsWithExpSysType(self):
+		sql = """
+			SELECT
+				i.id, i.actorAId, i.actorBId, i.sourceDb, i.pubmedId, st.name
+			FROM
+				Interaction i, InteractionToSystemType itst
+			LEFT JOIN
+				SystemType st ON itst.systemTypeId=st.id
+			WHERE
+				i.id=itst.interactionId
+		"""
+		
+		self.log.debug("loadInteractionsWithExpSysType():{}".format(sql))
+		cur = self.connect()
+		cur.execute(sql)
+		self.log.info("loadInteractionsWithExpSysType() returning with {} rows""".format(cur.rowcount))
+	
+		return cur
 	#
 	#
 	#def loadInteractionExpSysTypes(self):
