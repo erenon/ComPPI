@@ -102,13 +102,18 @@ class ComppiInterface(object):
 	#	return (nodes, edges)
 
 
-	def exportNodesToCsv(self, sp, loc):
+	def exportNodesToCsv(self, sp=-1, loc=''):
 		self.log.info("exportNodesToCsv(), sp: '{}', loc: '{}'".format(sp, loc))
 		# @TODO: Syn (UniProt Full / first mapping)		Localization Score
 		nodes_iter	= self.loadActors(sp)
 		locs		= self.loadLocalizations(loc)
 		
-		out_f = os.path.join(self.output_dir, 'proteins_localizations.csv')
+		if sp not in self.specii:
+			sp = 'all'
+		if loc not in self.locs:
+			loc = 'all'
+		out_f = os.path.join(self.output_dir, 'proteins_localizations-sp_{}-loc_{}.csv'.format(sp, loc))
+		
 		num_rows = 0
 		with open(out_f, 'w', newline='') as fp:
 			csvw = csv.writer(fp, delimiter="\t", quoting=csv.QUOTE_MINIMAL)
@@ -125,36 +130,58 @@ class ComppiInterface(object):
 			# data
 			for actor_id, sp, prot_name in nodes_iter:
 				num_rows += 1
-				ld = locs.get(actor_id, {}) # loc data aggregated per protein
-				csvw.writerow([
-					prot_name,
-					','.join(ld.get('loc_majors', [])),
-					','.join(ld.get('loc_minors', [])),
-					','.join(ld.get('loc_exp_sys', [])),
-					','.join(ld.get('loc_source_dbs', [])),
-					','.join(ld.get('loc_pubmeds', [])),
-					self.specii.get(sp, '')
-				])
+				ld = locs.get(actor_id) # loc data aggregated per protein
+				if ld is not None:
+					csvw.writerow([
+						prot_name,
+						','.join(ld.get('loc_majors', [])),
+						','.join(ld.get('loc_minors', [])),
+						','.join(ld.get('loc_exp_sys', [])),
+						','.join(ld.get('loc_source_dbs', [])),
+						','.join(ld.get('loc_pubmeds', [])),
+						self.specii.get(sp, '')
+					])
 			
 		self.log.info("exportNodesToCsv(), {} rows (+header) written to '{}'".format(num_rows, out_f))
 	
 
-	def exportEdgesToCsv(self, sp):
+	def exportEdgesToCsv(self, sp=-1, loc=''):
 		# @TODO: Syn A (UniProt Full / first mapping)	Syn B (UniProt Full / first mapping)	Interaction Score
+		
+		self.log.info("exportEdgesToCsv(), sp: '{}', loc: '{}'".format(sp, loc))
+
+		prot_ids			= []
+		filter_by_locs		= False
 		nodes_iter			= self.loadActors(sp)
 		#edges_iter			= self.loadInteractions()
 		#int_exp_sys_types	= self.loadInteractionExpSysTypes()
 		edges_iter			= self.loadInteractionsWithExpSysType()
 		#locs				= self.loadLocalizations(loc)
 		
-		# extract protein names as: {comppi_id: (protein name, species)}
+		if sp not in self.specii:
+			sp = 'all'
+		
+		# if localization is specified, get the protein IDs only from that loc
+		if loc not in self.locs:
+			loc = 'all'
+		else:
+			filter_by_locs = True
+			prot_ids = self.getProteinIdsByMajorLoc(loc)
+		
+		#print(sp)
+		#print(loc)
+		#sys.exit()
+		
+		# fetch protein names and taxonomy IDs
 		proteins = {}
 		tax_ids = {}
-		for pid, sp, name in nodes_iter:
-			proteins[pid] = name
-			tax_ids[pid] = self.specii.get(int(sp))
+		for pid, species, name in nodes_iter:
+			if not filter_by_locs or (filter_by_locs and pid in prot_ids):
+				proteins[pid] = name
+				tax_ids[pid] = self.specii.get(int(species))
 		
-		out_f = os.path.join(self.output_dir, 'interactions.csv')
+		# export the edges
+		out_f = os.path.join(self.output_dir, 'interactions-sp_{}-loc_{}.csv'.format(sp, loc))
 		num_rows = 0
 		with open(out_f, 'w', newline='') as fp:
 			csvw = csv.writer(fp, delimiter="\t", quoting=csv.QUOTE_MINIMAL)
@@ -169,18 +196,19 @@ class ComppiInterface(object):
 			])
 			# data
 			for int_id, actor_a_id, actor_b_id, source_db, pubmed_id, exp_sys_type in edges_iter:
-				num_rows += 1
-				csvw.writerow([
-					proteins.get(actor_a_id),
-					proteins.get(actor_b_id),
-					exp_sys_type,
-					#int_exp_sys_types.get(int_id),
-					source_db,
-					pubmed_id,
-					# it is assumed that both interactors are in the same species
-					# -> species of interactor A is used
-					tax_ids.get(actor_a_id, 'N/A')
-				])
+				if not filter_by_locs or (filter_by_locs and pid in prot_ids):
+					num_rows += 1
+					csvw.writerow([
+						proteins.get(actor_a_id),
+						proteins.get(actor_b_id),
+						exp_sys_type,
+						#int_exp_sys_types.get(int_id),
+						source_db,
+						pubmed_id,
+						# it is assumed that both interactors are in the same species
+						# -> species of interactor A is used
+						tax_ids.get(actor_a_id, 'N/A')
+					])
 			
 		self.log.info("exportEdgesToCsv(), {} rows (+header) written to '{}'".format(num_rows, out_f))
 
@@ -231,16 +259,30 @@ class ComppiInterface(object):
 	#	return dict(cur)
 
 
-	def loadActors(self, sp=''):
-		sql = "SELECT id, specieId, proteinName FROM Protein"
-		if sp in self.specii:
-			sql += " WHERE specieId=" + str(sp)
+	def loadActors(self, sp=-1):
+		""" Load the list of interactors (proteins).
 		
-		self.log.debug("loadActors():\n{}".format(sql))
+			If the species is not defined (or not found in the predefined species pool), all proteins will be returned.
+		
+			param sp: int, optional, the ID of the species. It is not a taxonomy ID, rather an integer between 0 and 3. See self.specii for further information.
+			
+			returns: python-mysql.connector cursor object (iterable).
+		"""
+		self.log.debug("loadActors() started")
 		cur = self.connect()
-		cur.execute(sql)
-		self.log.info("loadActors() returning with {} rows""".format(cur.rowcount))
+		if sp in self.specii:
+			sql = """
+				SELECT id, specieId, proteinName FROM Protein WHERE specieId = %s
+			"""
+			cur.execute(sql, (sp,))
+		else:
+			sql = """
+				SELECT id, specieId, proteinName FROM Protein
+			"""
+			cur.execute(sql)
+		self.log.debug("loadActors():\n{}".format(cur.statement))
 		
+		self.log.info("loadActors() returning with {} rows""".format(cur.rowcount))
 		return cur
 	
 
@@ -249,24 +291,39 @@ class ComppiInterface(object):
 
 
 	def loadLocalizations(self, loc):
-		sql = """
-			SELECT DISTINCT
-				ptl.proteinId as pid, ptl.sourceDb, ptl.pubmedId,
-				lt.name as minorLocName, lt.goCode as minorLocGo, lt.majorLocName,
-				st.name AS exp_sys, st.confidenceType AS exp_sys_type
-			FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
-			LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
-			WHERE
-				ptl.id=pltst.protLocId AND
-				pltst.systemTypeId=st.id
-		"""
+		self.log.debug("loadLocalizations() started")
 		
-		if loc in self.locs:
-			sql += " AND lt.majorLocName='%s'".format(loc)
-		
-		self.log.debug("loadLocalizations():\n{}".format(sql))
 		cur = self.connect()
-		cur.execute(sql)
+		if loc in self.locs:
+			sql = """
+				SELECT DISTINCT
+					ptl.proteinId as pid, ptl.sourceDb, ptl.pubmedId,
+					lt.name as minorLocName, lt.goCode as minorLocGo, lt.majorLocName,
+					st.name AS exp_sys, st.confidenceType AS exp_sys_type
+				FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
+				LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
+				WHERE
+					ptl.id=pltst.protLocId AND
+					pltst.systemTypeId=st.id AND
+					lt.majorLocName = %s
+			"""
+			cur.execute(sql, (loc,))
+		else:
+			sql = """
+				SELECT DISTINCT
+					ptl.proteinId as pid, ptl.sourceDb, ptl.pubmedId,
+					lt.name as minorLocName, lt.goCode as minorLocGo, lt.majorLocName,
+					st.name AS exp_sys, st.confidenceType AS exp_sys_type
+				FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
+				LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
+				WHERE
+					ptl.id=pltst.protLocId AND
+					pltst.systemTypeId=st.id
+			"""
+			cur.execute(sql)
+		
+		
+		self.log.debug("loadLocalizations():\n{}".format(cur.statement))
 		
 		# make a dictionary of it for fast access
 		# there can be multiple localizations for a single protein
@@ -295,7 +352,28 @@ class ComppiInterface(object):
 		return d
 
 
+	def getProteinIdsByMajorLoc(self, loc):
+		cur = self.connect()
+		sql = """
+			SELECT DISTINCT ptl.proteinId
+			FROM ProteinToLocalization ptl
+			LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
+			WHERE
+				lt.majorLocName = %s
+		"""
+		cur.execute(sql, (loc,))
+		
+		return [l[0] for l in cur]
+	
+
 if __name__ == '__main__':
 	c = ComppiInterface()
-	#c.exportNodesToCsv('', '')
-	c.exportEdgesToCsv('')
+	c.exportNodesToCsv()
+	c.exportEdgesToCsv()
+	
+	for sp in c.specii:
+		for loc in c.locs:
+			c.exportNodesToCsv(sp, loc)
+			c.exportEdgesToCsv(sp, loc)
+		
+	
