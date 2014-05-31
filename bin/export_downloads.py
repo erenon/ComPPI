@@ -23,7 +23,7 @@ class ComppiInterface(object):
 	"""
 
 	cfg_file 	= os.path.join('..', 'app', 'config', 'parameters.ini')
-	log_file	= os.path.join('..', 'web', 'export_downloads.log')
+	log_file	= os.path.join('..', 'web', 'download', 'export_downloads.log')
 	output_dir 	= os.path.join('..', 'web', 'download')
 	db_conn		= None
 	cursor		= None
