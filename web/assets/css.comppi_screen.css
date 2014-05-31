@@ -54,12 +54,10 @@ body  {
 	line-height: 150%;
 	color:  #000;
 }
-.ContentWithBg {  }
 #Footer {
 	clear: both;
-	background: #fff;
-	margin: 5em auto 0 auto;
-	padding: 4em 0 0 0;
+	margin: 5em auto 2em auto;
+	padding: 1em 0 0 0;
 	text-align: center;
 	vertical-align: bottom;
 }
