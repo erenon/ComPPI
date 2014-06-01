@@ -86,7 +86,7 @@ class DownloadCenterController extends Controller
 		$T['releases_ls'] = array();
 		$d = dir($this->releases_dir);
         while (false !== ($entry = $d->read())) {
-            if ($entry!='.' && $entry!='..' && $entry!=$this->current_db_sql)
+            if ($entry!='.' && $entry!='..' && $entry!=$this->current_db_sql && $entry!='.htaccess' && $entry!='stable')
             {
                 $entry = array(
                     'file' => $entry,
