@@ -38,7 +38,7 @@ $(document).ready(function(){
 	$("#DlSpeciesButtons").buttonset();
 	$("#DlLocButtons").buttonset();*/
 	
-	// PROTEIN SEARCH
+	// DOWNLOADS
 	$("input[name='fDlSet']").change(function() {
 		switch(this.value) {
 			case "comp":
