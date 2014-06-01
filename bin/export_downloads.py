@@ -37,7 +37,7 @@ class ComppiInterface(object):
 		2 : '6239', # C. elegans
 		3 : '4932' # S. cerevisiae
 	}
-	locs 		= frozenset(['cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane'])
+	locs 		= ['cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane']
 
 
 	def __init__(self):
@@ -79,29 +79,6 @@ class ComppiInterface(object):
 		return self.db_conn.cursor(buffered=True)
 
 
-	#def assembleAll(self, sp, loc):
-	#	nodes_iter	= self.loadActors(sp)
-	#	edges_iter	= self.loadInteractions()
-	#	locs		= self.loadLocalizations(loc)
-	#	
-	#	nodes = {}
-	#	for actor_id, sp, name in nodes_iter:
-	#		node_loc_data = locs.get(actor_id)
-	#		if node_loc_data is not None:
-	#			nodes[actor_id] 			= node_loc_data.copy()
-	#			nodes[actor_id]['name'] 	= name
-	#			nodes[actor_id]['species'] 	= species
-	#	
-	#	edges = {}
-	#	for actor_a, actor_b, source_db, pubmed_id in edges_iter:
-	#		if actor_a in nodes or actor_b in nodes:
-	#			ed = edges.setdefault((actor_a, actor_b), {'source_dbs': [], 'pubmeds': []})
-	#			ed['source_dbs'].append(source_db)
-	#			ed['pubmeds'].append(pubmed_id)
-	#	
-	#	return (nodes, edges)
-
-
 	def exportNodesToCsv(self, sp=-1, loc=''):
 		self.log.info("exportNodesToCsv(), sp: '{}', loc: '{}'".format(sp, loc))
 		# @TODO: Syn (UniProt Full / first mapping)		Localization Score
@@ -112,7 +89,7 @@ class ComppiInterface(object):
 			sp = 'all'
 		if loc not in self.locs:
 			loc = 'all'
-		out_f = os.path.join(self.output_dir, 'proteins_localizations-sp_{}-loc_{}.csv'.format(sp, loc))
+		out_f = os.path.join(self.output_dir, 'comppi--proteins_localizations-sp_{}-loc_{}.txt'.format(sp, loc))
 		
 		num_rows = 0
 		with open(out_f, 'w', newline='') as fp:
@@ -120,6 +97,7 @@ class ComppiInterface(object):
 			# header
 			csvw.writerow([
 				'Protein Name',
+				'Naming Convention',
 				'Major Loc',
 				'Minor Loc',
 				'Experimental System Type',
@@ -128,12 +106,13 @@ class ComppiInterface(object):
 				'TaxID'
 			])
 			# data
-			for actor_id, sp, prot_name in nodes_iter:
+			for actor_id, sp, prot_name, naming_conv in nodes_iter:
 				num_rows += 1
 				ld = locs.get(actor_id) # loc data aggregated per protein
 				if ld is not None:
 					csvw.writerow([
 						prot_name,
+						naming_conv,
 						','.join(ld.get('loc_majors', [])),
 						','.join(ld.get('loc_minors', [])),
 						','.join(ld.get('loc_exp_sys', [])),
@@ -150,13 +129,10 @@ class ComppiInterface(object):
 		
 		self.log.info("exportEdgesToCsv(), sp: '{}', loc: '{}'".format(sp, loc))
 
-		prot_ids			= []
-		filter_by_locs		= False
-		nodes_iter			= self.loadActors(sp)
-		#edges_iter			= self.loadInteractions()
-		#int_exp_sys_types	= self.loadInteractionExpSysTypes()
-		edges_iter			= self.loadInteractionsWithExpSysType()
-		#locs				= self.loadLocalizations(loc)
+		filtered_prot_ids			= []
+		filter_by_locs				= False
+		nodes_iter					= self.loadActors(sp)
+		edges_iter					= self.loadInteractionsWithExpSysType()
 		
 		if sp not in self.specii:
 			sp = 'all'
@@ -166,22 +142,21 @@ class ComppiInterface(object):
 			loc = 'all'
 		else:
 			filter_by_locs = True
-			prot_ids = self.getProteinIdsByMajorLoc(loc)
-		
-		#print(sp)
-		#print(loc)
-		#sys.exit()
+			filtered_prot_ids = self.getProteinIdsByMajorLoc(loc)
+			print("Number of filtered proteins: {}".format(len(filtered_prot_ids)))
 		
 		# fetch protein names and taxonomy IDs
 		proteins = {}
-		tax_ids = {}
-		for pid, species, name in nodes_iter:
-			if not filter_by_locs or (filter_by_locs and pid in prot_ids):
-				proteins[pid] = name
-				tax_ids[pid] = self.specii.get(int(species))
+		for pid, species, name, naming_conv in nodes_iter:
+			if not filter_by_locs or (filter_by_locs and pid in filtered_prot_ids):
+				proteins[pid] = ( name, naming_conv, self.specii.get(int(species)) )
+		
+		print("Number of protein names: {}".format(len(proteins)))
+		
+		print("Filter by locs: {}".format(filter_by_locs))
 		
 		# export the edges
-		out_f = os.path.join(self.output_dir, 'interactions-sp_{}-loc_{}.csv'.format(sp, loc))
+		out_f = os.path.join(self.output_dir, 'comppi--interactions-sp_{}-loc_{}.txt'.format(sp, loc))
 		num_rows = 0
 		with open(out_f, 'w', newline='') as fp:
 			csvw = csv.writer(fp, delimiter="\t", quoting=csv.QUOTE_MINIMAL)
@@ -189,6 +164,8 @@ class ComppiInterface(object):
 			csvw.writerow([
 				'Interactor A',
 				'Interactor B',
+				'Naming Convention A',
+				'Naming Convention B',
 				'Interaction Experimental System Type',
 				'Interaction Source Database',
 				'PubmedID',
@@ -196,18 +173,22 @@ class ComppiInterface(object):
 			])
 			# data
 			for int_id, actor_a_id, actor_b_id, source_db, pubmed_id, exp_sys_type in edges_iter:
-				if not filter_by_locs or (filter_by_locs and pid in prot_ids):
+				actor_a = proteins.get(actor_a_id)
+				actor_b = proteins.get(actor_b_id)
+				if actor_a is not None and actor_b is not None:
 					num_rows += 1
 					csvw.writerow([
-						proteins.get(actor_a_id),
-						proteins.get(actor_b_id),
+						actor_a[0], # protein name for actor A
+						actor_b[0], # protein name for actor B
+						actor_a[1], # naming convention for actor A
+						actor_b[1], # naming convention for actor B
 						exp_sys_type,
 						#int_exp_sys_types.get(int_id),
 						source_db,
 						pubmed_id,
 						# it is assumed that both interactors are in the same species
 						# -> species of interactor A is used
-						tax_ids.get(actor_a_id, 'N/A')
+						actor_a[2]
 					])
 			
 		self.log.info("exportEdgesToCsv(), {} rows (+header) written to '{}'".format(num_rows, out_f))
@@ -215,15 +196,13 @@ class ComppiInterface(object):
 	
 	def loadInteractions(self):
 		cur = self.connect()
-		# selecting all the interactions and filtering them later is
-		# much faster even if the memory footpring is larger
-		# than pre-filtering them
 		sql = "SELECT id, actorAId, actorBId, sourceDb, pubmedId FROM Interaction"
 		self.log.debug(sql)
 		cur.execute(sql)
 		
 		return cur
-	
+
+
 	def loadInteractionsWithExpSysType(self):
 		sql = """
 			SELECT
@@ -242,21 +221,6 @@ class ComppiInterface(object):
 		self.log.info("loadInteractionsWithExpSysType() returning with {} rows""".format(cur.rowcount))
 	
 		return cur
-	#
-	#
-	#def loadInteractionExpSysTypes(self):
-	#	sql = """
-	#		SELECT DISTINCT interactionId, st.name
-	#		FROM InteractionToSystemType itst
-	#		LEFT JOIN SystemType st ON itst.systemTypeId=st.id
-	#	"""
-	#	
-	#	self.log.debug("loadInteractionSysTypes():{}".format(sql))
-	#	cur = self.connect()
-	#	cur.execute(sql)
-	#	self.log.info("loadInteractionSysTypes() returning with {} rows""".format(cur.rowcount))
-	#	
-	#	return dict(cur)
 
 
 	def loadActors(self, sp=-1):
@@ -272,12 +236,15 @@ class ComppiInterface(object):
 		cur = self.connect()
 		if sp in self.specii:
 			sql = """
-				SELECT id, specieId, proteinName FROM Protein WHERE specieId = %s
+				SELECT id, specieId, proteinName, proteinNamingConvention
+				FROM Protein
+				WHERE specieId = %s
 			"""
 			cur.execute(sql, (sp,))
 		else:
 			sql = """
-				SELECT id, specieId, proteinName FROM Protein
+				SELECT id, specieId, proteinName, proteinNamingConvention
+				FROM Protein
 			"""
 			cur.execute(sql)
 		self.log.debug("loadActors():\n{}".format(cur.statement))
@@ -368,12 +335,18 @@ class ComppiInterface(object):
 
 if __name__ == '__main__':
 	c = ComppiInterface()
-	c.exportNodesToCsv()
-	c.exportEdgesToCsv()
+	all_specii = c.specii
+	all_locs = c.locs
+	del c
 	
-	for sp in c.specii:
-		for loc in c.locs:
-			c.exportNodesToCsv(sp, loc)
-			c.exportEdgesToCsv(sp, loc)
+	all_specii['all'] = 'all'
+	all_locs.append('all')
+
+	for sp in all_specii:
+		for loc in all_locs:
+			ci = ComppiInterface()
+			ci.exportNodesToCsv(sp, loc)
+			ci.exportEdgesToCsv(sp, loc)
+			del ci
 		
 	
