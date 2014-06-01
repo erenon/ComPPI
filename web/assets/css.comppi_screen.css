@@ -305,7 +305,7 @@ input { height: 25px; }
 
 #DownloadCenterForm { text-align: center; }
 #DownloadCenterForm table { border: 0; margin: 0 25px; width: 100%; border-collapse: collapse; text-align: left; }
-#DownloadCenterForm td { padding: 5px; width: 18%; height: 200px; vertical-align: top; }
+#DownloadCenterForm td { padding: 5px; width: 18%; height: 210px; vertical-align: top; }
 #DownloadCenterForm td:first-child { width: 28%; }
 
 #DlSpeciesButtons-All { font-style: normal; }
