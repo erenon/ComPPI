@@ -46,10 +46,6 @@ class DownloadCenterController extends Controller
 		
         $T = array();
 		
-		$T['curr_release_file'] = $this->current_db_sql;
-		$T['curr_release_fsize'] = number_format((filesize($this->releases_dir.$this->current_db_sql)/1048576), 2, '.', ' '); // show in MB
-        $T['curr_release_fmtime'] = date("Y-m-d. H:i:s", filemtime($this->releases_dir.$this->current_db_sql));
-		
 		$request = $this->getRequest();
 		if ($request->getMethod() == 'POST')
 		{
@@ -82,7 +78,7 @@ class DownloadCenterController extends Controller
 			$this->serveFile($dl_path);
 		}
 		
-		# previous releases directory
+		# all releases
 		$T['releases_ls'] = array();
 		$d = dir($this->releases_dir);
         while (false !== ($entry = $d->read())) {
@@ -97,7 +93,16 @@ class DownloadCenterController extends Controller
             }
         }
         $d->close();
-        ksort($T['releases_ls']);
+		
+		$curr_release_mtime = date("Y-m-d. H:i:s", filemtime($this->releases_dir.$this->current_db_sql));
+		$curr_release_entry = array(
+			'file' => $this->current_db_sql,
+			'size' => number_format((filesize($this->releases_dir.$this->current_db_sql)/1048576), 2, '.', ' '), // show in MB
+			'mtime' => $curr_release_mtime
+		);
+		# current release entry ensures that curr. release is displayed exactly once
+		$T['releases_ls'][$curr_release_mtime] = $curr_release_entry;
+		krsort($T['releases_ls']);
 		
         return $this->render('DownloadCenterBundle:DownloadCenter:downloadcenter.html.twig', $T);
     }

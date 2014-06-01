@@ -297,7 +297,7 @@ input { height: 25px; }
 /*#DownloadForm { text-align: left; margin-top: 1em; }
 #fDownloadLocFine { width: 780px; height: 10em; background: #505050; }
 #fDownloadSpecHsBtn, #fDownloadSpecDmBtn, #fDownloadSpecCeBtn, #fDownloadSpecScBtn { font-style: italic; }*/
-#DlSetHelpDisplay { margin: 0 30px; padding: 0; width: 100%; /*height: 1em;*/ }
+#DlSetHelpDisplay { margin: 0 30px; padding: 0; width: 100%; height: 4em; }
 .DlSetHelp { display: none; }
 
 #dlCenterReleases { margin: 0; padding: 5px 50px; }
@@ -305,7 +305,8 @@ input { height: 25px; }
 
 #DownloadCenterForm { text-align: center; }
 #DownloadCenterForm table { border: 0; margin: 0 25px; width: 100%; border-collapse: collapse; text-align: left; }
-#DownloadCenterForm td { padding: 5px; width: 25%; height: 180px; vertical-align: top; }
+#DownloadCenterForm td { padding: 5px; width: 18%; height: 180px; vertical-align: top; }
+#DownloadCenterForm td:first-child { width: 28%; }
 
 #DlSpeciesButtons-All { font-style: normal; }
 
