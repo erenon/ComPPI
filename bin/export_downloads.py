@@ -5,6 +5,7 @@ sudo pip3 install numpy
 """
 
 #!/usr/bin/python3
+import argparse
 import logging
 import os
 import configparser
@@ -334,19 +335,48 @@ class ComppiInterface(object):
 	
 
 if __name__ == '__main__':
-	c = ComppiInterface()
-	all_specii = c.specii
-	all_locs = c.locs
-	del c
+	parser = argparse.ArgumentParser()
+	parser.add_argument('-a', '--auto', required=True, help="Automatic mode: 1 (on) or 0 (off), decides if all combinations are generated automatically.")
+	parser.add_argument('-t', '--type', required=True, help="Type: 'interactions' or 'proteins'. Only if auto==0.")
+	parser.add_argument('-s', '--species', required=True, help="Species, [0-4] or 'all'. Only if auto==0.")
+	parser.add_argument('-l', '--loc', required=True, help="Major loc: 'cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane' or 'all'. Only if auto==0.")
+	args = parser.parse_args()
 	
-	all_specii['all'] = 'all'
-	all_locs.append('all')
-
-	for sp in all_specii:
-		for loc in all_locs:
-			ci = ComppiInterface()
-			ci.exportNodesToCsv(sp, loc)
-			ci.exportEdgesToCsv(sp, loc)
-			del ci
+	if int(args.auto) == 1:
+		c = ComppiInterface()
+		all_specii = c.specii
+		all_locs = c.locs
+		del c
 		
+		all_specii['all'] = 'all'
+		all_locs.append('all')
 	
+		for sp in all_specii:
+			for loc in all_locs:
+				ci = ComppiInterface()
+				ci.exportNodesToCsv(sp, loc)
+				ci.exportEdgesToCsv(sp, loc)
+				del ci
+	else:
+		c = ComppiInterface()
+		
+		if args.species == 'all':
+			sp = 'all'
+		elif int(args.species) in c.specii:
+			sp = int(args.species)
+		else:
+			raise InputError("Invalid species argument!")
+	
+		if args.loc == 'all' or args.loc in c.locs:
+			loc = args.loc
+		elif int(args.loc) in c.locs:
+			loc=int(args.loc)
+		else:
+			raise InputError("Invalid major loc argument!")
+		
+		if args.type == 'interactions':
+			c.exportEdgesToCsv(sp, loc)
+		elif args.type == 'proteins':
+			c.exportNodesToCsv(sp, loc)
+		else:
+			raise InputError("Invalid type argument!")
