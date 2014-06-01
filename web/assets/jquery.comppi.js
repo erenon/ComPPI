@@ -110,6 +110,11 @@ $(function() {
 	});
 });
 
+// protein search tooltips
+$(function() {
+	$( document ).tooltip();
+});
+
 // show/hide protein interaction details
 $(function() {
 	$(".ps-actorBDetails").hide();

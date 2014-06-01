@@ -63,13 +63,13 @@ class DownloadCenterController extends Controller
 			}
 			
 			$species = 'all';
-			if (!empty($_POST["fDlSpec"]) and isset($this->specii[$_POST["fDlSpec"]]))
+			if (isset($_POST["fDlSpec"]) and isset($this->specii[$_POST["fDlSpec"]]))
 			{
 				$species = $_POST["fDlSpec"];
 			}
 			
 			$loc = 'all';
-			if (!empty($_POST["fDlMLoc"]) and isset($this->locs[$_POST["fDlMLoc"]]))
+			if (isset($_POST["fDlMLoc"]) and isset($this->locs[$_POST["fDlMLoc"]]))
 			{
 				$loc = $this->locs[$_POST["fDlMLoc"]];
 			}

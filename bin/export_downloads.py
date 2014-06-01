@@ -2,6 +2,8 @@
 sudo apt-get install python3-mysql.connector python3-pip
 sudo pip3 install networkx
 sudo pip3 install numpy
+
+sp x loc all csak header ak?r prot, ak?r int
 """
 
 #!/usr/bin/python3

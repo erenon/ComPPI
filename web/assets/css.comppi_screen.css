@@ -297,7 +297,7 @@ input { height: 25px; }
 /*#DownloadForm { text-align: left; margin-top: 1em; }
 #fDownloadLocFine { width: 780px; height: 10em; background: #505050; }
 #fDownloadSpecHsBtn, #fDownloadSpecDmBtn, #fDownloadSpecCeBtn, #fDownloadSpecScBtn { font-style: italic; }*/
-#DlSetHelpDisplay { margin: 0 30px; padding: 0; width: 100%; height: 4em; }
+#DlSetHelpDisplay { margin: 0 30px; padding: 0; width: 100%; height: 5em; }
 .DlSetHelp { display: none; }
 
 #dlCenterReleases { margin: 0; padding: 5px 50px; }
