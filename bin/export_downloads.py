@@ -13,9 +13,6 @@ import configparser
 import mysql.connector
 import csv
 
-import pprint
-import sys
-
 class ComppiInterface(object):
 	"""
 	Class to get and export data from the ComPPI database.
@@ -144,17 +141,12 @@ class ComppiInterface(object):
 		else:
 			filter_by_locs = True
 			filtered_prot_ids = self.getProteinIdsByMajorLoc(loc)
-			print("Number of filtered proteins: {}".format(len(filtered_prot_ids)))
 		
 		# fetch protein names and taxonomy IDs
 		proteins = {}
 		for pid, species, name, naming_conv in nodes_iter:
 			if not filter_by_locs or (filter_by_locs and pid in filtered_prot_ids):
 				proteins[pid] = ( name, naming_conv, self.specii.get(int(species)) )
-		
-		print("Number of protein names: {}".format(len(proteins)))
-		
-		print("Filter by locs: {}".format(filter_by_locs))
 		
 		# export the edges
 		out_f = os.path.join(self.output_dir, 'comppi--interactions-sp_{}-loc_{}.txt'.format(sp, loc))
@@ -336,10 +328,21 @@ class ComppiInterface(object):
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
-	parser.add_argument('-a', '--auto', required=True, help="Automatic mode: 1 (on) or 0 (off), decides if all combinations are generated automatically.")
-	parser.add_argument('-t', '--type', required=True, help="Type: 'interactions' or 'proteins'. Only if auto==0.")
-	parser.add_argument('-s', '--species', required=True, help="Species, [0-4] or 'all'. Only if auto==0.")
-	parser.add_argument('-l', '--loc', required=True, help="Major loc: 'cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane' or 'all'. Only if auto==0.")
+	parser.add_argument(
+		'-a', '--auto', required=True, help="Automatic mode: 1 (on) or 0 (off), decides if all combinations are generated automatically.")
+	parser.add_argument(
+		'-t', '--type', required=True, help="Type: 'interactions' or 'proteins'. Only if auto==0.")
+	parser.add_argument(
+		'-s',
+		'--species',
+		choices=['0', '1', '2', '3', 'all'],
+		required=True, help="Species, [0-4] or 'all'. Only if auto==0.")
+	parser.add_argument(
+		'-l',
+		'--loc',
+		required=True,
+		choices=['all', 'cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane'],
+		help="Major loc: 'cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane' or 'all'. Only if auto==0.")
 	args = parser.parse_args()
 	
 	if int(args.auto) == 1:
