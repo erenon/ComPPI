@@ -10,20 +10,24 @@
 	<p class="msg_error">{{error_msgs}}</p>
 	{% endif %}
 
+	<div id="DlSetHelpDisplay"> </div>
+
 	<form id="DownloadCenterForm" action="{{ path('DownloadCenterBundle_downloads') }}" method="post">
-		
 		<table><tr><td>
 			<div id="DlSetButtons">
 			
 			<input type="radio" name="fDlSet" value="int" id="fDlSetInt" class="btn radiobtn" checked="checked" />
-			<label for="fDlSetInt" class="radioButtonLabel">Interactions</label><br />
+			<div class="DlSetHelp">Selected dataset: Integrated protein-protein interactions excluding the subcellular localizations.</div>
+			<label for="fDlSetInt" class="radioButtonLabel">Integrated protein-protein interaction dataset</label><br />
 			{# csak első oszlop? #}
 			
 			<input type="radio" name="fDlSet" value="protnloc" id="fDlSetProtNLoc" class="btn radiobtn" />
-			<label for="fDlSetProtNLoc" class="radioButtonLabel">Proteins with localizations</label><br />
+			<div class="DlSetHelp">Selected dataset: Integrated subcellular localization data for proteins excluding the interactions.</div>
+			<label for="fDlSetProtNLoc" class="radioButtonLabel">Integrated subcellular localization dataset</label><br />
 			
 			<input type="radio" name="fDlSet" value="comp" id="fDlSetComp" class="btn radiobtn" />
-			<label for="fDlSetComp" class="radioButtonLabel">Compartmentalized Data</label><br />
+			<div class="DlSetHelp">Selected dataset: User-defined major subcellular localization subset of the interactome.</div>
+			<label for="fDlSetComp" class="radioButtonLabel">Compartmentalized interactome</label><br />
 			{# 3 oszlop #}
 			
 			</div>

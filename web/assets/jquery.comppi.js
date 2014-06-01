@@ -53,6 +53,7 @@ $(document).ready(function(){
 			default:
 				$("#DLSpeciesContainer, #DLLocContainer").fadeOut();
 		}
+		$("#DlSetHelpDisplay").html( $(this).next(".DlSetHelp").html() ).fadeIn();
 	});
 	$("input[name='fDlSet']:checked").change(); // trigger the event for first time
 	
