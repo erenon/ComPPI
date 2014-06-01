@@ -71,7 +71,7 @@ class DownloadCenterController extends Controller
 			$loc = 'all';
 			if (!empty($_POST["fDlMLoc"]) and isset($this->locs[$_POST["fDlMLoc"]]))
 			{
-				$loc = $_POST["fDlMLoc"];
+				$loc = $this->locs[$_POST["fDlMLoc"]];
 			}
 			
 			$dl_path = $this->downloads_dir."comppi--$dltype-sp_$species-loc_$loc.txt";
