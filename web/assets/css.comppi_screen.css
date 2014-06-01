@@ -235,7 +235,7 @@ input { height: 25px; }
 /*input[type='checkbox'] { padding: 8px; }*/
 
 /* PROTEIN SEARCH */
-#ProteinSearchForm { width: 900px; margin: 0 auto; text-align: left; }
+#ProteinSearchForm { width: 700px; margin: 0 auto; padding: 1em 0; text-align: left; }
 #fProtSearchKeywordLabel { width: 200px; }
 #fProtSearchKeyword { width: 200px; margin: 2px 20px; }
 #fProtSearchSubmit { width: 200px; border: 0; }

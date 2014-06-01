@@ -42,12 +42,15 @@ $(document).ready(function(){
 	$("input[name='fDlSet']").change(function() {
 		switch(this.value) {
 			case "comp":
+			case "protnloc":
 				$("#DLSpeciesContainer, #DLLocContainer").fadeIn();
 				break;
 			case "int":
-			case "protnloc":
-				$("#DLSpeciesContainer").fadeIn();
 				$("#DLLocContainer").fadeOut();
+				// switch back to all localizations,
+				// otherwise previously selected loc would be sent
+				$("#DLLocContainer input:checked").removeAttr("checked");
+				$("#fDlMLocAll").attr("checked", "checked");
 				break;
 			case "all":
 			default:
