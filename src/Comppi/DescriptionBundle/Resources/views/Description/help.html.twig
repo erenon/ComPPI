@@ -5,7 +5,7 @@
 
 {% block bundlecontent %}
 	
-	<p align="center" style="padding-top: 30px; color: red; font-size: 30px;">DON'T PANIC</p>
+	<p align="center" style="padding-top: 40px; color: red; font-size: 50px;">DON'T PANIC</p>
 	
 	<h1>Help</h1>
 	
@@ -26,7 +26,7 @@
 		<li><a href="#proteinsearch">Protein search</a></li>
 		<li><a href="#download">Download of custom datasets</a></li>
 		<li><a href="#outputformats">Output formats</a></li>
-		<li><a href="#termofuse">ComPPI & open source</a></li>
+		<li><a href="#termsofuse">ComPPI & open source</a></li>
 		<li><a href="#cite">How to cite ComPPI?</a></li>
 		<li><a href="#relatedpublications">Related publications</a></li>
 		<li><a href="#othertools">Other tools by LINK-group and NetBiol</a></li>
@@ -35,7 +35,7 @@
 		
 	<a name="introduction"></a>
 	<h2>Introduction</h2>
-	<p>High-throughput protein-protein interaction (PPI) data often contain interactions, where the two interacting proteins have no common subcellular localizations. Here we present a compartmentalized protein-protein interaction database, ComPPI offering the following novel options:</p>
+	<p>High-throughput protein-protein interaction (PPI) data often contain interactions, where the two interacting proteins have no common subcellular localizations. Here we present a compartmentalized protein-protein interaction database, ComPPI, offering the following novel options:</p>
 	<p></p>
 	<ul>
 		<li>a.)	an integrated dataset of 10 protein-protein interaction and 9 subcellular localization databases covering four species (<i>S. cerevisiae</i>, <i>C. elegans</i>, <i>D. melanogaster</i>, <i>H. sapiens</i>);</li>
@@ -46,7 +46,8 @@
 	</ul>
 	<p></p>
 	<p>Because of the novel features of points from a.) to e.), ComPPI is useful for the analysis of experimental results in biochemistry, molecular biology and proteomics as well as for proteome- and interactome-wide studies in bioinformatics and network science helping cellular biology, medicine and drug design.</p>
-	
+	<br />
+	<p><b>Note:</b> ComPPI uses a protein ID mapping method to find the most relevant naming convention of the proteins. See more about our protein names <a name="namingconventions">here</a>.</p>
 	
 	<!-- <a name="tutorial"></a> -->
 	<!-- <h2>Tutorial</h2> -->
@@ -130,23 +131,76 @@
 	<a name="subcellocs"></a>
 	<h2>Structure of subcellular localizations</h2>
 	<p></p>
-	<p>The subcellular localizations of the proteins could be predicted or experimentally verified. Predicted </p>
+	<p>The subcellular localizations of the proteins could be predicted or experimentally verified. Predicted localizations are avaiable only for major subcellular organelles, such as the nucleus based on teh Nuclear Localization Signal (NLS). Experimentally validated localizations have a higher definition, such as part of the nuclear pore complex. This difference in the definition of the localization data, and the ability to deal with a usable number of localizations for filtering indicates the relevance of the separation of subcellular loclaization data to major and minor localization fractions.  </p>
 	<p></p>
-	<h3>High-density: minor localizations</h3>
-	<p>Subcellular localizations were standardized by using GO cellular component terms arranged into a non-redundant localization tree with more than 1500 individual GO term. 
-	<p>Download the whole localization tree <!--(teljes loc tree letöltés)-->, or explore the tree online:</p>/www.linkgroup.hu/docs/loctree.txt
-	<!--korábbi downloadból kibontható loc tree ide-->
+	<h3>High-definition: minor localizations</h3>
+	<p>Subcellular localizations were standardized by using <a href="http://www.geneontology.org/GO.component.guidelines.shtml">Gene Ontology cellular component terms</a> arranged with manual curation into a non-redundant localization tree with more than 1600 individual GO term. 
+	<p><a href="www.linkgroup.hu/docs/loctree.txt">Download the whole localization tree!</a></p>
 	<p></p>
-	<h3>Low-density: major localizations</h3> 
-	<p>Because of the properties of the ComPPI confidence score, we have arranged the minor localizations into 6 big cellular components: cytoplasm, nucleus, mitochondrion, secretory pathway, plasma membrane, extracellular</p>
-	<p>The confidence score algorithm works with major localizations. Download the list of minor localizatons belonging to major cellular components.</p>
-	<!--itt elérhetővé kellene tenni a major loc-hoz rendelős adatsort, de lnkelhetünk githubot is, ha az gyorsabb-->
-	
+	<h3>Low-definition: major localizations</h3> 
+	<p>We have arranged the minor localizations into 6 big cellular components:
+		<ul>
+			<li>cytoplasm(75 257 proteins)</li>
+			<li>nucleus (64 385 proteins)</li>
+			<li>mitochondrion(21 373 proteins)</li>
+			<li>secretory pathway(38 578 proteins)</li>
+			<li>membrane(50 989 proteins)</li>
+			<li>extracellular(19 004 proteins)</li>
+		</ul>
+	</p>
+	<p>The confidence score algorithm works with major localizations. In summary ComPPI contains 269 586 major localizations for 171 559 proteins (no localization for 16 390 proteins). The average major loc number for a protein is 1,57.</p>
+	<p><a href="www.linkgroup.hu/docs/largelocs.txt">Download</a> the list of minor localizatons belonging to major cellular components.</p>
+	<p></p>
+	<p>Distribution of the branches in the tree:</p>
+	<ul>
+		<li>525 - cytoplasm</li>
+		<li>353 - nucleus</li>
+		<li>78 - mitochondrion</li>
+		<li>185 - secretory pathway</li>
+		<li>367 - membrane</li>
+		<li>126 - extracellular</li>
+	</ul>
+	<br/>
+	<p>ComPPI separates the GO cellular component annotations by <a href="http://www.geneontology.org/GO.evidence.shtml">evidence level</a>:</p>
+	<ul>
+		<li>Experimental</li>
+			<ul>
+				<li>EXP: Inferred from Experiment</li>
+				<li>IDA: Inferred from Direct Assay</li>
+				<li>IPI: Inferred from Physical Interaction</li>
+				<li>IMP: Inferred from Mutant Phenotype</li>
+				<li>IGI: Inferred from Genetic Interaction</li>
+				<li>IEP: Inferred from Expression Pattern</li>
+			</ul>
+		<li>Predicted</li>
+			<ul>
+				<li>ISS: Inferred from Sequence or Structural Similarity</li>
+				<li>ISO: Inferred from Sequence Orthology</li>
+				<li>ISA: Inferred from Sequence Alignment</li>
+				<li>ISM: Inferred from Sequence Model</li>
+				<li>IGC: Inferred from Genomic Context</li>
+				<li>IBA: Inferred from Biological aspect of Ancestor</li>
+				<li>IBD: Inferred from Biological aspect of Descendant</li>
+				<li>IKR: Inferred from Key Residues</li>
+				<li>IRD: Inferred from Rapid Divergence</li>
+				<li>RCA: inferred from Reviewed Computational Analysis</li>
+			</ul>
+		<li>Unknown</li>
+			<ul>
+				<li>TAS: Traceable Author Statement</li>
+				<li>NAS: Non-traceable Author Statement</li>
+				<li>IC: Inferred by Curator</li>
+				<li>ND: No biological Data available</li>
+				<li>IEA: Inferred from Electronic Annotation</li>
+				<li>NR: Not Recorded</li>
+			</ul>
+	</ul>
 	
 	<a name="namingconventions"></a>
 	<h2>Protein naming conventions</h2>
 	<p></p>
 	<p>Source databases use different protein naming conventions. In order to merge these databases we mapped the protein names to UniProt ID. During this process we used the following protein ID mapping tables and for manual mapping the <a href="http://llama.mshri.on.ca/synergizer/translate/">Synergizer</a> and <a href="http://www.ebi.ac.uk/Tools/picr/">PICR</a> webservices.</p>
+	ComPPI uses a protein ID mapping method to find the most relevant naming convention of the proteins. The most reliable annotation is the UniProt Swiss-Prot protein accession, or if it was not avaiable the TrEmbl part of the UniProt, or other synonyms.</p>
 	<p></p>
 	<p>Protein ID Mapping Tables:</p>
 
@@ -175,14 +229,14 @@
 	<p>ComPPI integrated data set contains interactions and subcellular localizations for proteins in CSV format.</p>
 	
 	
-	<a name="termofuse"></a>
+	<a name="termsofuse"></a>
 	<h2>ComPPI & Open Source</h2>
 	<p></p>
 	<p>ComPPI database and web application is entirely open-source.</p>
 	<p>The user can reach the ComPPI source code in <a href="http://bificomp2.sote.hu:22422/comppi/summary">RhodeCode</a></p>
 	<p>Issue tracking is available through <a href="http://bificomp2.sote.hu/redmine/projects/comppi">Redmine</a> </p>
-	<p></p>
-	<p></p>
+	<br />
+	<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">ComPPI</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
 	
 	
 	<a name="cite"></a>
@@ -208,19 +262,19 @@
 	<p></p>
 	<p><b>Network analyzing tools in</b> <a href="http://www.linkgroup.hu/">LINK-group</a>:</p>
 	<ul>
-		<li><b>Turbine:</b> a versatile program package for the analysis of network dynamics, including the effect of single and multiple perturbations.<a href="http://www.linkgroup.hu/Turbine.php">	Visit Turbine</a></li>
-		<li><b>NetworGame:</b> a tool for the analysis of a large variety of spatial games on model and real world networks including the option for individual starting strategies for any network nodes.<a href="http://www.linkgroup.hu/NetworGame.php">	Visit NetworGame</a></li>
-		<li><b>ModuLand:</b> Analysis of complex, real-world networksup to several million nodes, identification of key nodes and prediction of behavior.<a href="http://www.linkgroup.hu/modules.php">	Visit ModuLand</a></li>
+		<li><i>Turbine:</i> a versatile program package for the analysis of network dynamics, including the effect of single and multiple perturbations.<a href="http://www.linkgroup.hu/Turbine.php">	Visit Turbine</a></li>
+		<li><i>NetworGame:</i> a tool for the analysis of a large variety of spatial games on model and real world networks including the option for individual starting strategies for any network nodes.<a href="http://www.linkgroup.hu/NetworGame.php">	Visit NetworGame</a></li>
+		<li><i>ModuLand:</i> Analysis of complex, real-world networksup to several million nodes, identification of key nodes and prediction of behavior.<a href="http://www.linkgroup.hu/modules.php">	Visit ModuLand</a></li>
 	</ul>
 	<p></p>
 	<p><b>Network-related tools in</b> <a href="http://netbiol.elte.hu/index.php/en/">NetBiol network biology group</a>:</p>
 	<ul>
-		<li><b>Signalink:</b> A multi-layered signaling and regulatory resource based on manual curation and integration to focus on cross-talks, multi-pathway proteins and signal flow regulation<a href="http://signalink.org/">	Visit Signalink</a></li>
-		<li><b>Autophagy Regulation:</b> Systems-level resource of autophagy regulation, including transcriptional, post-transcriptional regulatory mechanisms and signaling pahways.<a href="http://arn.elte.hu/">	Visit Autophagy Regulation</a></li>
-		<li><b>NRF2-ome:</b> Manually curated, predicted and collected systems-level resource of NRF2.<a href="http://nrf2.elte.hu">	Visit NRF2-ome</a></li>
-		<li><b>Cross-talk endosomes:</b> List of endosome-associated scaffold proteins and their cross-talk mediating properties.<a href="http://netbiol.elte.hu/endosome">	Visit Cross-talk endosomes</a></li>
-		<li><b>PathwayLinker:</b> Webservice for analyzing the signaling pathway memberships of proteins and their interactors for experiment design and evaluation<a href="http://pathwaylinker.org/"> 	Visit PathwayLinker</a></li>
-		<li><b>Signalog:</b> Tool for orthology based identification of novel signaling proteins<a href="http://signalink.org/signalog">	Visit Signalog</a></li>
+		<li><i>Signalink:</i> A multi-layered signaling and regulatory resource based on manual curation and integration to focus on cross-talks, multi-pathway proteins and signal flow regulation<a href="http://signalink.org/">	Visit Signalink</a></li>
+		<li><i>Autophagy Regulation:</i> Systems-level resource of autophagy regulation, including transcriptional, post-transcriptional regulatory mechanisms and signaling pahways.<a href="http://arn.elte.hu/">	Visit Autophagy Regulation</a></li>
+		<li><i>NRF2-ome:</i> Manually curated, predicted and collected systems-level resource of NRF2.<a href="http://nrf2.elte.hu">	Visit NRF2-ome</a></li>
+		<li><i>Cross-talk endosomes:</i> List of endosome-associated scaffold proteins and their cross-talk mediating properties.<a href="http://netbiol.elte.hu/endosome">	Visit Cross-talk endosomes</a></li>
+		<li><i>PathwayLinker:</i> Webservice for analyzing the signaling pathway memberships of proteins and their interactors for experiment design and evaluation<a href="http://pathwaylinker.org/"> 	Visit PathwayLinker</a></li>
+		<li><i>Signalog:</i> Tool for orthology based identification of novel signaling proteins<a href="http://signalink.org/signalog">	Visit Signalog</a></li>
 	</ul>
 
 {% endblock %}
