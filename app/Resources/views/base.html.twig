@@ -5,12 +5,12 @@
         <title>{% block title %}ComPPI - Compartmentalized Protein-Protein Interaction Database{% endblock %}</title>
         {% block stylesheets %}
 		<link href="http://fonts.googleapis.com/css?family=Cuprum:regular" rel="stylesheet" type="text/css" />
-		<link href="{{ asset('assets/ui-theme-smoothness/jquery-ui-1.10.2.custom.css') }}" rel="stylesheet" type="text/css" />
+		<link href="{{ asset('assets/ui-theme-smoothness/jquery-ui-1.10.4.custom.min.css') }}" rel="stylesheet" type="text/css" />
 		<link href="{{ asset('assets/css.comppi_screen.css') }}" rel="stylesheet" type="text/css" />
 		{% endblock %}
 		{% block javascripts %}
-		<script type="text/javascript" src="{{ asset('assets/jquery-1.9.1.min.js') }}"></script>
-		<script type="text/javascript" src="{{ asset('assets/jquery-ui-1.10.3.custom.min.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('assets/jquery-1.10.2.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('assets/jquery-ui-1.10.4.custom.min.js') }}"></script>
 		<script type="text/javascript" src="{{ asset('assets/jquery.comppi.js') }}"></script>
 		{% endblock %}
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
@@ -36,8 +36,10 @@
 		</div>
 		
 		<ul id="Footer">
-			<li>ComPPI Version: 2014-05-28 (Beta, unpublished)</li>
+			<li>ComPPI v1.0 (last update: 01.06.2014 - beta, unpublished)</li>
 			<li><a href="{{ path('ComppiDescriptionBundle_impressum') }}">Impressum</a></li>
+			<li><a href="{{ path('ComppiDescriptionBundle_help') }}#cite">Cite</a></li>
+			<li><a href="{{ path('ComppiDescriptionBundle_help') }}#termsofuse">Terms of use</a></li>
 		</ul>
     </body>
 </html>

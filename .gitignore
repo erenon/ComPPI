@@ -10,6 +10,7 @@ web/css
 web/js
 web/dbreleases
 web/download
+web/export_downloads.log
 
 #eclipse
 

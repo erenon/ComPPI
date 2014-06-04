@@ -17,7 +17,7 @@
 		</div>
 		
 		{% if protein.fullname is defined %}
-		<span class="ps-detailLabel"> {{ protein.fullname }} </span>
+		<span class="ps-detailLabel"> {{ protein.fullname }} </span>&nbsp;&nbsp;&nbsp;//&nbsp;&nbsp;&nbsp;<a href="{{ protein.uniprot_link }}">UniProt</a> <img src="{{ asset('assets/linkout.png') }}" />
 		{% endif %}
 		
 		{% if protein.synonyms is defined %}
