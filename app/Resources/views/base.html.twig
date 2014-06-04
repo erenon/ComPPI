@@ -5,12 +5,12 @@
         <title>{% block title %}ComPPI - Compartmentalized Protein-Protein Interaction Database{% endblock %}</title>
         {% block stylesheets %}
 		<link href="http://fonts.googleapis.com/css?family=Cuprum:regular" rel="stylesheet" type="text/css" />
-		<link href="{{ asset('assets/ui-theme-smoothness/jquery-ui-1.10.2.custom.css') }}" rel="stylesheet" type="text/css" />
+		<link href="{{ asset('assets/ui-theme-smoothness/jquery-ui-1.10.4.custom.min.css') }}" rel="stylesheet" type="text/css" />
 		<link href="{{ asset('assets/css.comppi_screen.css') }}" rel="stylesheet" type="text/css" />
 		{% endblock %}
 		{% block javascripts %}
-		<script type="text/javascript" src="{{ asset('assets/jquery-1.9.1.min.js') }}"></script>
-		<script type="text/javascript" src="{{ asset('assets/jquery-ui-1.10.3.custom.min.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('assets/jquery-1.10.2.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('assets/jquery-ui-1.10.4.custom.min.js') }}"></script>
 		<script type="text/javascript" src="{{ asset('assets/jquery.comppi.js') }}"></script>
 		{% endblock %}
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
@@ -20,23 +20,26 @@
     <body>
 		{% block header %}
 		<div id="Header">
-		<img src="{{ asset('assets/logo.png') }}" id="Logo" width="89" height="42" alt="ComPPI logo" title="ComPPI welcome page" />
-		<div id="HeaderSlogan"><b>Com</b>partmentalized <b>P</b>rotein-<b>P</b>rotein <b>I</b>nteraction Database</div>
-		<div id="MainMenu">
-			<a href="{{ path('ComppiDescriptionBundle_about') }}">Home</a> |
-			<a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}">Protein Search</a> |
-			<a href="{{ path('DownloadCenterBundle_downloads') }}">Downloads</a> |
-			<a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a>
+		<a href="http://comppi.linkgroup.hu/" title="Main Page"><img src="{{ asset('assets/logo.png') }}" id="Logo" height="80" alt="ComPPI logo" title="ComPPI welcome page" /></a>
+		<div id="HeaderSlogan">Compartmentalized Protein-Protein Interaction Database</div>
+		<ul id="MainMenu">
+			<li><a href="{{ path('ComppiDescriptionBundle_about') }}">Home</a></li>
+			<li><a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}">Protein Search</a></li>
+			<li><a href="{{ path('DownloadCenterBundle_downloads') }}">Downloads</a></li>
+			<li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li>
+		</ul>
 		</div>
-		</div>
-		{% endblock %}
+	{% endblock %}
 
 		<div id="Content">
         {% block bundlecontent %}{% endblock %}
 		</div>
 		
-		<div id="Footer">
-			ComPPI Version: 2013.06.30. | <a href="http://linkgroup.hu">LINK-Group</a> | <a href="http://netbiol.elte.hu/en/">NetBiol</a>
-		</div>
+		<ul id="Footer">
+			<li>ComPPI v1.0 (last update: 01.06.2014 - beta, unpublished)</li>
+			<li><a href="{{ path('ComppiDescriptionBundle_impressum') }}">Impressum</a></li>
+			<li><a href="{{ path('ComppiDescriptionBundle_help') }}#cite">Cite</a></li>
+			<li><a href="{{ path('ComppiDescriptionBundle_help') }}#termsofuse">Terms of use</a></li>
+		</ul>
     </body>
 </html>

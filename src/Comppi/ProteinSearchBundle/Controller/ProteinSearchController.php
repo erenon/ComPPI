@@ -117,19 +117,20 @@ class ProteinSearchController extends Controller
 	public function interactorsAction($comppi_id, $get_interactions)
 	{
 		$DB = $this->getDbConnection();
-		$locs = $this->getLocalizationTranslator();
 		$sp = $this->getSpeciesProvider();
 		$spDescriptors = $sp->getDescriptors();
-		$T = array();
-
-		// details of requested protein
+		$comppi_id = intval($comppi_id);
+		$protein_ids = []; // collect the interactor IDs
+		
+		$T = array(
+			'comppi_id' => $comppi_id,
+			'ls' => array()
+		);
+		
+		// details of the requested protein
 		$T['protein'] = $this->getProteinDetails($comppi_id);
 		
-		// @TODO: interakciók száma,
 		// @TODO: letölthető dataset
-		
-		$comppi_id = intval($comppi_id);
-		$T['comppi_id'] = $comppi_id;
 
 		// interactors
 		$r_interactors = $DB->executeQuery("SELECT DISTINCT
@@ -158,8 +159,6 @@ class ProteinSearchController extends Controller
 			$interaction_ids[$i->iid] = $i->iid;
 		}
 		
-		if (empty($protein_ids)) throw new \ErrorException('No proteins found by that protein ID!');
-		
 		if ($get_interactions) {
 			return $this->forward(
 				'DownloadCenterBundle:DownloadCenter:serveInteractions',
@@ -168,27 +167,33 @@ class ProteinSearchController extends Controller
 			);
 		}
 		
-		// localizations for the protein and its interactors
-		$protein_locs = $this->getProteinLocalizations($protein_ids);
-		
-		// synonyms for the protein and its interactors
-		$protein_synonyms = $this->getProteinSynonyms($protein_ids);
-		
-		foreach($T['ls'] as $pid => &$actor)
-		{
-			// localizations to interactors
-			if (!empty($protein_locs[$pid]))
-				$actor['locs'] = $protein_locs[$pid];
-			// synonyms to interactors
-			if (!empty($protein_synonyms[$pid]['syn_fullname']))
-				$actor['syn_fullname'] =  $protein_synonyms[$pid]['syn_fullname'];
-			if (!empty($protein_synonyms[$pid]['synonyms']))
-				$actor['synonyms'] = $protein_synonyms[$pid]['synonyms'];
-			//$actor['syn_namings'] = (empty($protein_synonyms[$pid]['syn_namings']) ? array() : $protein_synonyms[$pid]['syn_namings']);
+		if (!empty($protein_ids)) {
+			// localizations for the interactor
+			$protein_locs = $this->getProteinLocalizations($protein_ids);
+			
+			// synonyms for the interactor
+			$protein_synonyms = $this->getProteinSynonyms($protein_ids);
+			
+			foreach($T['ls'] as $pid => &$actor)
+			{
+				// localizations to interactors
+				if (!empty($protein_locs[$pid]))
+					$actor['locs'] = $protein_locs[$pid];
+				// synonyms to interactors
+				if (!empty($protein_synonyms[$pid]['syn_fullname']))
+					$actor['syn_fullname'] =  $protein_synonyms[$pid]['syn_fullname'];
+				if (!empty($protein_synonyms[$pid]['synonyms']))
+					$actor['synonyms'] = $protein_synonyms[$pid]['synonyms'];
+				//$actor['syn_namings'] = (empty($protein_synonyms[$pid]['syn_namings']) ? array() : $protein_synonyms[$pid]['syn_namings']);
+			}
 		}
 		
 		$T['protein']['interactionNumber'] = count($protein_ids);
-		$T['protein']['avgConfScore'] = round(($confScoreAvg/$T['protein']['interactionNumber']), 2)*100;
+		if ($T['protein']['interactionNumber']) {
+			$T['protein']['avgConfScore'] = round(($confScoreAvg/$T['protein']['interactionNumber']), 2)*100;
+		} else {
+			$T['protein']['avgConfScore'] = false;
+		}
 		
 		return $this->render('ComppiProteinSearchBundle:ProteinSearch:interactors.html.twig',$T);
 	}
@@ -357,6 +362,7 @@ class ProteinSearchController extends Controller
 		$syns = $this->getProteinSynonyms(array($comppi_id));
 		$prot_details['synonyms'] = $syns[$comppi_id]['synonyms'];
 		$prot_details['fullname'] = $syns[$comppi_id]['syn_fullname'];
+		$prot_details['uniprot_link'] = $this->uniprot_root.$prot_details['name'];
 		
 		return $prot_details;
 	}
@@ -366,12 +372,13 @@ class ProteinSearchController extends Controller
 	private function getProteinLocalizations($comppi_ids)
 	{
 		$DB = $this->getDbConnection();
-		$locs = $this->getLocalizationTranslator();
 		
 		$sql_pl = 'SELECT
 				ptl.proteinId as pid, ptl.localizationId AS locId, ptl.sourceDb, ptl.pubmedId,
+				lt.name as minorLocName, lt.majorLocName,
 				st.name AS exp_sys, st.confidenceType AS exp_sys_type
-			FROM ProteinToLocalization ptl, ProtLocToSystemType pltst, SystemType st
+			FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
+			LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
 			WHERE ptl.id=pltst.protLocId
 				AND pltst.systemTypeId=st.id
 				AND proteinId IN ('.join(',', $comppi_ids).')';
@@ -389,21 +396,19 @@ class ProteinSearchController extends Controller
 			$pl[$p->pid][$i]['pubmed_link'] = $this->linkToPubmed($p->pubmedId);
 			$pl[$p->pid][$i]['loc_exp_sys'] = $this->exptype[$p->exp_sys_type].': '.$p->exp_sys;
 			$pl[$p->pid][$i]['loc_exp_sys_type'] = $p->exp_sys_type;
-			try {
-				$pl[$p->pid][$i]['small_loc'] = ucfirst($locs->getHumanReadableLocalizationById($p->locId));
-			} catch (\InvalidArgumentException $e) {
+			if (!empty($p->minorLocName)) {
+				$pl[$p->pid][$i]['small_loc'] = ucfirst($p->minorLocName);
+			} else {
 				$pl[$p->pid][$i]['small_loc'] = 'N/A';
 			}
-			try {
-				$pl[$p->pid][$i]['large_loc'] = ucfirst($locs->getLargelocById($p->locId));
-			} catch (\InvalidArgumentException $e) {
+			if (!empty($p->majorLocName)) {
+				$pl[$p->pid][$i]['large_loc'] = ucfirst($p->majorLocName);
+			} else {
 				$pl[$p->pid][$i]['large_loc'] = 'N/A';
 			}
 		}
 		$this->verbose ? $this->verbose_log[] = count($pl).' protein locations found' : '';
 
-		// if a single id was requested, we return data directly for that
-        //return (count($comppi_ids)==1 ? $pl[$comppi_ids[0]] : $pl);
 		return (!empty($pl) ? $pl : array());
 	}
 	
@@ -421,14 +426,12 @@ class ProteinSearchController extends Controller
 		while ($s = $r_syn->fetch(\PDO::FETCH_OBJ))
 		{
 			if ($s->namingConvention=='UniProtFull') {
-				$syns[$s->pid]['syn_fullname'] = $s->name; // we have to highlight the full name...
+				$syns[$s->pid]['syn_fullname'] = $s->name; // full name highlighted...
 			} else {
 				$syns[$s->pid]['synonyms'][] = $s->name.'&nbsp;('.$s->namingConvention.')';
 			}
 		}
 		
-		// if a single id was requested, we return data directly for that
-        //return (count($comppi_ids)==1 ? $syns[$comppi_ids[0]] : $syns);
 		return $syns;
 	}
 	

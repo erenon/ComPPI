@@ -17,4 +17,9 @@ class DescriptionController extends Controller
     {
         return $this->render('ComppiDescriptionBundle:Description:help.html.twig');
     }
+
+    public function ImpressumAction()
+    {
+        return $this->render('ComppiDescriptionBundle:Description:impressum.html.twig');
+    }
 }

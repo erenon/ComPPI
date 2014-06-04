@@ -5,3 +5,7 @@ ComppiDescriptionBundle_about:
 ComppiDescriptionBundle_help:
     pattern:  /help
     defaults: { _controller: ComppiDescriptionBundle:Description:Help }
+
+ComppiDescriptionBundle_impressum:
+    pattern:  /impressum
+    defaults: { _controller: ComppiDescriptionBundle:Description:Impressum }

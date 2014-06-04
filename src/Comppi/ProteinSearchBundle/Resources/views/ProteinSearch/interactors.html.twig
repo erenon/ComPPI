@@ -8,16 +8,16 @@
 	
 	<p class="help"></p>
 	
-	<div id="ps-keyProtein" class="rounded_box">
+	<div id="ps-keyProtein" class="fancy_box">
 	<h1>{{ protein.name }}</h1>
-	<div class="rounded_box_body">
-		<div id="ps-interactionStats" class="rounded_box">
+	<div class="fancy_box_body">
+		<div id="ps-interactionStats" class="fancy_box_body">
 			Number of Interactions: {{ protein.interactionNumber }}
-			<br>Average Confidence Score: {{ protein.avgConfScore }}%
+			<br>Average Interaction Score: {% if protein.avgConfScore is empty %} N/A {% else %} {{ protein.avgConfScore }}% {% endif %}
 		</div>
 		
 		{% if protein.fullname is defined %}
-		<span class="ps-detailLabel"> {{ protein.fullname }} </span>
+		<span class="ps-detailLabel"> {{ protein.fullname }} </span>&nbsp;&nbsp;&nbsp;//&nbsp;&nbsp;&nbsp;<a href="{{ protein.uniprot_link }}">UniProt</a> <img src="{{ asset('assets/linkout.png') }}" />
 		{% endif %}
 		
 		{% if protein.synonyms is defined %}
@@ -30,7 +30,8 @@
 		
 		<p><h3 class="ps-detailLabel">Localizations:</h3>
 		{% if protein.locs is not empty %}
-		<table class="rounded_table hovered_list">
+		<table class="fancy_table hovered_list">
+			<thead>
 			<tr>
 			<th>Major Loc.</th>
 			<th>Minor Loc.</th>
@@ -38,6 +39,8 @@
 			<th>Source Database</th>
 			<th>PubMed</th>
 			</tr>
+			</thead>
+			<tbody>
 			{% for l in protein.locs %}
 			<tr class="ps-sysType{{ l.loc_exp_sys_type }}">
 			<td>{{ l.large_loc }}</td>
@@ -47,6 +50,7 @@
 			<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank">PubMed <img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
 			</tr>
 			{% endfor %}
+			</tbody>
 		</table></p>
 		{% else %}
 			Not available.
@@ -65,15 +69,18 @@
 	<p class="center"><a href="{{ url('ComppiProteinSearchBundle_interactors', {'comppi_id': comppi_id, 'get_interactions': 1}) }}" class="btn btn_submit">Download The Interactions</a></p> #}
 	
 	{% if ls %}
-	<table class="rounded_table striped_table hovered_list">
+	<table class="fancy_table striped_table hovered_list">
+	<thead>
 	<tr>
 		<th colspan="2" class="ps-resultsHeader">Interactions</th>
 	</tr>
+	</thead>
+	<tbody>
 	{% for p in ls %}
 	<tr class="{% if loop.index is odd %}ps-stripeEven{% else %}ps-stripeOdd{% endif %}">
 		<td class="ps-actorA">
 			<h1>{{ protein.name }}</h1>
-			<div class="ps-CS" title="Confidence Score">Confidence Score <div>{{ p.confScore }}%</div></div>
+			<div class="ps-CS" title="Confidence Score">Interaction Score <div>{{ p.confScore }}%</div></div>
 		</td>
 		<td class="ps-actorB">
 			<h1>{{ p.prot_name }}</h1> ({{ p.prot_naming }})
@@ -92,7 +99,8 @@
 			
 			<p><h3 class="ps-detailLabel">Localizations:</h3>
 			{% if p['locs'] is defined %}
-			<table class="rounded_table hovered_list">
+			<table class="fancy_table hovered_list">
+				<thead>
 				<tr>
 				<th>Major Loc.</th>
 				<th>Minor Loc.</th>
@@ -100,6 +108,8 @@
 				<th>Source Database</th>
 				<th>PubMed</th>
 				</tr>
+				</thead>
+				<tbody>
 				{% for l in p['locs'] %}
 				<tr class="ps-sysType{{ l.loc_exp_sys_type }}">
 				<td>{{ l.large_loc }}</td>
@@ -109,6 +119,7 @@
 				<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank">PubMed <img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
 				</tr>
 				{% endfor %}
+				</tbody>
 			</table></p>
 			{% else %}
 			Not available.
@@ -121,7 +132,10 @@
 		</td>
 	</tr>
 	{% endfor %}
+	</tbody>
 	</table>
+	{% else %}
+	<p class="center"><b>No interactions were found.</b></p>
 	{% endif %}
 
 {% endblock %}

@@ -5,46 +5,49 @@
 
 {% block bundlecontent %}
 	
-	
-	
+	<p align="center" style="padding-top: 40px; color: red; font-size: 50px;">DON'T PANIC</p>
 	
 	<h1>Help</h1>
-	
-	<form id="fCommentForm" method="post">
-		<p>Let us know what you think!</p>
-		<label>Name:</label><input type="text" name="fCommentName" value="" /><br />
-		<label>E-mail (optional):</label><input type="text" name="fCommentEmail" value="" /><br />
-		<textarea cols="50" rows="5"></textarea>
-		<input type="submit" class="btn" name="fCommentSubmit" id="fCommentSubmit" value="Send" />
-	</form>
 	
 	<a name="toc"></a>
 	<ul id="HelpToc">
 		<li><a href="#introduction">Introduction</a></li>
 		<!-- <li><a href="#tutorial">Tutorial</a></li> -->
 		<!-- <li><a href="#statistics">Statistics</a></li> -->
-		<li><a href="#confidencescore">Confidence score</a></li>
+		<li><a href="#species">ComPPI species</a></li>
 		<li><a href="#inputdbs">Input databases</a></li>
-		<li><a href="#subcellocs">Subcellular localizations</a></li>
+		<ul>
+			<li><a href="#inputppidbs">Input protein-protein interaction databases</a></li>
+			<li><a href="#inputlocdbs">Input subcellular localization databases</a></li>
+		</ul>
+		<li><a href="#subcellocs">Structure of subcellular localizations</a></li>
 		<li><a href="#namingconventions">Protein naming conventions</a></li>
+		<li><a href="#score">Interaction and localization score</a></li>
+		<li><a href="#proteinsearch">Protein search</a></li>
+		<li><a href="#download">Download of custom datasets</a></li>
 		<li><a href="#outputformats">Output formats</a></li>
-		<li><a href="#opensource">ComPPI & Open Source</a></li>
+		<li><a href="#termsofuse">ComPPI & open source</a></li>
+		<li><a href="#cite">How to cite ComPPI?</a></li>
 		<li><a href="#relatedpublications">Related publications</a></li>
 		<li><a href="#othertools">Other tools by LINK-group and NetBiol</a></li>
 	</ul>
-	
+		
+		
 	<a name="introduction"></a>
 	<h2>Introduction</h2>
-	<p>High- throughput protein-protein interaction (PPI) data often contain interactions, where the two interacting proteins have no common subcellular localizations. Here we present a compartmentalized protein-protein interaction database, ComPPI offering the following novel options:</p>
+	<p>High-throughput protein-protein interaction (PPI) data often contain interactions, where the two interacting proteins have no common subcellular localizations. Here we present a compartmentalized protein-protein interaction database, ComPPI, offering the following novel options:</p>
 	<p></p>
-	<p>a.)	an integrated dataset of 19 databases covering four species (S. cerevisiae, C. elegans, D. melanogaster, H. sapiens);</p>
-	<p>b.)	a hierarchic structure of subcellular localizations using >1500 Gene Ontology cellular component terms;</p>
-	<p>c.)	a confidence score comprising data-quality and consensus of interactome neighborhood subcellular localizations;</p>
-	<p>d.)	search options for individual proteins, interacting protein pairs, or interaction lists;</p>
-	<p>e.)	download options of whole-proteome or organelle-specific interactomes.</p>
+	<ul>
+		<li>a.)	an integrated dataset of 10 protein-protein interaction and 9 subcellular localization databases covering four species (<i>S. cerevisiae</i>, <i>C. elegans</i>, <i>D. melanogaster</i>, <i>H. sapiens</i>);</li>
+		<li>b.)	a hierarchic structure of subcellular localizations using >1600 Gene Ontology cellular component terms;</li>
+		<li>c.)	an interaction score comprising data-quality and a consensus of the subcellular localization of the interacting proteins;</li>
+		<li>d.)	search options for individual proteins;</li>
+		<li>e.)	download options of whole-proteome or organelle-specific interactomes and subcellular localization data.</li>
+	</ul>
 	<p></p>
-	<p>Because of the above mentioned novel features, ComPPI is useful for the analysis of experimental results in biochemistry, molecular biology and proteomics as well as for proteome- and interactome-wide studies in bioinformatics and network science helping cellular biology, medicine and drug design.</p>
-	
+	<p>Because of the novel features of points from a.) to e.), ComPPI is useful for the analysis of experimental results in biochemistry, molecular biology and proteomics as well as for proteome- and interactome-wide studies in bioinformatics and network science helping cellular biology, medicine and drug design.</p>
+	<br />
+	<p><b>Note:</b> ComPPI uses a protein ID mapping method to find the most relevant naming convention of the proteins. See more about our protein names <a name="namingconventions">here</a>.</p>
 	
 	<!-- <a name="tutorial"></a> -->
 	<!-- <h2>Tutorial</h2> -->
@@ -56,117 +59,148 @@
 	<!-- <h2>Statistics</h2> -->
 	<!-- <p>Confidence score után főbb statisztikák: interakciók száma fajonként oszlop, nagy lokalizációkba tartozó fehérjék számának eloszlása fajonként, confidence score eloszlás a 4 fajra, adatbázisok átfedése, de ez bonyolult</p> -->
 	
-	
-	<a name="confidencescore"></a>
-	<h2>Confidence score</h2>
-	<!-- <p>Ezt le kéne írni szépen, meg vmi képlet vagy a letölthető kód kellene ide.</p> -->
+	<a name="species"></a>
+	<h2>ComPPI species</h2>
+	<p>The ComPPI database contains data for the following species:</p>
 	<p></p>
-	<p>Further development, based on ComPPI confidence scoring algorithm:</p>
-	<p>ComPPI upgrades will contain a confidence score expanded to larger network neighbourhoods and a compartmentalized interactome visualization tool. Prediction of novel subcellular localizations in the same or in different species (terming the latter as localogs) using the localization data of orthologs, interologs and of their network neighbourhood will also be included. Localization-prediction and localization-dependent protein-protein interaction network filtering will be developed to a web-service.</p>
-
+	<ul>
+		<li><i>Saccharomyces cerevisiae</i> (Baker's yeast) - (taxonomy ID: <a href="http://www.uniprot.org/taxonomy/4932">4932</a>)</li>
+		<li><i>Caenorhabditis elegans</i> - (taxonomy ID: <a href="http://www.uniprot.org/taxonomy/6239">6239</a>)</li>
+		<li><i>Drosophila melanogaster</i> (Fruit fly) - (taxonomy ID: <a href="http://www.uniprot.org/taxonomy/7227">7227</a>)</li>
+		<li><i>Homo sapiens</i> (Human) - (taxonomy ID: <a href="http://www.uniprot.org/taxonomy/9606">9606</a>)</li>
+	</ul>
+	<p></p>
+	<p>Cross-species comparison of the compartmentalized protein-protein interaction data allows the user to design interactome based evolutionary studies.</p>
+	
 	
 	<a name="inputdbs"></a>
 	<h2>Input databases</h2>
-	<p>ComPPI is an integrated database merging protein-protein interaction and subcellular localization data.</p>
+	<p>ComPPI is an integrated database merging 10 protein-protein interaction and 9 subcellular localization databases. The resources are freely avaiable for academical research, and allows proteom-wide download options. The input databases are connected to the ComPPI database via input database specific interfaces. To learn more about how we deal with different protein naming conventions and subcellular localizations click <a name="namingconventions">here</a> or <a name="subcellocs">here</a>.</p>
 	<p></p>
 	
-	<h3>Protein-Protein interaction databases:</h3>
+	<a name="inputppidbs"></a>
+	<h3>Input protein-protein interaction databases</h3>
 
-	<h3>BioGRID (version 3.1.81.) </h3>
-	<a href="http://thebiogrid.org/">Visit BioGRID</a>
-	<p>Stark,C., Breitkreutz,B.-J., Reguly,T., Boucher,L., Breitkreutz,A. and Tyers,M. (2006) BioGRID: a general repository for interaction datasets. Nucleic Acids Res., 34, D535−D539.</p>
+	<ul>
+		<li><a href="http://thebiogrid.org/">BioGRID</a> (version 3.2.111)<br />
+		Stark,C., Breitkreutz,B.-J., Reguly,T., Boucher,L., Breitkreutz,A. and Tyers,M. (2006) BioGRID: a general repository for interaction datasets. Nucleic Acids Res., 34, D535−D539.</li>
+		<li><a href="http://ccsb.dfci.harvard.edu/web/www/ccsb/">Center for Cancer Systems Biology (CCSB)</a> (version 2011.02.)</li>
+		<li><a href="http://dip.doe-mbi.ucla.edu/dip/Main.cgi">DiP</a> (version 2014.01.17.)<br />
+		Xenarios,I., Rice,D.W., Salwinski,L., Baron,M.K., Marcotte,E.M. and Eisenberg,D. (2000) DIP : the Database of Interacting Proteins. Nucleic Acids Res., 28, 289−291.</li>
+		<li><a href="http://www.droidb.org/">DroID</a> (version 2014.01.)<br />
+		Yu,J., Pacifico,S., Liu,G., and Finley,R.L. (2008) DroID: the Drosophila Interactions Database, a comprehensive resource for annotated gene and protein interactions. BMC Genomics, 9, 461. </li>
+		<li><a href="http://mint.bio.uniroma2.it/HomoMINT/Welcome.do">HomoMINT</a> (version: 2011.03.07.)<br />
+		Persico,M., Ceol,A., Gavrila,C., Hoffmann,R., Florio,A. and Cesareni,G. (2005) HomoMINT: an inferred human network based on orthology mapping of protein interactions discovered in model organisms. BMC Bioinformatics, 6, S21. </li>
+		<li><a href="http://www.hprd.org/">HPRD</a> (version 2010.04.13.)<br />
+		Keshava Prasad,T.S., Goel,R., Kandasamy,K., Keerthikumar,S., Kumar,S., Mathivanan,S., Telikicherla,D. et al. (2009) Human Protein Reference Database --2009 update. Nucleic Acids Res., 37, D767−D772.</li>
+		<li><a href="http://www.ebi.ac.uk/intact/">IntAct</a> (version 2012.06.11.)<br />
+		Hermjakob,H., Montecchi-Palazzi,L., Lewington,C., Mudali,S., Kerrien,S., Orchard,S., Vingron,M. et al. (2004) IntAct: an open source molecular interaction database. Nucleic Acids Res., 32, D452−D455.</li>
+		<li><a href="http://matrixdb.ibcp.fr/">MatrixDB</a> (version 2012.08.01.)<br />
+		Chautard,E., Fatoux-Ardore,M., Ballut,L., Thierry-Mieg,N. and Ricard-Blum,S. (2011) MatrixDB, the extracellular matrix interaction database. Nucleic Acids Res., 39, D235−D240.</li>
+		<li><a href="http://mint.bio.uniroma2.it/mint/">MINT</a> (version 2013.03.26.)<br />
+		Chatr-aryamontri,A., Ceol,A., Palazzi,L.M., Nardelli,G., Schneider,M.V., Castagnoli,L. and Cesareni,G. (2007) MINT: the Molecular INTeraction database. Nucleic Acids Res., 35, D572−D574.</li>
+		<li><a href="http://mips.helmholtz-muenchen.de/proj/ppi/">MIPS</a><br />
+		Pagel,P., Kovac,S., Oesterheld,M., Brauner,B., Dunger-Kaltenbach,I., Frishman,G., Montrone,C. et al. (2005) The MIPS mammalian protein-protein interaction database. Bioinformatics, 21, 832−834.</li>
+	</ul>
 
-	<h3>Center for Cancer Systems Biology (CCSB) (version 2011.02.)</h3>
-	<a href="http://ccsb.dfci.harvard.edu/web/www/ccsb/">Visit CCSB</a>
+	<a name="inputlocdbs"></a>
+	<h3>Input subcellular localization databases</h3>
 
-	<h3>DiP (version 2012.02.28)</h3>
-	<a href="http://dip.doe-mbi.ucla.edu/dip/Main.cgi">Visit DiP</a>
-	Xenarios,I., Rice,D.W., Salwinski,L., Baron,M.K., Marcotte,E.M. and Eisenberg,D. (2000) DIP : the Database of Interacting Proteins. Nucleic Acids Res., 28, 289−291.
-
-	<h3>DroID (version 2012.04.)</h3>
-	<a href="http://www.droidb.org/">Visit DroID</a>
-	Yu,J., Pacifico,S., Liu,G., and Finley,R.L. (2008) DroID: the Drosophila Interactions Database, a comprehensive resource for annotated gene and protein interactions. BMC Genomics, 9, 461. 
-
-	<h3>HomoMINT </h3>
-	<a href="http://mint.bio.uniroma2.it/HomoMINT/Welcome.do">Visit HomoMINT</a>
-	Persico,M., Ceol,A., Gavrila,C., Hoffmann,R., Florio,A. and Cesareni,G. (2005) HomoMINT: an inferred human network based on orthology mapping of protein interactions discovered in model organisms. BMC Bioinformatics, 6, S21. 
-
-	<h3>HPRD (version 2010.04.13.)</h3>
-	<a href="http://www.hprd.org/">Visit HPRD</a>
-	Keshava Prasad,T.S., Goel,R., Kandasamy,K., Keerthikumar,S., Kumar,S., Mathivanan,S., Telikicherla,D. et al. (2009) Human Protein Reference Database --2009 update. Nucleic Acids Res., 37, D767−D772.
-
-	<h3>IntAct (version 2012.06.11.)</h3>
-	<a href="http://www.ebi.ac.uk/intact/">Visit IntAct</a>
-	Hermjakob,H., Montecchi-Palazzi,L., Lewington,C., Mudali,S., Kerrien,S., Orchard,S., Vingron,M. et al. (2004) IntAct: an open source molecular interaction database. Nucleic Acids Res., 32, D452−D455.
-
-	<h3>MatrixDB (version 2012.04.20.)</h3>
-	<a href="http://matrixdb.ibcp.fr/">Visit MatrixDB</a>
-	Chautard,E., Fatoux-Ardore,M., Ballut,L., Thierry-Mieg,N. and Ricard-Blum,S. (2011) MatrixDB, the extracellular matrix interaction database. Nucleic Acids Res., 39, D235−D240.
-
-	<h3>MINT (version 2012.02.06.)</h3>
-	<a href="http://mint.bio.uniroma2.it/mint/">Visit MINT</a>
-	Chatr-aryamontri,A., Ceol,A., Palazzi,L.M., Nardelli,G., Schneider,M.V., Castagnoli,L. and Cesareni,G. (2007) MINT: the Molecular INTeraction database. Nucleic Acids Res., 35, D572−D574.
-
-	<h3>MIPS</h3>
-	<a href="http://mips.helmholtz-muenchen.de/proj/ppi/">Visit MIPS</a>
-	Pagel,P., Kovac,S., Oesterheld,M., Brauner,B., Dunger-Kaltenbach,I., Frishman,G., Montrone,C. et al. (2005) The MIPS mammalian protein-protein interaction database. Bioinformatics, 21, 832−834.
-
-
-	<h3>Subcellular Localization Databases:</h3>
-
-	<h3>BaCelLo </h3>
-	<a href="http://gpcr.biocomp.unibo.it/bacello/">Visit BaCelLo</a>
-	Pierleoni,A., Martelli,P.L., Fariselli,P. and Casadio, R. (2006) BaCelLo: a balanced subcellular localization predictor. Bioinformatics, 22, e408−e416.
-
-	<h3>eSLDB (version 2008.04.)</h3>
-	<a href="http://gpcr.biocomp.unibo.it/esldb/">Visit eSLDB</a>
-	Pierleoni,A., Martelli,P.L., Fariselli,P. and Casadio,R. (2007) eSLDB: eukaryotic subcellular localization database. Nucleic Acids Res., 35, D208−D212.
-
-	<h3>Gene Ontology (downloaded at january 2013)</h3>
-	<a href="http://www.geneontology.org/">Visit Gene Ontology</a>
-	Ashburner,M., Ball,C.A., Blake,J.A., Botstein,D., Butler,H., Cherry,J.M. et al. (2000) Gene Ontology: tool for the unification of biology. Nature Genetics, 25, 25−29.
-
-	<h3>Human Proteinpedia (version 2009.09.16.)</h3>
-	<a href="http://www.humanproteinpedia.org/">Visit Human Proteinpedia</a>
-	Li,N., Berriz,G.F., Gibbons,F.D., Dreze,M., Ayivi-guedehoussou,N., Klitgord,N., Simon,C. et al. (2005) Towards a proteome-scale map of the human protein – protein interaction network. Nature, 437, 1173−1178.
-
-	<h3>LOCATE (version 6 2008.11.21.)</h3>
-	<a href="http://locate.imb.uq.edu.au/">Visit LOCATE</a>
-	Fink,J.L., Aturaliya,R.N., Davis,M.J., Zhang,F., Hanson,K., Teasdale,M.S., Kai,C. et al. (2006) LOCATE: a mouse protein subcellular localization database. Nucleic Acids Res., 34, D213−D217.
-
-	<h3>MatrixDB (version 2010.08.25.)</h3>
-	<a href="http://matrixdb.ibcp.fr/">Visit MatrixDB</a>
-	Chautard,E., Fatoux-Ardore,M., Ballut,L., Thierry-Mieg,N. and Ricard-Blum,S. (2011) MatrixDB, the extracellular matrix interaction database. Nucleic Acids Res., 39, D235−D240.
-
-	<h3>OrganelleDB </h3>
-	<a href="http://organelledb.lsi.umich.edu/">Visit OrganelledDB</a>
-	Wiwatwattana,N. and Kumar,A. (2005) Organelle DB: a cross-species database of protein localization and function. Nucleic Acids Res., 33, D598−D604.
-
-	<h3>PA-GOSUB (version 2.5)</h3>
-	<a href="http://webdocs.cs.ualberta.ca/~bioinfo/PA/GOSUB/">Visit PA-GOSUB </a>
-	Lu,P., Szafron,D., Greiner,R., Wishart,D.S., Fyshe,A., Pearcy,B., Poulin,B. et al. (2005) PA-GOSUB: a searchable database of model organism protein sequences with their predicted Gene Ontology molecular function and subcellular localization. Nucleic Acids Res., 33, D147−D153.
-
-	<h3>The Human Protein Atlas (version 10.0 2012.09.12.)</h3>
-	<a href="http://www.proteinatlas.org/">Visit The Human Protein Atlas </a>
-	Uhlen,M., Oksvold,P., Fagerberg,L., Lundberg,E., Jonasson,K., Forsberg,M., Zwahlen,M. et al. (2010) Towards a knowledge-based Human Protein Atlas. Nature Biotechn., 28, 1248−1250.
-
+	<ul>
+		<li><a href="http://gpcr.biocomp.unibo.it/bacello/">BaCelLo</a><br />
+		Pierleoni,A., Martelli,P.L., Fariselli,P. and Casadio, R. (2006) BaCelLo: a balanced subcellular localization predictor. Bioinformatics, 22, e408−e416.</li>
+		<li><a href="http://gpcr.biocomp.unibo.it/esldb/">eSLDB</a> (version 2008.04.)<br />
+		Pierleoni,A., Martelli,P.L., Fariselli,P. and Casadio,R. (2007) eSLDB: eukaryotic subcellular localization database. Nucleic Acids Res., 35, D208−D212.</li>
+		<li><a href="http://www.geneontology.org/">Gene Ontology (downloaded at june 2014)</a><br />
+		Ashburner,M., Ball,C.A., Blake,J.A., Botstein,D., Butler,H., Cherry,J.M. et al. (2000) Gene Ontology: tool for the unification of biology. Nature Genetics, 25, 25−29.</li>
+		<li><a href="http://www.humanproteinpedia.org/">Human Proteinpedia</a> (version 2.0)<br />
+		Li,N., Berriz,G.F., Gibbons,F.D., Dreze,M., Ayivi-guedehoussou,N., Klitgord,N., Simon,C. et al. (2005) Towards a proteome-scale map of the human protein – protein interaction network. Nature, 437, 1173−1178.</li>
+		<li><a href="http://locate.imb.uq.edu.au/">LOCATE (version 6 2008.11.21.)</a><br />
+		Fink,J.L., Aturaliya,R.N., Davis,M.J., Zhang,F., Hanson,K., Teasdale,M.S., Kai,C. et al. (2006) LOCATE: a mouse protein subcellular localization database. Nucleic Acids Res., 34, D213−D217.</li>
+		<li><a href="http://matrixdb.ibcp.fr/">MatrixDB (version 2014.03.20.)</a><br />
+		Chautard,E., Fatoux-Ardore,M., Ballut,L., Thierry-Mieg,N. and Ricard-Blum,S. (2011) MatrixDB, the extracellular matrix interaction database. Nucleic Acids Res., 39, D235−D240.</li>
+		<li>OrganelleDB <a href="http://organelledb.lsi.umich.edu/">OrganelledDB</a><br />
+		Wiwatwattana,N. and Kumar,A. (2005) Organelle DB: a cross-species database of protein localization and function. Nucleic Acids Res., 33, D598−D604.</li>
+		<li><a href="http://webdocs.cs.ualberta.ca/~bioinfo/PA/GOSUB/">PA-GOSUB  (version 2.5)</a><br />
+		Lu,P., Szafron,D., Greiner,R., Wishart,D.S., Fyshe,A., Pearcy,B., Poulin,B. et al. (2005) PA-GOSUB: a searchable database of model organism protein sequences with their predicted Gene Ontology molecular function and subcellular localization. Nucleic Acids Res., 33, D147−D153.</li>
+		<li><a href="http://www.proteinatlas.org/">The Human Protein Atlas </a> (version 10.0 2012.09.12.)<br />
+		Uhlen,M., Oksvold,P., Fagerberg,L., Lundberg,E., Jonasson,K., Forsberg,M., Zwahlen,M. et al. (2010) Towards a knowledge-based Human Protein Atlas. Nature Biotechn., 28, 1248−1250.</li>
+	</ul>
+			
 
 	<a name="subcellocs"></a>
-	<h2>Subcellular localizations</h2>
-	<h3>High-density: minor localizations</h3>
-	<p>Subcellular localizations were standardized by using GO cellular component terms arranged into a non-redundant localization tree with more than 1500 individual GO term. 
-	<p>Download the whole localization tree <!--(teljes loc tree letöltés)-->, or explore the tree online:</p>
-	<!--korábbi downloadból kibontható loc tree ide-->
+	<h2>Structure of subcellular localizations</h2>
 	<p></p>
-	<h3>Low-density: major localizations</h3> 
-	<p>Because of the properties of the ComPPI confidence score, we have arranged the minor localizations into 6 big cellular components: cytoplasm, nucleus, mitochondrion, secretory pathway, plasma membrane, extracellular</p>
-	<p>The confidence score algorithm works with major localizations. Download the list of minor localizatons belonging to major cellular components.</p>
-	<!--itt elérhetővé kellene tenni a major loc-hoz rendelős adatsort, de lnkelhetünk githubot is, ha az gyorsabb-->
-	
+	<p>The subcellular localizations of the proteins could be predicted or experimentally verified. Predicted localizations are avaiable only for major subcellular organelles, such as the nucleus based on teh Nuclear Localization Signal (NLS). Experimentally validated localizations have a higher definition, such as part of the nuclear pore complex. This difference in the definition of the localization data, and the ability to deal with a usable number of localizations for filtering indicates the relevance of the separation of subcellular loclaization data to major and minor localization fractions.  </p>
+	<p></p>
+	<h3>High-definition: minor localizations</h3>
+	<p>Subcellular localizations were standardized by using <a href="http://www.geneontology.org/GO.component.guidelines.shtml">Gene Ontology cellular component terms</a> arranged with manual curation into a non-redundant localization tree with more than 1600 individual GO term. 
+	<p><a href="www.linkgroup.hu/docs/loctree.txt">Download the whole localization tree!</a></p>
+	<p></p>
+	<h3>Low-definition: major localizations</h3> 
+	<p>We have arranged the minor localizations into 6 big cellular components:
+		<ul>
+			<li>cytoplasm(75 257 proteins)</li>
+			<li>nucleus (64 385 proteins)</li>
+			<li>mitochondrion(21 373 proteins)</li>
+			<li>secretory pathway(38 578 proteins)</li>
+			<li>membrane(50 989 proteins)</li>
+			<li>extracellular(19 004 proteins)</li>
+		</ul>
+	</p>
+	<p>The confidence score algorithm works with major localizations. In summary ComPPI contains 269 586 major localizations for 171 559 proteins (no localization for 16 390 proteins). The average major loc number for a protein is 1,57.</p>
+	<p><a href="www.linkgroup.hu/docs/largelocs.txt">Download</a> the list of minor localizatons belonging to major cellular components.</p>
+	<p></p>
+	<p>Distribution of the branches in the tree:</p>
+	<ul>
+		<li>525 - cytoplasm</li>
+		<li>353 - nucleus</li>
+		<li>78 - mitochondrion</li>
+		<li>185 - secretory pathway</li>
+		<li>367 - membrane</li>
+		<li>126 - extracellular</li>
+	</ul>
+	<br/>
+	<p>ComPPI separates the GO cellular component annotations by <a href="http://www.geneontology.org/GO.evidence.shtml">evidence level</a>:</p>
+	<ul>
+		<li>Experimental</li>
+			<ul>
+				<li>EXP: Inferred from Experiment</li>
+				<li>IDA: Inferred from Direct Assay</li>
+				<li>IPI: Inferred from Physical Interaction</li>
+				<li>IMP: Inferred from Mutant Phenotype</li>
+				<li>IGI: Inferred from Genetic Interaction</li>
+				<li>IEP: Inferred from Expression Pattern</li>
+			</ul>
+		<li>Predicted</li>
+			<ul>
+				<li>ISS: Inferred from Sequence or Structural Similarity</li>
+				<li>ISO: Inferred from Sequence Orthology</li>
+				<li>ISA: Inferred from Sequence Alignment</li>
+				<li>ISM: Inferred from Sequence Model</li>
+				<li>IGC: Inferred from Genomic Context</li>
+				<li>IBA: Inferred from Biological aspect of Ancestor</li>
+				<li>IBD: Inferred from Biological aspect of Descendant</li>
+				<li>IKR: Inferred from Key Residues</li>
+				<li>IRD: Inferred from Rapid Divergence</li>
+				<li>RCA: inferred from Reviewed Computational Analysis</li>
+			</ul>
+		<li>Unknown</li>
+			<ul>
+				<li>TAS: Traceable Author Statement</li>
+				<li>NAS: Non-traceable Author Statement</li>
+				<li>IC: Inferred by Curator</li>
+				<li>ND: No biological Data available</li>
+				<li>IEA: Inferred from Electronic Annotation</li>
+				<li>NR: Not Recorded</li>
+			</ul>
+	</ul>
 	
 	<a name="namingconventions"></a>
 	<h2>Protein naming conventions</h2>
+	<p></p>
 	<p>Source databases use different protein naming conventions. In order to merge these databases we mapped the protein names to UniProt ID. During this process we used the following protein ID mapping tables and for manual mapping the <a href="http://llama.mshri.on.ca/synergizer/translate/">Synergizer</a> and <a href="http://www.ebi.ac.uk/Tools/picr/">PICR</a> webservices.</p>
+	ComPPI uses a protein ID mapping method to find the most relevant naming convention of the proteins. The most reliable annotation is the UniProt Swiss-Prot protein accession, or if it was not avaiable the TrEmbl part of the UniProt, or other synonyms.</p>
 	<p></p>
 	<p>Protein ID Mapping Tables:</p>
 
@@ -178,46 +212,69 @@
 	<a href="http://www.uniprot.org/">Visit UniProt</a>
 	Huang,H., McGarvey,P.B., Suzek,B.E., Mazumder,R., Zhang,J., Chen,Y. and Wu,C.H. (2011) A comprehensive protein-centric ID mapping service for molecular data integration. Bioinformatics, 27, 1190−1191. 
 
+
+	<a name="score"></a>
+	<h2>Interaction and Localization Score</h2>
+	<p></p>
+	<!-- <p>Ezt le kéne írni szépen, meg vmi képlet vagy a letölthető kód kellene ide.</p> -->
+	<p></p>
+	<p>Further development, based on ComPPI confidence scoring algorithm:</p>
+	<p>ComPPI upgrades will contain a confidence score expanded to larger network neighbourhoods and a compartmentalized interactome visualization tool. Prediction of novel subcellular localizations in the same or in different species (terming the latter as localogs) using the localization data of orthologs, interologs and of their network neighbourhood will also be included. Localization-prediction and localization-dependent protein-protein interaction network filtering will be developed to a web-service.</p>
+
 	
 	<a name="outputformats"></a>
 	<h2>Output formats</h2>
+	<p></p>
 	<p>Full database download in SQL format. Compartmentalized data available in CSV format through the Protein Search export, or the Download page.</p>
 	<p>ComPPI integrated data set contains interactions and subcellular localizations for proteins in CSV format.</p>
 	
 	
-	<a name="opensource"></a>
+	<a name="termsofuse"></a>
 	<h2>ComPPI & Open Source</h2>
+	<p></p>
 	<p>ComPPI database and web application is entirely open-source.</p>
 	<p>The user can reach the ComPPI source code in <a href="http://bificomp2.sote.hu:22422/comppi/summary">RhodeCode</a></p>
 	<p>Issue tracking is available through <a href="http://bificomp2.sote.hu/redmine/projects/comppi">Redmine</a> </p>
+	<br />
+	<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">ComPPI</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
 	
+	
+	<a name="cite"></a>
+	<h2>How to cite ComPPI?</h2>
+	<p></p>
+	<p>The ComPPI database and web application is currently under publication.</p>
+
 	
 	<a name="relatedpublications"></a>
 	<h2>Related publications</h2>
 	<p></p>
-	<p>Szalay-Bekő, M., Palotai, R., Szappanos, B., Kovács, I.A., Papp, B. and Csermely, P. (2012) ModuLand plug-in for Cytoscape: extensively overlapping network modules, community centrality and their use in biological networks. Bioinformatics, 28, 2202-2204</p>
-	<p>Mihalik, Á. and Csermely, P. (2011) Heat shock partially dissociates the overlapping modules of the yeast protein-protein interaction network: A systems level model of adaptation. PLoS Comput. Biol. 7, e1002187</p>
-	<p>Farkas, I.J., Korcsmáros, T., Kovács, I.A., Mihalik, Á., Palotai, R., Simkó, G.I., Szalay, K.Z., Szalay-Bekő, M., Vellai, T., Wang, S. and Csermely, P. (2011) Network-based tools in the identification of novel drug-targets. Science Signaling 4, pt3</p>
-	<p>Kovács, I.A., Palotai, R., Szalay, M.S. and Csermely, P. (2010) Community landscapes: a novel, integrative approach for the determination of overlapping network modules. PLoS ONE 7, e12528</p>
-	<p>Tamás Korcsmáros; Illés J. Farkas; Máté S. Szalay; Petra Rovó; Dávid Fazekas; Zoltán Spiró; Csaba Böde; Katalin Lenti; Tibor Vellai; Péter Csermely (2010) Uniformly curated signaling pathways reveal tissue-specific cross-talks and support drug target discovery. Bioinformatics 26, 2042-2050</p>
-	<p>Csermely, P. (2008) Creative elements: network-based predictions of active centres in proteins, cellular and social networks. Trends Biochem. Sci. 33, 569-576</p>
-
+	<ol>
+		<li><i>Szalay-Bekő, M., Palotai, R., Szappanos, B., Kovács, I.A., Papp, B. and Csermely, P.</i> (2012) ModuLand plug-in for Cytoscape: extensively overlapping network modules, community centrality and their use in biological networks. Bioinformatics, 28, 2202-2204</li>
+		<li><i>Mihalik, Á. and Csermely, P.</i> (2011) Heat shock partially dissociates the overlapping modules of the yeast protein-protein interaction network: A systems level model of adaptation. PLoS Comput. Biol. 7, e1002187</li>
+		<li><i>Farkas, I.J., Korcsmáros, T., Kovács, I.A., Mihalik, Á., Palotai, R., Simkó, G.I., Szalay, K.Z., Szalay-Bekő, M., Vellai, T., Wang, S. and Csermely, P. </i>(2011) Network-based tools in the identification of novel drug-targets. Science Signaling 4, pt3</li>
+		<li><i>Kovács, I.A., Palotai, R., Szalay, M.S. and Csermely, P.</i> (2010) Community landscapes: a novel, integrative approach for the determination of overlapping network modules. PLoS ONE 7, e12528</li>
+		<li><i>Tamás Korcsmáros; Illés J. Farkas; Máté S. Szalay; Petra Rovó; Dávid Fazekas; Zoltán Spiró; Csaba Böde; Katalin Lenti; Tibor Vellai; Péter Csermely </i>(2010) Uniformly curated signaling pathways reveal tissue-specific cross-talks and support drug target discovery. Bioinformatics 26, 2042-2050</li>
+		<li><i>Csermely, P. </i>(2008) Creative elements: network-based predictions of active centres in proteins, cellular and social networks. Trends Biochem. Sci. 33, 569-576</li>
+	</ol>
 	
 	<a name="othertools"></a>
 	<h2>Other tools by LINK-group and NetBiol</h2>
 	<p></p>
-	<p>Network analyzing tools in <a href="http://www.linkgroup.hu/">LINK-group</a>:</p>
-	<p>Turbine, a versatile program package for the analysis of network dynamics, including the effect of single and multiple perturbations.<a href="http://www.linkgroup.hu/Turbine.php">Visit Turbine</a></p>
-	<p>NetworGame,a tool for the analysis of a large variety of spatial games on model and real world networks including the option for individual starting strategies for any network nodes.<a href="http://www.linkgroup.hu/NetworGame.php">Visit NetworGame</a></p>
-	<p>ModuLand: Analysis of complex, real-world networksup to several million nodes, identification of key nodes and prediction of behavior.<a href="http://www.linkgroup.hu/modules.php">Visit ModuLand</a></p>
+	<p><b>Network analyzing tools in</b> <a href="http://www.linkgroup.hu/">LINK-group</a>:</p>
+	<ul>
+		<li><i>Turbine:</i> a versatile program package for the analysis of network dynamics, including the effect of single and multiple perturbations.<a href="http://www.linkgroup.hu/Turbine.php">	Visit Turbine</a></li>
+		<li><i>NetworGame:</i> a tool for the analysis of a large variety of spatial games on model and real world networks including the option for individual starting strategies for any network nodes.<a href="http://www.linkgroup.hu/NetworGame.php">	Visit NetworGame</a></li>
+		<li><i>ModuLand:</i> Analysis of complex, real-world networksup to several million nodes, identification of key nodes and prediction of behavior.<a href="http://www.linkgroup.hu/modules.php">	Visit ModuLand</a></li>
+	</ul>
 	<p></p>
-	<p>Network-related tools in <a href="http://netbiol.elte.hu/index.php/en/">NetBiol network biology group</a>:</p>
-	<p>Signalink: A multi-layered signaling and regulatory resource based on manual curation and integration to focus on cross-talks, multi-pathway proteins and signal flow regulation<a href="http://signalink.org/">Visit Signalink</a></p>
-	<p>Autophagy Regulation: Systems-level resource of autophagy regulation, including transcriptional, post-transcriptional regulatory mechanisms and signaling pahways.<a href="http://arn.elte.hu/">Visit Autophagy Regulation</a></p>
-	<p>NRF2-ome: Manually curated, predicted and collected systems-level resource of NRF2.<a href="http://nrf2.elte.hu">Visit NRF2-ome</a></p>
-	<p>Cross-talk endosomes: List of endosome-associated scaffold proteins and their cross-talk mediating properties.<a href="http://netbiol.elte.hu/endosome">Visit Cross-talk endosomes</a></p>
-	<p>PathwayLinker: Webservice for analyzing the signaling pathway memberships of proteins and their interactors for experiment design and evaluation<a href="http://pathwaylinker.org/">Visit PathwayLinker</a></p>
-	<p>Signalog: Tool for orthology based identification of novel signaling proteins<a href="http://signalink.org/signalog">Visit Signalog</a></p>
-
+	<p><b>Network-related tools in</b> <a href="http://netbiol.elte.hu/index.php/en/">NetBiol network biology group</a>:</p>
+	<ul>
+		<li><i>Signalink:</i> A multi-layered signaling and regulatory resource based on manual curation and integration to focus on cross-talks, multi-pathway proteins and signal flow regulation<a href="http://signalink.org/">	Visit Signalink</a></li>
+		<li><i>Autophagy Regulation:</i> Systems-level resource of autophagy regulation, including transcriptional, post-transcriptional regulatory mechanisms and signaling pahways.<a href="http://arn.elte.hu/">	Visit Autophagy Regulation</a></li>
+		<li><i>NRF2-ome:</i> Manually curated, predicted and collected systems-level resource of NRF2.<a href="http://nrf2.elte.hu">	Visit NRF2-ome</a></li>
+		<li><i>Cross-talk endosomes:</i> List of endosome-associated scaffold proteins and their cross-talk mediating properties.<a href="http://netbiol.elte.hu/endosome">	Visit Cross-talk endosomes</a></li>
+		<li><i>PathwayLinker:</i> Webservice for analyzing the signaling pathway memberships of proteins and their interactors for experiment design and evaluation<a href="http://pathwaylinker.org/"> 	Visit PathwayLinker</a></li>
+		<li><i>Signalog:</i> Tool for orthology based identification of novel signaling proteins<a href="http://signalink.org/signalog">	Visit Signalog</a></li>
+	</ul>
 
 {% endblock %}

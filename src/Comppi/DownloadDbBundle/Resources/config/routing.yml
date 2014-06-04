@@ -1,7 +1,0 @@
-DownloadDbBundle_download:
-    pattern:  /
-    defaults: { _controller: DownloadDbBundle:DownloadDb:download }
-
-DownloadDbBundle_serve:
-    pattern:  /serve
-    defaults: { _controller: DownloadDbBundle:DownloadDb:serve }

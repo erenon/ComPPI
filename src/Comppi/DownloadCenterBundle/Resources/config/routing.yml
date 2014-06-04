@@ -1,19 +1,7 @@
 DownloadCenterBundle_downloads:
     pattern:  /downloads
-    defaults: { _controller: DownloadCenterBundle:DownloadCenter:currentReleaseGui }
+    defaults: { _controller: DownloadCenterBundle:DownloadCenter:downloadCenter }
 
-DownloadCenterBundle_currentrelease:
-    pattern:  /downloads/current_release
-    defaults: { _controller: DownloadCenterBundle:DownloadCenter:currentReleaseGui }
-
-DownloadCenterBundle_currentrelease:
-    pattern:  /downloads/current_release
-    defaults: { _controller: DownloadCenterBundle:DownloadCenter:currentReleaseGui }
-
-DownloadCenterBundle_previousreleases:
-    pattern:  /downloads/previous_releases
-    defaults: { _controller: DownloadCenterBundle:DownloadCenter:previousReleasesGui }
-
-DownloadCenterBundle_getpreviousrelease:
-    pattern:  /downloads/get_previous_release/{file}
-    defaults: { _controller: DownloadCenterBundle:DownloadCenter:previousRelease }
+DownloadCenterBundle_getrelease:
+    pattern:  /downloads/get_release/{file}
+    defaults: { _controller: DownloadCenterBundle:DownloadCenter:serveRelease }

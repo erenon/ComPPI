@@ -4,43 +4,42 @@
 {% block title %}ComPPI - About{% endblock %}
 
 {% block bundlecontent %}
-	<p>ComPPI is a compartmentalized protein-protein interaction database containing 133 622 proteins and their 766 987 interactions. Main features:</p>
+	<h3 align="center"><br /><b>ComPPI</b> is a compartmentalized protein-protein interaction database containing <b>187 949</b> proteins and their <b>950 780</b> interactions.</h3>
 
 	<ul id="WelcomePanels">
-		<li><h1>PPIs</h1>
-			An integrated data set of 10 protein-protein interaction databases
-containing 766 987 interactions:<br />
-			<em>BioGRID</em>,
-			<em>CCSB</em>,
-			<em>DiP</em>,
-			<em>DroID</em>,
-			<em>HomoMINT</em>,
-			<em>HPRD</em>,
-			<em>IntAct</em>,
-			<em>MatrixDB</em>,
-			<em>MINT</em> and
-			<em>MIPS</em>
-			<a href="help#inputdbs">Details...</a>
-		</li><li>
-			<h1>Localizations</h1>
-			An integrated data set of 9 subcellular localization databases
-including 499 436 subcellular localizations: BaCelLo</em>, eSLDB</em>, GO</em>, <em>HumanProteinpedia</em>, <em>LOCATE</em>, <em>MatrixDB</em>, <em>OrganelleDB</em>, <em>PA-GOSUB</em> and <em>TheHumanProteinAtlas</em> <a href="help#inputdbs">Details...</a>
+		<li class="welcomePanel"><h1><b>Protein-protein Interactions</b></h1>
+			<p align="justify">An integrated dataset of 10 protein-protein interaction databases containing 950 780 interactions<br />
+			<a href="{{ path('ComppiDescriptionBundle_help') }}#inputppidbs">Details...</a></p>
 		</li>
-		<li><h1>Species</h1>
-			A comparative assessment of four species: <i>S. cerevisiae, C. elegans, D. melanogaster, H. sapiens</i>.
+		<li class="welcomePanel"><h1><b>Subcellular Localizations</b></h1>
+			<p align="justify">An integrated dataset of 9 subcellular localization databases including 269 586  subcellular localizations<br />
+			<a href="{{ path('ComppiDescriptionBundle_help') }}#inputlocdbs">Details...</a></p>
 		</li>
-		<li><h1>1500+ GO cellular component terms</h1>
-			A hierarchic structure of subcellular localizations using more than 1500 GO cellular component terms.
+		<li class="welcomePanel"><h1><b>Species</b></h1>
+			<p>A comparative assessment of four species:
+			<ul>
+			<li><i>S. cerevisiae</i></li>
+			<li><i>C. elegans</i></li>
+			<li><i>D. melanogaster</i></li>
+			<li><i>H. sapiens</i></li>
+			</ul>
+			<a href="{{ path('ComppiDescriptionBundle_help') }}#species">Details...</a></p>
 		</li>
-		<li><h1>Confidence Score</h1>
-			A confidence score for 702,430 protein-protein interactions comprising
-data-quality and interactome-consensus of subcellular localization.
+		<li class="welcomePanel"><h1><b>1600+ Gene Ontology Cellular Component Terms</b></h1>
+			<p align="justify">A hierarchic structure of subcellular localizations using more than 1600 GO cellular component terms<br />
+			<a href="{{ path('ComppiDescriptionBundle_help') }}#subcellocs">Details...</a></p>
 		</li>
-		<li><h1>Search Proteins</h1>
-			Direct search options for individual proteins with autocomplete function.
+		<li class="welcomePanel"><h1><b>Interaction and Localization Score</b></h1>
+			<p align="justify">A localization score for proteins and an interaction score protein-protein interactions comprising data-quality and interactome-consensus of subcellular localization<br />
+			<a href="{{ path('ComppiDescriptionBundle_help') }}#score">Details...</a></p>
 		</li>
-		<li><h1>Download Custom Datasets</h1>
-			Download options of whole-proteome or organelle-specific interactomes.
+		<li class="welcomePanel"><h1><b>Protein Search</b></h1>
+			<p align="justify">Direct search options for individual proteins with autocomplete function<br />
+			<a href="{{ path('ComppiDescriptionBundle_help') }}#proteinsearch">Details...</a></p>
+		</li>
+		<li class="welcomePanel"><h1><b>Download Custom Datasets</b></h1>
+			<p align="justify">Download options of whole-proteome or organelle-specific interactomes and of integrated protein-protein interaction and subcellular localization datasets<br />
+			<a href="{{ path('ComppiDescriptionBundle_help') }}#download">Details...</a></p>
 		</li>
 	</ul>
 {% endblock %}

@@ -4,12 +4,91 @@
 {% block title %}ComPPI - Downloads - The Compartmentalized Protein-Protein Interaction Database{% endblock %}
 
 {% block bundlecontent %}
-<ul id="dlCenterMenu">
-	<li id="dlCenterMenu-Current"><a href="{{ path('DownloadCenterBundle_currentrelease') }}">Current Release</a></li>
-	<li id="dlCenterMenu-Previous"><a href="{{ path('DownloadCenterBundle_previousreleases') }}">Previous Releases</a></li>
-	{#<li id="dlCenterMenu-Custom" class="btn"><a href="{{ path('DownloadCenterBundle_customdl') }}">Other Downloads</a></li>#}
-</ul>
+<h1>Predefined Datasets</h1>
 
-{% block download_content %}Download Center{% endblock %}
+{% if error_msgs is defined %}
+	<p class="msg_error">{{error_msgs}}</p>
+	{% endif %}
+
+	<div id="DlSetHelpDisplay"> </div>
+
+	<form id="DownloadCenterForm" action="{{ path('DownloadCenterBundle_downloads') }}" method="post">
+		<table><tr><td>
+			<div id="DlSetButtons">
+			
+			<input type="radio" name="fDlSet" value="comp" id="fDlSetComp" class="btn radiobtn" checked="checked" />
+			<div class="DlSetHelp"><b>Selected dataset:</b> The interactome of the selected major subcellular localization. Contains only the interactions where at least one interactor is located in the selected subcellular localization.</div>
+			<label for="fDlSetComp" class="radioButtonLabel">Compartmentalized interactome</label><br />
+			
+			<input type="radio" name="fDlSet" value="int" id="fDlSetInt" class="btn radiobtn" />
+			<div class="DlSetHelp"><b>Selected dataset:</b> Integrated protein-protein interactions excluding the subcellular localizations. Contents:<br />
+			Interactor A, Interactor B, Naming Convention A, Naming Convention B, Interaction Experimental System Type, Interaction Source Database, PubmedID</div>
+			<label for="fDlSetInt" class="radioButtonLabel">Integrated protein-protein interaction dataset</label><br />
+			{# csak első oszlop? #}
+			
+			<input type="radio" name="fDlSet" value="protnloc" id="fDlSetProtNLoc" class="btn radiobtn" />
+			<div class="DlSetHelp"><b>Selected dataset:</b> Integrated subcellular localization data of proteins excluding the interactions. Contents:<br />
+			Protein Name, Naming Convention, Major Localization, GO Cellular Loc., Protein To Loc. Experimental System Type, Localization Source Database, PubmedID, Taxonomy ID</div>
+			<label for="fDlSetProtNLoc" class="radioButtonLabel">Integrated subcellular localization dataset</label><br />
+			{# 3 oszlop #}
+			
+			</div>
+			{# 2 oszlop #}
+			
+		</td><td>
+
+			<div id="DLSpeciesContainer">
+			<div id="DlSpeciesButtons" class="taxonomic_name">
+			<input type="radio" name="fDlSpec" value="all" id="fDlSpecAll" class="btn radiobtn" /><label for="fDlSpecAll" class="radioButtonLabel" id="DlSpeciesButtons-All">All species</label><br />
+			<input type="radio" name="fDlSpec" value="0" id="fDlSpecHs" class="btn radiobtn" /><label for="fDlSpecHs" class="radioButtonLabel">H. sapiens</label><br />
+			<input type="radio" name="fDlSpec" value="1" id="fDlSpecDm" class="btn radiobtn" /><label for="fDlSpecDm" class="radioButtonLabel">D. melanogaster</label><br />
+			<input type="radio" name="fDlSpec" value="2" id="fDlSpecCe" class="btn radiobtn" /><label for="fDlSpecCe" class="radioButtonLabel">C. elegans</label><br />
+			<input type="radio" name="fDlSpec" value="3" id="fDlSpecSc" class="btn radiobtn" /><label for="fDlSpecSc" class="radioButtonLabel">S. cerevisiae</label><br />
+			</div>
+			</div>
+		
+		</td><td>
+		
+			<div id="DLLocContainer">
+			<div id="DlLocButtons">
+			<input type="radio" name="fDlMLoc" value="all" id="fDlMLocAll" class="btn radiobtn" />
+			<label for="fDlMLocAll" class="radioButtonLabel">All Localizations</label><br />
+			<input type="radio" name="fDlMLoc" value="0" id="fDlMLocCytoplasm" class="btn radiobtn" />
+			<label for="fDlMLocCytoplasm" class="radioButtonLabel">Cytoplasm</label><br />
+			<input type="radio" name="fDlMLoc" value="1" id="fDlMLocMito" class="btn radiobtn" />
+			<label for="fDlMLocMito" class="radioButtonLabel">Mitochondrion</label><br />
+			<input type="radio" name="fDlMLoc" value="2" id="fDlMLocNucleus" class="btn radiobtn" />
+			<label for="fDlMLocNucleus" class="radioButtonLabel">Nucleus</label><br />
+			<input type="radio" name="fDlMLoc" value="3" id="fDlMLocEC" class="btn radiobtn" />
+			<label for="fDlMLocEC" class="radioButtonLabel">Extracellular</label><br />
+			<input type="radio" name="fDlMLoc" value="4" id="fDlMLocSecr" class="btn radiobtn" />
+			<label for="fDlMLocSecr" class="radioButtonLabel">Secretory Pathway</label><br />
+			<input type="radio" name="fDlMLoc" value="5" id="fDlMLocPlasMembr" class="btn radiobtn" />
+			<label for="fDlMLocPlasMembr" class="radioButtonLabel">Membrane</label>
+			</div>
+			</div>
+		
+		</td>
+		
+		<td>
+			<input type="submit" name="fDlSubmit" id="fDlSubmit" class="btn btn_submit" value="Download" />
+		</td>
+		
+		</tr></table>
+		
+	</form>
+
+
+	<h1>Current and Previous Releases</h1>
+
+	{% if releases_ls|length > 0 %}
+		<ul id="dlCenterReleases">
+		{% for f in releases_ls %}
+			<li>{% if loop.index==1 %}<b>Current Release: </b>{% endif %}<a href="{{ path('DownloadCenterBundle_getrelease', {'file': f.file }) }}">{{ f.file }} ({{ f.mtime }}, {{ f.size }} MB)</a></li>
+		{% endfor %}
+		</ul>
+	{% else %}
+		<p class="help">Previous releases are not available yet.</p>
+	{% endif %}
 
 {% endblock %}

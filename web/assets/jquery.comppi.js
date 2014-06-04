@@ -38,21 +38,25 @@ $(document).ready(function(){
 	$("#DlSpeciesButtons").buttonset();
 	$("#DlLocButtons").buttonset();*/
 	
-	// PROTEIN SEARCH
+	// DOWNLOADS
 	$("input[name='fDlSet']").change(function() {
 		switch(this.value) {
 			case "comp":
+			case "protnloc":
 				$("#DLSpeciesContainer, #DLLocContainer").fadeIn();
 				break;
 			case "int":
-			case "protnloc":
-				$("#DLSpeciesContainer").fadeIn();
 				$("#DLLocContainer").fadeOut();
+				// switch back to all localizations,
+				// otherwise previously selected loc would be sent
+				$("#DLLocContainer input:checked").removeAttr("checked");
+				$("#fDlMLocAll").attr("checked", "checked");
 				break;
 			case "all":
 			default:
 				$("#DLSpeciesContainer, #DLLocContainer").fadeOut();
 		}
+		$("#DlSetHelpDisplay").html( $(this).next(".DlSetHelp").html() ).fadeIn();
 	});
 	$("input[name='fDlSet']:checked").change(); // trigger the event for first time
 	
@@ -107,6 +111,11 @@ $(function() {
 			// submit?
 		}
 	});
+});
+
+// protein search tooltips
+$(function() {
+	$( document ).tooltip();
 });
 
 // show/hide protein interaction details
