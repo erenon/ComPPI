@@ -41,8 +41,12 @@ class ProteinController extends Controller
             $localizationTranslator = $this->get('comppi.build.localizationTranslator');
 
             foreach ($localizations as &$localization) {
-                $localization['localizationName'] = $localizationTranslator->
-                    getLocalizationById($localization['localizationId']);
+                try {
+                    $localization['localizationName'] = $localizationTranslator->
+                        getLocalizationById($localization['localizationId']);
+                } catch (\InvalidArgumentException $e) {
+                    $localization['localizationName'] = 'INVALID';
+                }
             }
         }
 
