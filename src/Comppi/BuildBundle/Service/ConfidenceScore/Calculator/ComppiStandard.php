@@ -159,6 +159,8 @@ class ComppiStandard implements CalculatorInterface
         // @TODO this hack is required here because of a PDO bug
         // https://bugs.php.net/bug.php?id=44639
         $connection->getWrappedConnection()->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+        
+        $connection->getConfiguration()->setSQLLogger(null);
 	//$connection->getWrappedConnection()->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
 	
 	  $this->largeLocs=array_keys($this->localizationTranslator->getLargelocs());
