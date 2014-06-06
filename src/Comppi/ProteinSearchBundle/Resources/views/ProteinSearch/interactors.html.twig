@@ -80,7 +80,7 @@
 	<tr class="{% if loop.index is odd %}ps-stripeEven{% else %}ps-stripeOdd{% endif %}">
 		<td class="ps-actorA">
 			<h1>{{ protein.name }}</h1>
-			<div class="ps-CS" title="Confidence Score">Interaction Score <div>{{ p.confScore }}%</div></div>
+			<div class="ps-CS" title="Interaction score based on the subcellular localization of the interacting partners. It reflects how likely the given interaction is if the localizations are considered.">Interaction Score <div>{{ p.confScore }}%</div></div>
 		</td>
 		<td class="ps-actorB">
 			<h1>{{ p.prot_name }}</h1> ({{ p.prot_naming }})
