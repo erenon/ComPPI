@@ -2,13 +2,13 @@
 <div class="center">
 <form id="ProteinSearchForm" action="protein_search" method="post">
 	<label for="fProtSearchKeyword" id="fProtSearchKeywordLabel">Protein Name:</label>
-	<input type="text" name="fProtSearchKeyword" id="fProtSearchKeyword" value="{{ keyword }}" title="Start typing to get a list of suggested proteins." />
+	<input type="text" name="fProtSearchKeyword" id="fProtSearchKeyword" value="{{ keyword }}" title="Start typing to get a list of suggested proteins; autocomplete appears after 3 characters." />
 	<input class="btn btn_submit" type="submit" name="fProtSearchSubmit" id="fProtSearchSubmit" value="Submit Search" title="Click 'Submit Search' to send your request." />
 
 	<div id="fProtSearchSpecContainer"
 		{% for s in species_list %}
 		<br />
-		<input type="radio" name="fProtSearchSpecies" id="fProtSearch{{ s.abbreviation }}" value="{{ s.abbreviation }}"{% if requested_species[s.abbreviation] is defined %} checked="checked"{% endif %} title="Click on species to select one."/>
+		<input type="radio" name="fProtSearchSpecies" id="fProtSearch{{ s.abbreviation }}" class="btn radiobtn"value="{{ s.abbreviation }}"{% if requested_species[s.abbreviation] is defined %} checked="checked"{% endif %} title="Click on a species to select it."/>
 		<label for="fProtSearch{{ s.abbreviation }}" class="radioButtonLabel taxonomic_name">{{ s.shortname }}</label>
 		{% endfor %}
 	</div>

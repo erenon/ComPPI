@@ -92,14 +92,23 @@ h3 { margin-top: 1em; margin-bottom: 0; }
 .help { margin: 0; }
 .help_details {}
 .infobtn {
+	background-color: rgb(120, 120, 180);
+	color: #fff;
+	border: 1px solid #000;
+	width: 20px;
+	height: 20px;
+	margin: 0;
+	padding: 0;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-khtml-border-radius: 10px;
+	display: block;
 	/*display: block;
 	float: right;
 	width: 22px;
 	height: 22px;
 	background: url("btn_bg.png") #3c3b37; color: #E0DFDC;
-	border-radius: 11px;
-	-webkit-border-radius: 5px;
-	-khtml-border-radius: 5px;*/
+	*/
 }
 .infobtn a { color: #E0DFDC; text-decoration: none; }
 .infobtn a:hover { color: #fff; }
@@ -252,7 +261,7 @@ input { height: 25px; }
 #fProtSearchKeyword { width: 200px; margin: 2px 20px; }
 #fProtSearchSubmit { width: 200px; border: 0; }
 #fProtSearchSpecContainer { width: 200px; margin: 10px 0 0 220px; }
-#fProtSearchhsBtn, #fProtSearchdmBtn, #fProtSearchceBtn, #fProtSearchscBtn { font-style: italic; }
+#fProtSearchhs, #fProtSearchdm, #fProtSearchce, #fProtSearchsc { font-style: italic; margin-left: 5px; }
 
 .ui-autocomplete-loading {
 	background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;

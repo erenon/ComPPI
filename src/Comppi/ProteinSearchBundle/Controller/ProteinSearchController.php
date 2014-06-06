@@ -19,6 +19,56 @@ class ProteinSearchController extends Controller
 		'GO:secretory_pathway',
 		'GO:0016020'
 	);
+	private $minor_loc_abbr_patterns = array(
+		'EXP',
+		'IDA',
+		'IPI',
+		'IMP',
+		'IGI',
+		'IEP',
+		'ISS',
+		'ISO',
+		'ISA',
+		'ISM',
+		'IGC',
+		'IBA',
+		'IBD',
+		'IKR',
+		'IRD',
+		'RCA',
+		'TAS',
+		'NAS',
+		'IC',
+		'ND',
+		'IEA',
+		'NR',
+		'SVM'
+	);
+	private $minor_loc_abbr_replacements = array(
+		'Inferred from Experiment',
+		'Inferred from Direct Assay',
+		'Inferred from Physical Interaction',
+		'Inferred from Mutant Phenotype',
+		'Inferred from Genetic Interaction',
+		'Inferred from Expression Pattern',
+		'Inferred from Sequence or Structural Similarity',
+		'Inferred from Sequence Orthology',
+		'Inferred from Sequence Alignment',
+		'Inferred from Sequence Model',
+		'Inferred from Genomic Context',
+		'Inferred from Biological aspect of Ancestor',
+		'Inferred from Biological aspect of Descendant',
+		'Inferred from Key Residues',
+		'Inferred from Rapid Divergence',
+		'inferred from Reviewed Computational Analysis',
+		'Traceable Author Statement',
+		'Non-traceable Author Statement',
+		'Inferred by Curator',
+		'No biological Data available',
+		'Inferred from Electronic Annotation',
+		'Not Recorded',
+		'Support Vector Machine'
+	);
 	private $verbose = false;
 	private $verbose_log = array();
 	private $search_range_start = 0; // current page * search_result_per_page -> search query limit from here
@@ -91,6 +141,7 @@ class ProteinSearchController extends Controller
 			elseif ($r_prots_by_name->rowCount()>1) {
 				while ($p = $r_prots_by_name->fetch(\PDO::FETCH_OBJ))
 				{
+					$pids[] = $p->proteinId;
 					$T['ls'][] = array(
 						'comppi_id' => $p->proteinId,
 						'name' => $p->name,
@@ -99,6 +150,15 @@ class ProteinSearchController extends Controller
 						'species' => $spDescriptors[$p->specieId]->shortname,
 						'uniprot_link' => $this->uniprot_root.$p->proteinName
 					);
+				}
+				// attach the full protein names to the list
+				if (!empty($pids)) {
+					$full_names = $this->getProteinSynonyms($pids);
+					foreach ($T['ls'] as $i=>$vals) {
+						$T['ls'][$i]['full_name'] = $full_names[$T['ls'][$i]['comppi_id']]['syn_fullname'];
+					}
+				} else {
+					die("Protein IDs are missing for the full name query of the result selector!");
 				}
 				return $this->render('ComppiProteinSearchBundle:ProteinSearch:middlepage.html.twig', $T);
 			}
@@ -258,10 +318,26 @@ class ProteinSearchController extends Controller
 		while ($p = $r_pl->fetch(\PDO::FETCH_OBJ))
 		{
 			$i++;
+			$mnlrc = 0; // minor loc replacement count
 			
 			$pl[$p->pid][$i]['source_db'] = $p->sourceDb;
 			$pl[$p->pid][$i]['pubmed_link'] = $this->linkToPubmed($p->pubmedId);
-			$pl[$p->pid][$i]['loc_exp_sys'] = $this->exptype[$p->exp_sys_type].': '.$p->exp_sys;
+			// loc exp sys type replacement: IPI -> IPI: Inferred From Physical Interaction
+			$loc_exp_sys = str_replace(
+				$this->minor_loc_abbr_patterns,
+				$this->minor_loc_abbr_replacements,
+				$p->exp_sys,
+				$mnlrc
+			);
+			if ($mnlrc) {
+				$pl[$p->pid][$i]['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
+					.': <a href="#" title="'
+					.$p->exp_sys.': '.$loc_exp_sys.
+					'">'.$p->exp_sys.'</a>';
+			} else {
+				$pl[$p->pid][$i]['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
+					.': '.$p->exp_sys;
+			}
 			$pl[$p->pid][$i]['loc_exp_sys_type'] = $p->exp_sys_type;
 			if (!empty($p->minorLocName)) {
 				$pl[$p->pid][$i]['small_loc'] = ucfirst($p->minorLocName);

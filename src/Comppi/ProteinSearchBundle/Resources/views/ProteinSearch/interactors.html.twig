@@ -17,7 +17,7 @@
 		</div>
 		
 		{% if protein.fullname is defined %}
-		<span class="ps-detailLabel"> {{ protein.fullname }} </span>&nbsp;&nbsp;&nbsp;//&nbsp;&nbsp;&nbsp;<a href="{{ protein.uniprot_link }}">UniProt</a> <img src="{{ asset('assets/linkout.png') }}" />
+		<span class="ps-detailLabel"> {{ protein.fullname }} </span>&nbsp;&nbsp;&nbsp;//&nbsp;&nbsp;&nbsp;<a href="{{ protein.uniprot_link }}" title="Find more information about the protein in the UniProt database">UniProt</a> <img src="{{ asset('assets/linkout.png') }}" />
 		{% endif %}
 		
 		{% if protein.synonyms is defined %}
@@ -33,8 +33,8 @@
 		<table class="fancy_table hovered_list">
 			<thead>
 			<tr>
-			<th>Major Loc.</th>
-			<th>Minor Loc.</th>
+			<th>Major Loc</th>
+			<th>Minor Loc</th>
 			<th>Experiment Type</th>
 			<th>Source Database</th>
 			<th>PubMed</th>
@@ -45,7 +45,7 @@
 			<tr class="ps-sysType{{ l.loc_exp_sys_type }}">
 			<td>{{ l.large_loc }}</td>
 			<td>{{ l.small_loc }}</td>
-			<td>{{ l.loc_exp_sys }}</td>
+			<td>{{ l.loc_exp_sys|raw }}</td>
 			<td>{% if l.source_db %} {{ l.source_db }} {% endif %}</td>
 			<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank">PubMed <img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
 			</tr>
@@ -84,7 +84,7 @@
 		</td>
 		<td class="ps-actorB">
 			<h1>{{ p.prot_name }}</h1> ({{ p.prot_naming }})
-			<a href="#" class="ps-detailsOpener">Details</a>
+			<a href="#" class="ps-detailsOpener" title="Click to see more details of the interaction. Click again to close the Details panel.">Details</a>
 			
 			{% if p.syn_fullname is defined %}<h2 class="ps-detailLabel">{{ p.syn_fullname }}</h2>{% endif %}
 			
@@ -102,8 +102,8 @@
 			<table class="fancy_table hovered_list">
 				<thead>
 				<tr>
-				<th>Major Loc.</th>
-				<th>Minor Loc.</th>
+				<th>Major Loc</th>
+				<th>Minor Loc</th>
 				<th>Experiment Type</th>
 				<th>Source Database</th>
 				<th>PubMed</th>
@@ -114,7 +114,7 @@
 				<tr class="ps-sysType{{ l.loc_exp_sys_type }}">
 				<td>{{ l.large_loc }}</td>
 				<td>{{ l.small_loc }}</td>
-				<td>{{ l.loc_exp_sys }}</td>
+				<td>{{ l.loc_exp_sys|raw }}</td>
 				<td>{% if l.source_db %} {{ l.source_db }} {% endif %}</td>
 				<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank">PubMed <img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
 				</tr>

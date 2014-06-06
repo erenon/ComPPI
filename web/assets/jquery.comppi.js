@@ -113,9 +113,14 @@ $(function() {
 	});
 });
 
-// protein search tooltips
+// tooltips
 $(function() {
-	$( document ).tooltip();
+	$( document ).tooltip({
+		position: {
+			my: "left bottom-10px",
+			at: "left top"
+		}
+	});
 });
 
 // show/hide protein interaction details
