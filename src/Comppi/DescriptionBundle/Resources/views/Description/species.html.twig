@@ -1,0 +1,21 @@
+{# src/Comppi/ProteinSearchBundle/Resources/views/about.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %}ComPPI - Help/ComPPI Specii{% endblock %}
+
+{% block bundlecontent %}
+	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>ComPPI Specii</li></ul></h1>
+
+	<p>The ComPPI database contains data for the following specii:</p>
+	<p></p>
+	<ul>
+		<li><i>Saccharomyces cerevisiae</i> (Baker's yeast) - (taxonomy ID: <a href="http://www.uniprot.org/taxonomy/4932">4932</a>)</li>
+		<li><i>Caenorhabditis elegans</i> - (taxonomy ID: <a href="http://www.uniprot.org/taxonomy/6239">6239</a>)</li>
+		<li><i>Drosophila melanogaster</i> (Fruit fly) - (taxonomy ID: <a href="http://www.uniprot.org/taxonomy/7227">7227</a>)</li>
+		<li><i>Homo sapiens</i> (Human) - (taxonomy ID: <a href="http://www.uniprot.org/taxonomy/9606">9606</a>)</li>
+	</ul>
+	<p></p>
+	<p>Cross-species comparison of the compartmentalized protein-protein interaction data allows the user to design interactome based evolutionary studies.</p>
+	
+	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a</p>
+{% endblock %}
