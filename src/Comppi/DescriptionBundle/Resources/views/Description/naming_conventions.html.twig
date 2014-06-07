@@ -1,0 +1,24 @@
+{# src/Comppi/ProteinSearchBundle/Resources/views/about.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %}ComPPI - Help/Naming Conventions{% endblock %}
+
+{% block bundlecontent %}
+	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Naming Conventions</li></ul></h1>
+	
+	<p>Source databases use different protein naming conventions. In order to merge these databases we mapped the protein names to UniProt ID. During this process we used the following protein ID mapping tables and for manual mapping the <a href="http://llama.mshri.on.ca/synergizer/translate/">Synergizer</a> and <a href="http://www.ebi.ac.uk/Tools/picr/">PICR</a> webservices.</p>
+	ComPPI uses a protein ID mapping method to find the most relevant naming convention of the proteins. The most reliable annotation is the UniProt Swiss-Prot protein accession, or if it was not avaiable the TrEmbl part of the UniProt, or other synonyms.</p>
+	
+	<p>Protein ID Mapping Tables:</p>
+
+	<h3>HPRD</h3>
+	<a href="http://www.hprd.org/">Visit HPRD</a>
+	Keshava Prasad,T.S., Goel,R., Kandasamy,K., Keerthikumar,S., Kumar,S., Mathivanan,S., Telikicherla,D. et al. (2009) Human Protein Reference Database --2009 update. Nucleic Acids Res., 37, D767−D772.
+
+	<h3>UniProt </h3>
+	<a href="http://www.uniprot.org/">Visit UniProt</a>
+	Huang,H., McGarvey,P.B., Suzek,B.E., Mazumder,R., Zhang,J., Chen,Y. and Wu,C.H. (2011) A comprehensive protein-centric ID mapping service for molecular data integration. Bioinformatics, 27, 1190−1191. 
+
+	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a</p>
+
+{% endblock %}

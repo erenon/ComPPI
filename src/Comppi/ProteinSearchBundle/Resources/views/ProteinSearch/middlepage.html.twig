@@ -6,25 +6,27 @@
 {% block bundlecontent %}
 	{% include 'ComppiProteinSearchBundle:ProteinSearch:searchform.html.twig' %}
 	
-	<p class="center"><b>Multiple proteins were found, please select one to see its interactions.</b></p>
+	<p class="center"><b>Multiple proteins were found, please select one.</b></p>
 	
 	{% if ls %}
 	<div class="center">
 	<table id="ProteinSearchSelectorTbl" class="fancy_table hovered_list">
 		<thead>
 		<tr id="ProtSearchSelectorHeader" class="not_hovered_line">
-			<th>Name</th>
-			<th>UniProt Profile</th>
-			<th>Species</th>
-			<th>ComPPI Details</th>
+			<th title="Canonical name">Name</th>
+			<th title="Recommended full-length name">Full Name</th>
+			<th title="Species">Species</th>
+			<th title="Direct link to the UniProt profile of the protein">UniProt</th>
+			<th title="Click to see the detailed interactions and localizations">ComPPI Details</th>
 		</tr>
 		</thead>
 		<tbody>
 		{% for p in ls %}
 		<tr>
 			<td><b>{{ p.name }}</b> ({{ p.namingConvention }})</td>
-			<td><a href="{{ p.uniprot_link }}" target="_blank">{{ p.name2 }} <img src="{{ asset('assets/linkout.png') }}" alt="Link to Uniprot" /></a></td>
+			<td>{% if p.full_name is defined %}{{ p.full_name }}{% endif %}</td>
 			<td class="taxonomic_name">{{ p.species }}</td>
+			<td><a href="{{ p.uniprot_link }}" target="_blank">{{ p.name2 }} <img src="{{ asset('assets/linkout.png') }}" alt="Link to Uniprot" /></a></td>
 			<td><a href="{{ path('ComppiProteinSearchBundle_interactors', {'comppi_id': p.comppi_id }) }}" class="btn">Details</a></td>
 		</tr>
 		{% endfor %}
