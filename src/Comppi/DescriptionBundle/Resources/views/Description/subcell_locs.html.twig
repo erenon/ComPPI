@@ -1,0 +1,77 @@
+{# src/Comppi/ProteinSearchBundle/Resources/views/about.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %}ComPPI - Help/Subcellular Localizations{% endblock %}
+
+{% block bundlecontent %}
+	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Subcellular Localizations</li></ul></h1>
+
+	<h2>Structure of subcellular localizations</h2>
+	<p></p>
+	<p>The subcellular localizations of the proteins could be predicted or experimentally verified. Predicted localizations are avaiable only for major subcellular organelles, such as the nucleus based on teh Nuclear Localization Signal (NLS). Experimentally validated localizations have a higher definition, such as part of the nuclear pore complex. This difference in the definition of the localization data, and the ability to deal with a usable number of localizations for filtering indicates the relevance of the separation of subcellular loclaization data to major and minor localization fractions.  </p>
+	<p></p>
+	<h3>High-definition: minor localizations</h3>
+	<p>Subcellular localizations were standardized by using <a href="http://www.geneontology.org/GO.component.guidelines.shtml">Gene Ontology cellular component terms</a> arranged with manual curation into a non-redundant localization tree with more than 1600 individual GO term. 
+	<p><a href="www.linkgroup.hu/docs/loctree.txt">Download the whole localization tree!</a></p>
+	<p></p>
+	<h3>Low-definition: major localizations</h3> 
+	<p>We have arranged the minor localizations into 6 big cellular components:
+		<ul>
+			<li>cytoplasm(75 257 proteins)</li>
+			<li>nucleus (64 385 proteins)</li>
+			<li>mitochondrion(21 373 proteins)</li>
+			<li>secretory pathway(38 578 proteins)</li>
+			<li>membrane(50 989 proteins)</li>
+			<li>extracellular(19 004 proteins)</li>
+		</ul>
+	</p>
+	<p>The confidence score algorithm works with major localizations. In summary ComPPI contains 269 586 major localizations for 171 559 proteins (no localization for 16 390 proteins). The average major loc number for a protein is 1,57.</p>
+	<p><a href="www.linkgroup.hu/docs/largelocs.txt">Download</a> the list of minor localizatons belonging to major cellular components.</p>
+	<p></p>
+	<p>Distribution of the branches in the tree:</p>
+	<ul>
+		<li>525 - cytoplasm</li>
+		<li>353 - nucleus</li>
+		<li>78 - mitochondrion</li>
+		<li>185 - secretory pathway</li>
+		<li>367 - membrane</li>
+		<li>126 - extracellular</li>
+	</ul>
+	<br/>
+	<p>ComPPI separates the GO cellular component annotations by <a href="http://www.geneontology.org/GO.evidence.shtml">evidence level</a>:</p>
+	<ul>
+		<li>Experimental</li>
+			<ul>
+				<li>EXP: Inferred from Experiment</li>
+				<li>IDA: Inferred from Direct Assay</li>
+				<li>IPI: Inferred from Physical Interaction</li>
+				<li>IMP: Inferred from Mutant Phenotype</li>
+				<li>IGI: Inferred from Genetic Interaction</li>
+				<li>IEP: Inferred from Expression Pattern</li>
+			</ul>
+		<li>Predicted</li>
+			<ul>
+				<li>ISS: Inferred from Sequence or Structural Similarity</li>
+				<li>ISO: Inferred from Sequence Orthology</li>
+				<li>ISA: Inferred from Sequence Alignment</li>
+				<li>ISM: Inferred from Sequence Model</li>
+				<li>IGC: Inferred from Genomic Context</li>
+				<li>IBA: Inferred from Biological aspect of Ancestor</li>
+				<li>IBD: Inferred from Biological aspect of Descendant</li>
+				<li>IKR: Inferred from Key Residues</li>
+				<li>IRD: Inferred from Rapid Divergence</li>
+				<li>RCA: inferred from Reviewed Computational Analysis</li>
+			</ul>
+		<li>Unknown</li>
+			<ul>
+				<li>TAS: Traceable Author Statement</li>
+				<li>NAS: Non-traceable Author Statement</li>
+				<li>IC: Inferred by Curator</li>
+				<li>ND: No biological Data available</li>
+				<li>IEA: Inferred from Electronic Annotation</li>
+				<li>NR: Not Recorded</li>
+			</ul>
+	</ul>
+	
+	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a</p>
+{% endblock %}

@@ -19,6 +19,56 @@ class ProteinSearchController extends Controller
 		'GO:secretory_pathway',
 		'GO:0016020'
 	);
+	private $minor_loc_abbr_patterns = array(
+		'EXP',
+		'IDA',
+		'IPI',
+		'IMP',
+		'IGI',
+		'IEP',
+		'ISS',
+		'ISO',
+		'ISA',
+		'ISM',
+		'IGC',
+		'IBA',
+		'IBD',
+		'IKR',
+		'IRD',
+		'RCA',
+		'TAS',
+		'NAS',
+		'IC',
+		'ND',
+		'IEA',
+		'NR',
+		'SVM'
+	);
+	private $minor_loc_abbr_replacements = array(
+		'Inferred from Experiment',
+		'Inferred from Direct Assay',
+		'Inferred from Physical Interaction',
+		'Inferred from Mutant Phenotype',
+		'Inferred from Genetic Interaction',
+		'Inferred from Expression Pattern',
+		'Inferred from Sequence or Structural Similarity',
+		'Inferred from Sequence Orthology',
+		'Inferred from Sequence Alignment',
+		'Inferred from Sequence Model',
+		'Inferred from Genomic Context',
+		'Inferred from Biological aspect of Ancestor',
+		'Inferred from Biological aspect of Descendant',
+		'Inferred from Key Residues',
+		'Inferred from Rapid Divergence',
+		'inferred from Reviewed Computational Analysis',
+		'Traceable Author Statement',
+		'Non-traceable Author Statement',
+		'Inferred by Curator',
+		'No biological Data available',
+		'Inferred from Electronic Annotation',
+		'Not Recorded',
+		'Support Vector Machine'
+	);
 	private $verbose = false;
 	private $verbose_log = array();
 	private $search_range_start = 0; // current page * search_result_per_page -> search query limit from here
@@ -91,6 +141,7 @@ class ProteinSearchController extends Controller
 			elseif ($r_prots_by_name->rowCount()>1) {
 				while ($p = $r_prots_by_name->fetch(\PDO::FETCH_OBJ))
 				{
+					$pids[] = $p->proteinId;
 					$T['ls'][] = array(
 						'comppi_id' => $p->proteinId,
 						'name' => $p->name,
@@ -99,6 +150,15 @@ class ProteinSearchController extends Controller
 						'species' => $spDescriptors[$p->specieId]->shortname,
 						'uniprot_link' => $this->uniprot_root.$p->proteinName
 					);
+				}
+				// attach the full protein names to the list
+				if (!empty($pids)) {
+					$full_names = $this->getProteinSynonyms($pids);
+					foreach ($T['ls'] as $i=>$vals) {
+						$T['ls'][$i]['full_name'] = $full_names[$T['ls'][$i]['comppi_id']]['syn_fullname'];
+					}
+				} else {
+					die("Protein IDs are missing for the full name query of the result selector!");
 				}
 				return $this->render('ComppiProteinSearchBundle:ProteinSearch:middlepage.html.twig', $T);
 			}
@@ -210,6 +270,208 @@ class ProteinSearchController extends Controller
 			$list[] = $p->name;
 
         return new Response(json_encode($list));
+	}
+	
+	
+	private function getProteinDetails($comppi_id)
+	{
+		$DB = $this->getDbConnection();
+		$r_p = $DB->executeQuery("SELECT proteinName AS name, proteinNamingConvention AS naming, specieId FROM Protein WHERE id=?", array($comppi_id));
+		if (!$r_p) throw new \ErrorException('Protein query failed!');
+		
+		$prot_details = $r_p->fetch(\PDO::FETCH_ASSOC);
+		$prot_details['species'] = $prot_details['specieId']; // @TODO: map name to id
+		$prot_details['locs'] = $this->getProteinLocalizations(array($comppi_id));
+		$prot_details['locs'] = (!empty($prot_details['locs'][$comppi_id]) ? $prot_details['locs'][$comppi_id] : array());
+		
+		$syns = $this->getProteinSynonyms(array($comppi_id));
+		$prot_details['synonyms'] = $syns[$comppi_id]['synonyms'];
+		$prot_details['fullname'] = $syns[$comppi_id]['syn_fullname'];
+		$prot_details['uniprot_link'] = $this->uniprot_root.$prot_details['name'];
+		
+		return $prot_details;
+	}
+
+	
+	// @var array The list of comppi ids
+	private function getProteinLocalizations($comppi_ids)
+	{
+		$DB = $this->getDbConnection();
+		
+		$sql_pl = 'SELECT
+				ptl.proteinId as pid, ptl.localizationId AS locId, ptl.sourceDb, ptl.pubmedId,
+				lt.name as minorLocName, lt.majorLocName,
+				st.name AS exp_sys, st.confidenceType AS exp_sys_type,
+				ls.score as locScore
+			FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
+			LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
+			LEFT JOIN LocalizationScore ls ON lt.id=ls.localizationId
+			WHERE ptl.id=pltst.protLocId
+				AND pltst.systemTypeId=st.id
+				AND proteinId IN ('.join(',', $comppi_ids).')';
+		$this->verbose ? $this->verbose_log[] = $sql_pl : '';
+		
+		if (!$r_pl = $DB->executeQuery($sql_pl))
+			throw new \ErrorException('ProteinToLocalization query failed!');
+		
+		$i = 0;
+		while ($p = $r_pl->fetch(\PDO::FETCH_OBJ))
+		{
+			$i++;
+			$mnlrc = 0; // minor loc replacement count
+			
+			$pl[$p->pid][$i]['source_db'] = $p->sourceDb;
+			$pl[$p->pid][$i]['pubmed_link'] = $this->linkToPubmed($p->pubmedId);
+			// loc exp sys type replacement: IPI -> IPI: Inferred From Physical Interaction
+			$loc_exp_sys = str_replace(
+				$this->minor_loc_abbr_patterns,
+				$this->minor_loc_abbr_replacements,
+				$p->exp_sys,
+				$mnlrc
+			);
+			if ($mnlrc) {
+				$pl[$p->pid][$i]['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
+					.': <a href="#" title="'
+					.$p->exp_sys.': '.$loc_exp_sys.
+					'">'.$p->exp_sys.'</a>';
+			} else {
+				$pl[$p->pid][$i]['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
+					.': '.$p->exp_sys;
+			}
+			$pl[$p->pid][$i]['loc_exp_sys_type'] = $p->exp_sys_type;
+			if (!empty($p->minorLocName)) {
+				$pl[$p->pid][$i]['small_loc'] = ucfirst($p->minorLocName);
+			} else {
+				$pl[$p->pid][$i]['small_loc'] = 'N/A';
+			}
+			if (!empty($p->majorLocName)) {
+				$pl[$p->pid][$i]['large_loc'] = ucfirst($p->majorLocName);
+				if (!empty($p->locScore)) {
+					$pl[$p->pid][$i]['loc_score'] = float($p->locScore);
+				} else {
+					$pl[$p->pid][$i]['loc_score'] = 0.0;
+				}
+			} else {
+				$pl[$p->pid][$i]['large_loc'] = 'N/A';
+			}
+		}
+		$this->verbose ? $this->verbose_log[] = count($pl).' protein locations found' : '';
+
+		return (!empty($pl) ? $pl : array());
+	}
+	
+	
+	private function getProteinSynonyms($comppi_ids)
+	{
+		$DB = $this->getDbConnection();
+		$sql_syn = "SELECT proteinId AS pid, name, namingConvention FROM NameToProtein WHERE proteinId IN(".join(',', $comppi_ids).")";
+		$this->verbose ? $this->verbose_log[] = $sql_syn : '';
+
+		if (!$r_syn = $DB->executeQuery($sql_syn))
+			throw new \ErrorException('getProteinSynonyms query failed!');
+		
+		$syns = array();
+		while ($s = $r_syn->fetch(\PDO::FETCH_OBJ))
+		{
+			if ($s->namingConvention=='UniProtFull') {
+				$syns[$s->pid]['syn_fullname'] = $s->name; // full name highlighted...
+			} else {
+				$syns[$s->pid]['synonyms'][] = $s->name.'&nbsp;('.$s->namingConvention.')';
+			}
+		}
+		
+		return $syns;
+	}
+	
+	
+	private function linkToPubmed($pubmed_uid)
+	{
+		return 'http://www.ncbi.nlm.nih.gov/pubmed/'.$pubmed_uid;
+	}
+	
+	private function initKeyword($protein_name)
+	{
+		
+		// $request->request->get('fProtSearchKeyword') is not empty even if no keyword was filled in!
+		if (!empty($_POST['fProtSearchKeyword']))
+		{
+			$keyword = $_POST['fProtSearchKeyword'];
+		}
+		else if (!empty($protein_name))
+		{
+			$keyword = $protein_name;
+		}
+		// Form was submitted, but we haven't had any keyword
+		elseif (isset($_SESSION['protein_search_keyword']))
+		{
+			//$this->get('session')->getFlashBag()->add('no_keyword_err', 'Please fill in a keyword!');
+			$keyword = $_SESSION['protein_search_keyword'];
+		}
+		else
+		{
+			$keyword = '';
+		}
+		return $keyword;
+	}
+	
+	/*
+		@var $requested_species the list of species abbreviations separated by commas, e.g. hs,ce
+	*/
+	private function initSpecies($requested_species = '')
+	{
+		$species_provider = $this->getSpeciesProvider();
+		
+		if (!empty($_POST['fProtSearchSpecies'])) {
+			// this ensures that we need an exact match from the input to be valid
+			// if we don't get back an object, then the form was forged
+			$o_sp_descriptor = $species_provider->getSpecieByAbbreviation($_POST['fProtSearchSpecies']);
+			$species_id = $o_sp_descriptor->id;
+		} elseif (!empty($requested_species)) {
+			$o_sp_descriptor = $species_provider->getSpecieByAbbreviation($requested_species);
+			$species_id = $o_sp_descriptor->id;
+		} else {
+			$species_id = 0; // human
+		}
+		
+		// add the taxonomical abbreviations of all species, they'll be needed on the species selector buttons
+		$descriptors = $species_provider->getDescriptors();
+		foreach($descriptors as $o)
+		{
+			$o->shortname = substr_replace($o->name, '. ', 1, strpos($o->name, ' '));
+		}
+		
+		return $species_id;
+	}
+	
+	private function initPageNum($curr_page)
+	{
+		$page = (preg_match('/^[0-9][0-9]*$/', $curr_page) ? (int)$curr_page : 0);
+		$this->search_range_start = $page * $this->search_result_per_page;
+		
+		return $page;
+	}
+	
+	private function getSpeciesProvider()
+	{
+		if (!$this->speciesProvider)
+			$this->speciesProvider = $this->get('comppi.build.specieProvider');
+			
+		return $this->speciesProvider;
+	}
+	
+	private function getDbConnection()
+	{
+		if (empty($this->DB))
+				$this->DB = $this->get('database_connection');
+		return $this->DB;
+	}
+	
+	private function getLocalizationTranslator()
+	{
+		if (!$this->localizationTranslator)
+			$this->localizationTranslator = $this->get('comppi.build.localizationTranslator');
+			
+		return $this->localizationTranslator;
 	}
 	
 	
@@ -345,184 +607,5 @@ class ProteinSearchController extends Controller
 		chmod("/var/www/comppi/$filename", 0777);
 		
 		return new Response("[ OK ]<br>First neighbours: ".$r_actor_ids->rowCount()."<br>Interactions: $interaction_count");
-	}
-	
-	
-	private function getProteinDetails($comppi_id)
-	{
-		$DB = $this->getDbConnection();
-		$r_p = $DB->executeQuery("SELECT proteinName AS name, proteinNamingConvention AS naming, specieId FROM Protein WHERE id=?", array($comppi_id));
-		if (!$r_p) throw new \ErrorException('Protein query failed!');
-		
-		$prot_details = $r_p->fetch(\PDO::FETCH_ASSOC);
-		$prot_details['species'] = $prot_details['specieId']; // @TODO: map name to id
-		$prot_details['locs'] = $this->getProteinLocalizations(array($comppi_id));
-		$prot_details['locs'] = (!empty($prot_details['locs'][$comppi_id]) ? $prot_details['locs'][$comppi_id] : array());
-		
-		$syns = $this->getProteinSynonyms(array($comppi_id));
-		$prot_details['synonyms'] = $syns[$comppi_id]['synonyms'];
-		$prot_details['fullname'] = $syns[$comppi_id]['syn_fullname'];
-		$prot_details['uniprot_link'] = $this->uniprot_root.$prot_details['name'];
-		
-		return $prot_details;
-	}
-
-	
-	// @var array The list of comppi ids
-	private function getProteinLocalizations($comppi_ids)
-	{
-		$DB = $this->getDbConnection();
-		
-		$sql_pl = 'SELECT
-				ptl.proteinId as pid, ptl.localizationId AS locId, ptl.sourceDb, ptl.pubmedId,
-				lt.name as minorLocName, lt.majorLocName,
-				st.name AS exp_sys, st.confidenceType AS exp_sys_type
-			FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
-			LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
-			WHERE ptl.id=pltst.protLocId
-				AND pltst.systemTypeId=st.id
-				AND proteinId IN ('.join(',', $comppi_ids).')';
-		$this->verbose ? $this->verbose_log[] = $sql_pl : '';
-		
-		if (!$r_pl = $DB->executeQuery($sql_pl))
-			throw new \ErrorException('ProteinToLocalization query failed!');
-		
-		$i = 0;
-		while ($p = $r_pl->fetch(\PDO::FETCH_OBJ))
-		{
-			$i++;
-			
-			$pl[$p->pid][$i]['source_db'] = $p->sourceDb;
-			$pl[$p->pid][$i]['pubmed_link'] = $this->linkToPubmed($p->pubmedId);
-			$pl[$p->pid][$i]['loc_exp_sys'] = $this->exptype[$p->exp_sys_type].': '.$p->exp_sys;
-			$pl[$p->pid][$i]['loc_exp_sys_type'] = $p->exp_sys_type;
-			if (!empty($p->minorLocName)) {
-				$pl[$p->pid][$i]['small_loc'] = ucfirst($p->minorLocName);
-			} else {
-				$pl[$p->pid][$i]['small_loc'] = 'N/A';
-			}
-			if (!empty($p->majorLocName)) {
-				$pl[$p->pid][$i]['large_loc'] = ucfirst($p->majorLocName);
-			} else {
-				$pl[$p->pid][$i]['large_loc'] = 'N/A';
-			}
-		}
-		$this->verbose ? $this->verbose_log[] = count($pl).' protein locations found' : '';
-
-		return (!empty($pl) ? $pl : array());
-	}
-	
-	
-	private function getProteinSynonyms($comppi_ids)
-	{
-		$DB = $this->getDbConnection();
-		$sql_syn = "SELECT proteinId AS pid, name, namingConvention FROM NameToProtein WHERE proteinId IN(".join(',', $comppi_ids).")";
-		$this->verbose ? $this->verbose_log[] = $sql_syn : '';
-
-		if (!$r_syn = $DB->executeQuery($sql_syn))
-			throw new \ErrorException('getProteinSynonyms query failed!');
-		
-		$syns = array();
-		while ($s = $r_syn->fetch(\PDO::FETCH_OBJ))
-		{
-			if ($s->namingConvention=='UniProtFull') {
-				$syns[$s->pid]['syn_fullname'] = $s->name; // full name highlighted...
-			} else {
-				$syns[$s->pid]['synonyms'][] = $s->name.'&nbsp;('.$s->namingConvention.')';
-			}
-		}
-		
-		return $syns;
-	}
-	
-	
-	private function linkToPubmed($pubmed_uid)
-	{
-		return 'http://www.ncbi.nlm.nih.gov/pubmed/'.$pubmed_uid;
-	}
-	
-	private function initKeyword($protein_name)
-	{
-		
-		// $request->request->get('fProtSearchKeyword') is not empty even if no keyword was filled in!
-		if (!empty($_POST['fProtSearchKeyword']))
-		{
-			$keyword = $_POST['fProtSearchKeyword'];
-		}
-		else if (!empty($protein_name))
-		{
-			$keyword = $protein_name;
-		}
-		// Form was submitted, but we haven't had any keyword
-		elseif (isset($_SESSION['protein_search_keyword']))
-		{
-			//$this->get('session')->getFlashBag()->add('no_keyword_err', 'Please fill in a keyword!');
-			$keyword = $_SESSION['protein_search_keyword'];
-		}
-		else
-		{
-			$keyword = '';
-		}
-		return $keyword;
-	}
-	
-	/*
-		@var $requested_species the list of species abbreviations separated by commas, e.g. hs,ce
-	*/
-	private function initSpecies($requested_species = '')
-	{
-		$species_provider = $this->getSpeciesProvider();
-		
-		if (!empty($_POST['fProtSearchSpecies'])) {
-			// this ensures that we need an exact match from the input to be valid
-			// if we don't get back an object, then the form was forged
-			$o_sp_descriptor = $species_provider->getSpecieByAbbreviation($_POST['fProtSearchSpecies']);
-			$species_id = $o_sp_descriptor->id;
-		} elseif (!empty($requested_species)) {
-			$o_sp_descriptor = $species_provider->getSpecieByAbbreviation($requested_species);
-			$species_id = $o_sp_descriptor->id;
-		} else {
-			$species_id = 0; // human
-		}
-		
-		// add the taxonomical abbreviations of all species, they'll be needed on the species selector buttons
-		$descriptors = $species_provider->getDescriptors();
-		foreach($descriptors as $o)
-		{
-			$o->shortname = substr_replace($o->name, '. ', 1, strpos($o->name, ' '));
-		}
-		
-		return $species_id;
-	}
-	
-	private function initPageNum($curr_page)
-	{
-		$page = (preg_match('/^[0-9][0-9]*$/', $curr_page) ? (int)$curr_page : 0);
-		$this->search_range_start = $page * $this->search_result_per_page;
-		
-		return $page;
-	}
-	
-	private function getSpeciesProvider()
-	{
-		if (!$this->speciesProvider)
-			$this->speciesProvider = $this->get('comppi.build.specieProvider');
-			
-		return $this->speciesProvider;
-	}
-	
-	private function getDbConnection()
-	{
-		if (empty($this->DB))
-				$this->DB = $this->get('database_connection');
-		return $this->DB;
-	}
-	
-	private function getLocalizationTranslator()
-	{
-		if (!$this->localizationTranslator)
-			$this->localizationTranslator = $this->get('comppi.build.localizationTranslator');
-			
-		return $this->localizationTranslator;
 	}
 }

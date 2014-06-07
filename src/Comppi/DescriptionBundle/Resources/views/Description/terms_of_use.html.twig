@@ -1,0 +1,18 @@
+{# src/Comppi/ProteinSearchBundle/Resources/views/about.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %}ComPPI - Help/Terms of Use{% endblock %}
+
+{% block bundlecontent %}
+	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Terms of Use</li></ul></h1>
+	
+	<h2>ComPPI & Open Source</h2>
+	<p></p>
+	<p>ComPPI database and web application is entirely open-source.</p>
+	<p>The user can reach the ComPPI source code in <a href="http://bificomp2.sote.hu:22422/comppi/summary">RhodeCode</a></p>
+	<p>Issue tracking is available through <a href="http://bificomp2.sote.hu/redmine/projects/comppi">Redmine</a> </p>
+	<br />
+	<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">ComPPI</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+	
+	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a</p>
+{% endblock %}
