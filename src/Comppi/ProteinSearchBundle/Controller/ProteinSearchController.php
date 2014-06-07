@@ -81,7 +81,7 @@ class ProteinSearchController extends Controller
 	);
 	private $autocomplete_url = "./protein_search/autocomplete/";
 	private $autocomplete_url_dev = "/comppi/ComPPI_dualon/web/app_dev.php/protein_search/autocomplete/";
-	
+
 	// PROTEIN SEARCH
 	//public function proteinSearchAction($protein_name, $requested_species, $current_page)
 	public function proteinSearchAction()
@@ -94,8 +94,8 @@ class ProteinSearchController extends Controller
 		$current_page = $this->initPageNum($current_page);
 		$sp = $this->getSpeciesProvider();
 		$spDescriptors = $sp->getDescriptors();
-		
-		
+
+
 		$T = array(
 			'verbose_log' => '',
 			'species_list' => $spDescriptors,
@@ -125,7 +125,7 @@ class ProteinSearchController extends Controller
 			  ORDER BY p.proteinName", array($keyword, $species_id));
 			if (!$r_prots_by_name)
 				throw new \ErrorException('Interaction query failed!');
-			
+
 			// exact match to a protein -> we show its interactions
 			if ($r_prots_by_name->rowCount()==1)
 			{
@@ -172,8 +172,8 @@ class ProteinSearchController extends Controller
 			return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
 		}
 	}
-	
-	
+
+
 	public function interactorsAction($comppi_id, $get_interactions)
 	{
 		$DB = $this->getDbConnection();
@@ -181,15 +181,15 @@ class ProteinSearchController extends Controller
 		$spDescriptors = $sp->getDescriptors();
 		$comppi_id = intval($comppi_id);
 		$protein_ids = []; // collect the interactor IDs
-		
+
 		$T = array(
 			'comppi_id' => $comppi_id,
 			'ls' => array()
 		);
-		
+
 		// details of the requested protein
 		$T['protein'] = $this->getProteinDetails($comppi_id);
-		
+
 		// @TODO: letölthető dataset
 
 		// interactors
@@ -214,11 +214,11 @@ class ProteinSearchController extends Controller
 				$T['ls'][$i->pid]['uniprot_outlink'] = $this->uniprot_root.$i->name;
 			$T['ls'][$i->pid]['confScore'] = round($i->confScore, 2)*100;
 			$confScoreAvg += $i->confScore;
-			
+
 			$protein_ids[$i->pid] = $i->pid;
 			$interaction_ids[$i->iid] = $i->iid;
 		}
-		
+
 		if ($get_interactions) {
 			return $this->forward(
 				'DownloadCenterBundle:DownloadCenter:serveInteractions',
@@ -226,14 +226,14 @@ class ProteinSearchController extends Controller
 					  'interaction_ids' => $interaction_ids)
 			);
 		}
-		
+
 		if (!empty($protein_ids)) {
 			// localizations for the interactor
 			$protein_locs = $this->getProteinLocalizations($protein_ids);
-			
+
 			// synonyms for the interactor
 			$protein_synonyms = $this->getProteinSynonyms($protein_ids);
-			
+
 			foreach($T['ls'] as $pid => &$actor)
 			{
 				// localizations to interactors
@@ -247,57 +247,57 @@ class ProteinSearchController extends Controller
 				//$actor['syn_namings'] = (empty($protein_synonyms[$pid]['syn_namings']) ? array() : $protein_synonyms[$pid]['syn_namings']);
 			}
 		}
-		
+
 		$T['protein']['interactionNumber'] = count($protein_ids);
 		if ($T['protein']['interactionNumber']) {
 			$T['protein']['avgConfScore'] = round(($confScoreAvg/$T['protein']['interactionNumber']), 2)*100;
 		} else {
 			$T['protein']['avgConfScore'] = false;
 		}
-		
+
 		return $this->render('ComppiProteinSearchBundle:ProteinSearch:interactors.html.twig',$T);
 	}
-	
-	
+
+
 	public function autocompleteAction($keyword)
 	{
 		$DB = $this->getDbConnection();
 		$r_i = $DB->executeQuery("SELECT name FROM ProteinName WHERE name LIKE ? ORDER BY LENGTH(name) LIMIT 15", array("%$keyword%"));
 		if (!$r_i) throw new \ErrorException('Autocomplete query failed!');
-		
+
 		$list = array();
 		while ($p = $r_i->fetch(\PDO::FETCH_OBJ))
 			$list[] = $p->name;
 
         return new Response(json_encode($list));
 	}
-	
-	
+
+
 	private function getProteinDetails($comppi_id)
 	{
 		$DB = $this->getDbConnection();
 		$r_p = $DB->executeQuery("SELECT proteinName AS name, proteinNamingConvention AS naming, specieId FROM Protein WHERE id=?", array($comppi_id));
 		if (!$r_p) throw new \ErrorException('Protein query failed!');
-		
+
 		$prot_details = $r_p->fetch(\PDO::FETCH_ASSOC);
 		$prot_details['species'] = $prot_details['specieId']; // @TODO: map name to id
 		$prot_details['locs'] = $this->getProteinLocalizations(array($comppi_id));
 		$prot_details['locs'] = (!empty($prot_details['locs'][$comppi_id]) ? $prot_details['locs'][$comppi_id] : array());
-		
+
 		$syns = $this->getProteinSynonyms(array($comppi_id));
 		$prot_details['synonyms'] = $syns[$comppi_id]['synonyms'];
 		$prot_details['fullname'] = $syns[$comppi_id]['syn_fullname'];
 		$prot_details['uniprot_link'] = $this->uniprot_root.$prot_details['name'];
-		
+
 		return $prot_details;
 	}
 
-	
+
 	// @var array The list of comppi ids
 	private function getProteinLocalizations($comppi_ids)
 	{
 		$DB = $this->getDbConnection();
-		
+
 		$sql_pl = 'SELECT
 				ptl.proteinId as pid, ptl.localizationId AS locId, ptl.sourceDb, ptl.pubmedId,
 				lt.name as minorLocName, lt.majorLocName,
@@ -310,16 +310,16 @@ class ProteinSearchController extends Controller
 				AND pltst.systemTypeId=st.id
 				AND proteinId IN ('.join(',', $comppi_ids).')';
 		$this->verbose ? $this->verbose_log[] = $sql_pl : '';
-		
+
 		if (!$r_pl = $DB->executeQuery($sql_pl))
 			throw new \ErrorException('ProteinToLocalization query failed!');
-		
+
 		$i = 0;
 		while ($p = $r_pl->fetch(\PDO::FETCH_OBJ))
 		{
 			$i++;
 			$mnlrc = 0; // minor loc replacement count
-			
+
 			$pl[$p->pid][$i]['source_db'] = $p->sourceDb;
 			$pl[$p->pid][$i]['pubmed_link'] = $this->linkToPubmed($p->pubmedId);
 			// loc exp sys type replacement: IPI -> IPI: Inferred From Physical Interaction
@@ -359,8 +359,8 @@ class ProteinSearchController extends Controller
 
 		return (!empty($pl) ? $pl : array());
 	}
-	
-	
+
+
 	private function getProteinSynonyms($comppi_ids)
 	{
 		$DB = $this->getDbConnection();
@@ -369,7 +369,7 @@ class ProteinSearchController extends Controller
 
 		if (!$r_syn = $DB->executeQuery($sql_syn))
 			throw new \ErrorException('getProteinSynonyms query failed!');
-		
+
 		$syns = array();
 		while ($s = $r_syn->fetch(\PDO::FETCH_OBJ))
 		{
@@ -379,19 +379,19 @@ class ProteinSearchController extends Controller
 				$syns[$s->pid]['synonyms'][] = $s->name.'&nbsp;('.$s->namingConvention.')';
 			}
 		}
-		
+
 		return $syns;
 	}
-	
-	
+
+
 	private function linkToPubmed($pubmed_uid)
 	{
 		return 'http://www.ncbi.nlm.nih.gov/pubmed/'.$pubmed_uid;
 	}
-	
+
 	private function initKeyword($protein_name)
 	{
-		
+
 		// $request->request->get('fProtSearchKeyword') is not empty even if no keyword was filled in!
 		if (!empty($_POST['fProtSearchKeyword']))
 		{
@@ -413,14 +413,14 @@ class ProteinSearchController extends Controller
 		}
 		return $keyword;
 	}
-	
+
 	/*
 		@var $requested_species the list of species abbreviations separated by commas, e.g. hs,ce
 	*/
 	private function initSpecies($requested_species = '')
 	{
 		$species_provider = $this->getSpeciesProvider();
-		
+
 		if (!empty($_POST['fProtSearchSpecies'])) {
 			// this ensures that we need an exact match from the input to be valid
 			// if we don't get back an object, then the form was forged
@@ -432,49 +432,51 @@ class ProteinSearchController extends Controller
 		} else {
 			$species_id = 0; // human
 		}
-		
+
 		// add the taxonomical abbreviations of all species, they'll be needed on the species selector buttons
 		$descriptors = $species_provider->getDescriptors();
 		foreach($descriptors as $o)
 		{
 			$o->shortname = substr_replace($o->name, '. ', 1, strpos($o->name, ' '));
 		}
-		
+
 		return $species_id;
 	}
-	
+
 	private function initPageNum($curr_page)
 	{
 		$page = (preg_match('/^[0-9][0-9]*$/', $curr_page) ? (int)$curr_page : 0);
 		$this->search_range_start = $page * $this->search_result_per_page;
-		
+
 		return $page;
 	}
-	
+
 	private function getSpeciesProvider()
 	{
 		if (!$this->speciesProvider)
 			$this->speciesProvider = $this->get('comppi.build.specieProvider');
-			
+
 		return $this->speciesProvider;
 	}
-	
+
 	private function getDbConnection()
 	{
 		if (empty($this->DB))
-				$this->DB = $this->get('database_connection');
+			$this->DB = $this->get('database_connection');
+
+		$this->get('database_connection')->getConfiguration()->setSQLLogger(null);
 		return $this->DB;
 	}
-	
+
 	private function getLocalizationTranslator()
 	{
 		if (!$this->localizationTranslator)
 			$this->localizationTranslator = $this->get('comppi.build.localizationTranslator');
-			
+
 		return $this->localizationTranslator;
 	}
-	
-	
+
+
 	/**
 	 * Current test protein: P04637 = ComPPI ID: 17387
 	 * Gets the first neighbours of a node with their connections to earch other (or optionally all of their interactions). Writes a tab-separated text file with rows like: "locA.nodeA\tlocB.nodeB\n".
@@ -483,7 +485,7 @@ class ProteinSearchController extends Controller
 	{
 		$joined_node_names = true; // node name = major_loc.protein_name (to display in Cytoscape for example)
 		$interaction_count = 0;
-		
+
 		$interaction_sql = "INSERT INTO Interaction (id, actorAId, actorBId) VALUES \n";
 		$interaction_rows = array();
 		$protein_sql = "INSERT INTO Protein (id, specieId, proteinName) VALUES \n";
@@ -494,7 +496,7 @@ class ProteinSearchController extends Controller
 		$protloc_to_systype_rows = array();
 		$systype_sql = "INSERT INTO SystemType (id, confidenceType) VALUES \n";
 		$systype_rows = array();
-		
+
 		// GET THE STAR-SHAPED NETWORK OF THE REQUESTED PROTEIN AND ITS FIRST NEIGHBOURS
 		$DB = $this->getDbConnection();
 		$r_actor_ids = $DB->executeQuery(
@@ -507,7 +509,7 @@ class ProteinSearchController extends Controller
 			WHERE actorAId = ? OR actorBId = ?",
 			array($comppi_id, $comppi_id, $comppi_id, $comppi_id)
 		);
-		
+
 		while($actor = $r_actor_ids->fetch(\PDO::FETCH_OBJ)) {
 			$first_neighbour_ids[$actor->actorId] = $actor->actorId;
 			$interaction_rows[$actor->iid] = '('.$actor->iid.', '.$comppi_id.', '.$actor->actorId.')';
@@ -515,7 +517,7 @@ class ProteinSearchController extends Controller
 		}
 
 		//die(var_dump($first_neighbours));
-		
+
 		// GET THE INTERACTIONS AMONG THE FIRST NEIGHBOURS
 		$sql_neighbour_links = "SELECT DISTINCT i.id as iid, p1.id as p1id, p1.proteinName as proteinA, p2.id as p2id, p2.proteinName as proteinB, ptl1.id as protLocAId, ptl1.localizationId as locAId, ptl2.id as protLocBId, ptl2.localizationId as locBId, st1.id as sysTypeAId, st1.confidenceType as confTypeA, st2.id as sysTypeBId, st1.confidenceType as confTypeB
 		FROM Interaction i
@@ -529,7 +531,7 @@ class ProteinSearchController extends Controller
 		LEFT JOIN SystemType st2 ON ptst2.systemTypeId=st2.id
 		WHERE (i.actorAId IN(".join(',', $first_neighbour_ids).") OR i.actorBId IN(".join(',', $first_neighbour_ids)."))
 		GROUP BY ptl1.localizationId, ptl2.localizationId";
-		
+
 		$sql_neighbour_links_for_negative_set = "SELECT DISTINCT i.id as iid, p1.id as p1id, p1.proteinName as proteinA, p2.id as p2id, p2.proteinName as proteinB, ptl1.id as protLocAId, ptl1.localizationId as locAId, ptl2.id as protLocBId, ptl2.localizationId as locBId, st1.id as sysTypeAId, st1.confidenceType as confTypeA, st2.id as sysTypeBId, st1.confidenceType as confTypeB
 		FROM Interaction i
 		LEFT JOIN Protein p1 ON p1.id=i.actorAId
@@ -542,57 +544,57 @@ class ProteinSearchController extends Controller
 		LEFT JOIN SystemType st2 ON ptst2.systemTypeId=st2.id
 		WHERE (i.actorAId IN(".join(',', $first_neighbour_ids).") OR i.actorBId IN(".join(',', $first_neighbour_ids)."))
 		GROUP BY ptl1.localizationId, ptl2.localizationId LIMIT 20000";
-		
+
 		//die($sql_neighbour_links);
-		
+
 		$r_neighbour_links = $DB->executeQuery($sql_neighbour_links);
-		
+
 		$locs = $this->getLocalizationTranslator();
 
 		while($link = $r_neighbour_links->fetch(\PDO::FETCH_OBJ)) {
 			$large_loc_a = (empty($link->locAId) ? "N/A" : $locs->getLargelocById($link->locAId));
 			$large_loc_b = (empty($link->locBId) ? "N/A" : $locs->getLargelocById($link->locBId));
-			
+
 			// take those and only those interactions,
 			// where the interactors are in the same known localization -> POSITIVE DATA SET
 			// for NEGATIVE DATA SET: $large_loc_a != $large_loc_b
 			if ($large_loc_a == $large_loc_b AND $large_loc_a != 'N/A') {
 				$interaction_count++;
-				
+
 				// Interaction
 				$interaction_tmp_row = '('.$link->iid.', '.$link->p1id.', '.$link->p2id.')';
 				if (!in_array($interaction_tmp_row, $interaction_rows))
 					$interaction_rows[$link->iid] = $interaction_tmp_row;
-				
+
 				// Protein
 				$protein_rows[$link->p1id] = '('.$link->p1id.", 0, '".$link->proteinA."')";
 				$protein_rows[$link->p2id] = '('.$link->p2id.", 0, '".$link->proteinB."')";
-				
+
 				// ProteinToLocalization
 				$prot_to_loc_rows[$link->protLocAId] = '('.$link->protLocAId.', '.$link->p1id.', '.$link->locAId.')';
 				$prot_to_loc_rows[$link->protLocBId] = '('.$link->protLocBId.', '.$link->p2id.', '.$link->locBId.')';
-	
+
 				// ProtLocToSystemType
 				$protloc_to_systype_rows[$link->protLocAId] = '('.$link->protLocAId.', '.$link->sysTypeAId.')';
 				$protloc_to_systype_rows[$link->protLocBId] = '('.$link->protLocBId.', '.$link->sysTypeBId.')';
-				
+
 				// SystemType
 				$systype_rows[$link->sysTypeAId] = '('.$link->sysTypeAId.', '.$link->confTypeA.')';
 				$systype_rows[$link->sysTypeBId] = '('.$link->sysTypeBId.', '.$link->confTypeB.')';
 			}
 		}
-		
+
 		$interaction_sql .= join(", \n", $interaction_rows);
 		$protein_sql .= join(", \n", $protein_rows);
 		$prot_to_loc_sql .= join(", \n", $prot_to_loc_rows);
 		$protloc_to_systype_sql .= join(", \n", $protloc_to_systype_rows);
 		$systype_sql .= join(", \n", $systype_rows);
-		
+
 		$file_tbl_structure = "/var/www/comppi/comppi_positive_dataset_structure-trimmed.sql";
 		$fp_structure = fopen($file_tbl_structure, "r");
 		$tbl_structures = fread($fp_structure, filesize($file_tbl_structure));
 		fclose($fp_structure);
-		
+
 		$filename = date("YmdHis").'_subgraph_of_'.$comppi_id.".sql";
 		$fp = fopen("/var/www/comppi/$filename", "a");
 		fwrite($fp,
@@ -605,7 +607,7 @@ class ProteinSearchController extends Controller
 		);
 		fclose($fp);
 		chmod("/var/www/comppi/$filename", 0777);
-		
+
 		return new Response("[ OK ]<br>First neighbours: ".$r_actor_ids->rowCount()."<br>Interactions: $interaction_count");
 	}
 }
