@@ -26,17 +26,41 @@ class ComppiStandard implements CalculatorInterface
 
     public function calculate(\Doctrine\DBAL\Connection $connection)
     {
-        $this->conn=$connection; //needed for CalculateLinkConfidence;
+
+        $protOffset = 0;
+        $interactionOffset = 0;
+        $blockSize = 500;
+
+    
+	$this->conn=$connection; //needed for CalculateLinkConfidence;
         $locQuery=$connection->prepare('SELECT proteinId,localizationId,specieId,confidenceType FROM ProtLocToSystemType LEFT JOIN ProteinToLocalization on ProtLocToSystemType.protLocId=ProteinToLocalization.id LEFT JOIN Protein on Protein.id=ProteinToLocalization.proteinId LEFT JOIN SystemType on SystemType.id=ProtLocToSystemType.systemTypeId WHERE proteinId=?');
         echo (" CompPPI Standard calculator init...\n");
         $this->initCalculation($connection);
         //for each protein
         $ProteinScores=array();
         echo (" Adding proteins from database...\n");
-        $protRes=$connection->query("SELECT DISTINCT id FROM Protein");
-        $protIDs=$protRes->fetchAll(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $protSelect=$connection->prepare("SELECT DISTINCT id FROM Protein ORDER BY id ASC LIMIT ?,?");
         $num=0;
+
+        $protinsert = $connection->prepare(
+            'INSERT INTO LocalizationScore(proteinId, majorLocName, calculatorId, score)' .
+            ' VALUES(?, ?, ?, ?)'
+        );
+
+        $protinsert->bindValue(3, $this->id, IntegerParameter::INTEGER);
         
+        $protSelect->bindValue(1, $protOffset, IntegerParameter::INTEGER);
+	$protSelect->bindValue(2, $blockSize, IntegerParameter::INTEGER);
+
+	$protSelect->execute();
+	
+	while ($protSelect->rowCount() > 0) 
+	{
+	$protIDs=$protSelect->fetchAll(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+	$connection->beginTransaction();
+	        
+
         //calculate protein scores
         foreach($protIDs as $protein)
         {
@@ -70,11 +94,24 @@ class ComppiStandard implements CalculatorInterface
 	  }
 	  //echo(1- $score."\n");
 	  $ProteinScores[$protein['id']][$ProteinLocalization]= 1 - $score;
+	  
+	  $protinsert->bindValue(1, $protein['id'], IntegerParameter::INTEGER);
+	  $protinsert->bindValue(2, $ProteinLocalization);
+	  $protinsert->bindValue(4, 1-$score, IntegerParameter::INTEGER);
+	  $protinsert->execute();
+
 	 }
-         if($num%10000==0) echo($num."/".count($protIDs)." proteins added.\n");
+         if($num%10000==0) echo($num." proteins added.\n");
         }
+	  $connection->commit();
 
+	  // advance cursor
+	  $protOffset += $blockSize;
 
+	  $protSelect->closeCursor();
+	  $protSelect->bindValue(1, $protOffset, IntegerParameter::INTEGER);
+	  $protSelect->execute();
+	}
         echo("Calculating link confidence scores...\n");
 
         $insert = $connection->prepare(
@@ -89,8 +126,6 @@ class ComppiStandard implements CalculatorInterface
             'SELECT Interaction.id as id FROM Interaction ORDER BY id ASC LIMIT ?, ?'
         );
 
-        $interactionOffset = 0;
-        $blockSize = 500;
 
         $interactionSelect->bindValue(1, $interactionOffset, IntegerParameter::INTEGER);
         $interactionSelect->bindValue(2, $blockSize, IntegerParameter::INTEGER);

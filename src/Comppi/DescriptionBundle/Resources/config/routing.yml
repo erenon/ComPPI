@@ -2,10 +2,10 @@ ComppiDescriptionBundle_about:
     pattern:  /home
     defaults: { _controller: ComppiDescriptionBundle:Description:About }
 
-ComppiDescriptionBundle_help:
-    pattern:  /help
-    defaults: { _controller: ComppiDescriptionBundle:Description:Help }
-
 ComppiDescriptionBundle_impressum:
     pattern:  /impressum
     defaults: { _controller: ComppiDescriptionBundle:Description:Impressum }
+
+ComppiDescriptionBundle_help:
+    pattern:  /help/{subpage}
+    defaults: { _controller: ComppiDescriptionBundle:Description:Help, subpage = '' }

@@ -18,6 +18,7 @@ web/export_downloads.log
 .project
 .settings
 
+databases
 databases/ce
 databases/dm
 databases/hs
@@ -27,3 +28,5 @@ databases2
 
 #build
 build 
+
+comppi.komodoproject
