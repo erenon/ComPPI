@@ -26,10 +26,10 @@ class LoadConfidenceScoresCommand extends ContainerAwareCommand
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $output->writeln('  > calculating null score');
+//         $output->writeln('  > calculating null score');
 
-        $calculator = $this->calculator;
-        $calculator->calculateScores($calculator::NULL_CALC);
+//         $calculator = $this->calculator;
+//         $calculator->calculateScores($calculator::NULL_CALC);
 
         $output->writeln('  > calculating comppi standard score');
 
