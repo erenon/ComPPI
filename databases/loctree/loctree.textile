@@ -362,7 +362,7 @@
 *********** cytosolic proteasome complex (GO:0031597)
 ************ proteasome storage granule (GO:0034515)
 ************ proteasome core complex (GO:0005839)
-************* proteasome core complex, beta-subunit complex (GO:0019774)GO:0034677
+************* proteasome core complex, beta-subunit complex (GO:0019774)
 ************* proteasome core complex, alpha-subunit complex (GO:0019773)
 ********** fatty acid synthase complex (GO:0005835)
 ********** phosphatidylinositol 3-kinase complex (GO:0005942)

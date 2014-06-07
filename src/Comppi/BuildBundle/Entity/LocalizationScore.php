@@ -9,18 +9,24 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class LocalizationScore
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\ManyToOne(targetEntity="ProteinToLocalization")
-     */
-    protected $localizationId;
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\ManyToOne(targetEntity="Protein")
+	 */
+	protected $proteinId;
 
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      */
     protected $calculatorId;
+    
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="string")
+     */
+    protected $majorLocName;
 
     /**
      * @ORM\Column(type="float")

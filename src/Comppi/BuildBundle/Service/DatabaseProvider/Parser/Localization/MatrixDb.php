@@ -47,9 +47,10 @@ class MatrixDb extends AbstractLocalizationParser
 
         $recordArray = explode("\t", $line);
         $this->checkRecordFieldCount($recordArray, 2);
+        $proteinName = trim($recordArray[0], "\"");
 
         $this->currentRecord = array(
-            'proteinId' => $recordArray[0],
+            'proteinId' => $proteinName,
             'namingConvention' => 'UniProtKB-AC',
             'localization' => $this->localization,
             'pubmedId' => 19147664,
