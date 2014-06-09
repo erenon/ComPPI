@@ -768,7 +768,7 @@ then
     then
         wget --load-cookies dip-cookies.txt \
         -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
-        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Hsapi20140427.txt \
+        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2014/tab25/Hsapi20140427.txt \
         -O ./hs/interaction/Dip_Hsapi.txt
     fi
     
@@ -777,7 +777,7 @@ then
     then
         wget --load-cookies dip-cookies.txt \
         -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
-        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Dmela20140427.txt \
+        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2014/tab25/Dmela20140427.txt \
         -O ./dm/interaction/Dip_Dmela.txt
     fi
     
@@ -786,7 +786,7 @@ then
     then
         wget --load-cookies dip-cookies.txt \
         -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
-        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Scere20140427.txt \
+        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2014/tab25/Scere20140427.txt \
         -O ./sc/interaction/Dip_Scere.txt
     fi
     
@@ -795,7 +795,7 @@ then
     then
         wget --load-cookies dip-cookies.txt \
         -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
-        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Celeg20140427.txt \
+        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2014/tab25/Celeg20140427.txt \
         -O ./ce/interaction/Dip_Celeg.txt
     fi
     
@@ -816,7 +816,7 @@ then
     fi     
     
     grep "taxid:9606(Homo sapiens)	taxid:9606(human)" intact.txt > ./hs/interaction/intact-hs.txt
-    grep "taxid:7227(\"Drosophila melanogaster (Fruit fly)\")	taxid:7227(drome)" intact.txt > /dm/interaction/intact-dm.txt
+    grep "taxid:7227(\"Drosophila melanogaster (Fruit fly)\")	taxid:7227(drome)" intact.txt > ./dm/interaction/intact-dm.txt
     grep "taxid:559292(\"Saccharomyces cerevisiae (strain ATCC 204508 / S288c)\")	taxid:559292(yeast)" intact.txt > ./sc/interaction/intact-sc.txt
     grep "taxid:6239(Caenorhabditis elegans)	taxid:6239(caeel)" intact.txt > ./ce/interaction/intact-ce.txt
     
