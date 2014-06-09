@@ -758,7 +758,7 @@ then
     # login
     wget --save-cookies dip-cookies.txt \
      --keep-session-cookies \
-     --post-data 'login=vAirDa98&pass=Csbmq&lgn=1&Login=Login' \
+     --post-data 'login=vAirDa97&pass=Csbmq&lgn=1&Login=Login' \
      -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
      http://dip.doe-mbi.ucla.edu/dip/Login.cgi \
      -O /dev/null
@@ -768,7 +768,7 @@ then
     then
         wget --load-cookies dip-cookies.txt \
         -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
-        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Hsapi20140117.txt \
+        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Hsapi20140427.txt \
         -O ./hs/interaction/Dip_Hsapi.txt
     fi
     
@@ -777,7 +777,7 @@ then
     then
         wget --load-cookies dip-cookies.txt \
         -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
-        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Dmela20140117.txt \
+        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Dmela20140427.txt \
         -O ./dm/interaction/Dip_Dmela.txt
     fi
     
@@ -786,7 +786,7 @@ then
     then
         wget --load-cookies dip-cookies.txt \
         -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
-        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Scere20140117.txt \
+        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Scere20140427.txt \
         -O ./sc/interaction/Dip_Scere.txt
     fi
     
@@ -795,7 +795,7 @@ then
     then
         wget --load-cookies dip-cookies.txt \
         -U "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080418 Ubuntu/7.10 (gutsy) Firefox/2.0.0.14" \
-        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Celeg20140117.txt \
+        http://dip.doe-mbi.ucla.edu/dip/File.cgi?FN=2012/tab25/Celeg20140427.txt \
         -O ./ce/interaction/Dip_Celeg.txt
     fi
     
