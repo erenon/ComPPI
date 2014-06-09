@@ -4,44 +4,96 @@
 {% block title %}ComPPI - Main Page{% endblock %}
 
 {% block bundlecontent %}
-	<table id="MainPageContent"><tbody><tr>
-	
-	<!-- left column -->
-	<td>
-		<p>ComPPI</b> is a compartmentalized protein-protein interaction database containing <b>187 949</b> proteins and their <b>950 780</b> interactions.</p>
-		<p>Protein-protein Interactions - An integrated dataset of 10 protein-protein interaction databases containing 950 780 interactions<br/>
-		Subcellular Localizations - An integrated dataset of 9 subcellular localization databases including 269 586 subcellular localizations
-		Species - A comparative assessment of four species:<br/>
-
-    S. cerevisiae
-    C. elegans
-    D. melanogaster
-    H. sapiens<br/>
-		1600+ Gene Ontology Cellular Component - A hierarchic structure of subcellular localizations using more than 1600 GO cellular component terms<br/>
-		Interaction and Localization Score - A localization score for proteins and an interaction score protein-protein interactions comprising data-quality and interactome-consensus of subcellular localization<br/>
-		Protein Search - Direct search options for individual proteins with autocomplete function<br/>
-		Download Custom Datasets - Download options of whole-proteome or organelle-specific interactomes and of integrated protein-protein interaction and subcellular localization datasets
-		</p>
-	</td>
-	
-	<!-- right column -->
-	<td><ul>
-		<li><b>187 949</b> proteins and</li>
-		<li><b>950 780</b> interactions integrated from 10 databases,</li>
-		<li><b>269 586</b> <a href="{{ path('ComppiDescriptionBundle_help') }}/input_databases">subcellular localizations</a> from 9 databases</li>
-		<li><b>1600+</b> Gene Ontology Cellular Component Terms</li>
-		<li>A comparative assessment of four species:
-			<ul>
-			<li><i>S. cerevisiae</i></li>
-			<li><i>C. elegans</i></li>
-			<li><i>D. melanogaster</i></li>
-			<li><i>H. sapiens</i></li>
-			</ul>
-		</li>
-		<li>Interaction and Localization Score to comprise data quality,</li>
-		<li>Direct search options for individual proteins with autocomplete function</li>
-		<li>Download Custom Datasets</li>
-	</ul>
-	
-	</tr></tbody></table>
+	<table id="MainPageContent">
+		<thead>
+                <tr>
+                    <th width="50%" align="center" bgcolor="orange"><font face="verdana" color="grey">What is ComPPI?</font></th>
+                    <th width="50%" align="center" bgcolor="orange"><font face="verdana" color="grey">Statistics</font></th>
+                </tr> 
+            </thead>
+		<tbody>
+			<tr>
+				<!-- left column -->
+				<td>
+					ComPPI is a compartmentalized protein-protein interaction database,
+					providing subcellular localization specific information of the interactors
+					and offers download options of compartment-specific interactomes.
+					With the help of the ComPPI database those interactions could be filtered out
+					where the interacting proteins have no common subcellular localization.
+					
+				</td>
+				<!-- right column -->
+				<td>
+					<table id="Input_PPI_Table_Human" class="fancy_table hovered_list">
+						<thead>
+						    <tr>
+							<th>Species</th>
+							<th>Number of Proteins</th>
+							<th>Number of Localizations</th>
+							<th>Number of Interactions</th>
+						    </tr> 
+						</thead>
+						<tbody>
+						    <tr>
+							<td><i>Saccharomyces cerevisiae</i> (Baker's yeast)</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						    </tr> 
+						    <tr>
+							<td><i>Caenorhabditis elegans</i></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						    </tr> 
+						    <tr>
+							<td><i>Drosophila melanogaster</i> (Fruit fly)</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						    </tr> 
+						    <tr>
+							<td><i>Homo sapiens</i> (Human)</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						    </tr>     
+						</tbody>
+					    </table>
+				</td>
+			</tr>
+			<tr>
+				<th width="50%" align="center" bgcolor="orange"><font face="verdana" color="grey">Main features</font></th>
+			</tr>
+			<tr>
+				<td>
+					<li><font color="grey">PROTEIN-PROTEIN INTERACTIONS</font><br />
+					An integrated dataset of 10 protein-protein interaction databases containing 950 780 interactions.<br /> Details...
+					</li>
+					<li><font color="grey">SUBCELLULAR LOCALIZATIONS</font><br />
+					An integrated dataset of 9 subcellular localization databases including 269 586 subcellular localizations.<br /> Details...	
+					</li>
+					<li><font color="grey">SPECIES</font><br />
+					A comparative assessment of four species: <i>S. cerevisiae</i>, <i>C. elegans</i>, <i>D. melanogaster</i>, <i>H. sapiens</i><br />
+					Details...	
+					</li>
+					<li><font color="grey">1600+ GENE ONTOLOGY CELLULAR COMPONENT TERMS</font><br />
+					A hierarchic structure of subcellular localizations using more than 1600 GO cellular component terms. <br />Details...	
+					</li>
+					<li><font color="grey">INTERACTION AND LOCALIZATION SCORE</font><br />
+					A localization score for proteins and an interaction score protein-protein interactions comprising data-quality and interactome-consensus of subcellular localization. <br />Details...	
+					</li>
+					<li><font color="grey">PROTEIN SEARCH</font><br />
+					Direct search options for individual proteins with autocomplete function. <br />Details...	
+					</li>
+					<li><font color="grey">DOWNLOAD CUSTOM DATASETS</font><br />
+					Download options of whole-proteome or organelle-specific interactomes and of integrated protein-protein interaction and subcellular localization datasets. <br />Details...	
+					</li>
+				</td>
+				<td>
+					
+				</td>
+			</tr>
+		</tbody>
+	</table>
 {% endblock %}
