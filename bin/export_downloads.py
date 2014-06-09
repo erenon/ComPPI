@@ -52,7 +52,7 @@ class ComppiInterface(object):
 		'all': 4
 	}
 	locs = ['cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane']
-	loc_opts = ['cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane', 'all_major_locs']
+	loc_opts = ['cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane', 'all']
 	exp_system_types = {
 		0: 'Unknown',
 		1: 'Experimental',
@@ -116,7 +116,7 @@ class ComppiInterface(object):
 			"""
 			self.logging.debug(sql)
 			cur.execute(sql)
-	
+
 			et = []
 			for iid, actor_a, actor_b, i_src_db, i_pubmed, i_score, i_exp_sys_t in cur:
 				# each row: (node A comppi ID, node B comppi ID, {dict of edge properties})
@@ -124,7 +124,7 @@ class ComppiInterface(object):
 					i_score = 0.0
 				else:
 					i_score = float(i_score)
-	
+
 				et.append(
 					(
 						actor_a,
@@ -138,7 +138,7 @@ class ComppiInterface(object):
 						}
 					)
 				)
-	
+
 			self.logging.debug("getGlobalEdgeTable() returns with {} rows".format(len(et)))
 			return et
 
@@ -260,7 +260,7 @@ class ComppiInterface(object):
 
 	def filterGraph(self, graph, loc, species_id):
 		self.logging.debug("filterGraph() started, loc: '{}', species_id: '{}'".format(loc, species_id))
-		
+
 		# get protein IDs by loc, IDs by species, intersect, and get the graph containing only those nodes
 		loc_node_ids = None
 		if loc in self.locs and species_id in self.specii:
@@ -282,14 +282,14 @@ class ComppiInterface(object):
 
 		# in-place filtering to save memory
 		graph.remove_nodes_from( [n for n in graph if n not in node_ids] )
-		
+
 		self.logging.info("filterGraph() returns with a filtered graph: {} nodes, {} edges".format(graph.number_of_nodes(), graph.number_of_edges()))
 		return graph
 
 
 	def buildEgograph(self, graph, node_id):
 		self.logging.debug("buildEgograph() started")
-		
+
 		return nx.ego_graph(graph, node_id, radius=1, undirected=True)
 
 
@@ -305,7 +305,7 @@ class ComppiInterface(object):
 			"""
 			self.logging.debug(sql)
 			cur.execute(sql)
-	
+
 			d = {}
 			for pid, name, naming_conv, species_id in cur:
 				d[pid] = {
@@ -313,7 +313,7 @@ class ComppiInterface(object):
 					'naming_conv': naming_conv,
 					'taxonomy_id': self.specii.get(species_id, -1)
 				}
-	
+
 			self.logging.debug("getProteinDetails() returns with {} rows".format(len(d)))
 			return d
 
@@ -333,14 +333,14 @@ class ComppiInterface(object):
 			"""
 			self.logging.debug(sql)
 			cur.execute(sql)
-	
+
 			d = {}
 			for pid, names, naming_convs in cur:
 				d[pid] = {
 					'names': names,
 					'naming_convs': naming_convs
 				}
-	
+
 			return d
 
 
@@ -357,39 +357,39 @@ class ComppiInterface(object):
 					ls.score AS locScore
 				FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
 				LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
-				LEFT JOIN LocalizationScore ls ON lt.id=ls.localizationId
+				LEFT JOIN LocalizationScore ls ON ptl.proteinId=ls.proteinId
 				WHERE ptl.id=pltst.protLocId
 					AND pltst.systemTypeId=st.id
 			"""
 			self.logging.debug(sql)
 			cur.execute(sql)
-	
+
 			all_exp_sys_types = self.getExperimentalSystemTypes()
 			d = {}
 			for pid, source_db, pubmed, go_code, major_loc, exp_sys, exp_sys_type, loc_score in cur:
 				curr_p = d.setdefault(pid, {})
-	
+
 				curr_p.setdefault('source_dbs', [])
 				curr_p['source_dbs'].append(source_db)
-	
+
 				curr_p.setdefault('pubmed_ids', [])
 				curr_p['pubmed_ids'].append(pubmed)
-	
+
 				curr_p.setdefault('minor_locs', [])
 				curr_p['minor_locs'].append(go_code)
-	
+
 				curr_p.setdefault('major_locs', [])
 				curr_p['major_locs'].append(major_loc)
-	
+
 				curr_p.setdefault('exp_sys', [])
 				curr_p['exp_sys'].append(exp_sys)
-	
+
 				curr_p.setdefault('exp_sys_types', [])
 				curr_p['exp_sys_types'].append(all_exp_sys_types.get(exp_sys_type))
-	
+
 				curr_p.setdefault('loc_scores', [])
 				curr_p['loc_scores'].append(loc_score)
-	
+
 			self.logging.debug("getLocalizations() returns with {} protein ID and localization data".format(len(d)))
 			return d
 
@@ -413,7 +413,7 @@ class ComppiInterface(object):
 			"""
 			self.logging.debug(sql)
 			cur.execute(sql)
-	
+
 			d = {}
 			for stid, exp_sys, exp_sys_type in cur:
 				est = self.exp_system_types.get(exp_sys_type)
@@ -421,7 +421,7 @@ class ComppiInterface(object):
 					d[stid] = exp_sys + '(' + est + ')'
 				else:
 					d[stid] = exp_sys
-	
+
 			self.logging.debug("getExperimentalSystemTypes() returns with {} system types".format(len(d)))
 			return d
 
@@ -449,7 +449,7 @@ class ComppiInterface(object):
 			"""
 			cur.execute(sql, (loc,))
 			n_ids = set([l[0] for l in cur])
-			
+
 			self.logging.debug("getNodeIdsByMajorLoc() returns with {} node IDs".format(len(n_ids)))
 			return n_ids
 
@@ -472,22 +472,22 @@ class ComppiInterface(object):
 				SELECT id FROM Protein WHERE specieId = %s
 			"""
 			cur.execute(sql, (sp_id,))
-	
+
 			n_ids = set([r[0] for r in cur])
 			self.logging.debug("getNodeIdsBySpeciesId() returns with {} node IDs".format(len(n_ids)))
-	
+
 			return n_ids
 
 
 	def exportNetworkToCsv(self, graph, filename, node_columns, edge_columns, header = tuple(), flatten = True, skip_none_lines = True):
 		""" Write the network nodes and edges with all their attributes to a tab-delimited CSV file.
-		
+
 			The method creates a merged, all-in type CSV file. Each row refers to an edge, and contains all the node properties for both nodes and all the edge properties:
 				node1, node2, node1 attr1, node1 attr2, ... node2 attr1, node2 attr2, ..., edge attr1, edge attr2, ...
 			If you want to have network edgetable in CSV format, use the networkx built-in graph writing methods (e.g. networkx.write_edgelist())
-			
+
 			If an attribute in 'node_columns'/'edge_columns' is not found for a node/edge, a KeyError is raised.
-		
+
 			param graph: networkx.Graph or networkx.DiGraph object, the graph to export
 			param filename: the filename of the CSV file
 			param node_columns: tuple of strings, must contain the exact node attribute names (data dict keys for a node) which are required to be exported. The order of the attribute names determines the order of columns.
@@ -501,18 +501,18 @@ class ComppiInterface(object):
 			flatten: {}
 			skip_none_lines: {}
 		""".format(filename, header, node_columns, edge_columns, flatten, skip_none_lines))
-			
+
 		if header and (len(header) != (len(node_columns)*2 + len(edge_columns))):
 			raise ValueError("""exportNetworkToCsv(): length of header is not the same as 2*node columns + edge columns!
 				node colums: {}
 				edge columns: {}
 				header: {}
 				""".format(node_columns, edge_columns, header))
-		
+
 		row_count = 0
 		with open(filename, 'w', newline='') as fp:
 			csvw = csv.writer(fp, delimiter="\t", quoting=csv.QUOTE_MINIMAL)
-			
+
 			# header
 			if header:
 				csvw.writerow([attr for attr in header])
@@ -526,19 +526,19 @@ class ComppiInterface(object):
 				for attr in edge_columns:
 					h3.append(attr)
 				csvw.writerow(h1 + h2 + h3)
-			
+
 			# export data
 			for n1, n2, e in graph.edges_iter(data=True):
 				curr_node1_cells	= self._aggregateCsvCells(graph.node[n1], node_columns, flatten, skip_none_lines)
 				curr_node2_cells	= self._aggregateCsvCells(graph.node[n2], node_columns, flatten, skip_none_lines)
 				curr_edge_cells	= self._aggregateCsvCells(e, edge_columns, flatten, skip_none_lines)
-				
+
 				if curr_node1_cells and curr_node2_cells and curr_edge_cells:
 					csvw.writerow(curr_node1_cells + curr_node2_cells + curr_edge_cells)
 					row_count += 1
-		
+
 		self.logging.debug("exportNetworkToCsv() returns with {} rows + header".format(row_count))
-		
+
 
 	def exportNodesToCsv(self, graph, filename, node_columns, header = tuple(), flatten = True, skip_none_lines = True):
 		self.logging.info("""exportNodesToCsv() started,
@@ -548,46 +548,46 @@ class ComppiInterface(object):
 			flatten: {}
 			skip_none_lines: {}
 		""".format(filename, header, node_columns, flatten, skip_none_lines))
-			
+
 		if header and len(header) != len(node_columns):
 			raise ValueError("exportNetworkToCsv(): length of header is not the same as length of node columns!")
-		
+
 		row_count = 0
 		with open(filename, 'w', newline='') as fp:
 			csvw = csv.writer(fp, delimiter="\t", quoting=csv.QUOTE_MINIMAL)
-			
+
 			# header
 			if header:
 				csvw.writerow([attr for attr in header])
 			else:
 				csvw.writerow([attr for attr in node_columns])
-			
+
 			# export data
 			for n, d in graph.nodes_iter(data=True):
 				curr_row = self._aggregateCsvCells(d, node_columns, flatten, skip_none_lines)
 				if curr_row:
 					csvw.writerow(curr_row)
 					row_count += 1
-		
+
 		self.logging.debug("exportNodesToCsv() returns with {} rows + header".format(row_count))
-	
-	
+
+
 	def _aggregateCsvCells(self, data, cells, flatten = True, skip_none_lines = True):
 		row = []
 		skip_curr_line = False
-		
+
 		for cell_name in cells:
 			d = data[cell_name] # throws KeyError: bad column name if node attribute is not found
-			
+
 			if flatten and isinstance(d, list):
 				if None in d:
 					if skip_none_lines:
 						return []
 					else:
 						d = [x if x is not None else 'N/A' for x in d]
-				
+
 				d = '|'.join([str(x) for x in d])
-				
+
 			row.append(d)
 
 		return row
@@ -617,7 +617,7 @@ if __name__ == '__main__':
 		help="Major localization.")
 
 	args = main_parser.parse_args()
-	
+
 	if args.mode=='build':
 		c = ComppiInterface()
 		c.cache_enabled = False
@@ -627,7 +627,7 @@ if __name__ == '__main__':
 		all_specii = c.specii_opts
 		all_locs = c.loc_opts
 		del c
-		
+
 		#if not args.hasattr('type'):
 		#	raise ValueError("--type/-t must be specified in export mode!")
 		#if not args.hasattr('species'):
@@ -635,7 +635,7 @@ if __name__ == '__main__':
 		#if not args.hasattr('loc'):
 		#	raise ValueError("--loc/-l must be specified in export mode!")
 
-		if args.species != 'all_species' and args.species in all_specii:
+		if args.species != 'all' and args.species in all_specii:
 			all_specii = {args.species: all_specii[args.species]}
 		if args.loc != 'all' and args.loc in all_locs:
 			all_locs = [args.loc]
@@ -645,12 +645,12 @@ if __name__ == '__main__':
 				# the script is much faster if ComppiInterface is always re-created and destroyed
 				# (the reason may be the garbage collection?)
 				ci = ComppiInterface()
-				
+
 				# the original graph is always re-loaded, because
 				# the graph filtering is done in-place (orig. graph is overwritten) to fit into 2 GB of server RAM
 				comppi = ci.buildGlobalComppi()
 				filtered_comppi = ci.filterGraph(comppi, loc, sp_id) # note the sp_id
-				
+
 				# various types of networks
 				if args.type=='proteinloc' or args.type=='all':
 					ci.exportNodesToCsv(
@@ -660,7 +660,7 @@ if __name__ == '__main__':
 						('Protein Name', 'Naming Convention', 'Synonyms', 'Major Loc', 'Localization Score', 'Minor Loc', 'Experimental System Type', 'Localization Source Database', 'PubmedID', 'TaxID'),
 						skip_none_lines = False
 					)
-				
+
 				if args.type=='compartment' or args.type=='all':
 					ci.exportNetworkToCsv(
 						filtered_comppi,
@@ -673,7 +673,7 @@ if __name__ == '__main__':
 						),
 						skip_none_lines = False
 					)
-				
+
 				if args.type=='interaction' or args.type=='all':
 					ci.exportNetworkToCsv(
 						filtered_comppi,
@@ -683,8 +683,8 @@ if __name__ == '__main__':
 						('Protein A', 'Synonyms A', 'Taxonomy ID A', 'Protein B', 'Synonyms B', 'Taxonomy ID B', 'Interaction Score', 'Interaction Experimental System Type', 'Interaction Source Database', 'Interaction PubMed ID'),
 						skip_none_lines = False
 					)
-				
+
 				del ci
-		
+
 	else:
 		raise ValueError("'build' or 'export' must be the first command line parameter.")
