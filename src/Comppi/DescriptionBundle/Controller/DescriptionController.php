@@ -28,6 +28,12 @@ class DescriptionController extends Controller
             case 'input_databases':
                 $t = 'ComppiDescriptionBundle:Description:input_databases.html.twig';
                 break;
+            case 'input_loc':
+                $t = 'ComppiDescriptionBundle:Description:input_loc.html.twig';
+                break;
+            case 'input_ppi':
+                $t = 'ComppiDescriptionBundle:Description:input_ppi.html.twig';
+                break;
             case 'introduction':
                 $t = 'ComppiDescriptionBundle:Description:introduction.html.twig';
                 break;

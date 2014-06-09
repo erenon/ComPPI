@@ -6,8 +6,8 @@ use Doctrine\DBAL\Types\IntegerType as IntegerParameter;
 
 class ComppiStandard implements CalculatorInterface
 {
-
-    private $weights=array('0'=>0.66,'1'=>1.0,'2'=>0.33);
+    /*0 - unknown, 1 - experimental, 2 - predicted*/
+    private $weights=array('0'=>0.66,'1'=>0.95,'2'=>0.33);
 
 
     /**
