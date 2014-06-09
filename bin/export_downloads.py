@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 sudo apt-get install python3-mysql.connector python3-pip
 sudo pip3 install networkx
@@ -6,13 +7,16 @@ sudo pip3 install numpy
 sp x loc all csak header ak?r prot, ak?r int
 """
 
-#!/usr/bin/python3
+from contextlib import closing
 import argparse
 import logging
 import os
 import configparser
 # python3-mysql.connector: http://dev.mysql.com/doc/connector-python/en/index.html
 import mysql.connector
+import networkx as nx
+import gzip
+import pickle
 import csv
 
 class ComppiInterface(object):
@@ -22,43 +26,54 @@ class ComppiInterface(object):
 	attrib cfg_file: str, the parameters.ini file of Symphony to share the DB settings
 	"""
 
-	cfg_file 	= os.path.join('..', 'app', 'config', 'parameters.ini')
-	log_file	= os.path.join('..', 'web', 'download', 'export_downloads.log')
-	output_dir 	= os.path.join('..', 'web', 'download')
-	db_conn		= None
-	cursor		= None
-	db_name 	= ''
-	db_host 	= ''
-	db_user 	= ''
-	db_pwd  	= ''
-	specii		= {
+	cache_enabled 			= True
+	comppi_global_graph_f 	= 'global_comppi_graph.gzpickle'
+	cfg_file						= os.path.join('..', 'app', 'config', 'parameters.ini')
+	log_file						= os.path.join('..', 'web', 'download', 'export_networks.log')
+	log_mode					= 'a' # a: append, w: overwrite
+	output_dir 				= os.path.join('..', 'web', 'download')
+	db_conn					= None
+	cursor						= None
+	db_name 					= ''
+	db_host 					= ''
+	db_user 					= ''
+	db_pwd  					= ''
+	specii = {
 		0 : '9606', # H. sapiens
 		1 : '7227', # D. melanogaster
 		2 : '6239', # C. elegans
 		3 : '4932' # S. cerevisiae
 	}
-	spec_abbr	= {
-		0 : 'hsapiens', # H. sapiens
-		1 : 'dmelanogaster', # D. melanogaster
-		2 : 'celegans', # C. elegans
-		3 : 'scerevisiae' # S. cerevisiae
+	specii_opts = {
+		'hsapiens': 0, # H. sapiens
+		'dmelanogaster': 1, # D. melanogaster
+		'celegans': 2, # C. elegans
+		'scerevisiae': 3, # S. cerevisiae
+		'all': 4
 	}
-	locs 		= ['cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane']
+	locs = ['cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane']
+	loc_opts = ['cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane', 'all_major_locs']
+	exp_system_types = {
+		0: 'Unknown',
+		1: 'Experimental',
+		2: 'Predicted'
+	}
 
 
 	def __init__(self):
 		logging.basicConfig(
 				filename = self.log_file,
-				filemode = 'w', # a for append, w for overwrite
+				filemode = self.log_mode, # a for append, w for overwrite
 				format = '%(asctime)s - %(levelname)s - %(message)s',
 				level = logging.DEBUG)
 
-		self.log = logging
+		self.logging = logging
+		self.logging.info("X----- STARTED ----------")
 
 		cfg = configparser.ConfigParser()
 		cfg.read(self.cfg_file)
 
-		self.log.info("Config loaded")
+		self.logging.info("Config loaded")
 
 		self.db_name	= cfg['parameters']['database_name']
 		self.db_host 	= cfg['parameters']['database_host']
@@ -68,7 +83,7 @@ class ComppiInterface(object):
 
 	def connect(self):
 		if self.db_conn is None:
-			self.log.info("Connecting to database...")
+			self.logging.info("Connecting to database...")
 			self.db_conn = mysql.connector.connect(
 				host=self.db_host,
 				user=self.db_user,
@@ -79,316 +94,597 @@ class ComppiInterface(object):
 				# see also http://planet.mysql.com/entry/?id=26522
 				buffered=True
 			)
-			self.log.info("Database connection established")
+			self.logging.info("Database connection established")
 
 		# returning a new cursor object every time prevents overwrite of cursor buffer
 		return self.db_conn.cursor(buffered=True)
 
 
-	def exportNodesToCsv(self, sp=-1, loc=''):
-		self.log.info("exportNodesToCsv(), sp: '{}', loc: '{}'".format(sp, loc))
-		# @TODO: Syn (UniProt Full / first mapping)		Localization Score
-		nodes_iter	= self.loadActors(sp)
-		locs		= self.loadLocalizations(loc)
+	def getGlobalEdgeTable(self):
+		self.logging.debug("getGlobalEdgeTable() started")
 
-		if sp not in self.specii:
-			sp = 'all'
-		if loc not in self.locs:
-			loc = 'all'
-		out_f = os.path.join(self.output_dir, 'comppi--proteins_localizations-sp_{}-loc_{}.txt'.format(sp, loc))
-
-		num_rows = 0
-		with open(out_f, 'w', newline='') as fp:
-			csvw = csv.writer(fp, delimiter="\t", quoting=csv.QUOTE_MINIMAL)
-			# header
-			csvw.writerow([
-				'Protein Name',
-				'Naming Convention',
-				'Major Loc',
-				'Minor Loc',
-				'Experimental System Type',
-				'Localization Source Database',
-				'PubmedID',
-				'TaxID'
-			])
-			# data
-			for actor_id, sp, prot_name, naming_conv in nodes_iter:
-				num_rows += 1
-				ld = locs.get(actor_id) # loc data aggregated per protein
-				if ld is not None and ('deleted' not in naming_conv.lower()):
-					csvw.writerow([
-						prot_name,
-						naming_conv,
-						','.join(ld.get('loc_majors', [])),
-						','.join(ld.get('loc_minors', [])),
-						','.join(ld.get('loc_exp_sys', [])),
-						','.join(ld.get('loc_source_dbs', [])),
-						','.join(ld.get('loc_pubmeds', [])),
-						self.specii.get(sp, '')
-					])
-
-		self.log.info("exportNodesToCsv(), {} rows (+header) written to '{}'".format(num_rows, out_f))
-
-
-	def exportEdgesToCsv(self, sp=-1, loc=''):
-		# @TODO: Syn A (UniProt Full / first mapping)	Syn B (UniProt Full / first mapping)	Interaction Score
-
-		self.log.info("exportEdgesToCsv(), sp: '{}', loc: '{}'".format(sp, loc))
-
-		filtered_prot_ids			= []
-		filter_by_locs				= False
-		nodes_iter				= self.loadActors(sp)
-		edges_iter				= self.loadInteractionsWithExpSysType()
-
-		if sp not in self.specii:
-			sp = 'all'
-
-		# if localization is specified, get the protein IDs only from that loc
-		if loc not in self.locs:
-			loc = 'all'
-		else:
-			filter_by_locs = True
-			filtered_prot_ids = self.getProteinIdsByMajorLoc(loc)
-
-		# fetch protein names and taxonomy IDs
-		proteins = {}
-		for pid, species, name, naming_conv in nodes_iter:
-			if not filter_by_locs or (filter_by_locs and pid in filtered_prot_ids):
-				proteins[pid] = ( name, naming_conv, self.specii.get(int(species)) )
-
-		# export the edges
-		out_f = os.path.join(self.output_dir, 'comppi--interactions-sp_{}-loc_{}.txt'.format(sp, loc))
-		num_rows = 0
-		with open(out_f, 'w', newline='') as fp:
-			csvw = csv.writer(fp, delimiter="\t", quoting=csv.QUOTE_MINIMAL)
-			# header
-			csvw.writerow([
-				'Interactor A',
-				'Interactor B',
-				'Naming Convention A',
-				'Naming Convention B',
-				'Interaction Experimental System Type',
-				'Interaction Source Database',
-				'PubmedID',
-				'TaxID'
-			])
-			# data
-			for int_id, actor_a_id, actor_b_id, source_db, pubmed_id, exp_sys_type in edges_iter:
-				actor_a = proteins.get(actor_a_id)
-				actor_b = proteins.get(actor_b_id)
-				# sort out: rows where any naming convention is "UniProtKB/deleted" or localization is 'N/A'
-				if actor_a is not None and actor_b is not None and ('deleted' not in actor_a[1].lower() and 'deleted' not in actor_b[1].lower()) and ('n/a' not in actor_a[2].lower() or 'n/a' not in actor_b[2].lower()):
-					num_rows += 1
-					csvw.writerow([
-						actor_a[0], # protein name for actor A
-						actor_b[0], # protein name for actor B
-						actor_a[1], # naming convention for actor A
-						actor_b[1], # naming convention for actor B
-						exp_sys_type,
-						#int_exp_sys_types.get(int_id),
-						source_db,
-						pubmed_id,
-						# it is assumed that both interactors are in the same species
-						# -> species of interactor A is used
-						actor_a[2]
-					])
-
-		self.log.info("exportEdgesToCsv(), {} rows (+header) written to '{}'".format(num_rows, out_f))
-
-
-	def loadInteractions(self):
-		cur = self.connect()
-		sql = "SELECT id, actorAId, actorBId, sourceDb, pubmedId FROM Interaction"
-		self.log.debug(sql)
-		cur.execute(sql)
-
-		return cur
-
-
-	def loadInteractionsWithExpSysType(self):
-		sql = """
-			SELECT
-				i.id, i.actorAId, i.actorBId, i.sourceDb, i.pubmedId, st.name
-			FROM
-				Interaction i, InteractionToSystemType itst
-			LEFT JOIN
-				SystemType st ON itst.systemTypeId=st.id
-			WHERE
-				i.id=itst.interactionId
-		"""
-
-		self.log.debug("loadInteractionsWithExpSysType():{}".format(sql))
-		cur = self.connect()
-		cur.execute(sql)
-		self.log.info("loadInteractionsWithExpSysType() returning with {} rows""".format(cur.rowcount))
-
-		return cur
-
-
-	def loadActors(self, sp=-1):
-		""" Load the list of interactors (proteins).
-
-			If the species is not defined (or not found in the predefined species pool), all proteins will be returned.
-
-			param sp: int, optional, the ID of the species. It is not a taxonomy ID, rather an integer between 0 and 3. See self.specii for further information.
-
-			returns: python-mysql.connector cursor object (iterable).
-		"""
-		self.log.debug("loadActors() started")
-		cur = self.connect()
-		if sp in self.specii:
+		cursor = self.connect()
+		with closing(cursor) as cur:
 			sql = """
-				SELECT id, specieId, proteinName, proteinNamingConvention
-				FROM Protein
-				WHERE specieId = %s
+				SELECT
+					i.id, i.actorAId, i.actorBId, i.sourceDb, i.pubmedId,
+					cs.score,
+					itst.systemTypeId
+				FROM Interaction i
+				LEFT JOIN ConfidenceScore cs ON i.id=cs.interactionId
+				LEFT JOIN InteractionToSystemType itst ON i.id=itst.interactionId
 			"""
-			cur.execute(sql, (sp,))
-		else:
-			sql = """
-				SELECT id, specieId, proteinName, proteinNamingConvention
-				FROM Protein
-			"""
+			self.logging.debug(sql)
 			cur.execute(sql)
-		self.log.debug("loadActors():\n{}".format(cur.statement))
+	
+			et = []
+			for iid, actor_a, actor_b, i_src_db, i_pubmed, i_score, i_exp_sys_t in cur:
+				# each row: (node A comppi ID, node B comppi ID, {dict of edge properties})
+				if i_score is None:
+					i_score = 0.0
+				else:
+					i_score = float(i_score)
+	
+				et.append(
+					(
+						actor_a,
+						actor_b,
+						{
+							'weight': i_score,
+							'source_db': i_src_db,
+							'pubmed': i_pubmed,
+							'edge_id': iid,
+							'exp_system_type_id': i_exp_sys_t
+						}
+					)
+				)
+	
+			self.logging.debug("getGlobalEdgeTable() returns with {} rows".format(len(et)))
+			return et
 
-		self.log.info("loadActors() returning with {} rows""".format(cur.rowcount))
-		return cur
+
+	def buildGraphFromEdgetable(self, edgetable, nw_name = 'directed_weighted_ppi', only_main_component = False, strict_check = False):
+		""" Build a weighted, directed graph from an edgetable.
+
+			Each line of the edge table must contain node1, node1, attribute dict, where the attribute dict must contain at least one 'weight' key with a scalar value. Arbitrary number of other edge attributes are allowed, these all will be included in the graph.
+
+			There may be multiple components in the network (not connected parts). If the 'only_main_component' flag is set to True and there are multiple components, the output graph will be the largest connected component.
+			The Networkx connected_components_* methods don't support directed graphs, so we create first an undirected graph, check if there are multiple components, take the largest one and create a directed graph from the largest component.
+
+			param edgetable: list of tuples, each tuple contains two node IDs and a dictionary with the edge weight and optional other edge properties.
+			Each tuple have to contain the edge weight, e.g.
+				edgetable = [(node1, node2, {"weight": 0.8})]
+			and may contain additional edge properties:
+				edgetable = [(node1, node2, {"weight": 0.8, "some_property": "A"})]
+			The edgetable is the direct input for the networkx add_edges_from() method.
+			param nw_name: the filesystem-friendly name of the network (mostly used for caching purposes)
+			param only_main_component: bool, optional. If true, the network will be the main connected component (the largest connected subgraph) of the network from the edgetable.
+			returns: networkx weighted, directed graph object
+		"""
+		self.logging.debug("buildGraphFromEdgetable() started")
+
+		# primitive tests to see if the edgetable is populated...
+		if len(edgetable)==0:
+			self.logging.critical("buildGraphFromEdgetable(): empty edgetable!")
+			raise Exception('Empty edgetable!')
+
+		# ... strict check of the edgetable structure
+		# required minimum for each row: (node1, node2, {"weight": 0.8})
+		if strict_check:
+			for row in edgetable:
+				if len(row)!=3 or not isinstance(row[2], dict) or row[2].get("weight") is None:
+					self.logging.critical("buildGlobalDiGraph(): missing edge weight!")
+					raise Exception('Missing edge weight!')
+
+		dg = nx.DiGraph()
+		dg.graph['name'] = nw_name
+
+		if only_main_component:
+			# main component is only supported on undirected graphs
+			ug = nx.Graph()
+			ug.add_edges_from(edgetable) # undirected global graph
+			if nx.number_connected_components(ug)>1:
+				lcug = nx.connected_component_subgraphs(ug)[0]
+			else:
+				lcug = ug
+			del ug
+
+			# add the main connected component as the graph to the directed graph
+			dg.add_edges_from(lcug.edges(data=True))
+		else:
+			dg.add_edges_from(edgetable)
+
+		self.logging.info("buildGraphFromEdgetable(): de novo constructed, nodes: {}, edges: {}".format(dg.number_of_nodes(), dg.number_of_edges()))
+		return dg
 
 
-	def loadSynonyms(self, ):
-		pass
+	def buildGlobalComppi(self):
+		"""
+			Resources are freed up manually to save memory.
+		"""
+		self.logging.debug("buildGlobalComppi() started")
+		if self.cache_enabled and os.path.isfile(self.comppi_global_graph_f):
+			with gzip.open(self.comppi_global_graph_f, 'rb') as fp:
+				self.logging.info("buildGlobalComppi(): global graph loaded from cache")
+				return pickle.load(fp)
+		else:
+			# build the graph
+			et			= self.getGlobalEdgeTable()
+			graph		= self.buildGraphFromEdgetable(et)
+			del et
+
+			# annotate the nodes
+			prot_dtls	= self.getProteinDetails()
+			prot_syns	= self.getProteinSynonyms()
+			locs		= self.getLocalizations()
+
+			for n, d in graph.nodes_iter(data=True):
+				pd	= prot_dtls.get(n, {})
+				ps	= prot_syns.get(n, {})
+				lc	= locs.get(n, {})
+
+				d['name']			= pd.get('name')
+				d['naming_conv']	= pd.get('naming_conv')
+				d['taxonomy_id']	= pd.get('taxonomy_id')
+				d['synonyms']		= ps.get('names')
+				d['minor_locs']		= lc.get('minor_locs')
+				d['major_locs']		= lc.get('major_locs')
+				d['loc_scores']		= lc.get('loc_scores')
+				d['loc_source_dbs']	= lc.get('source_dbs')
+				d['loc_pubmed_ids']	= lc.get('pubmed_ids')
+				d['loc_exp_sys']	= lc.get('exp_sys')
+				d['loc_exp_sys_types']	= lc.get('exp_sys_types')
+
+			del prot_dtls
+			del prot_syns
+			del locs
+
+			# annotate the edges (see also self.getGlobalEdgeTable())
+			exp_sys		= self.getExperimentalSystemTypes()
+
+			for n1, n2, e_attr in graph.edges_iter(data=True):
+				est_id = e_attr.get('exp_system_type_id')
+				if est_id is not None:
+					e_attr['exp_sys_str'] = exp_sys.get(est_id)
+
+			del exp_sys
+
+			self.logging.debug("buildGlobalComppi(): global graph has been constructed de novo")
+
+			with gzip.open(self.comppi_global_graph_f, 'wb') as fp:
+				pickle.dump(graph, fp)
+				self.logging.info("buildGlobalComppi(): global graph dumped to cache")
+
+			return graph
 
 
-	def loadLocalizations(self, loc):
-		self.log.debug("loadLocalizations() started")
+	def filterGraph(self, graph, loc, species_id):
+		self.logging.debug("filterGraph() started, loc: '{}', species_id: '{}'".format(loc, species_id))
+		
+		# get protein IDs by loc, IDs by species, intersect, and get the graph containing only those nodes
+		loc_node_ids = None
+		if loc in self.locs and species_id in self.specii:
+			loc_node_ids = self.getNodeIdsByMajorLoc(loc)
+			spec_node_ids = self.getNodeIdsBySpeciesId(species_id)
+			node_ids = set.intersection(loc_node_ids, spec_node_ids)
+			del loc_node_ids
+			del spec_node_ids
+			self.logging.debug("filterGraph(): graph filtered for loc and species")
+		elif loc in self.locs:
+			node_ids = self.getNodeIdsByMajorLoc(loc)
+			self.logging.debug("filterGraph(): graph filtered for loc")
+		elif species_id in self.specii:
+			node_ids = self.getNodeIdsBySpeciesId(species_id)
+			self.logging.debug("filterGraph(): graph filtered for species")
+		else:
+			self.logging.debug("filterGraph() returns with the original graph")
+			return graph
 
-		cur = self.connect()
-		if loc in self.locs:
+		# in-place filtering to save memory
+		graph.remove_nodes_from( [n for n in graph if n not in node_ids] )
+		
+		self.logging.info("filterGraph() returns with a filtered graph: {} nodes, {} edges".format(graph.number_of_nodes(), graph.number_of_edges()))
+		return graph
+
+
+	def buildEgograph(self, graph, node_id):
+		self.logging.debug("buildEgograph() started")
+		
+		return nx.ego_graph(graph, node_id, radius=1, undirected=True)
+
+
+	def getProteinDetails(self):
+		self.logging.debug("getProteinDetails() started")
+
+		cursor = self.connect()
+		with closing(cursor) as cur:
 			sql = """
-				SELECT DISTINCT
+				SELECT
+					id, proteinName, proteinNamingConvention, specieId
+				FROM Protein
+			"""
+			self.logging.debug(sql)
+			cur.execute(sql)
+	
+			d = {}
+			for pid, name, naming_conv, species_id in cur:
+				d[pid] = {
+					'name': name,
+					'naming_conv': naming_conv,
+					'taxonomy_id': self.specii.get(species_id, -1)
+				}
+	
+			self.logging.debug("getProteinDetails() returns with {} rows".format(len(d)))
+			return d
+
+
+	def getProteinSynonyms(self):
+		self.logging.debug("getProteinSynonyms() started")
+
+		cursor = self.connect()
+		with closing(cursor) as cur:
+			sql = """
+				SELECT
+					proteinId,
+					GROUP_CONCAT(name SEPARATOR '|') as names,
+					GROUP_CONCAT(namingConvention SEPARATOR '|') as naming_convs
+				FROM NameToProtein
+				GROUP BY proteinId
+			"""
+			self.logging.debug(sql)
+			cur.execute(sql)
+	
+			d = {}
+			for pid, names, naming_convs in cur:
+				d[pid] = {
+					'names': names,
+					'naming_convs': naming_convs
+				}
+	
+			return d
+
+
+	def getLocalizations(self):
+		self.logging.debug("getLocalizations() started")
+
+		cursor = self.connect()
+		with closing(cursor) as cur:
+			sql = """
+				SELECT
 					ptl.proteinId as pid, ptl.sourceDb, ptl.pubmedId,
-					lt.name as minorLocName, lt.goCode as minorLocGo, lt.majorLocName,
-					st.name AS exp_sys, st.confidenceType AS exp_sys_type
+					lt.goCode, lt.majorLocName,
+					st.name AS exp_sys, st.confidenceType AS exp_sys_type,
+					ls.score AS locScore
 				FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
 				LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
+				LEFT JOIN LocalizationScore ls ON lt.id=ls.localizationId
+				WHERE ptl.id=pltst.protLocId
+					AND pltst.systemTypeId=st.id
+			"""
+			self.logging.debug(sql)
+			cur.execute(sql)
+	
+			all_exp_sys_types = self.getExperimentalSystemTypes()
+			d = {}
+			for pid, source_db, pubmed, go_code, major_loc, exp_sys, exp_sys_type, loc_score in cur:
+				curr_p = d.setdefault(pid, {})
+	
+				curr_p.setdefault('source_dbs', [])
+				curr_p['source_dbs'].append(source_db)
+	
+				curr_p.setdefault('pubmed_ids', [])
+				curr_p['pubmed_ids'].append(pubmed)
+	
+				curr_p.setdefault('minor_locs', [])
+				curr_p['minor_locs'].append(go_code)
+	
+				curr_p.setdefault('major_locs', [])
+				curr_p['major_locs'].append(major_loc)
+	
+				curr_p.setdefault('exp_sys', [])
+				curr_p['exp_sys'].append(exp_sys)
+	
+				curr_p.setdefault('exp_sys_types', [])
+				curr_p['exp_sys_types'].append(all_exp_sys_types.get(exp_sys_type))
+	
+				curr_p.setdefault('loc_scores', [])
+				curr_p['loc_scores'].append(loc_score)
+	
+			self.logging.debug("getLocalizations() returns with {} protein ID and localization data".format(len(d)))
+			return d
+
+
+	def getExperimentalSystemTypes(self):
+		""" Load all experimental system types.
+			returns: dict keyed by system type IDs, values are strings
+
+			Example:
+			>>> st = self.getExperimentalSystemTypes()
+			>>> st
+			... {0: 'SVM decision tree (Predicted)'}
+
+		"""
+		self.logging.debug("getExperimentalSystemTypes() started")
+
+		cursor = self.connect()
+		with closing(cursor) as cur:
+			sql = """
+				SELECT st.id, st.name AS exp_sys, st.confidenceType AS exp_sys_type FROM SystemType st
+			"""
+			self.logging.debug(sql)
+			cur.execute(sql)
+	
+			d = {}
+			for stid, exp_sys, exp_sys_type in cur:
+				est = self.exp_system_types.get(exp_sys_type)
+				if est is not None:
+					d[stid] = exp_sys + '(' + est + ')'
+				else:
+					d[stid] = exp_sys
+	
+			self.logging.debug("getExperimentalSystemTypes() returns with {} system types".format(len(d)))
+			return d
+
+
+	def getNodeIdsByMajorLoc(self, loc):
+		"""
+			Get the distinct node IDs of the proteins belonging to a given major cell compartment.
+
+			param loc: string, the name of the major localization; see also self.locs
+			returns: set, the unique node IDs
+		"""
+		self.logging.debug("getNodeIdsByMajorLoc() started, loc: '{}'".format(loc))
+
+		if loc not in self.locs:
+			raise ValueError("getNodeIdsByMajorLoc(): Unknown major localization name: '{}'".format(loc))
+
+		cursor = self.connect()
+		with closing(cursor) as cur:
+			sql = """
+				SELECT ptl.proteinId
+				FROM ProteinToLocalization ptl
+				LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
 				WHERE
-					ptl.id=pltst.protLocId AND
-					pltst.systemTypeId=st.id AND
 					lt.majorLocName = %s
 			"""
 			cur.execute(sql, (loc,))
-		else:
-			sql = """
-				SELECT DISTINCT
-					ptl.proteinId as pid, ptl.sourceDb, ptl.pubmedId,
-					lt.name as minorLocName, lt.goCode as minorLocGo, lt.majorLocName,
-					st.name AS exp_sys, st.confidenceType AS exp_sys_type
-				FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
-				LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
-				WHERE
-					ptl.id=pltst.protLocId AND
-					pltst.systemTypeId=st.id
-			"""
-			cur.execute(sql)
+			n_ids = set([l[0] for l in cur])
+			
+			self.logging.debug("getNodeIdsByMajorLoc() returns with {} node IDs".format(len(n_ids)))
+			return n_ids
 
 
-		self.log.debug("loadLocalizations():\n{}".format(cur.statement))
-
-		# make a dictionary of it for fast access
-		# there can be multiple localizations for a single protein
-		# -> aggregate per comppi ID
-		d = {}
-		for row in cur:
-			# protein ID (comppi ID) as main dict key
-			currd = d.setdefault(row[0], {})
-			# source DB of protein -> localization mapping
-			locdb = currd.setdefault('loc_source_dbs', [])
-			locdb.append(row[1])
-			# publication reference of protein -> localization mapping
-			locpm = currd.setdefault('loc_pubmeds', [])
-			locpm.append(str(row[2]))
-			# minor locations as GO IDs
-			locmin = currd.setdefault('loc_minors', [])
-			locmin.append(row[4])
-			# major locations as strings
-			locmaj = currd.setdefault('loc_majors', [])
-			locmaj.append(row[5])
-			# experimental system
-			locexps = currd.setdefault('loc_exp_sys', [])
-			locexps.append(row[6])
-
-		self.log.info("loadLocalizations(), returning with {} localizations".format(len(d)))
-		return d
-
-
-	def getProteinIdsByMajorLoc(self, loc):
-		cur = self.connect()
-		sql = """
-			SELECT DISTINCT ptl.proteinId
-			FROM ProteinToLocalization ptl
-			LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
-			WHERE
-				lt.majorLocName = %s
+	def getNodeIdsBySpeciesId(self, sp_id):
 		"""
-		cur.execute(sql, (loc,))
+			Get the distinct node IDs of a given species.
 
-		return [l[0] for l in cur]
+			param sp_id: int, the ID of the species; see also self.specii
+			returns: set, the unique node IDs
+		"""
+		self.logging.debug("getNodeIdsBySpeciesId() started, species ID: '{}'".format(sp_id))
+
+		if sp_id not in self.specii:
+			raise ValueError("getNodeIdsBySpeciesId(): Unknown species ID: '{}'".format(sp_id))
+
+		cursor = self.connect()
+		with closing(cursor) as cur:
+			sql = """
+				SELECT id FROM Protein WHERE specieId = %s
+			"""
+			cur.execute(sql, (sp_id,))
+	
+			n_ids = set([r[0] for r in cur])
+			self.logging.debug("getNodeIdsBySpeciesId() returns with {} node IDs".format(len(n_ids)))
+	
+			return n_ids
+
+
+	def exportNetworkToCsv(self, graph, filename, node_columns, edge_columns, header = tuple(), flatten = True, skip_none_lines = True):
+		""" Write the network nodes and edges with all their attributes to a tab-delimited CSV file.
+		
+			The method creates a merged, all-in type CSV file. Each row refers to an edge, and contains all the node properties for both nodes and all the edge properties:
+				node1, node2, node1 attr1, node1 attr2, ... node2 attr1, node2 attr2, ..., edge attr1, edge attr2, ...
+			If you want to have network edgetable in CSV format, use the networkx built-in graph writing methods (e.g. networkx.write_edgelist())
+			
+			If an attribute in 'node_columns'/'edge_columns' is not found for a node/edge, a KeyError is raised.
+		
+			param graph: networkx.Graph or networkx.DiGraph object, the graph to export
+			param filename: the filename of the CSV file
+			param node_columns: tuple of strings, must contain the exact node attribute names (data dict keys for a node) which are required to be exported. The order of the attribute names determines the order of columns.
+			param edge_columns: tuple of strings, must contain the exact edge attribute names (data dict keys for an edge) which are required to be exported. The order of the attribute names determines the order of columns.
+		"""
+		self.logging.info("""exportNetworkToCsv() started,
+			filename: {}
+			header: {}
+			node_columns: {}
+			edge_columns: {}
+			flatten: {}
+			skip_none_lines: {}
+		""".format(filename, header, node_columns, edge_columns, flatten, skip_none_lines))
+			
+		if header and (len(header) != (len(node_columns)*2 + len(edge_columns))):
+			raise ValueError("""exportNetworkToCsv(): length of header is not the same as 2*node columns + edge columns!
+				node colums: {}
+				edge columns: {}
+				header: {}
+				""".format(node_columns, edge_columns, header))
+		
+		row_count = 0
+		with open(filename, 'w', newline='') as fp:
+			csvw = csv.writer(fp, delimiter="\t", quoting=csv.QUOTE_MINIMAL)
+			
+			# header
+			if header:
+				csvw.writerow([attr for attr in header])
+			else:
+				h1 = []
+				h2 = []
+				h3 = []
+				for attr in node_columns:
+					h1.append("node1:{}".format(attr))
+					h2.append("node2:{}".format(attr))
+				for attr in edge_columns:
+					h3.append(attr)
+				csvw.writerow(h1 + h2 + h3)
+			
+			# export data
+			for n1, n2, e in graph.edges_iter(data=True):
+				curr_node1_cells	= self._aggregateCsvCells(graph.node[n1], node_columns, flatten, skip_none_lines)
+				curr_node2_cells	= self._aggregateCsvCells(graph.node[n2], node_columns, flatten, skip_none_lines)
+				curr_edge_cells	= self._aggregateCsvCells(e, edge_columns, flatten, skip_none_lines)
+				
+				if curr_node1_cells and curr_node2_cells and curr_edge_cells:
+					csvw.writerow(curr_node1_cells + curr_node2_cells + curr_edge_cells)
+					row_count += 1
+		
+		self.logging.debug("exportNetworkToCsv() returns with {} rows + header".format(row_count))
+		
+
+	def exportNodesToCsv(self, graph, filename, node_columns, header = tuple(), flatten = True, skip_none_lines = True):
+		self.logging.info("""exportNodesToCsv() started,
+			filename: {}
+			header: {}
+			node_columns: {}
+			flatten: {}
+			skip_none_lines: {}
+		""".format(filename, header, node_columns, flatten, skip_none_lines))
+			
+		if header and len(header) != len(node_columns):
+			raise ValueError("exportNetworkToCsv(): length of header is not the same as length of node columns!")
+		
+		row_count = 0
+		with open(filename, 'w', newline='') as fp:
+			csvw = csv.writer(fp, delimiter="\t", quoting=csv.QUOTE_MINIMAL)
+			
+			# header
+			if header:
+				csvw.writerow([attr for attr in header])
+			else:
+				csvw.writerow([attr for attr in node_columns])
+			
+			# export data
+			for n, d in graph.nodes_iter(data=True):
+				curr_row = self._aggregateCsvCells(d, node_columns, flatten, skip_none_lines)
+				if curr_row:
+					csvw.writerow(curr_row)
+					row_count += 1
+		
+		self.logging.debug("exportNodesToCsv() returns with {} rows + header".format(row_count))
+	
+	
+	def _aggregateCsvCells(self, data, cells, flatten = True, skip_none_lines = True):
+		row = []
+		skip_curr_line = False
+		
+		for cell_name in cells:
+			d = data[cell_name] # throws KeyError: bad column name if node attribute is not found
+			
+			if flatten and isinstance(d, list):
+				if None in d:
+					if skip_none_lines:
+						return []
+					else:
+						d = [x if x is not None else 'N/A' for x in d]
+				
+				d = '|'.join([str(x) for x in d])
+				
+			row.append(d)
+
+		return row
+
 
 
 if __name__ == '__main__':
-	parser = argparse.ArgumentParser()
-	parser.add_argument(
-		'-a', '--auto', required=True, help="Automatic mode: 1 (on) or 0 (off), decides if all combinations are generated automatically.")
-	parser.add_argument(
-		'-t', '--type', required=True, help="Type: 'interactions' or 'proteins'. Only if auto==0.")
-	parser.add_argument(
+	main_parser = argparse.ArgumentParser(description="Build the global ComPPI network and export various subnetworks of it.")
+	main_parser.add_argument(
+		'mode',
+		choices=['build', 'export'],
+		help="'build': (Re-)Build the global ComPPI network from the database and refresh the cache.\n'export': Export a subnetwork. If there is no global ComPPI network, it is automatically built.")
+	main_parser.add_argument(
+		'-t',
+		'--type',
+		choices=['proteinloc', 'compartment', 'interaction', 'all'],
+		help="Determines the type of the exported subnetwork.")
+	main_parser.add_argument(
 		'-s',
 		'--species',
-		choices=['0', '1', '2', '3', 'all'],
-		required=True, help="Species, [0-4] or 'all'. Only if auto==0.")
-	parser.add_argument(
+		choices=['hsapiens', 'dmelanogaster', 'celegans', 'scerevisiae', 'all'],
+		help="Species.")
+	main_parser.add_argument(
 		'-l',
 		'--loc',
-		required=True,
-		choices=['all', 'cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane'],
-		help="Major loc: 'cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane' or 'all'. Only if auto==0.")
-	args = parser.parse_args()
+		choices=['cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane', 'all'],
+		help="Major localization.")
 
-	if int(args.auto) == 1:
+	args = main_parser.parse_args()
+	
+	if args.mode=='build':
 		c = ComppiInterface()
-		all_specii = c.specii
-		all_locs = c.locs
+		c.cache_enabled = False
+		c.buildGlobalComppi()
+	elif args.mode=='export':
+		c = ComppiInterface()
+		all_specii = c.specii_opts
+		all_locs = c.loc_opts
 		del c
+		
+		#if not args.hasattr('type'):
+		#	raise ValueError("--type/-t must be specified in export mode!")
+		#if not args.hasattr('species'):
+		#	raise ValueError("--species/-s must be specified in export mode!")
+		#if not args.hasattr('loc'):
+		#	raise ValueError("--loc/-l must be specified in export mode!")
 
-		all_specii['all'] = 'all'
-		all_locs.append('all')
+		if args.species != 'all_species' and args.species in all_specii:
+			all_specii = {args.species: all_specii[args.species]}
+		if args.loc != 'all' and args.loc in all_locs:
+			all_locs = [args.loc]
 
-		for sp in all_specii:
+		for sp, sp_id in all_specii.items():
 			for loc in all_locs:
+				# the script is much faster if ComppiInterface is always re-created and destroyed
+				# (the reason may be the garbage collection?)
 				ci = ComppiInterface()
-				ci.exportNodesToCsv(sp, loc)
-				ci.exportEdgesToCsv(sp, loc)
+				
+				# the original graph is always re-loaded, because
+				# the graph filtering is done in-place (orig. graph is overwritten) to fit into 2 GB of server RAM
+				comppi = ci.buildGlobalComppi()
+				filtered_comppi = ci.filterGraph(comppi, loc, sp_id) # note the sp_id
+				
+				# various types of networks
+				if args.type=='proteinloc' or args.type=='all':
+					ci.exportNodesToCsv(
+						filtered_comppi,
+						os.path.join(ci.output_dir, 'comppi_proteins_locs--tax_{}-loc_{}.txt'.format(sp, loc)),
+						('name', 'naming_conv', 'synonyms', 'major_locs', 'loc_scores', 'minor_locs', 'loc_exp_sys_types', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
+						('Protein Name', 'Naming Convention', 'Synonyms', 'Major Loc', 'Localization Score', 'Minor Loc', 'Experimental System Type', 'Localization Source Database', 'PubmedID', 'TaxID'),
+						skip_none_lines = False
+					)
+				
+				if args.type=='compartment' or args.type=='all':
+					ci.exportNetworkToCsv(
+						filtered_comppi,
+						os.path.join(ci.output_dir, 'comppi_compartments--tax_{}-loc_{}.txt'.format(sp, loc)),
+						('name', 'naming_conv', 'major_locs', 'minor_locs', 'loc_scores', 'loc_exp_sys_types', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
+						('weight', 'exp_sys_str', 'source_db', 'pubmed'),
+						(	'Interactor A', 'Naming Convention A', 'Major Loc A', 'Minor Loc A', 'Loc Score A', 'Loc Experimental System Type A', 'Loc Source DB A', 'Loc PubMed ID A', 'Taxonomy ID A',
+							'Interactor B', 'Naming Convention B', 'Major Loc B', 'Minor Loc B', 'Loc Score B', 'Loc Experimental System Type B', 'Loc Source DB B', 'Loc PubMed ID B', 'Taxonomy ID B',
+							'Interaction Score', 'Interaction Experimental System Type', 'Interaction Source Database', 'Interaction PubMed ID'
+						),
+						skip_none_lines = False
+					)
+				
+				if args.type=='interaction' or args.type=='all':
+					ci.exportNetworkToCsv(
+						filtered_comppi,
+						os.path.join(ci.output_dir, 'comppi_interactions--tax_{}-loc_{}.txt'.format(sp, loc)),
+						('name', 'synonyms', 'taxonomy_id'),
+						('weight', 'exp_sys_str', 'source_db', 'pubmed'),
+						('Protein A', 'Synonyms A', 'Taxonomy ID A', 'Protein B', 'Synonyms B', 'Taxonomy ID B', 'Interaction Score', 'Interaction Experimental System Type', 'Interaction Source Database', 'Interaction PubMed ID'),
+						skip_none_lines = False
+					)
+				
 				del ci
+		
 	else:
-		c = ComppiInterface()
-
-		if args.species == 'all':
-			sp = 'all'
-		elif int(args.species) in c.specii:
-			sp = int(args.species)
-		else:
-			raise InputError("Invalid species argument!")
-
-		if args.loc == 'all' or args.loc in c.locs:
-			loc = args.loc
-		elif int(args.loc) in c.locs:
-			loc=int(args.loc)
-		else:
-			raise InputError("Invalid major loc argument!")
-
-		if args.type == 'interactions':
-			c.exportEdgesToCsv(sp, loc)
-		elif args.type == 'proteins':
-			c.exportNodesToCsv(sp, loc)
-		else:
-			raise InputError("Invalid type argument!")
+		raise ValueError("'build' or 'export' must be the first command line parameter.")

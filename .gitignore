@@ -30,3 +30,4 @@ databases2
 build 
 
 comppi.komodoproject
+bin/global_comppi_graph.gzpickle
