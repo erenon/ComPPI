@@ -815,10 +815,10 @@ then
         unzip intact.zip
     fi     
     
-    grep "taxid:9606(Human)	taxid:9606(Human)" intact.txt > ./hs/interaction/intact-hs.txt
-    grep "taxid:7227(Fruit fly)	taxid:7227(Fruit fly)" intact.txt > ./dm/interaction/intact-dm.txt  
-    grep "taxid:559292(Saccharomyces cerevisiae S288c)	taxid:559292(Saccharomyces cerevisiae S288c)" intact.txt > ./sc/interaction/intact-sc.txt
-    grep "taxid:6239(Caenorhabditis elegans)	taxid:6239(Caenorhabditis elegans)" intact.txt > ./ce/interaction/intact-ce.txt
+    grep "taxid:9606(Homo sapiens)	taxid:9606(human)" intact.txt > ./hs/interaction/intact-hs.txt
+    grep "taxid:7227(\"Drosophila melanogaster (Fruit fly)\")	taxid:7227(drome)" intact.txt > /dm/interaction/intact-dm.txt
+    grep "taxid:559292(\"Saccharomyces cerevisiae (strain ATCC 204508 / S288c)\")	taxid:559292(yeast)" intact.txt > ./sc/interaction/intact-sc.txt
+    grep "taxid:6239(Caenorhabditis elegans)	taxid:6239(caeel)" intact.txt > ./ce/interaction/intact-ce.txt
     
     # cleanup
     rm intact.txt
