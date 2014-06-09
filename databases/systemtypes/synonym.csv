@@ -1,164 +1,93 @@
-two-hybrid screening;yeast two-hybrid                                       ;yeast 2-hybrid                                         ;Y2H                                                    ;two hybrid array                                       ;two hybrid                                             ;HQ Y2H                                                 ;2 hybrid                                               
-yeast display                                          ;;;;;;;
-x-ray fiber diffraction                                ;;;;;;;
-x-ray diffraction                                      ;x ray scattering                                       ;;;;;;
-x-ray crystallography                                  ;;;;;;;
-physical interaction;si-mi:MI:1204                                         ;physical association                                   ;physical                                               ;direct interaction                                     ;association                                            ;;
-unspecified method                                     ;not available                                          ;Manual upload                                          ;;;;;
-ubiquitinase assay                                     ;;;;;;;
-ubiquitin reconstruction                               ;;;;;;;
-two hybrid fragment pooling approach                   ;two hybrid pooling approach                            ;;;;;;
-transmission electron microscopy                       ;;;;;;;
-transcriptional complementation assay                  ;;;;;;;
-tox-r dimerization assay                               ;;;;;;;
-three-hybrid screening;three hybrid                                           ;protein tri hybrid                                     ;protein three hybrid                                   ;3 hybrid method                                        ;;;
-tap tag coimmunoprecipitation                          ;;;;;;;
-t7 phage display                                       ;;;;;;;
-SVM decision tree;SVM decision tree (predicted)                          ;;;;;;
-surface plasmon resonance array                        ;surface plasmon resonance                              ;;;;;;
-structure based prediction                             ;;;;;;;
-static light scattering                                ;;;;;;;
-surface plasmon resonance;spr                                                    ;;;;;;
-staining;Staining                                               ;;;;;;
-Split renilla luciferase complementation               ;;;;;;;
-spike;Spike                                                  ;;;;;;
-solid phase assay                                      ;;;;;;;
-silicon nanowire field-effect transistor               ;;;;;;;
-scintillation proximity assay                          ;;;;;;;
-saturation binding                                     ;;;;;;;
-rna interference                                       ;;;;;;;
-ribonuclease assay                                     ;;;;;;;
-reverse two hybrid                                     ;;;;;;;
-reverse phase chromatography                           ;;;;;;;
-pull down                                              ;;;;;;;
-PTM-Switchboard                                        ;;;;;;;
-pTarget method;pTarget                                                ;;;;;;
-proximity enzyme linked immunosorbent assay            ;;;;;;;
-proteinchip;proteinchip(r;;;;;;
-protein kinase assay                                   ;;;;;;;
-protein cross-linking with a bifunctional reagent      ;;;;;;;
-protein complementation assay                          ;;;;;;;
-protein cleavage                                       ;;;;;;;
-protein array                                          ;;;;;;;
-protease assay                                         ;;;;;;;
-protease accessibility laddering                       ;;;;;;;
-predicted                                              ;interaction prediction                                 ;;;;;;
-polymerization                                         ;;;;;;;
-PIN                                                    ;;;;;;;
-phosphotransferase assay                               ;phosphotransfer reaction                               ;phosphotransfer assay                                  ;;;;;
-phosphorylation reaction                               ;;;;;;;
-phosphatase assay                                      ;;;;;;;
-PhosphoPOINT                                           ;;;;;;;
-phage display                                          ;;;;;;;
-peptide array                                          ;;;;;;;
-PDZBase                                                ;;;;;;;
-PA ML algorythm;PA ML algorythm (predicted)                            ;;;;;;
-oxidoreductase activity electron transfer assay        ;;;;;;;
-nuclear magnetic resonance                             ;;;;;;;
-NetPath                                                ;;;;;;;
-molecular sieving                                      ;;;;;;;
-MIPS-MPPI                                              ;;;;;;;
-MINT                                                   ;;;;;;;
-methyltransferase radiometric assay                    ;methyltransferase assay                                ;;;;;;
-methylation reaction                                   ;;;;;;;
-MatrixDB                                               ;;;;;;;
-mass spectrometry study of hydrogen/deuterium exchange ;;;;;;;
-mass spectrometry studies of complexes                 ;;;;;;;
-mammalian protein protein interaction trap             ;;;;;;;
-light scattering                                       ;;;;;;;
-light microscopy                                       ;;;;;;;
-lex-a dimerization assay                               ;;;;;;;
-lambda repressor two hybrid                            ;;;;;;;
-lambda phage display                                   ;;;;;;;
-kinase scintillation proximity assay                   ;;;;;;;
-kinase homogeneous time resolved fluorescence          ;;;;;;;
-isothermal titration calorimetry                       ;;;;;;;
-ion exchange chromatography                            ;;;;;;;
-intermolecular force                                   ;;;;;;;
-interactome parallel affinity capture                  ;;;;;;;
-IntAct;IntAct-SS                                              ;IntAct-LS                                              ;;;;;
-InnateDB                                               ;;;;;;;
-inhibitor small molecules                              ;;;;;;;
-in-gel kinase assay                                    ;;;;;;;
-inferred by curator                                    ;;;;;;;
-inferred by author                                     ;;;;;;;
-in vivo                                                ;VV                                                     ; VV                                                    ; in vivo                                               ;;;;
-in vitro                                               ;VT                                                     ; VT                                                    ;;;;;
-immunodepleted coimmunoprecipitation                   ;;;;;;;
-imaging technique                                      ;;;;;;;
-HPRD                                                   ;;;;;;;
-DIP                                                    ;;;;;;;
-CORUM                                                  ;;;;;;;
-Biogrid                                                ;;;;;;;
-BIND                                                   ;;;;;;;
-APE                        ;APE (experimental)                                     ;;;;;;
-homogeneous time resolved fluorescence                 ;;;;;;;
-gtpase assay                                           ;;;;;;;
-gst pull down                                          ;;;;;;;
-genetic;genetic interference                                   ;;;;;;
-gdp/gtp exchange assay                                 ;;;;;;;
-gal4 vp16 complementation                              ;;;;;;;
-enzymatic footprinting;footprinting                                           ;;;;;;
-fluorescent resonance energy transfer                  ;;;;;;;
-fluorescence-activated cell sorting                    ;;;;;;;
-fluorescence technology                                ;;;;;;;
-fluorescence polarization spectroscopy                 ;;;;;;;
-fluorescence microscopy                                ;;;;;;;
-fluorescence correlation spectroscopy                  ;;;;;;;
-filter binding                                         ;;;;;;;
-filamentous phage display                              ;;;;;;;
-far western blotting                                   ;;;;;;;
-experimental;experimental knowledge based                           ;experimental interaction detection                     ;experimental interac                                   ;Experimental (experimental)                            ;Experiment Type (experimental)                         ;;
-elisa;enzyme linked immunosorbent assay                      ;elisa: enzyme-linked immunosorbent assay               ;;;;;
-electrophoretic mobility shift assay;emsa                                                   ;;;;;;
-electrophoretic mobility supershift assay              ;;;;;;;
-enzymatic study                                        ;enzymatic reaction                                     ;;;;;;
-electron paramagnetic resonance                        ;electron resonance                                     ;;;;;;
-electron tomography                                    ;;;;;;;
-electron microscopy                                    ;;;;;;;
-electron diffraction                                   ;;;;;;;
-dynamic light scattering                               ;;;;;;;
-disulfide bond                                         ;;;;;;;
-display technology                                     ;;;;;;;
-deubiquitinase assay                                   ;deubiquitination reaction                              ;;;;;;
-dihydrofolate reductase reconstruction                 ;;;;;;;
-detection by mass spectrometry                         ;;;;;;;
-dephosphorylation reaction                             ;;;;;;;
-cosedimentation through density gradient;density sedimentation;;;;;;
-cosedimentation in solution                            ;cosedimentation                                        ;;;;;;
-copurification                                         ;;;;;;;
-covalent binding                                       ;;;;;;;
-demethylase assay;demethylation reaction                                 ;;;;;;
-deacetylase assay                                      ;;;;;;;
-cross-linking study                                    ;cross-linking studies                                  ;crosslink                                              ;;;;;
-confocal microscopy                                    ;;;;;;;
-competition binding                                    ;;;;;;;
-comigration in sds page                                ;;;;;;;
-comigration in non denaturing gel electrophoresis      ;;;;;;;
-comigration in gel electrophoresis                     ;;;;;;;
-colocalization by fluorescent probes cloning           ;;;;;;;
-coimmunoprecipitation                                  ;coip                                                   ;;;;;;
-cleavage reaction                                      ;;;;;;;
-classical fluorescence spectroscopy                    ;;;;;;;
-circular dichroism                                     ;;;;;;;
-chromatography technology                              ;;;;;;;
-chromatin immunoprecipitation assay                    ;;;;;;;
-blue native page                                       ;;;;;;;
-biophysical                                            ;;;;;;;
-bioluminescence resonance energy transfer              ;;;;;;;
-biochemical                                            ;;;;;;;
-bimolecular fluorescence complementation               ;;;;;;;
-beta lactamase complementation                         ;;;;;;;
-beta galactosidase complementation                     ;;;;;;;
-affinity chromatography technology                     ;affinity technology                                    ;;;;;;
-bead aggregation assay                                 ;;;;;;;
-atpase assay                                           ;;;;;;;
-atomic force microscopy                                ;;;;;;;
-array technology                                       ;;;;;;;
-antisense rna                                          ;;;;;;;
-antibody array                                         ;;;;;;;
-anti tag coimmunoprecipitation                         ;;;;;;;
-anti bait coimmunoprecipitation                        ;;;;;;;
-amplified luminescent proximity homogeneous assay      ;;;;;;;
-adp ribosylation reaction                              ;;;;;;;
-acetylase assay                                        ;;;;;;;
+two-hybrid screening;yeast two-hybrid;yeast 2-hybrid;Y2H;two hybrid array;two hybrid;HQ Y2H;2 hybrid
+X-ray fiber diffraction;x-ray fiber diffraction
+X-ray diffraction;x-ray diffraction;x ray scattering
+X-ray crystallography;x-ray crystallography
+physical interaction;si-mi:MI:1204;physical association;physical;direct interaction;association
+unspecified method;not available;Manual upload
+two-hybrid fragment pooling approach;two hybrid fragment pooling approach;two hybrid pooling approach
+ToxR dimerization assay;tox-r dimerization assay
+three-hybrid screening;three hybrid;protein tri hybrid;protein three hybrid;3 hybrid method
+TAP-tag co-immunoprecipitation;tap tag coimmunoprecipitation
+T7 phage display;t7 phage display
+SVM decision tree;SVM decision tree (predicted)
+surface plasmon resonance array (SPR);surface plasmon resonance array;surface plasmon resonance;surface plasmon resonance;spr
+structure-based prediction;structure based prediction
+staining;Staining
+Split Renilla luciferase complementation;Split renilla luciferase complementation
+spike;Spike
+solid-phase assay;solid phase assay
+RNA interference;rna interference
+reverse two-hybrid;reverse two hybrid
+pull-down;pull down
+pTarget method;pTarget
+proximity enzyme-linked immunosorbent assay;proximity enzyme linked immunosorbent assay
+proteinchip;proteinchip(r
+predicted;interaction prediction
+phosphotransferase assay;phosphotransfer reaction;phosphotransfer assay
+PAML algorithm;PA ML algorythm;PA ML algorythm (predicted)
+nuclear magnetic resonance (NMR);nuclear magnetic resonance
+methyltransferase radiometric assay;methyltransferase assay
+mammalian protein-protein interaction trap;mammalian protein protein interaction trap
+LexA dimerization assay;lex-a dimerization assay
+lambda repressor two-hybrid;lambda repressor two hybrid
+kinase homogeneous time-resolved fluorescence;kinase homogeneous time resolved fluorescence
+IntAct;IntAct-SS;IntAct-LS
+in vivo;VV;VV;in vivo
+in vitro;VT; VT
+immunodepleted co-immunoprecipitation;immunodepleted coimmunoprecipitation
+annotated protein expression (APE);APE;APE (experimental)
+homogeneous time-resolved fluorescence;homogeneous time resolved fluorescence
+GTPase assay;gtpase assay
+GST pull-down;gst pull down
+genetic;genetic interference
+GDP/GTP exchange assay;gdp/gtp exchange assay
+Gal4-VP16 complementation;gal4 vp16 complementation
+enzymatic footprinting;footprinting
+fluorescence resonance energy transfer (FRET);fluorescent resonance energy transfer
+far-Western blotting;far western blotting
+experimental;experimental knowledge based;experimental interaction detection;experimental interac;Experimental (experimental);Experiment Type (experimental)
+enzyme-linked immunosorbent assay (ELISA);elisa;enzyme linked immunosorbent assay;elisa: enzyme-linked immunosorbent assay
+electrophoretic mobility shift assay;emsa
+enzymatic study;enzymatic reaction
+electron paramagnetic resonance;electron resonance
+deubiquitinase assay;deubiquitination reaction
+cosedimentation through density gradient;density sedimentation
+cosedimentation in solution;cosedimentation
+co-purification;copurification
+demethylase assay;demethylation reaction
+cross-linking study;cross-linking studies;crosslink
+comigration in SDS-PAGE;comigration in sds page
+co-immunoprecipitation;coimmunoprecipitation;coip
+blue native PAGE;blue native page
+bioluminescence resonance energy transfer (BRET);bioluminescence resonance energy transfer
+beta-lactamase complementation;beta lactamase complementation
+beta-galactosidase complementation;beta galactosidase complementation
+affinity chromatography technology;affinity technology
+ATPase assay;atpase assay
+atomic force microscopy (AFM);atomic force microscopy
+antisense RNA;antisense rna
+anti-tag co-immunoprecipitation;anti tag coimmunoprecipitation
+anti-bait co-immunoprecipitation;anti bait coimmunoprecipitation
+ADP ribosylation reaction;adp ribosylation reaction
+inferred from experiment;EXP
+inferred from direct assay;IDA
+inferred from physical interaction;IPI
+inferred from mutant phenotype;IMP
+inferred from genetic interaction;IGI
+inferred from expression pattern;IEP
+inferred from sequence or structural similarity;ISS
+inferred from sequence orthology;ISO
+inferred from sequence alignment;ISA
+inferred from sequence model;ISM
+inferred from genomic context;IGC
+inferred from biological aspect of ancestor;IBA
+inferred from biological aspect of descendant;IBD
+inferred from key residues;IKR
+inferred from rapid divergence;IRD
+inferred from reviewed computational analysis;RCA
+traceable author statement;TAS
+non-traceable author statement;NAS
+inferred by curator;IC
+no biological data available;ND
+inferred from electronic annotation;IEA
+not recorded;NR
