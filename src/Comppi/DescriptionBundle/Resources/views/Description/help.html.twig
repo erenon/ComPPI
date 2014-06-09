@@ -7,53 +7,28 @@
 
 	<h1>Help & Description</h1>
 	
+	<br />
 	<a name="toc"></a>
 	<ol id="HelpToc">
-		<li><a href="#introduction">Introduction</a></li>
-		<!-- <li><a href="#tutorial">Tutorial</a></li> -->
-		<!-- <li><a href="#statistics">Statistics</a></li> -->
-		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/species">ComPPI species</a></li>
-		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/input_databases">Input databases</a></li>
-		<ol>
-			<li>Input protein-protein interaction databases</li>
-			<li>Input subcellular localization databases</li>
-		</ol>
-		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs">Structure of subcellular localizations</a></li>
-		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/naming_conventions">Protein naming conventions</a></li>
-		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/scores">Interaction and localization score</a></li>
-		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/protein_search">Protein search</a></li>
-		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/downloads">Download of custom datasets</a></li>
-		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/output_formats">Output formats</a></li>
-		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/terms_of_use">ComPPI & open source</a></li>
-		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/cite_us">How to cite ComPPI?</a></li>
-		<li><a href="#othertools">Other tools and related publications by LINK-group and NetBiol</a></li>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/introduction">Introduction</a></li>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/tutorial">Tutorial</a></li>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/statistics">Statistics</a></li>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/species">ComPPI Species</a></li>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/input_databases">Input Databases</a></li>
+		<ul>
+			<li><a href="{{ path('ComppiDescriptionBundle_help') }}/input_ppi">Input Protein-Protein Interaction Databases</a></li>
+			<li><a href="{{ path('ComppiDescriptionBundle_help') }}/input_loc">Input Subcellular Localization Databases</a></li>
+		</ul>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs">Structure of Subcellular Localizations</a></li>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/naming_conventions">Protein Naming Conventions</a></li>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/scores">Interaction and Localization Score</a></li>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/protein_search">Protein Search</a></li>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/downloads">Download of Custom Datasets</a></li>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/output_formats">Output Formats</a></li>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/terms_of_use">ComPPI & Open Source</a></li>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/cite_us">How to Cite ComPPI?</a></li>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/other_tools_and_sources">Other Tools and Resources</a></li>
+		<br/>
 	</ol>
-		
-		
-	<a name="introduction"></a>
-	<h2>Introduction</h2>
-	<p>High-throughput protein-protein interaction (PPI) data often contain interactions, where the two interacting proteins have no common subcellular localizations. Here we present a compartmentalized protein-protein interaction database, ComPPI, offering the following novel options:</p>
-	<p></p>
-	<ul>
-		<li>a.)	an integrated dataset of 10 protein-protein interaction and 9 subcellular localization databases covering four species (<i>S. cerevisiae</i>, <i>C. elegans</i>, <i>D. melanogaster</i>, <i>H. sapiens</i>);</li>
-		<li>b.)	a hierarchic structure of subcellular localizations using >1600 Gene Ontology cellular component terms;</li>
-		<li>c.)	an interaction score comprising data-quality and a consensus of the subcellular localization of the interacting proteins;</li>
-		<li>d.)	search options for individual proteins;</li>
-		<li>e.)	download options of whole-proteome or organelle-specific interactomes and subcellular localization data.</li>
-	</ul>
-	<p></p>
-	<p>Because of the novel features of points from a.) to e.), ComPPI is useful for the analysis of experimental results in biochemistry, molecular biology and proteomics as well as for proteome- and interactome-wide studies in bioinformatics and network science helping cellular biology, medicine and drug design.</p>
-	<br />
-	<p><b>Note:</b> ComPPI uses a protein ID mapping method to find the most relevant naming convention of the proteins. See more about our protein names <a name="namingconventions">here</a>.</p>
 	
-	<!-- <a name="tutorial"></a> -->
-	<!-- <h2>Tutorial</h2> -->
-	<!-- <p>Végleges felületről print screen és benne nyilak szöveggel</p> -->
-	<!-- <p></p> -->
-	
-	
-	<!-- <a name="statistics"></a> -->
-	<!-- <h2>Statistics</h2> -->
-	<!-- <p>Confidence score után főbb statisztikák: interakciók száma fajonként oszlop, nagy lokalizációkba tartozó fehérjék számának eloszlása fajonként, confidence score eloszlás a 4 fajra, adatbázisok átfedése, de ez bonyolult</p> -->
-
 {% endblock %}
