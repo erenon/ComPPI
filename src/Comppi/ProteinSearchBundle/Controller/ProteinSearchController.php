@@ -122,7 +122,7 @@ class ProteinSearchController extends Controller
 				AND n2p.name=?
 				AND p.specieId=?
 			  GROUP BY p.proteinName
-			  ORDER BY p.proteinName", array($keyword, $species_id));
+			  ORDER BY p.proteinName DESC", array($keyword, $species_id));
 			if (!$r_prots_by_name)
 				throw new \ErrorException('Interaction query failed!');
 
@@ -190,8 +190,6 @@ class ProteinSearchController extends Controller
 		// details of the requested protein
 		$T['protein'] = $this->getProteinDetails($comppi_id);
 
-		// @TODO: letölthető dataset
-
 		// interactors
 		$r_interactors = $DB->executeQuery("SELECT DISTINCT
 				i.id AS iid, i.sourceDb, i.pubmedId,
@@ -200,25 +198,35 @@ class ProteinSearchController extends Controller
 			FROM Interaction i
 			LEFT JOIN Protein p ON p.id=IF(actorAId = $comppi_id, i.actorBId, i.actorAId)
 			LEFT JOIN ConfidenceScore cs ON i.id=cs.interactionId
-			WHERE actorAId = $comppi_id OR actorBId = $comppi_id");
+			WHERE actorAId = $comppi_id OR actorBId = $comppi_id
+			ORDER BY cs.score DESC");
 		//	LIMIT ".$this->search_result_per_page);
 		if (!$r_interactors)
 			throw new \ErrorException('Interactor query failed!');
 
 		$confScoreAvg = 0.0;
+		// there may be a significant difference between
+		// the number of proteins and the number of cycles (one protein multiple times?)
+		// therefore a separate counter is needed
+		$confCounter = 0;
+
+		// interactors skeleton
 		while ($i = $r_interactors->fetch(\PDO::FETCH_OBJ))
 		{
+			$T['ls'][$i->pid]['prot_id'] = $i->pid;
 			$T['ls'][$i->pid]['prot_name'] = $i->name;
 			$T['ls'][$i->pid]['prot_naming'] = $i->namingConvention;
 			//if ($i->namingConvention=='UniProtKB-AC')
-				$T['ls'][$i->pid]['uniprot_outlink'] = $this->uniprot_root.$i->name;
+			$T['ls'][$i->pid]['uniprot_outlink'] = $this->uniprot_root.$i->name;
 			$T['ls'][$i->pid]['confScore'] = round($i->confScore, 2)*100;
-			$confScoreAvg += $i->confScore;
+			$confScoreAvg += (float)$i->confScore;
+			$confCounter++;
 
 			$protein_ids[$i->pid] = $i->pid;
 			$interaction_ids[$i->iid] = $i->iid;
 		}
 
+		// @TODO: letölthető dataset
 		if ($get_interactions) {
 			return $this->forward(
 				'DownloadCenterBundle:DownloadCenter:serveInteractions',
@@ -234,6 +242,7 @@ class ProteinSearchController extends Controller
 			// synonyms for the interactor
 			$protein_synonyms = $this->getProteinSynonyms($protein_ids);
 
+			// update the existing skeleton (therefore reference is needed)
 			foreach($T['ls'] as $pid => &$actor)
 			{
 				// localizations to interactors
@@ -250,7 +259,7 @@ class ProteinSearchController extends Controller
 
 		$T['protein']['interactionNumber'] = count($protein_ids);
 		if ($T['protein']['interactionNumber']) {
-			$T['protein']['avgConfScore'] = round(($confScoreAvg/$T['protein']['interactionNumber']), 2)*100;
+			$T['protein']['avgConfScore'] = round($confScoreAvg/$confCounter, 2)*100;
 		} else {
 			$T['protein']['avgConfScore'] = false;
 		}
@@ -298,21 +307,35 @@ class ProteinSearchController extends Controller
 	{
 		$DB = $this->getDbConnection();
 
+		$sql_ls = 'SELECT
+				proteinId as pid, majorLocName, score
+			FROM LocalizationScore
+			WHERE
+				proteinId IN ('.join(',', $comppi_ids).')';
+		$this->verbose ? $this->verbose_log[] = $sql_ls : '';
+
+		if (!$r_ls = $DB->executeQuery($sql_ls))
+			die('LocalizationScore query failed!');
+
+		$loc_scores = array();
+		while ($ls = $r_ls->fetch(\PDO::FETCH_OBJ))
+		{
+			$loc_scores[$ls->pid][$ls->majorLocName] = $ls->score;
+		}
+
 		$sql_pl = 'SELECT
 				ptl.proteinId as pid, ptl.localizationId AS locId, ptl.sourceDb, ptl.pubmedId,
 				lt.name as minorLocName, lt.majorLocName,
-				st.name AS exp_sys, st.confidenceType AS exp_sys_type,
-				ls.score as locScore
+				st.name AS exp_sys, st.confidenceType AS exp_sys_type
 			FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
 			LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
-			LEFT JOIN LocalizationScore ls ON lt.id=ls.localizationId
 			WHERE ptl.id=pltst.protLocId
 				AND pltst.systemTypeId=st.id
-				AND proteinId IN ('.join(',', $comppi_ids).')';
+				AND ptl.proteinId IN ('.join(',', $comppi_ids).')';
 		$this->verbose ? $this->verbose_log[] = $sql_pl : '';
 
 		if (!$r_pl = $DB->executeQuery($sql_pl))
-			throw new \ErrorException('ProteinToLocalization query failed!');
+			die('ProteinToLocalization query failed!');
 
 		$i = 0;
 		while ($p = $r_pl->fetch(\PDO::FETCH_OBJ))
@@ -346,13 +369,14 @@ class ProteinSearchController extends Controller
 			}
 			if (!empty($p->majorLocName)) {
 				$pl[$p->pid][$i]['large_loc'] = ucfirst($p->majorLocName);
-				if (!empty($p->locScore)) {
-					$pl[$p->pid][$i]['loc_score'] = float($p->locScore);
+				if (!empty($loc_scores[$p->pid][$p->majorLocName])) {
+					$pl[$p->pid][$i]['loc_score'] = round($loc_scores[$p->pid][$p->majorLocName], 2);
 				} else {
 					$pl[$p->pid][$i]['loc_score'] = 0.0;
 				}
 			} else {
 				$pl[$p->pid][$i]['large_loc'] = 'N/A';
+				$pl[$p->pid][$i]['loc_score'] = 0.0;
 			}
 		}
 		$this->verbose ? $this->verbose_log[] = count($pl).' protein locations found' : '';
@@ -361,6 +385,18 @@ class ProteinSearchController extends Controller
 	}
 
 
+	/*	Collect the synonyms for a given set of proteins, and group these by protein ID.
+
+		@param $comppi_ids: array of ints, the protein IDs
+		@return array
+
+		Example:
+		>>> this->getProteinSynonyms($comppi_ids)
+		... synonyms = array(
+				'syn_fullname' = 'UniprotFull name',
+				'synonyms' => array('Syn1', 'syn2')
+			)
+	*/
 	private function getProteinSynonyms($comppi_ids)
 	{
 		$DB = $this->getDbConnection();
