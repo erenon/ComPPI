@@ -18,23 +18,23 @@ body  {
 	margin: 0 0 2em 0;
     padding: 0;
 }
-#MainMenu, #NavMenu, #Footer {
+#MainMenu, #NavMenu, #Footer, .listWithSeparator {
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
 }
-#MainMenu li, #NavMenu li, #Footer li {
+#MainMenu li, #NavMenu li, #Footer li, .listWithSeparator li {
 	margin: 0;
 	padding: 0;
 	color: #000;
 	display: inline;
 }
-#MainMenu li:after, #NavMenu li:after, #Footer li:after {
+#MainMenu li:after, #NavMenu li:after, #Footer li:after, .listWithSeparator li:after {
 	content: "//";
 	color: #909090;
 	margin: 0 12px;
 }
-#MainMenu li:last-child:after, #NavMenu li:last-child:after, #Footer li:last-child:after {
+#MainMenu li:last-child:after, #NavMenu li:last-child:after, #Footer li:last-child:after, .listWithSeparator li:last-child:after {
 	content: "";
 	margin: 0;
 }
@@ -118,7 +118,7 @@ h3 { margin-top: 1em; margin-bottom: 0; }
 
 .fancy_table {
 	width: 100%;
-	margin: 1em 0 2em 0;
+	margin: 1em 0 7px 0;
 	border-spacing: 0;
 	border-width: 0;
 	border-collapse: collapse;
@@ -174,7 +174,7 @@ tbody:before {
 
 .fancy_box {
 	/*width: 100%;*/
-	margin: 1em 0;
+	margin: 1em 0 0 0;
 	padding: 0;
 	border: 0;
 }
@@ -287,6 +287,7 @@ input { height: 25px; }
 #ProteinSearchSelectorTbl { width: auto; margin: 1em auto; }
 
 #ps-interactionStats { float: right; font-weight: bold; margin-top: 0; padding: 5px; }
+#ps-keyProtein { margin-bottom: 2em; }
 #ps-keyProtein h1 { padding: 17px 10px; }
 .ps-actorA { padding: 10px 20px; width: 80px; border-top: 1px dotted #909090; height:  100%; }
 .ps-actorA h1 { font-size: 1.5em; font-weight: lighter; margin: 0; padding: 0; display: inline; }
