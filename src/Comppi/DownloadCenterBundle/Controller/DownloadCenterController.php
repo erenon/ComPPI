@@ -30,6 +30,13 @@ class DownloadCenterController extends Controller
 		'3' => 'S. cerevisiae',
 		'all' => 'All'
 	);
+	private $specii_dl_opts = array(
+		'0' => 'hsapiens',
+		'1' => 'dmelanogaster',
+		'2' => 'celegans',
+		'3' => 'scerevisiae',
+		'all' => 'all'
+	);
 
 	/*
 	Main method of the DownloadCenter.
@@ -39,8 +46,9 @@ class DownloadCenterController extends Controller
 	*/
     public function downloadCenterAction()
     {
-		//comppi--proteins_localizations-sp_{}-loc_{}.txt
-		//comppi--interactions-sp_{}-loc_{}.txt
+		//comppi--proteins_locs-tax_{}-loc_{}.txt
+		//comppi--compartments--tax_{}-loc_{}.txt
+		//comppi--interactions--tax_{}-loc_{}.txt
 
 		//$sp = $this->speciesProvider = $this->get('comppi.build.specieProvider');
 
@@ -53,19 +61,21 @@ class DownloadCenterController extends Controller
 			switch ($_POST['fDlSet'])
 			{
 				case 'int':
-				case 'comp':
 					$dltype = 'interactions';
 					break;
+				case 'comp':
+					$dltype = 'compartments';
+					break;
 				case 'protnloc':
-					$dltype = 'proteins_localizations';
+					$dltype = 'proteins_locs';
 					break;
 				// default: file will not be found
 			}
 
 			$species = 'all';
-			if (isset($_POST["fDlSpec"]) and isset($this->specii[$_POST["fDlSpec"]]))
+			if (isset($_POST["fDlSpec"]) and isset($this->specii_dl_opts[$_POST["fDlSpec"]]))
 			{
-				$species = $_POST["fDlSpec"];
+				$species = $this->specii_dl_opts[$_POST["fDlSpec"]];
 			}
 
 			$loc = 'all';
@@ -74,7 +84,8 @@ class DownloadCenterController extends Controller
 				$loc = $this->locs[$_POST["fDlMLoc"]];
 			}
 
-			$dl_path = $this->downloads_dir."comppi--$dltype-sp_$species-loc_$loc.txt";
+			$dl_path = $this->downloads_dir
+				."comppi--".$dltype."--tax_".$species."_loc_".$loc.".txt";
 			$this->serveFile($dl_path);
 		}
 

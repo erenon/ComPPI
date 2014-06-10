@@ -287,8 +287,8 @@ class ComppiInterface(object):
 		return graph
 
 
-	def buildEgograph(self, graph, node_id):
-		self.logging.debug("buildEgograph() started")
+	def buildEgoGraph(self, graph, node_id):
+		self.logging.debug("buildEgoGraph() started")
 
 		return nx.ego_graph(graph, node_id, radius=1, undirected=True)
 
@@ -347,6 +347,18 @@ class ComppiInterface(object):
 	def getLocalizations(self):
 		self.logging.debug("getLocalizations() started")
 
+		cursor_ls = self.connect()
+		loc_scores = {}
+		with closing(cursor_ls) as cur_ls:
+			sql_ls = """
+				SELECT pid, majorLocName, score FROM  LocalizationScore ls
+			"""
+			self.logging.debug(sql_ls)
+			cur_ls.execute(sql_ls)
+
+			for pid, major_loc, score in cur_ls:
+				loc_scores[pid][major_loc] = score
+
 		cursor = self.connect()
 		with closing(cursor) as cur:
 			sql = """
@@ -366,7 +378,7 @@ class ComppiInterface(object):
 
 			all_exp_sys_types = self.getExperimentalSystemTypes()
 			d = {}
-			for pid, source_db, pubmed, go_code, major_loc, exp_sys, exp_sys_type, loc_score in cur:
+			for pid, source_db, pubmed, go_code, major_loc, exp_sys, exp_sys_type in cur:
 				curr_p = d.setdefault(pid, {})
 
 				curr_p.setdefault('source_dbs', [])
@@ -388,7 +400,7 @@ class ComppiInterface(object):
 				curr_p['exp_sys_types'].append(all_exp_sys_types.get(exp_sys_type))
 
 				curr_p.setdefault('loc_scores', [])
-				curr_p['loc_scores'].append(loc_score)
+				curr_p['loc_scores'].append(loc_scores.get(pid))
 
 			self.logging.debug("getLocalizations() returns with {} protein ID and localization data".format(len(d)))
 			return d
@@ -588,6 +600,15 @@ class ComppiInterface(object):
 
 				d = '|'.join([str(x) for x in d])
 
+			if flatten and isinstance(d, dict):
+				if None in d.values():
+					if skip_none_lines:
+						return {}
+					else:
+						d = [str(k)+':'+str(v) if v is not None else 'N/A' for k,v in d.items()]
+
+				d = '|'.join([str(k)+':'+str(v) for k,v in d.items()])
+
 			row.append(d)
 
 		return row
@@ -598,7 +619,7 @@ if __name__ == '__main__':
 	main_parser = argparse.ArgumentParser(description="Build the global ComPPI network and export various subnetworks of it.")
 	main_parser.add_argument(
 		'mode',
-		choices=['build', 'export'],
+		choices=['build', 'export', 'egograph'],
 		help="'build': (Re-)Build the global ComPPI network from the database and refresh the cache.\n'export': Export a subnetwork. If there is no global ComPPI network, it is automatically built.")
 	main_parser.add_argument(
 		'-t',
@@ -615,6 +636,11 @@ if __name__ == '__main__':
 		'--loc',
 		choices=['cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane', 'all'],
 		help="Major localization.")
+	main_parser.add_argument(
+		'-n',
+		'--node_id',
+		type=int,
+		help="Node ID for generating egographs.")
 
 	args = main_parser.parse_args()
 
@@ -622,6 +648,11 @@ if __name__ == '__main__':
 		c = ComppiInterface()
 		c.cache_enabled = False
 		c.buildGlobalComppi()
+	elif args.mode=='egograph':
+		c = ComppiInterface()
+		comppi = c.buildGlobalComppi()
+		egograph = c.buildEgoGraph(comppi, args.node_id)
+		print(egograph.edges(data=True))
 	elif args.mode=='export':
 		c = ComppiInterface()
 		all_specii = c.specii_opts
@@ -655,20 +686,20 @@ if __name__ == '__main__':
 				if args.type=='proteinloc' or args.type=='all':
 					ci.exportNodesToCsv(
 						filtered_comppi,
-						os.path.join(ci.output_dir, 'comppi_proteins_locs--tax_{}-loc_{}.txt'.format(sp, loc)),
-						('name', 'naming_conv', 'synonyms', 'major_locs', 'loc_scores', 'minor_locs', 'loc_exp_sys_types', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
-						('Protein Name', 'Naming Convention', 'Synonyms', 'Major Loc', 'Localization Score', 'Minor Loc', 'Experimental System Type', 'Localization Source Database', 'PubmedID', 'TaxID'),
+						os.path.join(ci.output_dir, 'comppi--proteins_locs--tax_{}_loc_{}.txt'.format(sp, loc)),
+						('name', 'naming_conv', 'synonyms', 'loc_scores', 'minor_locs', 'loc_exp_sys_types', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
+						('Protein Name', 'Naming Convention', 'Synonyms', 'Major Loc With Loc Score', 'Minor Loc', 'Experimental System Type', 'Localization Source Database', 'PubmedID', 'TaxID'),
 						skip_none_lines = False
 					)
 
 				if args.type=='compartment' or args.type=='all':
 					ci.exportNetworkToCsv(
 						filtered_comppi,
-						os.path.join(ci.output_dir, 'comppi_compartments--tax_{}-loc_{}.txt'.format(sp, loc)),
-						('name', 'naming_conv', 'major_locs', 'minor_locs', 'loc_scores', 'loc_exp_sys_types', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
+						os.path.join(ci.output_dir, 'comppi--compartments--tax_{}_loc_{}.txt'.format(sp, loc)),
+						('name', 'naming_conv', 'loc_scores', 'minor_locs', 'loc_exp_sys_types', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
 						('weight', 'exp_sys_str', 'source_db', 'pubmed'),
-						(	'Interactor A', 'Naming Convention A', 'Major Loc A', 'Minor Loc A', 'Loc Score A', 'Loc Experimental System Type A', 'Loc Source DB A', 'Loc PubMed ID A', 'Taxonomy ID A',
-							'Interactor B', 'Naming Convention B', 'Major Loc B', 'Minor Loc B', 'Loc Score B', 'Loc Experimental System Type B', 'Loc Source DB B', 'Loc PubMed ID B', 'Taxonomy ID B',
+						(	'Interactor A', 'Naming Convention A', 'Major Loc A With Loc Score', 'Minor Loc A', 'Loc Experimental System Type A', 'Loc Source DB A', 'Loc PubMed ID A', 'Taxonomy ID A',
+							'Interactor B', 'Naming Convention B', 'Major Loc B With Loc Score', 'Minor Loc B', 'Loc Experimental System Type B', 'Loc Source DB B', 'Loc PubMed ID B', 'Taxonomy ID B',
 							'Interaction Score', 'Interaction Experimental System Type', 'Interaction Source Database', 'Interaction PubMed ID'
 						),
 						skip_none_lines = False
@@ -677,7 +708,7 @@ if __name__ == '__main__':
 				if args.type=='interaction' or args.type=='all':
 					ci.exportNetworkToCsv(
 						filtered_comppi,
-						os.path.join(ci.output_dir, 'comppi_interactions--tax_{}-loc_{}.txt'.format(sp, loc)),
+						os.path.join(ci.output_dir, 'comppi--interactions--tax_{}_loc_{}.txt'.format(sp, loc)),
 						('name', 'synonyms', 'taxonomy_id'),
 						('weight', 'exp_sys_str', 'source_db', 'pubmed'),
 						('Protein A', 'Synonyms A', 'Taxonomy ID A', 'Protein B', 'Synonyms B', 'Taxonomy ID B', 'Interaction Score', 'Interaction Experimental System Type', 'Interaction Source Database', 'Interaction PubMed ID'),
