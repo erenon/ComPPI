@@ -85,7 +85,7 @@ class DownloadCenterController extends Controller
 			}
 
 			$dl_path = $this->downloads_dir
-				."comppi--".$dltype."--tax_".$species."_loc_".$loc.".txt";
+				."comppi--".$dltype."--tax_".$species."_loc_".$loc.".txt.gz";
 			$this->serveFile($dl_path);
 		}
 
