@@ -6,8 +6,30 @@
 {% block bundlecontent %}
 	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Tutorial</li></ul></h1>
 	
-	
-	
+        <br/>
+        <p align="center">
+            <a href="#protsearch">How to use the Protein Search page?</a><br/>
+            <a href="#download">How to use the Downloads page?</a>
+        </p>
+        
+        
+	<a name="protsearch"><h2>How to use the Protein Search page?</h2></a>
+        
+        <p>To learn more about the Protein Search page navigate <a href="{{ path('ComppiDescriptionBundle_help') }}/protein_search">here</a>.</p>
+        
+        <!--PRINT SCREEN
+        - search - choose species - autocomplete- submit search -tooltips!
+        - multiple proteins - choose (UniProt and full name) - Details
+        - rsult
+            - query protein on the top - name, synonyms, loc info
+            - if no interactions: No interactions were found. (such as: Q761V2)
+            - interactions: list - interaction score, comppi interactors and uniprot link - details - synonyms and loc info-->
+        
+	<a name="download"><h2>How to use the Downloads page?</h2></a>
+
+        <p>To learn more about the Downloads page navigate <a href="{{ path('ComppiDescriptionBundle_help') }}/downloads">here</a>.</p>
+
+        
 	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
         
 {% endblock %}

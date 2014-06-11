@@ -6,7 +6,66 @@
 {% block bundlecontent %}
 	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Protein Search</li></ul></h1>
 	
-	<p></p>
+        <h2>Summary of the Protein Search page</h2>
+	<p align="justify">On the Protein Search page the user can search for the interactions of individual proteins.
+        After the wanted protein is submitted for search on the top of the result page the <a href="#intA">properties of the query protein</a> appear,
+        and after that the <a href="#int">interactions</a> are listed. All interactions contain information about the <a href="#intB">properties of the interacting partner</a>,
+        and the interaction score for the certain interaction.</p>
+        
+        <p align="justify">To learn more about how to use our Protein Search page check out our <a href="{{ path('ComppiDescriptionBundle_help') }}/tutorial#protsearch">Tutorial</a>!</p>
+        
+        <a name="intA"><h2>Properties of the query protein</h2></a>
+        
+        <p align="justify">On the top of the result page the following properties are listed about the query protein:
+        <ol>
+            <li>the <b>Full Name</b> of the protein from the UniProt database and link to the <b>UniProt Profile</b></li>
+            <li>the <b>Number of Interactions</b> gives the number of the existing interactions for the given protein</li>
+            <li><b>Average Interaction Score</b> gives the average of all the interactions for the given protein</li>
+            <li>the <b>Synonyms</b> of the query protein contains all the protein names stored in the ComPPI database</li>
+            <li>the <b>Localizations</b> table contains the following properties for the subcellular localization of the protein:
+            <ul>
+                <li>the list of <b>Major Localizations</b>: every entry is in a new row</li>
+                <li>the list of <b>Minor Localizations</b>: if the name of the minor localization was the same like the name of the major localization, then there is no detailed localization information available</li>
+                <li>the <b>Localization Score</b> contains the calculated score for the given major localization.  See more about the Localization Score <a href="{{ path('ComppiDescriptionBundle_help') }}/scores">here</a>.</li>
+                <li>the <b>Experiment Type</b> column contains the system type of the localization data: experimental, predicted, or unknown with more detailed name if it was available</li>
+                <li>the <b>Source Database</b> list contains the source of the entry</li>
+                <li>the <b>PubMed</b> column contains the PubMed ID of the entry, usually the related publication of the source database</li>
+            </ul></li>
+        </ol></p>
+        
+               
+        <a name="int"><h2>Properties of the interactions</h2></a>
+        
+        <p align="justify">On the result page the interactions are listed after the box with the properties of the query protein. The following properties are included:
+        <ol>
+            <li>the <b>Interaction Score</b> is available for all the interactions, where both interactors have at least one major localization.
+            If there was no localization info, then the Interaction Score is 0.
+            See more about the Interaction Score <a href="{{ path('ComppiDescriptionBundle_help') }}/scores">here</a>.</li>
+            <li>the <b>UniProt accession</b> and the <b>Full Name</b> of the interactor protein</li>
+            <li>the <b>ComPPI Interactors</b> link navigates directly to the interactions of the certain interactor protein</li>
+            <li>the <b>UniProtKB Profile</b> is directly available for the interactors</li>
+            <li>the <b>Details</b> show the <a href="#intB">properties of the interactor</a> protein after clicking</li>
+        </ol>
+        </p>
+        
+        <a name="intB"><h2>Properties of the interacting partners</h2></a>
+        
+        <p align="justify">The structure of the properties of the interacting partner:
+        <ol>
+            <li>the <b>Full Name</b> of the protein from the UniProt database and link to the <b>UniProt Profile</b></li>
+            <li>the <b>ComPPI Interactors</b> link navigates directly to the interactions of the certain interactor protein</li>
+            <li>the <b>UniProtKB Profile</b> is directly available for the interactors</li>
+            <li>the <b>Synonyms</b> of the query protein contains all the protein names stored in the ComPPI database</li>
+            <li>the <b>Localizations</b> table contains the following properties for the subcellular localization of the protein:
+            <ul>
+                <li>the list of <b>Major Localizations</b>: every entry is in a new row</li>
+                <li>the list of <b>Minor Localizations</b>: if the name of the minor localization was the same like the name of the major localization, then there is no detailed localization information available</li>
+                <li>the <b>Localization Score</b> contains the calculated score for the given major localization.  See more about the Localization Score <a href="{{ path('ComppiDescriptionBundle_help') }}/scores">here</a>.</li>
+                <li>the <b>Experiment Type</b> column contains the system type of the localization data: experimental, predicted, or unknown with more detailed name if it was available</li>
+                <li>the <b>Source Database</b> list contains the source of the entry</li>
+                <li>the <b>PubMed</b> column contains the PubMed ID of the entry, usually the related publication of the source database</li>
+            </ul></li>
+        </ol></p>
 
 	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
 {% endblock %}
