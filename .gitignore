@@ -31,3 +31,4 @@ build
 
 comppi.komodoproject
 bin/global_comppi_graph.gzpickle
+bin/__pycache__
