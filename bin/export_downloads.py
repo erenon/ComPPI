@@ -11,6 +11,7 @@ from contextlib import closing
 import argparse
 import logging
 import os
+import io
 import configparser
 # python3-mysql.connector: http://dev.mysql.com/doc/connector-python/en/index.html
 import mysql.connector
@@ -28,16 +29,16 @@ class ComppiInterface(object):
 
 	cache_enabled 			= True
 	comppi_global_graph_f 	= 'global_comppi_graph.gzpickle'
-	cfg_file						= os.path.join('..', 'app', 'config', 'parameters.ini')
-	log_file						= os.path.join('..', 'web', 'download', 'export_networks.log')
-	log_mode					= 'a' # a: append, w: overwrite
+	cfg_file				= os.path.join('..', 'app', 'config', 'parameters.ini')
+	log_file				= os.path.join('..', 'web', 'download', 'export_networks.log')
+	log_mode				= 'a' # a: append, w: overwrite
 	output_dir 				= os.path.join('..', 'web', 'download')
 	db_conn					= None
-	cursor						= None
-	db_name 					= ''
-	db_host 					= ''
-	db_user 					= ''
-	db_pwd  					= ''
+	cursor					= None
+	db_name 				= ''
+	db_host 				= ''
+	db_user 				= ''
+	db_pwd  				= ''
 	specii = {
 		0 : '9606', # H. sapiens
 		1 : '7227', # D. melanogaster
@@ -351,13 +352,14 @@ class ComppiInterface(object):
 		loc_scores = {}
 		with closing(cursor_ls) as cur_ls:
 			sql_ls = """
-				SELECT pid, majorLocName, score FROM  LocalizationScore ls
+				SELECT proteinId, majorLocName, score FROM  LocalizationScore ls
 			"""
 			self.logging.debug(sql_ls)
 			cur_ls.execute(sql_ls)
-
+		
 			for pid, major_loc, score in cur_ls:
-				loc_scores[pid][major_loc] = score
+				curr_mloc_sc = loc_scores.setdefault(pid, {})
+				curr_mloc_sc[major_loc] = score
 
 		cursor = self.connect()
 		with closing(cursor) as cur:
@@ -365,11 +367,9 @@ class ComppiInterface(object):
 				SELECT
 					ptl.proteinId as pid, ptl.sourceDb, ptl.pubmedId,
 					lt.goCode, lt.majorLocName,
-					st.name AS exp_sys, st.confidenceType AS exp_sys_type,
-					ls.score AS locScore
+					st.name AS exp_sys, st.confidenceType AS exp_sys_type
 				FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
 				LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
-				LEFT JOIN LocalizationScore ls ON ptl.proteinId=ls.proteinId
 				WHERE ptl.id=pltst.protLocId
 					AND pltst.systemTypeId=st.id
 			"""
@@ -391,7 +391,8 @@ class ComppiInterface(object):
 				curr_p['minor_locs'].append(go_code)
 
 				curr_p.setdefault('major_locs', [])
-				curr_p['major_locs'].append(major_loc)
+				if major_loc not in curr_p['major_locs']:
+					curr_p['major_locs'].append(major_loc)
 
 				curr_p.setdefault('exp_sys', [])
 				curr_p['exp_sys'].append(exp_sys)
@@ -399,8 +400,12 @@ class ComppiInterface(object):
 				curr_p.setdefault('exp_sys_types', [])
 				curr_p['exp_sys_types'].append(all_exp_sys_types.get(exp_sys_type))
 
-				curr_p.setdefault('loc_scores', [])
-				curr_p['loc_scores'].append(loc_scores.get(pid))
+				# record one major loc only once
+				# example: loc_scores: {'cytoplasm': 0.9, 'nucleus': 0.5}
+				curr_p.setdefault('loc_scores', {})
+				curr_ls = loc_scores.get(pid, {})
+				for curr_maj_loc, curr_score in curr_ls.items():
+					curr_p['loc_scores'][curr_maj_loc] = curr_score
 
 			self.logging.debug("getLocalizations() returns with {} protein ID and localization data".format(len(d)))
 			return d
@@ -522,8 +527,12 @@ class ComppiInterface(object):
 				""".format(node_columns, edge_columns, header))
 
 		row_count = 0
-		with open(filename, 'w', newline='') as fp:
-			csvw = csv.writer(fp, delimiter="\t", quoting=csv.QUOTE_MINIMAL)
+		with gzip.open(filename, 'w') as fp:
+			csvw = csv.writer(
+				io.TextIOWrapper(fp, newline="", write_through=True), # text into binary file
+				delimiter="\t",
+				quoting=csv.QUOTE_MINIMAL
+			)
 
 			# header
 			if header:
@@ -565,8 +574,12 @@ class ComppiInterface(object):
 			raise ValueError("exportNetworkToCsv(): length of header is not the same as length of node columns!")
 
 		row_count = 0
-		with open(filename, 'w', newline='') as fp:
-			csvw = csv.writer(fp, delimiter="\t", quoting=csv.QUOTE_MINIMAL)
+		with gzip.open(filename, 'w') as fp:
+			csvw = csv.writer(
+				io.TextIOWrapper(fp, newline="", write_through=True), # text into binary file
+				delimiter="\t",
+				quoting=csv.QUOTE_MINIMAL
+			)
 
 			# header
 			if header:
@@ -590,29 +603,56 @@ class ComppiInterface(object):
 
 		for cell_name in cells:
 			d = data[cell_name] # throws KeyError: bad column name if node attribute is not found
-
-			if flatten and isinstance(d, list):
-				if None in d:
-					if skip_none_lines:
-						return []
-					else:
-						d = [x if x is not None else 'N/A' for x in d]
-
-				d = '|'.join([str(x) for x in d])
-
-			if flatten and isinstance(d, dict):
-				if None in d.values():
-					if skip_none_lines:
-						return {}
-					else:
-						d = [str(k)+':'+str(v) if v is not None else 'N/A' for k,v in d.items()]
-
-				d = '|'.join([str(k)+':'+str(v) for k,v in d.items()])
-
-			row.append(d)
+			flat_d = []
+			
+			if flatten and isinstance(d, (list, tuple)):
+				flat_d = '|'.join( self._flattenList(d, skip_none_lines) )
+			elif flatten and isinstance(d, dict):
+				flat_d = '|'.join( self._flattenDict(d, skip_none_lines) )
+			else:
+				flat_d = d
+			
+			# if any of the cells contains none, skip (if Nones should be skipped)
+			if not flat_d and skip_none_lines:
+				return []
+			else:
+				row.append(flat_d)
 
 		return row
 
+
+	def _flattenList(self, data, skip_none_lines = True):
+		""" Recursive flattening of lists and tuples. """
+		d = []
+
+		for i in data:
+			if i is None and skip_none_lines:
+				return []
+			elif isinstance(i, list):
+				d.extend(self._flattenList(i, skip_none_lines))
+			elif isinstance(i, dict):
+				d.extend(self._flattenDict(i, skip_none_lines))
+			else:
+				d.append(str(i))
+				
+		return d
+
+	
+	def _flattenDict(self, data, skip_none_lines = True):
+		""" Recursive flattening of dicts. """
+		d = []
+
+		for k, v in data.items():
+			if v is None and skip_none_lines:
+				return []
+			elif isinstance(v, list):
+				d.extend(self._flattenList(v, skip_none_lines))
+			elif isinstance(v, dict):
+				d.extend(self._flattenDict(v, skip_none_lines))
+			else:
+				d.append(str(k)+':'+str(v))
+				
+		return d
 
 
 if __name__ == '__main__':
@@ -686,7 +726,7 @@ if __name__ == '__main__':
 				if args.type=='proteinloc' or args.type=='all':
 					ci.exportNodesToCsv(
 						filtered_comppi,
-						os.path.join(ci.output_dir, 'comppi--proteins_locs--tax_{}_loc_{}.txt'.format(sp, loc)),
+						os.path.join(ci.output_dir, 'comppi--proteins_locs--tax_{}_loc_{}.txt.gz'.format(sp, loc)),
 						('name', 'naming_conv', 'synonyms', 'loc_scores', 'minor_locs', 'loc_exp_sys_types', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
 						('Protein Name', 'Naming Convention', 'Synonyms', 'Major Loc With Loc Score', 'Minor Loc', 'Experimental System Type', 'Localization Source Database', 'PubmedID', 'TaxID'),
 						skip_none_lines = False
@@ -695,7 +735,7 @@ if __name__ == '__main__':
 				if args.type=='compartment' or args.type=='all':
 					ci.exportNetworkToCsv(
 						filtered_comppi,
-						os.path.join(ci.output_dir, 'comppi--compartments--tax_{}_loc_{}.txt'.format(sp, loc)),
+						os.path.join(ci.output_dir, 'comppi--compartments--tax_{}_loc_{}.txt.gz'.format(sp, loc)),
 						('name', 'naming_conv', 'loc_scores', 'minor_locs', 'loc_exp_sys_types', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
 						('weight', 'exp_sys_str', 'source_db', 'pubmed'),
 						(	'Interactor A', 'Naming Convention A', 'Major Loc A With Loc Score', 'Minor Loc A', 'Loc Experimental System Type A', 'Loc Source DB A', 'Loc PubMed ID A', 'Taxonomy ID A',
@@ -708,7 +748,7 @@ if __name__ == '__main__':
 				if args.type=='interaction' or args.type=='all':
 					ci.exportNetworkToCsv(
 						filtered_comppi,
-						os.path.join(ci.output_dir, 'comppi--interactions--tax_{}_loc_{}.txt'.format(sp, loc)),
+						os.path.join(ci.output_dir, 'comppi--interactions--tax_{}_loc_{}.txt.gz'.format(sp, loc)),
 						('name', 'synonyms', 'taxonomy_id'),
 						('weight', 'exp_sys_str', 'source_db', 'pubmed'),
 						('Protein A', 'Synonyms A', 'Taxonomy ID A', 'Protein B', 'Synonyms B', 'Taxonomy ID B', 'Interaction Score', 'Interaction Experimental System Type', 'Interaction Source Database', 'Interaction PubMed ID'),
