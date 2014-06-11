@@ -89,7 +89,7 @@ h2 { margin-top: 2em; margin-bottom: 0.5em; font-size: 1.25em; font-weight: 500;
 h3 { margin-top: 1em; margin-bottom: 0; }
 
 .center { text-align: center; }
-.help { margin: 0; }
+.help { margin: 1em 0; }
 .help_details {}
 .infobtn {
 	background-color: rgb(120, 120, 180);
@@ -112,9 +112,7 @@ h3 { margin-top: 1em; margin-bottom: 0; }
 }
 .infobtn a { color: #E0DFDC; text-decoration: none; }
 .infobtn a:hover { color: #fff; }
-.pagination { list-style-type: none; margin: 0; padding: 0; width: 100%; text-align: center; }
-.pagination li { display: inline; margin: 0 4px; font-size: 1.2em; }
-.pagination li.paginationCurrentPage a { color: #fff; }
+.message_success { font-weight: bold; color: #008800; }
 
 .fancy_table {
 	width: 100%;
@@ -220,35 +218,36 @@ tbody:before {
     box-shadow: 5px 5px 5px 0px #999;
 }
 a.btn:hover { color: #000; }
-
-/*.btn { background: url("btn_bg.png") #3c3b37; color: #E0DFDC; }
-.btn_green { color: #E1FFCE; background: url("btn_bg_green.png") #307500; border: 1px solid #228800; }
-.btn a { color: #E0DFDC; text-decoration: none; }
-.btn a:hover, .btn:hover, .btn_green:hover { color: #fff; }
-.btn_src { font-size: 12px; padding: 0 8px; }
-.btn_submit { color: #000; background: #E49E32 url("btn_bg_orange.png") repeat-x top left; border: 1px solid #E49E32; }
-.btn_submit:hover { color: #800000; }*/
-
 label {
 	display: block;
 	float: left;
 	width: 200px;
-	height: 25px;
-	margin: 2px;
+	height: 30px;
+	margin: 2px 10px 2px 2px;
+	padding: 8px 0 4px 0;
 	border-top: 2px solid rgb(155, 159, 165);
 	text-align: left;
-	vertical-align: bottom;
 }
 .radioButtonLabel { float: none; width: auto; display: inline; border: 0; }
-.radiobtn { height: auto; margin: 5px 10px 5px 0; padding: 0; }
 #Content form br { clear: left; }
 /*#fProtSearchLocECBtn { margin-left: 206px; }  properly align as a label was before it */
 input, select, textarea {
-	margin: 2px;
+	margin: 2px 10px;
 	padding: 8px;
 	border: 1px solid #000;
+	width: 300px;
 }
 input { height: 25px; }
+textarea { height: 200px; }
+.radiobtn {
+	width: 20px;
+	height: auto;
+	margin: 5px 10px 5px 0;
+	padding: 0;
+	-webkit-box-shadow: 5px 5px 5px 0px #999;
+    -moz-box-shadow: 5px 5px 5px 0px #999;
+    box-shadow: 5px 5px 5px 0px #999;
+}
 /*input[type='checkbox'] { padding: 8px; }*/
 
 /* MAIN PAGE */
@@ -260,7 +259,7 @@ input { height: 25px; }
 #fProtSearchKeywordLabel { width: 200px; }
 #fProtSearchKeyword { width: 200px; margin: 2px 20px; }
 #fProtSearchSubmit { width: 200px; border: 0; }
-#fProtSearchSpecContainer { width: 200px; margin: 10px 0 0 220px; }
+#fProtSearchSpecContainer { width: 200px; margin: 10px 0 0 220px; padding: 0; }
 #fProtSearchhs, #fProtSearchdm, #fProtSearchce, #fProtSearchsc { font-style: italic; margin-left: 5px; }
 
 .ui-autocomplete-loading {
@@ -376,3 +375,7 @@ input { height: 25px; }
 
 /* HELP */
 .backToTOC { text-align: right; margin-right: 200px; }
+
+/* CONTACT */
+#ContactForm { width: 600px; margin: 0 auto; }
+#ContactForm .help { margin-top: 0; }

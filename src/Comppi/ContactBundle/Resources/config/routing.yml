@@ -1,0 +1,5 @@
+ContactBundle_contact:
+    pattern:  /contact
+    defaults: { _controller: ContactBundle:Contact:contact }
+    requirements:
+        _method: GET|POST

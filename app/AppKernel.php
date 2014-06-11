@@ -23,6 +23,7 @@ class AppKernel extends Kernel
 			new Comppi\StatBundle\StatBundle(),
             //new Comppi\DownloadDbBundle\DownloadDbBundle(),
             new Comppi\DownloadCenterBundle\DownloadCenterBundle(),
+            new Comppi\ContactBundle\ContactBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
