@@ -10,9 +10,13 @@
 
 <h1>What is ComPPI?</h1>
 <p>Protein-protein interaction networks are spatially and temporally merged from the results of various experimental and predicting methods. These often ignore localization data, which in turn deteriorates the data quality and its predictive potential.</p>
-<p>We present ComPPI, the compartmentalized protein-protein interaction database, that provides qualitative information on the interactions, proteins and their localizations integrated from <a href="{{ path('ComppiDescriptionBundle_help') }}/input_databases">multiple databases</a>. ComPPI introduces two <a href="{{ path('ComppiDescriptionBundle_help') }}/scores">qualitative scores</a>, the interaction score and the localization score, which describe the calculated probability of the data correctness.</p>
+<p>We present ComPPI, the <b>compartmentalized protein-protein interaction database</b>, which provides qualitative information on the <b>interactions, proteins and their localizations</b> integrated from <a href="{{ path('ComppiDescriptionBundle_help') }}/input_databases">multiple databases</a>.
+<br />The overlap of data among various databases can be very low <a href="http://www.nature.com/nmeth/journal/v6/n1/abs/nmeth.1284.html" title="Cusick et al, 2009, Nature Methods: Literature-curated protein interaction datasets (click to open the abstract)" target="_blank">[1]</a>, therefore the <b>integration</b> results in improved data quality.
+<br />The localizations of the interacting proteins are often not considered, leading to networks with many false positive interactions. Considering the available localization data further improves the data quality.
+<br />ComPPI introduces two novel <a href="{{ path('ComppiDescriptionBundle_help') }}/scores">qualitative scores</a>, the <b>interaction score</b> and the <b>localization score</b>, which describe the calculated probability of the data correctness.</p>
+<p>ComPPI is a novel, integrative, open source database useful for the analysis of experimental results in biochemistry, molecular biology and proteomics as well as for proteome- and interactome-wide studies in bioinformatics and network science helping cellular biology, medicine and drug design.</p>
 
-
+<h1>Quick Statistics</h1>
 <p><table id="MainPageStatisticsTable">
 	<thead>
 		<th>Species</th>
