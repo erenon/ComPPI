@@ -1,0 +1,241 @@
+{# src/Comppi/ProteinSearchBundle/Resources/views/about.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %}ComPPI - Help/Input Subcellular Localization Databases{% endblock %}
+
+{% block bundlecontent %}
+
+	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Input Subcellular Localization Databases</li></ul></h1>
+	
+	<br/>
+        <p>Available species:</p>
+        <ul>
+            <li><a href="#human"><i>Homo sapiens</i> (Human)</a></li>
+            <li><a href="#drosi"><i>Drosophila melanogaster</i> (Fruit fly)</a></li>
+            <li><a href="#worm"><i>Caenorhabditis elegans</i></a></li>
+            <li><a href="#yeast"><i>Saccharomyces cerevisiae</i> (Baker's yeast)</a></li>
+        </ul>
+        
+        <a name="human"><h2 align="center"><i>Homo sapiens (Human)</i></h2></a>
+	<table id="Input_PPI_Table_Human" class="fancy_table hovered_list">
+            <thead>
+                <tr>
+                    <th>Database Name</th>
+                    <th>Version number</th>
+                    <th>Pubmed ID</th>
+                    <!--<th>Protein Count</th>-->
+                    <!--<th>Localization Count</th>-->
+                </tr> 
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="http://gpcr.biocomp.unibo.it/bacello/">BaCelLo</a></td>
+                    <td>date: 2006</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/16873501">16873501</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>
+                <tr>
+                    <td><a href="http://gpcr.biocomp.unibo.it/esldb/">eSLDB</a></td>
+                    <td>date: 04.2008</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/17108361">17108361</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>   
+                <tr>
+                    <td><a href="http://www.geneontology.org/">Gene Ontology</a></td>
+                    <td>downloaded at June 2014</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/10802651">10802651</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>    
+                <tr>
+                    <td><a href="http://www.humanproteinpedia.org/">Human Proteinpedia</a></td>
+                    <td>version: 2.0</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/22159132">22159132</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>
+                <tr>
+                    <td><a href="http://locate.imb.uq.edu.au/">LOCATE</a></td>
+                    <td>date: 21.11.2008</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/17986452">17986452</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>
+                <tr>
+                    <td><a href="http://matrixdb.ibcp.fr/">MatrixDB</a></td>
+                    <td>date: 20.03.2014</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/20852260">20852260</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>
+                <tr>
+                    <td><a href="http://organelledb.lsi.umich.edu/">Organelle DB</a></td>
+                    <td>date: 2007</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/17130152">17130152</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>
+                <tr>
+                    <td><a href="http://webdocs.cs.ualberta.ca/~bioinfo/PA/GOSUB/">PA-GOSUB</a></td>
+                    <td>version: 2.5</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/15608166">15608166</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>
+                <tr>
+                    <td><a href="http://www.proteinatlas.org/">The Human Protein Atlas</a></td>
+                    <td>version: 10.0 (12.09.2012)</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/21139605">21139605</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>
+            </tbody>
+        </table>
+
+        <a name="drosi"><h2 align="center"><i>Drosophila melanogaster</i> (Fruit fly)</h2></a>
+	<table id="Input_PPI_Table_Drosi" class="fancy_table hovered_list">
+            <thead>
+                <tr>
+                    <th>Database Name</th>
+                    <th>Version number</th>
+                    <th>Pubmed ID</th>
+                    <!--<th>Protein Count</th>-->
+                    <!--<th>Localization Count</th>-->
+                </tr> 
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="http://gpcr.biocomp.unibo.it/esldb/">eSLDB</a></td>
+                    <td>date: 04.2008</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/17108361">17108361</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>   
+                <tr>
+                    <td><a href="http://www.geneontology.org/">Gene Ontology</a></td>
+                    <td>downloaded at June 2014</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/10802651">10802651</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>    
+                <tr>
+                    <td><a href="http://organelledb.lsi.umich.edu/">Organelle DB</a></td>
+                    <td>date: 2007</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/17130152">17130152</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>
+                <tr>
+                    <td><a href="http://webdocs.cs.ualberta.ca/~bioinfo/PA/GOSUB/">PA-GOSUB</a></td>
+                    <td>version: 2.5</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/15608166">15608166</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>
+            </tbody>
+        </table>
+        
+        <a name="worm"><h2 align="center"><i>Caenorhabditis elegans</i></h2></a>
+	<table id="Input_PPI_Table_Worm" class="fancy_table hovered_list">
+            <thead>
+                <tr>
+                    <th>Database Name</th>
+                    <th>Version number</th>
+                    <th>Pubmed ID</th>
+                    <!--<th>Protein Count</th>-->
+                    <!--<th>Localization Count</th>-->
+                </tr> 
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="http://gpcr.biocomp.unibo.it/bacello/">BaCelLo</a></td>
+                    <td>date: 2006</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/16873501">16873501</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>
+                <tr>
+                    <td><a href="http://gpcr.biocomp.unibo.it/esldb/">eSLDB</a></td>
+                    <td>date: 04.2008</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/17108361">17108361</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>   
+                <tr>
+                    <td><a href="http://www.geneontology.org/">Gene Ontology</a></td>
+                    <td>downloaded at June 2014</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/10802651">10802651</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>    
+                <tr>
+                    <td><a href="http://organelledb.lsi.umich.edu/">Organelle DB</a></td>
+                    <td>date: 2007</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/17130152">17130152</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>
+                <tr>
+                    <td><a href="http://webdocs.cs.ualberta.ca/~bioinfo/PA/GOSUB/">PA-GOSUB</a></td>
+                    <td>version: 2.5</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/15608166">15608166</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>
+            </tbody>
+        </table>
+        
+        <a name="yeast"><h2 align="center"><i>Saccharomyces cerevisiae</i> (Baker's yeast)</h2></a>
+	<table id="Input_PPI_Table_Yeast" class="fancy_table hovered_list">
+            <thead>
+                <tr>
+                    <th>Database Name</th>
+                    <th>Version number</th>
+                    <th>Pubmed ID</th>
+                    <!--<th>Protein Count</th>-->
+                    <!--<th>Localization Count</th>-->
+                </tr> 
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="http://gpcr.biocomp.unibo.it/bacello/">BaCelLo</a></td>
+                    <td>date: 2006</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/16873501">16873501</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>
+                <tr>
+                    <td><a href="http://gpcr.biocomp.unibo.it/esldb/">eSLDB</a></td>
+                    <td>date: 04.2008</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/17108361">17108361</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>   
+                <tr>
+                    <td><a href="http://www.geneontology.org/">Gene Ontology</a></td>
+                    <td>downloaded at June 2014</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/10802651">10802651</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>    
+                <tr>
+                    <td><a href="http://organelledb.lsi.umich.edu/">Organelle DB</a></td>
+                    <td>date: 2007</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/17130152">17130152</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>
+                <tr>
+                    <td><a href="http://webdocs.cs.ualberta.ca/~bioinfo/PA/GOSUB/">PA-GOSUB</a></td>
+                    <td>version: 2.5</td>
+                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/15608166">15608166</a></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                </tr>
+            </tbody>
+        </table>
+	
+	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
+{% endblock %}
