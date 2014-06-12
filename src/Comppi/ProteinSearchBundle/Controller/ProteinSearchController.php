@@ -370,13 +370,13 @@ class ProteinSearchController extends Controller
 			if (!empty($p->majorLocName)) {
 				$pl[$p->pid][$i]['large_loc'] = ucfirst($p->majorLocName);
 				if (!empty($loc_scores[$p->pid][$p->majorLocName])) {
-					$pl[$p->pid][$i]['loc_score'] = round($loc_scores[$p->pid][$p->majorLocName], 2);
+					$pl[$p->pid][$i]['loc_score'] = round($loc_scores[$p->pid][$p->majorLocName], 2)*100;
 				} else {
-					$pl[$p->pid][$i]['loc_score'] = 0.0;
+					$pl[$p->pid][$i]['loc_score'] = 0;
 				}
 			} else {
 				$pl[$p->pid][$i]['large_loc'] = 'N/A';
-				$pl[$p->pid][$i]['loc_score'] = 0.0;
+				$pl[$p->pid][$i]['loc_score'] = 0;
 			}
 		}
 		$this->verbose ? $this->verbose_log[] = count($pl).' protein locations found' : '';
