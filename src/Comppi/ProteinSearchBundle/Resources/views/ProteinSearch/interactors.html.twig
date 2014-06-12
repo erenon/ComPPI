@@ -33,12 +33,12 @@
 		<table class="fancy_table hovered_list">
 			<thead>
 			<tr>
-			<th>Major Loc</th>
-			<th>Minor Loc</th>
-			<th>Loc Score</th>
-			<th>Experiment Type</th>
-			<th>Source Database</th>
-			<th>PubMed</th>
+			<th title="Major localization">Major Loc</th>
+			<th title="Specific localization">Minor Loc</th>
+			<th title="The probability of the protein belonging to the given major localization">Loc Prob</th>
+			<th title="The type of the experiment that related the protein to the localization">Experiment Type</th>
+			<th title="The source database of the protein-localization data">Source Database</th>
+			<th title="The publication about the source database or the protein localization">PubMed</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -46,7 +46,7 @@
 			<tr class="ps-sysType{{ l.loc_exp_sys_type }}">
 			<td>{{ l.large_loc }}</td>
 			<td>{{ l.small_loc }}</td>
-			<td>{{ l.loc_score }}</td>
+			<td>{{ l.loc_score }}%</td>
 			<td>{{ l.loc_exp_sys|raw }}</td>
 			<td>{% if l.source_db %} {{ l.source_db }} {% endif %}</td>
 			<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank" title="Direct link to the publication that relates the protein to the localization.">PubMed&nbsp;<img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
@@ -112,12 +112,12 @@
 			<table class="fancy_table hovered_list">
 				<thead>
 				<tr>
-				<th>Major Loc</th>
-				<th>Minor Loc</th>
-				<th>Loc Score</th>
-				<th>Experiment Type</th>
-				<th>Source Database</th>
-				<th>PubMed</th>
+				<th title="Major localization">Major Loc</th>
+				<th title="Specific localization">Minor Loc</th>
+				<th title="The probability of the protein belonging to the given major localization">Loc Prob</th>
+				<th title="The type of the experiment that related the protein to the localization">Experiment Type</th>
+				<th title="The source database of the protein-localization data">Source Database</th>
+				<th title="The publication about the source database or the protein localization">PubMed</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -125,7 +125,7 @@
 				<tr class="ps-sysType{{ l.loc_exp_sys_type }}">
 				<td>{{ l.large_loc }}</td>
 				<td>{{ l.small_loc }}</td>
-				<td>{{ l.loc_score }}</td>
+				<td>{{ l.loc_score }}%</td>
 				<td>{{ l.loc_exp_sys|raw }}</td>
 				<td>{% if l.source_db %} {{ l.source_db }} {% endif %}</td>
 				<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank" title="Direct link to the publication that relates the protein to the localization.">PubMed&nbsp;<img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
