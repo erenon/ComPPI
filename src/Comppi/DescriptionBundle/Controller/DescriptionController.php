@@ -55,6 +55,9 @@ class DescriptionController extends Controller
             case 'species':
                 $t = 'ComppiDescriptionBundle:Description:species.html.twig';
                 break;
+            case 'statistics':
+                $t = 'ComppiDescriptionBundle:Description:statistics.html.twig';
+                break;
             case 'subcell_locs':
                 $t = 'ComppiDescriptionBundle:Description:subcell_locs.html.twig';
                 break;

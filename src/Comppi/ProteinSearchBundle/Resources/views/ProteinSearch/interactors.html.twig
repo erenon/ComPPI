@@ -5,9 +5,9 @@
 
 {% block bundlecontent %}
 	{# include ':searchform.html.twig' with {'foo': 'bar'} #}
-	
+
 	<p class="help"></p>
-	
+
 	<div id="ps-keyProtein" class="fancy_box">
 	<h1>{{ protein.name }}</h1>
 	<div class="fancy_box_body">
@@ -15,11 +15,11 @@
 			Number of Interactions: {{ protein.interactionNumber }}
 			<br>Average Interaction Score: {% if protein.avgConfScore is empty %} N/A {% else %} {{ protein.avgConfScore }}% {% endif %}
 		</div>
-		
+
 		{% if protein.fullname is defined %}
-		<span class="ps-detailLabel"> {{ protein.fullname }} </span>&nbsp;&nbsp;&nbsp;//&nbsp;&nbsp;&nbsp;<a href="{{ protein.uniprot_link }}" title="Find more information about the protein in the UniProt database">UniProt</a> <img src="{{ asset('assets/linkout.png') }}" />
+		<span class="ps-detailLabel"> {{ protein.fullname }} </span>&nbsp;&nbsp;&nbsp;//&nbsp;&nbsp;&nbsp;<a href="{{ protein.uniprot_link }}" title="Find more information about {{ protein.name }} in the UniProt database">UniProt Profile</a>&nbsp;<img src="{{ asset('assets/linkout.png') }}" />
 		{% endif %}
-		
+
 		{% if protein.synonyms is defined %}
 		<p><span class="ps-detailLabel">Synonyms:</span>
 		{% for s in protein.synonyms %}
@@ -27,17 +27,18 @@
 		{% endfor %}
 		</p>
 		{% endif %}
-		
-		<p><h3 class="ps-detailLabel">Localizations:</h3>
+
+		<h3 class="ps-detailLabel">Localizations:</h3>
 		{% if protein.locs is not empty %}
 		<table class="fancy_table hovered_list">
 			<thead>
 			<tr>
-			<th>Major Loc</th>
-			<th>Minor Loc</th>
-			<th>Experiment Type</th>
-			<th>Source Database</th>
-			<th>PubMed</th>
+			<th title="Major localization">Major Loc</th>
+			<th title="Specific localization">Minor Loc</th>
+			<th title="The probability of the protein belonging to the given major localization">Loc Prob</th>
+			<th title="The type of the experiment that related the protein to the localization">Experiment Type</th>
+			<th title="The source database of the protein-localization data">Source Database</th>
+			<th title="The publication about the source database or the protein localization">PubMed</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -45,31 +46,32 @@
 			<tr class="ps-sysType{{ l.loc_exp_sys_type }}">
 			<td>{{ l.large_loc }}</td>
 			<td>{{ l.small_loc }}</td>
+			<td>{{ l.loc_score }}%</td>
 			<td>{{ l.loc_exp_sys|raw }}</td>
 			<td>{% if l.source_db %} {{ l.source_db }} {% endif %}</td>
-			<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank">PubMed <img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
+			<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank" title="Direct link to the publication that relates the protein to the localization.">PubMed&nbsp;<img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
 			</tr>
 			{% endfor %}
 			</tbody>
-		</table></p>
+		</table>
 		{% else %}
 			Not available.
 		{% endif %}
-		
+
 		{% if p.uniprot_outlink is defined %}
-		<p><a href="{{ p.uniprot_outlink }}" class="ps-detailLabel">UniProtKB Profile</a></p>
+		<p><a href="{{ p.uniprot_outlink }}" class="ps-detailLabel" title="Find more information about {{ protein.name }} in the UniProt database">UniProtKB Profile&nbsp;<img src="{{ asset('assets/linkout.png') }}" /></a></p>
 	{% endif %}
 	</div>
 	</div>
-	
+
 	{# <form action="{{ interactionDlUrl }}" method="post" class="center">
 		<input type="submit" name="fProtSearchDlResults" value="Download The Interactions" class="btn btn_submit" />
-	</form> 
-	
+	</form>
+
 	<p class="center"><a href="{{ url('ComppiProteinSearchBundle_interactors', {'comppi_id': comppi_id, 'get_interactions': 1}) }}" class="btn btn_submit">Download The Interactions</a></p> #}
-	
+
 	{% if ls %}
-	<table class="fancy_table striped_table hovered_list">
+	<table class="fancy_table striped_table">
 	<thead>
 	<tr>
 		<th colspan="2" class="ps-resultsHeader">Interactions</th>
@@ -84,10 +86,18 @@
 		</td>
 		<td class="ps-actorB">
 			<h1>{{ p.prot_name }}</h1> ({{ p.prot_naming }})
+
 			<a href="#" class="ps-detailsOpener" title="Click to see more details of the interaction. Click again to close the Details panel.">Details</a>
-			
+
 			{% if p.syn_fullname is defined %}<h2 class="ps-detailLabel">{{ p.syn_fullname }}</h2>{% endif %}
-			
+
+			<ul class="listWithSeparator not-hovered-list">
+				<li><a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}/interactors/{{ p.prot_id }}" title="Click to open the interactors of {{ p.prot_name }} on a new tab." target="_blank">ComPPI Interactors</a></li>
+				{% if p.uniprot_outlink is defined %}
+				<li><a href="{{ p.uniprot_outlink }}" title="Find more information about {{ protein.name }} in the UniProt database" target="_blank">UniProtKB Profile&nbsp;<img src="{{ asset('assets/linkout.png') }}" /></a></li>
+				{% endif %}
+			</ul>
+
 			<div class="ps-actorBDetails">
 			{% if p.synonyms is defined %}
 			<p><h3 class="ps-detailLabel">Synonyms:</h3>
@@ -96,17 +106,18 @@
 			{% endfor %}
 			</p>
 			{% endif %}
-			
+
 			<p><h3 class="ps-detailLabel">Localizations:</h3>
 			{% if p['locs'] is defined %}
 			<table class="fancy_table hovered_list">
 				<thead>
 				<tr>
-				<th>Major Loc</th>
-				<th>Minor Loc</th>
-				<th>Experiment Type</th>
-				<th>Source Database</th>
-				<th>PubMed</th>
+				<th title="Major localization">Major Loc</th>
+				<th title="Specific localization">Minor Loc</th>
+				<th title="The probability of the protein belonging to the given major localization">Loc Prob</th>
+				<th title="The type of the experiment that related the protein to the localization">Experiment Type</th>
+				<th title="The source database of the protein-localization data">Source Database</th>
+				<th title="The publication about the source database or the protein localization">PubMed</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -114,9 +125,10 @@
 				<tr class="ps-sysType{{ l.loc_exp_sys_type }}">
 				<td>{{ l.large_loc }}</td>
 				<td>{{ l.small_loc }}</td>
+				<td>{{ l.loc_score }}%</td>
 				<td>{{ l.loc_exp_sys|raw }}</td>
 				<td>{% if l.source_db %} {{ l.source_db }} {% endif %}</td>
-				<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank">PubMed <img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
+				<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank" title="Direct link to the publication that relates the protein to the localization.">PubMed&nbsp;<img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
 				</tr>
 				{% endfor %}
 				</tbody>
@@ -124,10 +136,7 @@
 			{% else %}
 			Not available.
 			{% endif %}
-			
-			{% if p.uniprot_outlink is defined %}
-			<p><a href="{{ p.uniprot_outlink }}" class="ps-detailLabel">UniProtKB Profile</a></p>
-			{% endif %}
+
 			</div>
 		</td>
 	</tr>

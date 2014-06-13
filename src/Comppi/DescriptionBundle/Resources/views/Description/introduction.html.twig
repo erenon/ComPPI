@@ -1,0 +1,30 @@
+{# src/Comppi/ProteinSearchBundle/Resources/views/about.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %}ComPPI - Help/Introduction{% endblock %}
+
+{% block bundlecontent %}
+	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Introduction</li></ul></h1>
+	
+	<p align='justify'>Protein-protein interaction data often contain false interactions, which could not occur in the living cell.
+        The identification of the interactions with high-throughput technics, such as the yeast two-hybrid or the co-immunoprecipitation methods, do not take into consideration the subcellular localization of the proteins.</p>
+        
+	<p>Here we present a compartmentalized protein-protein interaction database, ComPPI, to filter out the interactions where the interacting proteins have no common subcellular localization.</p>
+	
+	<p>ComPPI offers the following novel options:</p>
+	<ul>
+		<li>a.)	an integrated dataset of 10 protein-protein interaction and 9 subcellular localization databases covering four species (<i>S. cerevisiae</i>, <i>C. elegans</i>, <i>D. melanogaster</i>, <i>H. sapiens</i>);</li>
+		<li>b.)	a hierarchic structure of subcellular localizations using >1600 Gene Ontology cellular component terms;</li>
+		<li>c.)	an interaction score based on the localization score  of the interacting proteins comprising data-quality and a consensus of the subcellular localization;</li>
+		<li>d.)	search option for individual proteins;</li>
+		<li>e.)	download options of whole-proteome or organelle-specific interactomes and subcellular localization data.</li>
+</ul>
+	
+	<p align='justify'>Because of the novel features of points from a.) to e.), ComPPI is useful for the analysis of experimental results in biochemistry, molecular biology and proteomics as well as for proteome- and interactome-wide studies in bioinformatics and network science helping cellular biology, medicine and drug design.
+	</p>
+	
+	<br/>
+	<p align='justify'>(<b>Note</b> that ComPPI uses a protein ID mapping method to find the most relevant naming convention of the proteins. See more about our protein names <a href="{{ path('ComppiDescriptionBundle_help') }}/naming_conventions">here</a>.)</p>
+	
+	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
+{% endblock %}

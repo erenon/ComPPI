@@ -4,9 +4,93 @@
 {% block title %}ComPPI - Help/Interaction and Localization Score{% endblock %}
 
 {% block bundlecontent %}
-	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Interaction and Localization Score</li></ul></h1>
+	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Interaction and Localization Score</li></ul></h1>
+      
+	<h2>Summary of the ComPPI scoring system</h2>
+	
+	<p align="justify">The ComPPI scoring system is designed as a subcellular localization-based measure to score the reliablity of an interaction between two proteins.
+	In the first part we calculate the <a href="#locscore">localization score</a> for all the proteins with at least one major localization.
+	The localization score is calculated for all major localizations where the given protein exists, and based on the type of the <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#origin">subcellular localization</a> data.
+	Whit this method the localization score incorporates a) the quality of the localization (experimental, predicted, or unknown),
+	and because of the integrated dataset b) the quantity of the data which is coming from the number of sources.
+	In the second part we use the previously calculated localization score of the interactors to <a href="#intscore">score the interaction</a> between them in a compartment dependent manner.</p>
+	
+	<p align="justify">In summary, the ComPPI <b>localization score</b> gives the probability that the <b>protein</b> is exists in the certain major localization,
+	while the <b>interaction score</b> is a measure for the <b>interaction</b> between the interactiors based on the localization score.</p>
+	
+	<p align="justify"><b>Note</b> that the interaction score is <b>0</b>, if there was no localization information for one or both of the interactors.</p>
+	
+	<h2>Detailed description of the ComPPI scoring system</h2>
+	<ol>
+		<li><a href="#basics">Basics of the ComPPI scoring system</a></li>
+		<li><a href="#locscore">Localization score</a></li>
+		<li><a href="#intscore">Interaction score</a></li>
+		<!--<li><a href="#scoreopt">Optimalization</a></li>-->
+		<li><a href="#locdist">Distribution of the localization score</a></li>
+		<li><a href="#intdist">Distribution of the interaction score</a></li>
+	</ol>
+	<br/>
+        
+    <br /><a name="basics"></a>
+	<h3>1. Basics of the ComPPI scoring system</h3>
+	<p align="justify">We are working with probabilities where the events are independent. The two basic operations are:
+	<ul>
+		<li>AND (⊕) [standard multiplication, a⊕b=a*b]</li>
+		<li>OR (Ⓥ) [aⓋb = 1-(1-a)*(1-b)]</li>
+	</ul>
+	The ComPPI scoring system works with the major localizations of the proteins, described <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs">here</a>.
+	The localization and confidence score is calculated using a PHP script, while the scores are stored in the SQL-based database.</p></p>
 
+
+	<br /><a name="locscore"></a>
+	<h3>2. Localization score</h3>	
+	<p align="justify">Because of the different types of <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#origin">subcellular localization</a>
+	data we use the following propabilities as the parameters of the calculation: 
+		<ul>
+			<li>p=0.95 experimentally verified</li>
+			<li>p=0.66 unknown interaction type</li>
+			<li>p=0.33 predicted evidence</li>
+		</ul>
+	</p>
+	
+	<p align="justify">The localization score is the probability of the protein being in a certain compartment.
+	The localization score is computed for all the proteins with at least one major localization
+	for all the 6 compartments by OR-ing together the localization entries (since every entry is added evidence):
+	
+	<br /><img src="http://www.linkgroup.hu/pic/score_1.png" alt="loc_score" height="118" width="212" />
+	</p>
+        
+	
+	<br /><a name="intscore"></a>
+	<h3>3. Interaction score</h3>
+	<p align="justify">The ComPPI interaction score is calculated using the probability of the two proteins meeting in any compartment.
+        Matching elements (localization probabilities of two proteins for the same localization) are AND-ed together (since both proteins must be present for the interaction):
+	
+	<br /><img src="http://www.linkgroup.hu/pic/score_2.png" alt="matching_loc" height="51" width="212" /></p>
+	
+	<p align="justify">Applying OR for all the 6 locations yields <img src="http://www.linkgroup.hu/pic/score_5.png" alt="p_loc" height="38" width="4" />
+	(because it does not matter in which location do the two proteins connect).
+
+	<br /><img src="http://www.linkgroup.hu/pic/score_3.png" alt="loc_sum" height="123" width="212" /></p>
+	
+	<p align="justify">The full equation of the interaction score is the following:
+	
+	<br /><img src="http://www.linkgroup.hu/pic/score_4.png" alt="loc_sum" height="248" width="765" /></p>
+        
+	<!--<a name="scoreopt"><h3>Optimalization</h3></a>-->
+	
 	<p></p>
+        
+	<br /><a name="locdist"></a>
+	<h3>4. Distribution of the localization score</h3>
+	 
+	<p></p>
+	 
+	<br /><a name="intdist"></a>
+	<h3>5. Distribution of the interaction score</h3>
+	
+	<p></p>
+
 
 	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
 {% endblock %}

@@ -4,44 +4,87 @@
 {% block title %}ComPPI - Main Page{% endblock %}
 
 {% block bundlecontent %}
-	<table id="MainPageContent"><tbody><tr>
-	
-	<!-- left column -->
-	<td>
-		<p>ComPPI</b> is a compartmentalized protein-protein interaction database containing <b>187 949</b> proteins and their <b>950 780</b> interactions.</p>
-		<p>Protein-protein Interactions - An integrated dataset of 10 protein-protein interaction databases containing 950 780 interactions<br/>
-		Subcellular Localizations - An integrated dataset of 9 subcellular localization databases including 269 586 subcellular localizations
-		Species - A comparative assessment of four species:<br/>
+<div class="center">
+<table id="MainPageContent"><tr>
+<td id="MainPageLeftColumn">
 
-    S. cerevisiae
-    C. elegans
-    D. melanogaster
-    H. sapiens<br/>
-		1600+ Gene Ontology Cellular Component - A hierarchic structure of subcellular localizations using more than 1600 GO cellular component terms<br/>
-		Interaction and Localization Score - A localization score for proteins and an interaction score protein-protein interactions comprising data-quality and interactome-consensus of subcellular localization<br/>
-		Protein Search - Direct search options for individual proteins with autocomplete function<br/>
-		Download Custom Datasets - Download options of whole-proteome or organelle-specific interactomes and of integrated protein-protein interaction and subcellular localization datasets
-		</p>
-	</td>
-	
-	<!-- right column -->
-	<td><ul>
-		<li><b>187 949</b> proteins and</li>
-		<li><b>950 780</b> interactions integrated from 10 databases,</li>
-		<li><b>269 586</b> <a href="{{ path('ComppiDescriptionBundle_help') }}/input_databases">subcellular localizations</a> from 9 databases</li>
-		<li><b>1600+</b> Gene Ontology Cellular Component Terms</li>
-		<li>A comparative assessment of four species:
-			<ul>
-			<li><i>S. cerevisiae</i></li>
-			<li><i>C. elegans</i></li>
-			<li><i>D. melanogaster</i></li>
-			<li><i>H. sapiens</i></li>
-			</ul>
-		</li>
-		<li>Interaction and Localization Score to comprise data quality,</li>
-		<li>Direct search options for individual proteins with autocomplete function</li>
-		<li>Download Custom Datasets</li>
-	</ul>
-	
-	</tr></tbody></table>
+<h1>What is ComPPI?</h1>
+<p>Protein-protein interaction networks are spatially and temporally merged from the results of various experimental and predicting methods. These often ignore localization data, which in turn deteriorates the data quality and its predictive potential.</p>
+<p>We present ComPPI, the <b>compartmentalized protein-protein interaction database</b>, which provides qualitative information on the <b>interactions, proteins and their localizations</b> integrated from <a href="{{ path('ComppiDescriptionBundle_help') }}/input_databases">multiple databases</a>.
+<br />The overlap of data among various databases can be very low <a href="http://www.nature.com/nmeth/journal/v6/n1/abs/nmeth.1284.html" title="Cusick et al, 2009, Nature Methods: Literature-curated protein interaction datasets (click to open the abstract)" target="_blank">[1]</a>, therefore the <b>integration</b> results in improved data quality.
+<br />The localizations of the interacting proteins are often not considered, leading to networks with many false positive interactions. Creating a consensus between the available interaction and localization data further improves the data quality.
+<br />ComPPI introduces two novel <a href="{{ path('ComppiDescriptionBundle_help') }}/scores">qualitative scores</a>, the <b>interaction score</b> and the <b>localization score</b>, which describe the calculated probability of the data correctness.</p>
+<p>ComPPI is a novel, integrative, open source database useful for the analysis of experimental results in biochemistry, molecular biology and proteomics as well as for proteome- and interactome-wide studies in bioinformatics and network science helping cellular biology, medicine and drug design.</p>
+
+<h1>Quick Statistics</h1>
+<p><table id="MainPageStatisticsTable">
+	<thead>
+		<th>Species</th>
+		<th>Number<br/>of<br/>Proteins</th>
+		<th>Number<br/>of<br/>Localizations</th>
+		<th>Number<br/>of<br/>Interactions</th>
+	</thead>
+	<tbody>
+	<tr>
+		<td><i><!-- Saccharomyces -->S.&nbsp;cerevisiae</i> (Baker's&nbsp;yeast)</td>
+		<td>0</td>
+		<td>0</td>
+		<td>0</td>
+	</tr> 
+	<tr>
+		<td><i><!-- Caenorhabditis -->C.&nbsp;elegans</i></td>
+		<td>0</td>
+		<td>0</td>
+		<td>0</td>
+	</tr> 
+	<tr>
+		<td><i><!-- Drosophila -->D.&nbsp;melanogaster</i> (Fruit fly)</td>
+		<td>0</td>
+		<td>0</td>
+		<td>0</td>
+	</tr> 
+	<tr>
+		<td><i><!-- Homo -->H.&nbsp;sapiens</i> (Human)</td>
+		<td>0</td>
+		<td>0</td>
+		<td>0</td>
+	</tr>     
+	</tbody>
+</table></p>
+</td> <!-- end of left column -->
+
+
+<td id="MainPageRightColumn">
+		
+<h1>Main Features</h1>
+<ul>
+<li><h3>Protein-Protein Interactions</h3>
+An integrated dataset of 10 protein-protein interaction databases containing 950 780 interactions.<br /> <a href="{{ path('ComppiDescriptionBundle_help') }}/input_ppi">Details...</a>
+</li>
+<li><h3>Subcellular Localizations</h3>
+An integrated dataset of 9 subcellular localization databases including 269 586 subcellular localizations.<br /> <a href="{{ path('ComppiDescriptionBundle_help') }}/input_loc">Details...</a>
+</li>
+<li><h3>Species</h3>
+A comparative assessment of four species: <i>S. cerevisiae</i>, <i>C. elegans</i>, <i>D. melanogaster</i>, <i>H. sapiens</i><br />
+<a href="{{ path('ComppiDescriptionBundle_help') }}/species">Details...</a>
+</li>
+<li><h3>1600+ Gene Ontology Cellular Component Terms</h3>
+A hierarchic structure of subcellular localizations using more than 1600 Gene Ontology cellular component terms. <br /><a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs">Details...</a>
+</li>
+<li><h3>Interaction and Localization Score</h3>
+A localization score for the proteins and an interaction score for the protein-protein interactions comprising data-quality and interactome-consensus of subcellular localization. <br />
+<a href="{{ path('ComppiDescriptionBundle_help') }}/scores">Details...</a>
+</li>
+<li><h3>Protein Search</h3>
+Direct search options for individual proteins with autocomplete function. <br />
+<a href="{{ path('ComppiDescriptionBundle_help') }}/protein_search">Details...</a>
+</li>
+<li><h3>Download of Custom Datasets</h3>
+Download options of whole-proteome or organelle-specific interactomes and of integrated protein-protein interaction and subcellular localization datasets. <br /><a href="{{ path('ComppiDescriptionBundle_help') }}/downloads">Details...</a>
+</li>
+</ul>
+
+</td> <!-- end of right column -->
+</tr></table>
+</div>
 {% endblock %}

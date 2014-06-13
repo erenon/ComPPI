@@ -1,0 +1,28 @@
+{# src/Comppi/ContactBundle/Resources/views/contactform.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %}ComPPI - Contact Us{% endblock %}
+
+{% block bundlecontent %}
+<div class="center">
+	
+{% if app.session.hasFlash('contact-notice') %}
+<p class="message_success"> {{ app.session.flash('contact-notice') }} </p>
+{% endif %}
+	
+<form id="ContactForm" action="{{ path('ContactBundle_contact') }}" method="post" {{ form_enctype(form) }}>
+	{{ form_errors(form) }}
+
+	{{ form_row(form.name) }}<br />
+	{{ form_row(form.email) }}<br />
+	{{ form_row(form.message) }}<br />
+
+	{{ form_rest(form) }}
+	
+	<p class="help">Your message, including your e-mail address, is safe with us. It will not be handled over to any 3rd party and will be used strictly for communication with us.<br />
+All feedback is appreciated.</p>
+
+	<input type="submit" value="Submit" class="btn" />	
+</form>
+</div>
+{% endblock %}

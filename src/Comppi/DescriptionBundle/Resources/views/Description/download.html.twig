@@ -5,8 +5,162 @@
 
 {% block bundlecontent %}
 	
-	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Downloads</li></ul></h1>
+	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Download of Custom Datasets</li></ul></h1>
+        
+        <h2>Summary of the Downloads page</h2>
+	<p align="justify">On the <a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}/searchform">Downloads</a> page the user can download the following predefined custom datasets and the full database:
+        <ul>
+            <li><a href="#comp">Compartmentalized Interactome</a></li>
+            <li><a href="#ppi">Integrated Protein-Protein Interaction Dataset</a></li>
+            <li><a href="#loc">Integrated Subcellular Localization Dataset</a></li>
+            <li><a href="#full">Full database - Current and Previous Releases</a></li>
+        </ul>
+        </p>
+        
+        <a name="comp"><h2>Compartmentalized Interactome</h2></a>
+        
+        <p align="justify">The <b>Compartmentalized Interactome</b> is the protein-protein interaction network of the selected major subcellular localization.
+        This dataset contains only the interactions where <b>at least one of the interactors is located in the selected subcellular localization</b>.</p>
+        
+        <p align="justify">Customization options:
+        <ul>
+            <li><b>Choose species</b></li>
+            <ul>
+                <li><i>All species</i>: contains the compartmentalized data for the selected compartment for all species</li>
+                <li><i>H. sapiens</i>: contains the compartmentalized data for the selected compartment only for Human</li>
+                <li><i>D. melanogaster</i>: contains the compartmentalized data for the selected compartment only for Fruit fly</li>
+                <li><i>C. elegans</i>: contains the compartmentalized data for the selected compartment only for the <i>C. elegans</i> </li>
+                <li><i>S. cerevisiae</i>: contains the compartmentalized data for the selected compartment only for Yeast</li>
+            </ul>
+            <br/>
+
+            <li><b>Choose subcellular localization</b></li>
+            <ul>
+                <li><i>All localizations</i>: contains the compartmentalized data for the all major localizations for the choosen species</li>
+                <li><i>Cytoplasm</i>: contains the compartmentalized data only for the <b>cytoplasm</b> major localization for the choosen species</li>
+                <li><i>Mitochondrion</i>: contains the compartmentalized data only for the <b>mitochondrion</b> major localization for the choosen species</li>
+                <li><i>Nucleus</i>: contains the compartmentalized data only for the <b>nucleus</b> major localization for the choosen species</li>
+                <li><i>Extracellular</i>: contains the compartmentalized data only for the <b>extracellular</b> major localization for the choosen species</li>
+                <li><i>Secretory-Pathway</i>: contains the compartmentalized data only for the <b>secretory-pathway</b> major localization for the choosen species</li>
+                <li><i>Membrane</i>: contains the compartmentalized data only for the <b>membrane</b> major localization for the choosen species</li>
+            </ul>
+        </ul>
+        </p>
+        <p align="justify"><b>Note</b> that the user could choose only one subcellular localization. Download of multiple localization datasets is not available yet.</p>
+        
+        <br/>
+        <p align="justify">The <b>Compartmentalized Interactome</b> contains the following data columns (the entries are separated by |):
+        <ul>
+            <li><b>Interactor A</b>: UniProt accession of the interactor protein A</li>
+            <li><b>Naming Convention A</b>: naming convention for the interactor protein A</li>
+            <li><b>Major Loc A With Loc Score</b>: list of the major subcellular localizations where the protein exists and the corresponding localization score for the interactor protein A</li>
+            <li><b>Minor Loc A</b>: list of the minor localizations where the protein exists for the interactor protein A</li>
+            <li><b>Loc Experimental System Type A</b>: list of the experimental system types for the given major or minor localizations for the interactor protein A</li>
+            <li><b>Loc Source DB A</b>: list of the source databases for the given major or minor localizations for the interactor protein A</li>
+            <li><b>Loc PubMed ID A</b>: list of the PubMed IDs for the sources of the given major or minor localizations for the interactor protein A</li>
+            <li><b>Taxonomy ID A</b>: the taxonomy ID of the interactor protein A</li>
+            <li><b>Interactor B</b>: UniProt accession of the interactor protein B</li>
+            <li><b>Naming Convention B</b>: naming convention for the interactor protein B</li>
+            <li><b>Major Loc B With Loc Score</b>: list of the major subcellular localizations where the protein exists and the corresponding localization score for the interactor protein B</li>
+            <li><b>Minor Loc B</b>:  list of the minor localizations where the protein exists for the interactor protein B</li>
+            <li><b>Loc Experimental System Type B</b>: list of the experimental system types for the given major or minor localizations for the interactor protein B</li>
+            <li><b>Loc Source DB B</b>: list of the source databases for the given major or minor localizations for the interactor protein B</li>
+            <li><b>Loc PubMed ID B</b>: list of the PubMed IDs for the source of the given major or minor localizations for the interactor protein B</li>
+            <li><b>Taxonomy ID B</b>: the taxonomy ID of the interactor protein B</li>
+            <li><b>Interaction Score</b>: the interaction score gives the propability of the interaction in a compartment dependent manner</li>
+            <li><b>Interaction Experimental System Type</b>: list of the experimental system types for the given interaction</li>
+            <li><b>Interaction Source Database</b>: list of the source databases for the given interaction</li>
+            <li><b>Interaction PubMed ID</b>: list of the PubMed Ids for the sources of the given interaction</li>
+        </ul>
+        </p>
+
+        
+               
+        <a name="ppi"><h2>Integrated Protein-Protein Interaction Dataset</h2></a>
+        
+        <p align="justify">The <b>Integrated Protein-Protein Interaction Dataset</b> contains all the interactions for the choosen species excluding the subcellular localizations.</p> 
+        
+        <p align="justify">Customization options:
+        <ul>
+            <li><b>Choose species</b></li>
+            <ul>
+                <li><i>All species</i>: contains the integrated protein-protein interaction data for all species</li>
+                <li><i>H. sapiens</i>: contains the integrated protein-protein interaction data for Human</li>
+                <li><i>D. melanogaster</i>: contains the integrated protein-protein interaction data for Fruit fly</li>
+                <li><i>C. elegans</i>: contains the integrated protein-protein interaction data for the <i>C. elegans</i> </li>
+                <li><i>S. cerevisiae</i>: contains the integrated protein-protein interaction data for Yeast</li>
+            </ul>
+        </ul>
+        </p>
+        
+        <br/>
+        <p align="justify">The <b>Integrated Protein-Protein Interaction Dataset</b> contains the following data columns (the entries are separated by |):
+        <ul>
+            <li><b>Protein A</b>: UniProt accession of the interactor protein A</li>
+            <li><b>Synonyms A</b>: list of the protein name synonyms for the interactor protein A</li>
+            <li><b>Taxonomy ID A</b>: the taxonomy ID of the interactor protein B</li>
+            <li><b>Protein B</b>: UniProt accession of the interactor protein B</li>
+            <li><b>Synonyms B</b>: list of the protein name synonyms for the interactor protein B</li>
+            <li><b>Taxonomy ID B</b>: the taxonomy ID of the interactor protein B</li>
+            <li><b>Interaction Score</b>: the interaction score gives the propability of the interaction in a compartment dependent manner</li>
+            <li><b>Interaction Experimental System Type</b>: list of the experimental system types for the given interaction</li>
+            <li><b>Interaction Source Database</b>: list of the source databases for the given interaction</li>
+            <li><b>Interaction PubMed ID</b>: list of the PubMed Ids for the sources of the given interaction</li>
+        </ul>
+        </p>
+
+        
+        <a name="loc"><h2>Integrated Subcellular Localization Dataset</h2></a>
+        
+        <p align="justify">The <b>Integrated Subcellular Localization Dataset</b> contains all the localization data for the proteins excluding the interactions.</p>
+        
+        <p align="justify">Customization options:
+        <ul>
+            <li><b>Choose species</b></li>
+            <ul>
+                <li><i>All species</i>: contains the integrated subcellular localization data for all species</li>
+                <li><i>H. sapiens</i>: contains the integrated subcellular localization data for Human</li>
+                <li><i>D. melanogaster</i>: contains the integrated subcellular localization data for Fruit fly</li>
+                <li><i>C. elegans</i>: contains the integrated subcellular localization data for the <i>C. elegans</i> </li>
+                <li><i>S. cerevisiae</i>: contains the integrated subcellular localization data for Yeast</li>
+            </ul>
+            <br/>
+
+            <li><b>Choose subcellular localization</b></li>
+            <ul>
+                <li><i>All localizations</i>: contains the subcellular localization data for the all major localizations for the choosen species</li>
+                <li><i>Cytoplasm</i>: contains the subcellular localization data only for the <b>cytoplasm</b> major localization for the choosen species</li>
+                <li><i>Mitochondrion</i>: contains the subcellular localization data only for the <b>mitochondrion</b> major localization for the choosen species</li>
+                <li><i>Nucleus</i>: contains the subcellular localization data only for the <b>nucleus</b> major localization for the choosen species</li>
+                <li><i>Extracellular</i>: contains the subcellular localization data only for the <b>extracellular</b> major localization for the choosen species</li>
+                <li><i>Secretory-Pathway</i>: contains the subcellular localization data only for the <b>secretory-pathway</b> major localization for the choosen species</li>
+                <li><i>Membrane</i>: contains the subcellular localization data only for the <b>membrane</b> major localization for the choosen species</li>
+            </ul>
+        </ul>
+        </p>
+        
+        <br/>
+        <p align="justify">The <b>Integrated Subcellular Localization Dataset</b> contains the following data columns (the entries are separated by |):
+        <ul>
+            <li><b>Protein Name</b>: UniProt accession of the protein</li>
+            <li><b>Naming Convention</b>: naming convention for the protein<</li>
+            <li><b>Synonyms</b>: list of the protein name synonyms for the protein</li>
+            <li><b>Major Loc With Loc Score</b>: list of the major subcellular localizations where the protein exists and the corresponding localization score for the protein</li>
+            <li><b>Minor Loc</b>: list of the minor localizations where the protein exists for the protein</li>
+            <li><b>Experimental System Type</b>: list of the experimental system types for the given major or minor localizations for the protein</li>
+            <li><b>Localization Source Database</b>: list of the source databases for the given major or minor localizations for the protein</li>
+            <li><b>PubmedID</b>: list of the PubMed IDs for the source of the given major or minor localizations for the protein</li>
+            <li><b>TaxID</b>: the taxonomy ID of the protein</li>
+        </ul>
+        </p>
+
+        <a name="full"><h2>Full database - Current and Previous Releases</h2></a>
+        
+        <p align="justify">The ComPPI <b>Full Database</b> download allows the user o download the current or previous releases of the ComPPI database.
+        The downloaded database is in SQL format and contains all the information stored in the ComPPI database.</p>
+        
+        <p align="justify">More information about the output formats on the Downloads page <a href="{{ path('ComppiDescriptionBundle_help') }}/output_formats">here</a>.</p>
 	
-	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a</p>
+	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
 
 {% endblock %}

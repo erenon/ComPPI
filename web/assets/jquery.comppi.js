@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	// first input autofokus
 	$("input[type='text']:eq(0)").focus();
-	
+
 	// outlinks
 	//$('a[target="_blank"]').append(' <img src="outlink.png" alt="Link goes out from comppi." />');
 	// this does not work - what the FUCK, Symfony?!
@@ -17,7 +17,7 @@ $(document).ready(function(){
 	$("#AdvSearchBtn").click(function() {
 		$("#AdvSearchFrame").slideToggle(500);
 	});*/
-	
+
 	// ToggleButtons
 	// @TODO: create an abstract solution for this
 	/*$(".toggleButton").click(function() {
@@ -30,14 +30,14 @@ $(document).ready(function(){
 			$(field_name).attr('value', 1);
 		}
 	});*/
-	
+
 	// radio buttons
-	
+
 	/*$("#ProteinSearchSpecies").buttonset();
 	$("#DlSetButtons").buttonset();
 	$("#DlSpeciesButtons").buttonset();
 	$("#DlLocButtons").buttonset();*/
-	
+
 	// DOWNLOADS
 	$("input[name='fDlSet']").change(function() {
 		switch(this.value) {
@@ -59,7 +59,7 @@ $(document).ready(function(){
 		$("#DlSetHelpDisplay").html( $(this).next(".DlSetHelp").html() ).fadeIn();
 	});
 	$("input[name='fDlSet']:checked").change(); // trigger the event for first time
-	
+
 	//$(":radio.btn").hide();
 	/*$(":radio.btn + label").addClass("btn").click(function(){
 		if ( $(this).hasClass('btn_green') ) {
@@ -71,12 +71,12 @@ $(document).ready(function(){
 		}
 	});*/
 	//$(":radio.btn:checked + label").addClass("btn_green");
-	
-	
+
+
 	/*$('#ProteinSearchForm:radio').each(function(){
 		var id = $(this).attr("id");
 		var label = $('label[for="' + id + '"]');
-		
+
 		$(this).add(label).css("display", "none").after();
 		$(this).before('<input type="button" id="'+ id +'Btn" value="'+ $(label).text() +'" class="btn radioButton" />');
 		if ($(this).is(':checked')) {

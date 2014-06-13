@@ -5,7 +5,7 @@ html {
 }
 body, #Header, #Footer {
 	min-width: 1000px;
-	background: url("content_bg_25.png") 80% 80px no-repeat;
+	background: url("content_bg_25.png") 80% 110px no-repeat;
 }
 body  {
 	margin: 50px auto 10px auto;
@@ -18,23 +18,23 @@ body  {
 	margin: 0 0 2em 0;
     padding: 0;
 }
-#MainMenu, #NavMenu, #Footer {
+#MainMenu, .NavMenu, #Footer, .listWithSeparator {
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
 }
-#MainMenu li, #NavMenu li, #Footer li {
+#MainMenu li, .NavMenu li, #Footer li, .listWithSeparator li {
 	margin: 0;
 	padding: 0;
 	color: #000;
 	display: inline;
 }
-#MainMenu li:after, #NavMenu li:after, #Footer li:after {
+#MainMenu li:after, .NavMenu li:after, #Footer li:after, .listWithSeparator li:after {
 	content: "//";
 	color: #909090;
 	margin: 0 12px;
 }
-#MainMenu li:last-child:after, #NavMenu li:last-child:after, #Footer li:last-child:after {
+#MainMenu li:last-child:after, .NavMenu li:last-child:after, #Footer li:last-child:after, .listWithSeparator li:last-child:after {
 	content: "";
 	margin: 0;
 }
@@ -89,7 +89,7 @@ h2 { margin-top: 2em; margin-bottom: 0.5em; font-size: 1.25em; font-weight: 500;
 h3 { margin-top: 1em; margin-bottom: 0; }
 
 .center { text-align: center; }
-.help { margin: 0; }
+.help { margin: 1em 0; }
 .help_details {}
 .infobtn {
 	background-color: rgb(120, 120, 180);
@@ -112,13 +112,11 @@ h3 { margin-top: 1em; margin-bottom: 0; }
 }
 .infobtn a { color: #E0DFDC; text-decoration: none; }
 .infobtn a:hover { color: #fff; }
-.pagination { list-style-type: none; margin: 0; padding: 0; width: 100%; text-align: center; }
-.pagination li { display: inline; margin: 0 4px; font-size: 1.2em; }
-.pagination li.paginationCurrentPage a { color: #fff; }
+.message_success { font-weight: bold; color: #008800; }
 
 .fancy_table {
 	width: 100%;
-	margin: 1em 0 2em 0;
+	margin: 1em 0 7px 0;
 	border-spacing: 0;
 	border-width: 0;
 	border-collapse: collapse;
@@ -136,7 +134,7 @@ h3 { margin-top: 1em; margin-bottom: 0; }
     box-shadow: 5px 5px 5px 0px #999;
 }
 /* empty space between thead and tbody */
-tbody:before {
+.fancy_table tbody:before {
     line-height:7px;
     content:"-";
     color: #c0c0c0;
@@ -174,7 +172,7 @@ tbody:before {
 
 .fancy_box {
 	/*width: 100%;*/
-	margin: 1em 0;
+	margin: 1em 0 0 0;
 	padding: 0;
 	border: 0;
 }
@@ -220,47 +218,73 @@ tbody:before {
     box-shadow: 5px 5px 5px 0px #999;
 }
 a.btn:hover { color: #000; }
-
-/*.btn { background: url("btn_bg.png") #3c3b37; color: #E0DFDC; }
-.btn_green { color: #E1FFCE; background: url("btn_bg_green.png") #307500; border: 1px solid #228800; }
-.btn a { color: #E0DFDC; text-decoration: none; }
-.btn a:hover, .btn:hover, .btn_green:hover { color: #fff; }
-.btn_src { font-size: 12px; padding: 0 8px; }
-.btn_submit { color: #000; background: #E49E32 url("btn_bg_orange.png") repeat-x top left; border: 1px solid #E49E32; }
-.btn_submit:hover { color: #800000; }*/
-
 label {
 	display: block;
 	float: left;
 	width: 200px;
-	height: 25px;
-	margin: 2px;
+	height: 30px;
+	margin: 2px 10px 2px 2px;
+	padding: 8px 0 4px 0;
 	border-top: 2px solid rgb(155, 159, 165);
 	text-align: left;
-	vertical-align: bottom;
 }
 .radioButtonLabel { float: none; width: auto; display: inline; border: 0; }
-.radiobtn { height: auto; margin: 5px 10px 5px 0; padding: 0; }
 #Content form br { clear: left; }
 /*#fProtSearchLocECBtn { margin-left: 206px; }  properly align as a label was before it */
 input, select, textarea {
-	margin: 2px;
+	margin: 2px 10px;
 	padding: 8px;
 	border: 1px solid #000;
+	width: 300px;
 }
 input { height: 25px; }
-/*input[type='checkbox'] { padding: 8px; }*/
+textarea { height: 200px; }
+.radiobtn {
+	width: 20px;
+	height: auto;
+	margin: 5px 10px 5px 0;
+	padding: 0;
+	-webkit-box-shadow: 5px 5px 5px 0px #999;
+    -moz-box-shadow: 5px 5px 5px 0px #999;
+    box-shadow: 5px 5px 5px 0px #999;
+}
 
-/* MAIN PAGE */
-#MainPageContent { width: 100%;  }
-#MainPageContent td { width: 50%; vertical-align: top; text-align: justify; }
+/* ABOUT / MAIN PAGE */
+#MainPageContent { width: 1000px; margin: 0 auto; padding: 0; text-align: left; }
+#MainPageLeftColumn, #MainPageRightColumn {
+	margin: 0;
+	padding: 0;
+	width: 460px;
+	vertical-align: top;
+	text-align: justify;
+}
+#MainPageLeftColumn { padding-right: 20px; }
+#MainPageRightColumn { padding-left: 20px; }
+#MainPageContent h1 { margin-top: 2em; padding: 2px 0; border-bottom: 1px solid #000; }
+#MainPageContent h3 { font-weight: 600; margin: 0; }
+#MainPageContent td p { margin: 0.5em 0 0.7em 0; text-align: justify; }
+#MainPageContent ul { list-style-type: none; margin: 0; padding: 0; }
+#MainPageContent ul li { margin: 0 0 1em 0; }
+#MainPageStatisticsTable { border-collapse: collapse; width: 100%; margin: 1em 0 0 0; padding: 0; }
+#MainPageStatisticsTable th, #MainPageStatisticsTable td {
+	padding: 2px;
+	height: 50px;
+	border-right: 1px solid #a9a9a9;
+	border-bottom: 1px solid #a9a9a9;
+	text-align: center;
+}
+#MainPageStatisticsTable td { border-top: 1px solid red;}
+/*#MainPageStatisticsTable th { font-size: 10px; }*/
+#MainPageStatisticsTable th:last-child, #MainPageStatisticsTable td:last-child { border-right: 0; }
+#MainPageStatisticsTable tr:last-child td { border-bottom: 0; }
+
 
 /* PROTEIN SEARCH */
 #ProteinSearchForm { width: 700px; margin: 0 auto; padding: 1em 0; text-align: left; }
 #fProtSearchKeywordLabel { width: 200px; }
 #fProtSearchKeyword { width: 200px; margin: 2px 20px; }
 #fProtSearchSubmit { width: 200px; border: 0; }
-#fProtSearchSpecContainer { width: 200px; margin: 10px 0 0 220px; }
+#fProtSearchSpecContainer { width: 200px; margin: 10px 0 0 220px; padding: 0; }
 #fProtSearchhs, #fProtSearchdm, #fProtSearchce, #fProtSearchsc { font-style: italic; margin-left: 5px; }
 
 .ui-autocomplete-loading {
@@ -287,6 +311,7 @@ input { height: 25px; }
 #ProteinSearchSelectorTbl { width: auto; margin: 1em auto; }
 
 #ps-interactionStats { float: right; font-weight: bold; margin-top: 0; padding: 5px; }
+#ps-keyProtein { margin-bottom: 2em; }
 #ps-keyProtein h1 { padding: 17px 10px; }
 .ps-actorA { padding: 10px 20px; width: 80px; border-top: 1px dotted #909090; height:  100%; }
 .ps-actorA h1 { font-size: 1.5em; font-weight: lighter; margin: 0; padding: 0; display: inline; }
@@ -325,7 +350,7 @@ input { height: 25px; }
 /*#DownloadForm { text-align: left; margin-top: 1em; }
 #fDownloadLocFine { width: 780px; height: 10em; background: #505050; }
 #fDownloadSpecHsBtn, #fDownloadSpecDmBtn, #fDownloadSpecCeBtn, #fDownloadSpecScBtn { font-style: italic; }*/
-#DlSetHelpDisplay { margin: 0 30px; padding: 0; width: 100%; height: 5em; }
+#DlSetHelpDisplay { margin: 0 30px; padding: 0; width: 100%; height: 3em; }
 .DlSetHelp { display: none; }
 
 #dlCenterReleases { margin: 0; padding: 5px 50px; }
@@ -338,40 +363,12 @@ input { height: 25px; }
 
 #DlSpeciesButtons-All { font-style: normal; }
 
-#fCommentForm { margin: 1em auto; width: 650px; text-align: center; }
-#fCommentForm input { width: 405px; }
-#fCommentForm label { text-align: left; padding-left: 5px; }
-#HelpToc { border-bottom: 1px solid #404040; }
-#fCommentSubmit { margin: 2px auto; }
+#fDlSubmit { width: 180px; }
 
-#LocTree { margin-left: 200px; /* width of a label */ }
-#LocTree li { list-style-type: none; }
-
-/* About / Main page */
-#WelcomePanels {
-	margin: 0;
-	padding: 0 1em;
-	text-align: center;
-	width: 100%;
-}
-#WelcomePanels li.welcomePanel {
-	list-style-type: none;
-	float: left;
-	width: 13%;
-	margin: 10em 0 10px 0;
-	padding: 0 7px;
-	text-align: left;
-}
-#WelcomePanels li.welcomePanel h1 {
-	font-size: 1.2em;
-	font-weight: lighter;
-	height: 120px;
-	margin: 0;
-	padding: 0;
-	border-bottom: 1px solid #000;
-}
-#WelcomePanels li.welcomePanel ul { margin: 0; padding: 0 0 0 20px;}
-#WelcomePanels li.welcomePanel li { margin: 0; padding: 0; list-style-type: square; }
 
 /* HELP */
-.backToTOC { text-align: right; margin-right: 200px; }
+.backToTOC { text-align: right; margin-top: 4em; margin-right: 100px; }
+
+/* CONTACT */
+#ContactForm { width: 600px; margin: 0 auto; }
+#ContactForm .help { margin-top: 0; }

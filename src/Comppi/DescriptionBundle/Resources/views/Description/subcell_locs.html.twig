@@ -4,47 +4,92 @@
 {% block title %}ComPPI - Help/Subcellular Localizations{% endblock %}
 
 {% block bundlecontent %}
-	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Subcellular Localizations</li></ul></h1>
+	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Subcellular Localizations</li></ul></h1>
 
-	<h2>Structure of subcellular localizations</h2>
-	<p></p>
-	<p>The subcellular localizations of the proteins could be predicted or experimentally verified.
-	Predicted localizations are avaiable only for major subcellular organelles, such as the nucleus based on the Nuclear Localization Signal (NLS).
-	Experimentally validated localizations have a higher definition, such as part of the nuclear pore complex.
-	This difference in the definition of the localization data,
-	and the ability to deal with a usable number of localizations for filtering indicates the relevance of the separation of subcellular loclaization
-	data to major and minor localization fractions.</p>
-	<p></p>
-	<h3>High-definition: minor localizations</h3>
-	<p>Subcellular localizations were standardized by using <a href="http://www.geneontology.org/GO.component.guidelines.shtml">Gene Ontology cellular component terms</a> arranged with manual curation into a non-redundant localization tree with more than 1600 individual GO term. 
-	<p><a href="www.linkgroup.hu/docs/loctree.txt">Download the whole localization tree!</a></p>
-	<p></p>
-	<h3>Low-definition: major localizations</h3> 
-	<p>We have arranged the minor localizations into 6 big cellular components:
+	<h2>Summary of the subcellular localization data</h2>
+	
+	<p align="justify">In summary ComPPI contains 269 586 major localizations for 171 559 proteins
+	(no localization for 16 390 proteins). The average number of major localizations for a protein is 1.57.
+	The interaction and localization score algorithm works with major localizations (detailed below).</p>
+	
+	<p>The final distribution of the proteins in the major localizations:
 		<ul>
-			<li>cytoplasm (75 257 proteins)</li>
-			<li>nucleus (64 385 proteins)</li>
-			<li>mitochondrion (21 373 proteins)</li>
-			<li>secretory pathway (38 578 proteins)</li>
-			<li>membrane (50 989 proteins)</li>
-			<li>extracellular (19 004 proteins)</li>
+			<li><b>cytoplasm:</b> 75 257 proteins</li>
+			<li><b>nucleus:</b> 64 385 proteins</li>
+			<li><b>mitochondrion:</b> 21 373 proteins</li>
+			<li><b>secretory-pathway:</b> 38 578 proteins</li>
+			<li><b>membrane:</b> 50 989 proteins</li>
+			<li><b>extracellular:</b> 19 004 proteins</li>
+		</ul>
+	</p>	
+	
+	<h2>Detailed description of the subcellular localization data</h2>
+	<ol>
+            <li><a href="#origin">Origin of the subcellular localization data</a></li>
+            <li><a href="#structure">Structure of the subcellular localization data</a></li>
+            <li><a href="#expsystype">Experimental system type of the subcellular localization data</a></li>
+        </ol>
+	<br/>
+	
+	<a name="origin"></a>
+	<h3>1. Origin of the subcellular localization data</h3>
+	
+	<p align="justify">The subcellular localizations of the proteins could be experimentally verified, predicted by computational methods, or from unknown origin.
+		<ul>
+			<li><b>Experimental:</b> subcellular localizations from experiments often contain sub-organelle specific information for the proteins.
+			This means that the definition of the localization data is high, the localization of the protein could be e.g. in certain protein complexes.</li>
+			<li><b>Predicted:</b> subcellular localizations from computational prediction methods based on less specific predictors of localiation,
+			such as the search for Nuclear Localization Signals (NLS) to predict the nuclear localization of a given protein.
+			Because of this lower specificity the definition of the predictions often reach only the level of major cell organelles, such as the nucleus or the cytoplasm.</li>
+			<li><b>Unknown:</b> subcellular localizations from unknown origin also occur. The definition of thos data could vary between source databases.</li>
 		</ul>
 	</p>
-	<p>The interaction and localization score algorithm works with major localizations. In summary ComPPI contains 269 586 major localizations for 171 559 proteins
-	(no localization for 16 390 proteins). The average major loc number for a protein is 1.57.</p>
-	<p><a href="www.linkgroup.hu/docs/largelocs.txt">Download</a> the list of minor localizatons belonging to major cellular components.</p>
-	<p></p>
-	<p>Distribution of the branches in the tree:</p>
-	<ul>
-		<li>525 - cytoplasm</li>
-		<li>353 - nucleus</li>
-		<li>78 - mitochondrion</li>
-		<li>185 - secretory pathway</li>
-		<li>367 - membrane</li>
-		<li>126 - extracellular</li>
-	</ul>
-	<br/>
-	<p>ComPPI separates the GO cellular component annotations by <a href="http://www.geneontology.org/GO.evidence.shtml">evidence level</a>:</p>
+
+
+	<br/><a name="structure"></a>
+	<h3>2. Structure of the subcellular localization data</h3>
+	
+	<p align="justify">Subcellular localizations were standardized by using
+	<a href="http://www.geneontology.org/GO.component.guidelines.shtml">Gene Ontology (GO) cellular component terms</a>
+	arranged with manual curation into a non-redundant localization tree with more than 1600 individual GO terms.
+	The localization tree contains only the GO cellular component terms which are exist in the ComPPI database.
+	For more details <a href="http://bificomp2.sote.hu:22422/comppi/files/85e7056adb541d5a18c60792457986c71a3a0ab0/databases/loctree/loctree.textile">visit the whole localization tree.</a></p>
+	
+	<p align="justify">Because of the difference in the definition of the localization data,
+	and the ability to deal with a usable number of localizations for the scoring based filtering method indicates the relevance of the separation of subcellular localization
+	data into major and minor localization fractions.</p>
+			
+	<p align="justify">Based on the localization tree of the GO terms we have arranged the minor localizations into 6 big cellular components
+	(cytoplasm, nucleus, mitochondrion, secretory-pathway, membrane, extracellular).
+	For more details <a href="http://bificomp2.sote.hu:22422/comppi/files/85e7056adb541d5a18c60792457986c71a3a0ab0/databases/loctree/largelocs.yml">visit the list of minor localizatons belonging to major cellular components.</a></p>
+	
+	<p>The distribution of the branches in the tree shows that how many minor localizations (GO terms) were assigned to a certain major localization:
+		<ul>
+			<li>cytoplasm: 525</li>
+			<li>nucleus: 353</li>
+			<li>mitochondrion: 78</li>
+			<li>secretory-pathway: 185</li>
+			<li>membrane: 367</li>
+			<li>extracellular: 126</li>
+		</ul>
+	</p>
+
+
+	<br/><a name="expsystype"></a>
+	<h3>3. Experimental system type of the subcellular localization data</h3>
+	
+	<p>The differences in the <a href="#origin">origin</a> of the subcellular localization data indicates that we had to arrange the system types into
+	experimental (1), predicted (2), and unknown (0) origin. To learn more about our system types navigate
+	<a href="http://bificomp2.sote.hu:22422/comppi/files/85e7056adb541d5a18c60792457986c71a3a0ab0/databases/systemtypes/system.csv">here</a>.</p>
+	
+	<p>Because of the redundancy in the nomenclature of the system types we had to map the synonyms into a common name. To learn more about our system type synonyms navigate
+	<a href="http://bificomp2.sote.hu:22422/comppi/files/85e7056adb541d5a18c60792457986c71a3a0ab0/databases/systemtypes/synonym.csv">here</a>.</p>
+	
+	<p>The subcellular localization data from the Gene Ontology is one of our biggest resources.
+	ComPPI separates the GO cellular component annotations by <a href="http://www.geneontology.org/GO.evidence.shtml">evidence level</a>,
+	which allows us to deal with a more detailed subcellular localization dataset.</p>
+	
+	<p>The structure of the GO evidence levels, and the meaning of the abbreviations in the source data:
 	<ul>
 		<li>Experimental</li>
 			<ul>
@@ -78,6 +123,7 @@
 				<li>NR: Not Recorded</li>
 			</ul>
 	</ul>
+	</p>
 	
 	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
 {% endblock %}

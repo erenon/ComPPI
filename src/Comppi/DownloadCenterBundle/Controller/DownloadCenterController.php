@@ -30,22 +30,30 @@ class DownloadCenterController extends Controller
 		'3' => 'S. cerevisiae',
 		'all' => 'All'
 	);
-    
+	private $specii_dl_opts = array(
+		'0' => 'hsapiens',
+		'1' => 'dmelanogaster',
+		'2' => 'celegans',
+		'3' => 'scerevisiae',
+		'all' => 'all'
+	);
+
 	/*
 	Main method of the DownloadCenter.
-	
+
 	Served files are in the $this->downloads_dir, file names are determined in the comppi/bin/export_downloads.py file.
 
 	*/
     public function downloadCenterAction()
     {
-		//comppi--proteins_localizations-sp_{}-loc_{}.txt
-		//comppi--interactions-sp_{}-loc_{}.txt
-		
+		//comppi--proteins_locs-tax_{}-loc_{}.txt
+		//comppi--compartments--tax_{}-loc_{}.txt
+		//comppi--interactions--tax_{}-loc_{}.txt
+
 		//$sp = $this->speciesProvider = $this->get('comppi.build.specieProvider');
-		
+
         $T = array();
-		
+
 		$request = $this->getRequest();
 		if ($request->getMethod() == 'POST')
 		{
@@ -53,140 +61,75 @@ class DownloadCenterController extends Controller
 			switch ($_POST['fDlSet'])
 			{
 				case 'int':
-				case 'comp':
 					$dltype = 'interactions';
 					break;
+				case 'comp':
+					$dltype = 'compartments';
+					break;
 				case 'protnloc':
-					$dltype = 'proteins_localizations';
+					$dltype = 'proteins_locs';
 					break;
 				// default: file will not be found
 			}
-			
+
 			$species = 'all';
-			if (isset($_POST["fDlSpec"]) and isset($this->specii[$_POST["fDlSpec"]]))
+			if (isset($_POST["fDlSpec"]) and isset($this->specii_dl_opts[$_POST["fDlSpec"]]))
 			{
-				$species = $_POST["fDlSpec"];
+				$species = $this->specii_dl_opts[$_POST["fDlSpec"]];
 			}
-			
+
 			$loc = 'all';
 			if (isset($_POST["fDlMLoc"]) and isset($this->locs[$_POST["fDlMLoc"]]))
 			{
 				$loc = $this->locs[$_POST["fDlMLoc"]];
 			}
-			
-			$dl_path = $this->downloads_dir."comppi--$dltype-sp_$species-loc_$loc.txt";
+
+			$dl_path = $this->downloads_dir
+				."comppi--".$dltype."--tax_".$species."_loc_".$loc.".txt.gz";
 			$this->serveFile($dl_path);
 		}
-		
+
 		# all releases
 		$T['releases_ls'] = array();
-		$d = dir($this->releases_dir);
-        while (false !== ($entry = $d->read())) {
-            if ($entry!='.' && $entry!='..' && $entry!=$this->current_db_sql && $entry!='.htaccess' && $entry!='stable')
-            {
-                $entry = array(
-                    'file' => $entry,
-                    'size' => number_format((filesize($this->releases_dir.$entry)/1048576), 2, '.', ' '),
-                    'mtime' => date("Y-m-d. H:i:s", filemtime($this->releases_dir.$entry))
-                );
-                $T['releases_ls'][$entry['mtime']] = $entry;
-            }
-        }
-        $d->close();
-		
-		$curr_release_mtime = date("Y-m-d. H:i:s", filemtime($this->releases_dir.$this->current_db_sql));
-		$curr_release_entry = array(
-			'file' => $this->current_db_sql,
-			'size' => number_format((filesize($this->releases_dir.$this->current_db_sql)/1048576), 2, '.', ' '), // show in MB
-			'mtime' => $curr_release_mtime
-		);
-		# current release entry ensures that curr. release is displayed exactly once
-		$T['releases_ls'][$curr_release_mtime] = $curr_release_entry;
-		krsort($T['releases_ls']);
-		
+		if (is_dir($this->releases_dir)) {
+			if ($d = dir($this->releases_dir)) {
+								while (false !== ($entry = $d->read())) {
+					if ($entry!='.' && $entry!='..' && $entry!=$this->current_db_sql && $entry!='.htaccess' && $entry!='stable')
+					{
+						$entry = array(
+							'file' => $entry,
+							'size' => number_format((filesize($this->releases_dir.$entry)/1048576), 2, '.', ' '),
+							'mtime' => date("Y-m-d. H:i:s", filemtime($this->releases_dir.$entry))
+						);
+						$T['releases_ls'][$entry['mtime']] = $entry;
+					}
+				}
+				$d->close();
+
+				$curr_release_mtime = date("Y-m-d. H:i:s", filemtime($this->releases_dir.$this->current_db_sql));
+				$curr_release_entry = array(
+					'file' => $this->current_db_sql,
+					'size' => number_format((filesize($this->releases_dir.$this->current_db_sql)/1048576), 2, '.', ' '), // show in MB
+					'mtime' => $curr_release_mtime
+				);
+				# current release entry ensures that curr. release is displayed exactly once
+				$T['releases_ls'][$curr_release_mtime] = $curr_release_entry;
+				krsort($T['releases_ls']);
+			}
+
+		}
+
+
         return $this->render('DownloadCenterBundle:DownloadCenter:downloadcenter.html.twig', $T);
     }
 
-    
+
     public function serveReleaseAction($file)
     {
         return $this->serveFile($this->releases_dir.$file); // $this->releases_dir prevents cross-site serving!
     }
 
-	
-//	public function serveAllDataAction()
-//	{	
-//		return $this->serveFile($this->releases_dir.$this->current_db_sql);
-//	}
-//	
-//	
-//	public function serveComparmentalizedDataAction($species)
-//	{
-//		// we define which compartments are needed... (keys are the same as to be found in $locs->getLargelocs(), see buildComparmentalizedData() method)
-//		$compartments = array();
-//		isset($_POST['fDlMLocCytoplasm']) ? $compartments['cytoplasm'] = true : '';
-//		isset($_POST['fDlMLocMito']) ? $compartments['mitochondrion'] = true : '';
-//		isset($_POST['fDlMLocNucleus']) ? $compartments['nucleus'] = true : '';
-//		isset($_POST['fDlMLocEC']) ? $compartments['extracellular'] = true : '';
-//		isset($_POST['fDlMLocSecr']) ? $compartments['secretory-pathway'] = true : '';
-//		isset($_POST['fDlMLocPlasMembr']) ? $compartments['membrane'] = true : '';
-//
-//		if (empty($compartments)) {
-//			$_SESSION['messages']['compartment_error'] = "Please select at least one compartment!";
-//			return $this->forward('DownloadCenterBundle:DownloadCenter:currentReleaseGui');
-//		}
-//		
-//		$file = $this->downloads_dir.'comppi--interactions_by_compartments--'.join('_', array_keys($compartments)).'--'.$species['abbr'].'.csv';
-//        
-//		if (file_exists($file.'.zip')) {
-//			return $this->serveFile($file.'.zip');
-//		} elseif (file_exists($file)) {
-//            return $this->serveFile($file);
-//		} else {
-//			$this->buildComparmentalizedData(basename($file), $species['id'], $compartments);
-//			return $this->serveFile($file);
-//		}
-//	}
-//
-//
-//    public function serveInteractionsAction($species, $interaction_ids = array()) {
-//		if (!empty($interaction_ids)) {
-//			$file = $this->downloads_dir.'comppi--interactions_custom.csv';
-//		} else {
-//			$file = $this->downloads_dir.'comppi--interactions_'.$species['abbr'].'.csv';
-//		}
-//        
-//		if (!empty($interaction_ids)) {
-//			$this->buildInteractions($file, $species['id'], $interaction_ids);
-//				return $this->serveFile($file);
-//		} else {
-//			if (file_exists($file.'.zip')) {
-//				return $this->serveFile($file.'.zip');
-//			} elseif (file_exists($file)) {
-//				return $this->serveFile($file);
-//			} else {
-//				$this->buildInteractions($file, $species['id']);
-//				return $this->serveFile($file);
-//			}
-//		}
-//    }
-//	
-//	
-//	public function serveProteinsAndLocsAction($species)
-//	{
-//		$file = $this->downloads_dir.'comppi--proteins_and_localizations_'.$species['abbr'].'.csv';
-//        
-//		if (file_exists($file.'.zip')) {
-//			return $this->serveFile($file.'.zip');
-//		} elseif (file_exists($file)) {
-//            return $this->serveFile($file);
-//		} else {
-//			$this->buildProteinsAndLocs(basename($file), $species['id']);
-//			return $this->serveFile($file);
-//		}
-//	}
-	
-    
+
     private function serveFile($filepath)
     {
         if (file_exists($filepath))
@@ -205,11 +148,11 @@ class DownloadCenterController extends Controller
 			exit();
         }
     }
-    
+
     private function createFileservingHeaders(Response $response, $filename)
     {
         session_cache_limiter('none');
-		
+
 		$response->headers->set('Content-Description', 'File Transfer');
 		//$response->headers->set('Cache-Control', 'public');
 		//$response->headers->set('Cache-Control', 'must-revalidate');
