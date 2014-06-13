@@ -7,25 +7,55 @@
 	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Tutorial</li></ul></h1>
 	
         <br/>
-        <p align="center">
-            <a href="#protsearch">How to use the Protein Search page?</a><br/>
-            <a href="#download">How to use the Downloads page?</a>
-        </p>
+        <h2>Tutorials:</h2>
+        <ul>
+            <li><a href="#protsearch">How to use the Protein Search page?</a></li>
+            <li><a href="#download">How to use the Downloads page?</a></li>
+        </ul>
+                
         
+	<a name="protsearch"></a>
+        <h2>How to use the Protein Search page?</h2>
+        <p>A step-by-step guide.</p>
         
-	<a name="protsearch"><h2>How to use the Protein Search page?</h2></a>
+        <ol>
+		<li><a href="#start">How to start the search for a protein?</a></li>
+                <li><a href="#multiple">What if multiple proteins were found?</a></li>
+		<li><a href="#noint">What if no interactions were found?</a></li>
+		<li><a href="#result">What can I find on the results page</a></li>
+		<li><a href="#intdist">What can I find out about the interactions?</a></li>
+	</ol>
+        <p>Protein Search is described in details <a href="{{ path('ComppiDescriptionBundle_help') }}/protein_search">here</a>.</p>
         
-	<!--<p>The search starts with a form to specify the name of the query protein. This name can be a protein ID or a fragment of a name. A list of suggested names pops up after typing at least 3 characters. This search can be filtered to the available species as well. Move your mouse over any of the form elements to display a location-sensitive tooltip.
-<br />If a single protein was found, the page of interactors is shown immediately. If there are multiple search results for a given protein name (or fragment), an intermediate page displays the available options.</p>-->
-	
-	<p>Protein Search is described in details <a href="{{ path('ComppiDescriptionBundle_help') }}/protein_search">here</a>.</p>
-	
+        <a name="start"></a>
         <div class="center">
-            <img src="http://www.linkgroup.hu/pic/comppi_tutorial_sum.jpg" alt="protein search tutorial" height="3872" width="900" />
+            <img src="http://www.linkgroup.hu/pic/comppi_tutorial_protsearch_1.JPG" alt="protein search tutorial 1" />
         </div>
 	
+        <a name="multiple"></a>
+        <div class="center">
+            <img src="http://www.linkgroup.hu/pic/comppi_tutorial_protsearch_2.JPG" alt="protein search tutorial 2" />
+        </div>
         
-	<a name="download"><h2>How to use the Downloads page?</h2></a>
+        <a name="noint"></a>
+        <div class="center">
+            <img src="http://www.linkgroup.hu/pic/comppi_tutorial_protsearch_3.JPG" alt="protein search tutorial 3" />
+        </div>
+        
+        <a name="result"></a>
+        <div class="center">
+            <img src="http://www.linkgroup.hu/pic/comppi_tutorial_protsearch_4.JPG" alt="protein search tutorial 4" />
+        </div>
+        
+        <a name="intdist"></a>
+        <div class="center">
+            <img src="http://www.linkgroup.hu/pic/comppi_tutorial_protsearch_5.JPG" alt="protein search tutorial 5" />
+        </div>
+        
+    
+    
+    <a name="download"></a>
+    <h2>How to use the Downloads page?</h2>
 
     <p>To learn more about the Downloads page navigate <a href="{{ path('ComppiDescriptionBundle_help') }}/downloads">here</a>.</p>
 

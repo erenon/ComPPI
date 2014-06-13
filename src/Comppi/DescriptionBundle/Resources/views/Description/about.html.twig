@@ -10,23 +10,23 @@
 
 <h1>What is ComPPI?</h1>
 <p>Protein-protein interaction networks are spatially and temporally merged from the results of various experimental and predicting methods. These often ignore localization data, which in turn deteriorates the data quality and its predictive potential.</p>
-<p>We present ComPPI, the <b>compartmentalized protein-protein interaction database</b>, which provides qualitative information on the <b>interactions, proteins and their localizations</b> integrated from <a href="{{ path('ComppiDescriptionBundle_help') }}/input_databases">multiple databases</a>.
-<br />The overlap of data among various databases can be very low <a href="http://www.nature.com/nmeth/journal/v6/n1/abs/nmeth.1284.html" title="Cusick et al, 2009, Nature Methods: Literature-curated protein interaction datasets (click to open the abstract)" target="_blank">[1]</a>, therefore the <b>integration</b> results in improved data quality.
-<br />The localizations of the interacting proteins are often not considered, leading to networks with many false positive interactions. Creating a consensus between the available interaction and localization data further improves the data quality.
-<br />ComPPI introduces two novel <a href="{{ path('ComppiDescriptionBundle_help') }}/scores">qualitative scores</a>, the <b>interaction score</b> and the <b>localization score</b>, which describe the calculated probability of the data correctness.</p>
+<p>We present ComPPI, the <b>compartmentalized protein-protein interaction database</b>, which provides qualitative information on the <b>interactions, proteins and their localizations</b> integrated from <a href="{{ path('ComppiDescriptionBundle_help') }}/input_databases">multiple databases</a>.</p>
+<p>The overlap of data among various databases can be very low <a href="http://www.nature.com/nmeth/journal/v6/n1/abs/nmeth.1284.html" title="Cusick et al, 2009, Nature Methods: Literature-curated protein interaction datasets (click to open the abstract)" target="_blank">[1]</a>, therefore the <b>integration</b> results in improved data quality.</p>
+<p>The localizations of the interacting proteins are often not taken into consideration, leading to networks with many false positive interactions. Creating a consensus between the available interaction and localization data further improves the data quality.</p>
+<p>ComPPI introduces two novel <a href="{{ path('ComppiDescriptionBundle_help') }}/scores">qualitative scores</a>, the <b>interaction score</b> and the <b>localization score</b>, which describe the calculated probability of the data correctness.</p>
 <p>ComPPI is a novel, integrative, open source database useful for the analysis of experimental results in biochemistry, molecular biology and proteomics as well as for proteome- and interactome-wide studies in bioinformatics and network science helping cellular biology, medicine and drug design.</p>
 
 <h1>Quick Statistics</h1>
-<p><table id="MainPageStatisticsTable">
+<p><table id="MainPageStatisticsTable" class="striped_table">
 	<thead>
 		<th>Species</th>
-		<th>Number<br/>of<br/>Proteins</th>
-		<th>Number<br/>of<br/>Localizations</th>
-		<th>Number<br/>of<br/>Interactions</th>
+		<th>Proteins</th>
+		<th>Localizations</th>
+		<th>Interactions</th>
 	</thead>
 	<tbody>
-	<tr>
-		<td><i><!-- Saccharomyces -->S.&nbsp;cerevisiae</i> (Baker's&nbsp;yeast)</td>
+	<tr valign="middle">
+		<td><i><!-- Saccharomyces -->S.&nbsp;cerevisiae</i></td>
 		<td>0</td>
 		<td>0</td>
 		<td>0</td>
@@ -38,13 +38,13 @@
 		<td>0</td>
 	</tr> 
 	<tr>
-		<td><i><!-- Drosophila -->D.&nbsp;melanogaster</i> (Fruit fly)</td>
+		<td><i><!-- Drosophila -->D.&nbsp;melanogaster</i></td>
 		<td>0</td>
 		<td>0</td>
 		<td>0</td>
 	</tr> 
 	<tr>
-		<td><i><!-- Homo -->H.&nbsp;sapiens</i> (Human)</td>
+		<td><i><!-- Homo -->H.&nbsp;sapiens</i></td>
 		<td>0</td>
 		<td>0</td>
 		<td>0</td>
@@ -72,23 +72,23 @@ A comparative assessment of four species: <i>S. cerevisiae</i>, <i>C. elegans</i
 A hierarchic structure of subcellular localizations using more than 1600 Gene Ontology cellular component terms. <br /><a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs">Details...</a>
 </li>
 <li><h3>Interaction and Localization Score</h3>
-A localization score for the proteins and an interaction score for the protein-protein interactions comprising data-quality and interactome-consensus of subcellular localization. <br />
+Localization score for the proteins and interaction score for the protein-protein interactions comprising data-quality and interactome-consensus of subcellular localization. <br />
 <a href="{{ path('ComppiDescriptionBundle_help') }}/scores">Details...</a>
 </li>
 <li><h3>Protein Search</h3>
 Direct search options for individual proteins with autocomplete function. <br />
 <a href="{{ path('ComppiDescriptionBundle_help') }}/protein_search">Details...</a>
 </li>
-<li><h3>Download of Custom Datasets</h3>
-Download options of whole-proteome or organelle-specific interactomes and of integrated protein-protein interaction and subcellular localization datasets. <br /><a href="{{ path('ComppiDescriptionBundle_help') }}/downloads">Details...</a>
+<li><h3>Download Custom Datasets</h3>
+Download options of whole-proteome or organelle-specific interactomes, integrated protein-protein interaction and subcellular localization datasets. <br /><a href="{{ path('ComppiDescriptionBundle_help') }}/downloads">Details...</a>
 </li>
 </ul>
 
 
 <h1>News</h1>
 <ul>
-<li><h3>2014-06-01: ComPPI First Alpha</h3>
-The first alpha of comppi is released. All feedback is appreciated!
+<li><h3>2014/06/01: ComPPI First Alpha</h3>
+<p>The first alpha of ComPPI is released. All feedback is welcome!</p>
 </li>
 </ul>
 
