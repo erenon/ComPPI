@@ -33,7 +33,7 @@ class Intact extends AbstractInteractionParser
             }
 
             $recordArray = explode("\t", $line);
-            $this->checkRecordFieldCount($recordArray, 31);
+            $this->checkRecordFieldCount($recordArray, 42);
 
             // check for same taxid:
             if ($recordArray[9] !== $recordArray[10]) {
