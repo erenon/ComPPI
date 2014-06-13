@@ -264,7 +264,7 @@ textarea { height: 200px; }
 #MainPageLeftColumn h1:first-child, #MainPageRightColumn h1:first-child { margin-top: 1em; }
 #MainPageContent h3 { font-weight: 600; margin: 0; }
 #MainPageContent td p { margin: 0.5em 0 0.7em 0; text-align: justify; }
-#MainPageContent ul { list-style-type: none; margin: 0; padding: 0; }
+#MainPageContent ul { margin: 0; padding-left: 15px; }
 #MainPageContent ul li { margin: 0 0 1em 0; }
 #MainPageStatisticsTable { border-collapse: collapse; width: 100%; margin: 1em 0 0 0; padding: 0; }
 #MainPageStatisticsTable th, #MainPageStatisticsTable td {
