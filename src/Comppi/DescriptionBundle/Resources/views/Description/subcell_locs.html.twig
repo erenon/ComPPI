@@ -4,9 +4,8 @@
 {% block title %}ComPPI - Help/Subcellular Localizations{% endblock %}
 
 {% block bundlecontent %}
-	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Subcellular Localizations</li></ul></h1>
+	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Subcellular Localizations</li></ul></h1>
 
-	<br/>
 	<h2>Summary of the subcellular localization data</h2>
 	
 	<p align="justify">In summary ComPPI contains 269 586 major localizations for 171 559 proteins
@@ -25,14 +24,15 @@
 	</p>	
 	
 	<h2>Detailed description of the subcellular localization data</h2>
-	<ul>
+	<ol>
             <li><a href="#origin">Origin of the subcellular localization data</a></li>
             <li><a href="#structure">Structure of the subcellular localization data</a></li>
             <li><a href="#expsystype">Experimental system type of the subcellular localization data</a></li>
-        </ul>
+        </ol>
 	<br/>
 	
-	<a name="origin"><h3>Origin of the subcellular localization data</h3></a>
+	<a name="origin"></a>
+	<h3>1. Origin of the subcellular localization data</h3>
 	
 	<p align="justify">The subcellular localizations of the proteins could be experimentally verified, predicted by computational methods, or from unknown origin.
 		<ul>
@@ -44,8 +44,10 @@
 			<li><b>Unknown:</b> subcellular localizations from unknown origin also occur. The definition of thos data could vary between source databases.</li>
 		</ul>
 	</p>
-	
-	<a name="structure"><h3>Structure of the subcellular localization data</h3></a>
+
+
+	<br/><a name="structure"></a>
+	<h3>2. Structure of the subcellular localization data</h3>
 	
 	<p align="justify">Subcellular localizations were standardized by using
 	<a href="http://www.geneontology.org/GO.component.guidelines.shtml">Gene Ontology (GO) cellular component terms</a>
@@ -71,8 +73,10 @@
 			<li>extracellular: 126</li>
 		</ul>
 	</p>
-		
-	<a name="expsystype"><h3>Experimental system type of the subcellular localization data</h3></a>
+
+
+	<br/><a name="expsystype"></a>
+	<h3>3. Experimental system type of the subcellular localization data</h3>
 	
 	<p>The differences in the <a href="#origin">origin</a> of the subcellular localization data indicates that we had to arrange the system types into
 	experimental (1), predicted (2), and unknown (0) origin. To learn more about our system types navigate

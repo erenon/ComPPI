@@ -4,714 +4,717 @@
 {% block title %}ComPPI - Help/Statistics{% endblock %}
 
 {% block bundlecontent %}
-	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Statistics</li></ul></h1>
+	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Statistics</li></ul></h1>
+
+	<p align="justify">On the <b>Statistics</b> page you can find more information about the properties of the ComPPI dataset.
+        The <a href="#summary">Statistics Summary</a> describes the summarized number of proteins, interactions and localizations, and the average localization and interaction score for all species.
+        The <a href="#detailed">Detailed Statistics</a> describes the number of proteins, interactions and localizations, and the average localization and interaction score for the certain localizations of the choosen species.</p>
+        
+	<p align="justify">To find out more about the subcellular localization data navigate <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs">here</a>.</p>
 	
-        <br>
-	<p align="justify">On the <b>Statistics</b> page you could find more information about the properties of the ComPPI dataset.
-        The <a href="#summary">Summary Statistics</a> contains the summarized number of proteins, interactions and localizations, and the average localization and interaction score for all species.
-        The <a href="#detailed">Detailed Statistics</a> contains the number of proteins, interactions and localizations, and the average localization and interaction score for the certain localizations of the choosen species.</p>
-        
-        <p align="justify">To find out more about the subcellular localization data navigate <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs">here</a>.</p>
-        
-        <p align="justify">To find out more about the ComPPI scoring system and the distribution of the localization and the interaction score navigate <a href="{{ path('ComppiDescriptionBundle_help') }}/scores">here</a>.</p>
-        
-        <a name="summary"><h2>Summary Statistics</h2></a>
-        
-        <table id="Summary_Statistics" class="fancy_table hovered_list">
-            <thead>
-                <tr>
-                    <th>Data Type</th>
-                    <th>Number of Proteins</th>
-                    <th>Number of Localizations</th>
-                    <th>Average localization score</th>
-                    <th>Number of Interactions</th>
-                    <th>Average Interaction Score</th>
-                </tr> 
-            </thead>
-            <tbody>
-                <tr>
-                    <td><b>Compartmentalized Data</b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                </tr>
-                <tr>
-                    <td><b>Interaction Data</b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                </tr>
-                <tr>
-                    <td><b>Localization data</b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <a name="detailed"><h2>Detailed Statistics</h2></a>
-        
-        <p>Available species:</p>
-        <ul>
-            <li><a href="#human"><i>Homo sapiens</i> (Human)</a></li>
-            <li><a href="#drosi"><i>Drosophila melanogaster</i> (Fruit fly)</a></li>
-            <li><a href="#worm"><i>Caenorhabditis elegans</i></a></li>
-            <li><a href="#yeast"><i>Saccharomyces cerevisiae</i> (Baker's yeast)</a></li>
-        </ul>
-        
-        <a name="human"><h2 align="center"><i>Homo sapiens (Human)</i></h2></a>
-        <table id="Statistics_HS" class="fancy_table hovered_list">
-            <thead>
-                <tr>
-                    <th>Data Type</th>
-                    <th>Number of Proteins</th>
-                    <th>Number of Localizations</th>
-                    <th>Average localization score</th>
-                    <th>Number of Interactions</th>
-                    <th>Average Interaction Score</th>
-                </tr> 
-            </thead>
-            <tbody>
-                <tr>
-                    <td><b>Compartmentalized Data</b>
-                    <ul>
-                        <li><b><i>All Localizations</i></b></li>
-                        <li><i>Cytoplasm</i></li>
-                        <li><i>Mitochondrion</i></li>
-                        <li><i>Nucleus</i></li>
-                        <li><i>Extracellular</i></li>
-                        <li><i>Secretory Pathway</i></li>
-                        <li><i>Membrane</i></li>
-                    </ul>
-                    </td>
-                    <td><br/>
-                    <ul>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td><b>Interaction Data</b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                </tr>
-                <tr>
-                    <td><b>Localization Data</b>
-                    <ul>
-                        <li><b><i>All Localizations</i></b></li>
-                        <li><i>Cytoplasm</i></li>
-                        <li><i>Mitochondrion</i></li>
-                        <li><i>Nucleus</i></li>
-                        <li><i>Extracellular</i></li>
-                        <li><i>Secretory Pathway</i></li>
-                        <li><i>Membrane</i></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                </tr>
-                </tr>
-            </tbody>
-        </table>
-        
-        <a name="drosi"><h2 align="center"><i>Drosophila melanogaster</i> (Fruit fly)</h2></a>
-        <table id="Statistics_DM" class="fancy_table hovered_list">
-            <thead>
-                <tr>
-                    <th>Data Type</th>
-                    <th>Number of Proteins</th>
-                    <th>Number of Localizations</th>
-                    <th>Average localization score</th>
-                    <th>Number of Interactions</th>
-                    <th>Average Interaction Score</th>
-                </tr> 
-            </thead>
-            <tbody>
-                <tr>
-                    <td><b>Compartmentalized Data</b>
-                    <ul>
-                        <li><b><i>All Localizations</i></b></li>
-                        <li><i>Cytoplasm</i></li>
-                        <li><i>Mitochondrion</i></li>
-                        <li><i>Nucleus</i></li>
-                        <li><i>Extracellular</i></li>
-                        <li><i>Secretory Pathway</i></li>
-                        <li><i>Membrane</i></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td><b>Interaction Data</b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                </tr>
-                <tr>
-                    <td><b>Localization Data</b>
-                    <ul>
-                        <li><b><i>All Localizations</i></b></li>
-                        <li><i>Cytoplasm</i></li>
-                        <li><i>Mitochondrion</i></li>
-                        <li><i>Nucleus</i></li>
-                        <li><i>Extracellular</i></li>
-                        <li><i>Secretory Pathway</i></li>
-                        <li><i>Membrane</i></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                </tr>
-                </tr>
-            </tbody>
-        </table>
-        
-        <a name="worm"><h2 align="center"><i>Caenorhabditis elegans</i></h2></a>
-        <table id="Statistics_CE" class="fancy_table hovered_list">
-            <thead>
-                <tr>
-                    <th>Data Type</th>
-                    <th>Number of Proteins</th>
-                    <th>Number of Localizations</th>
-                    <th>Average localization score</th>
-                    <th>Number of Interactions</th>
-                    <th>Average Interaction Score</th>
-                </tr> 
-            </thead>
-            <tbody>
-                <tr>
-                    <td><b>Compartmentalized Data</b>
-                    <ul>
-                        <li><b><i>All Localizations</i></b></li>
-                        <li><i>Cytoplasm</i></li>
-                        <li><i>Mitochondrion</i></li>
-                        <li><i>Nucleus</i></li>
-                        <li><i>Extracellular</i></li>
-                        <li><i>Secretory Pathway</i></li>
-                        <li><i>Membrane</i></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td><b>Interaction Data</b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                </tr>
-                <tr>
-                    <td><b>Localization Data</b>
-                    <ul>
-                        <li><b><i>All Localizations</i></b></li>
-                        <li><i>Cytoplasm</i></li>
-                        <li><i>Mitochondrion</i></li>
-                        <li><i>Nucleus</i></li>
-                        <li><i>Extracellular</i></li>
-                        <li><i>Secretory Pathway</i></li>
-                        <li><i>Membrane</i></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                </tr>
-                </tr>
-            </tbody>
-        </table>
-       
-        <a name="yeast"><h2 align="center"><i>Saccharomyces cerevisiae</i> (Baker's yeast)</h2></a>
-        <table id="Statistics_SC" class="fancy_table hovered_list">
-            <thead>
-                <tr>
-                    <th>Data Type</th>
-                    <th>Number of Proteins</th>
-                    <th>Number of Localizations</th>
-                    <th>Average localization score</th>
-                    <th>Number of Interactions</th>
-                    <th>Average Interaction Score</th>
-                </tr> 
-            </thead>
-            <tbody>
-                <tr>
-                    <td><b>Compartmentalized Data</b>
-                    <ul>
-                        <li><b><i>All Localizations</i></b></li>
-                        <li><i>Cytoplasm</i></li>
-                        <li><i>Mitochondrion</i></li>
-                        <li><i>Nucleus</i></li>
-                        <li><i>Extracellular</i></li>
-                        <li><i>Secretory Pathway</i></li>
-                        <li><i>Membrane</i></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td><b>Interaction Data</b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                    <td><b></b></td>
-                </tr>
-                <tr>
-                    <td><b>Localization Data</b>
-                    <ul>
-                        <li><b><i>All Localizations</i></b></li>
-                        <li><i>Cytoplasm</i></li>
-                        <li><i>Mitochondrion</i></li>
-                        <li><i>Nucleus</i></li>
-                        <li><i>Extracellular</i></li>
-                        <li><i>Secretory Pathway</i></li>
-                        <li><i>Membrane</i></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                    <td>
-                    <ul><br/>
-                        <li><b></b></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    </td>
-                </tr>
-                </tr>
-            </tbody>
-        </table>
-        
-        
+	<p align="justify">To find out more about the ComPPI scoring system and the distribution of the localization and the interaction score navigate <a href="{{ path('ComppiDescriptionBundle_help') }}/scores">here</a>.</p>
 	
+	<a name="summary"></a>
+	<h2>Statistics Summary</h2>
+	
+	<table id="Summary_Statistics" class="fancy_table hovered_list">
+		<thead>
+			<tr>
+				<th>Data Type</th>
+				<th>Number of Proteins</th>
+				<th>Number of Localizations</th>
+				<th>Average localization score</th>
+				<th>Number of Interactions</th>
+				<th>Average Interaction Score</th>
+			</tr> 
+		</thead>
+		<tbody>
+			<tr>
+				<td><b>Compartmentalized Data</b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+			</tr>
+			<tr>
+				<td><b>Interaction Data</b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+			</tr>
+			<tr>
+				<td><b>Localization data</b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<a name="detailed"><h2>Detailed Statistics</h2></a>
+	
+	<p>Available species:</p>
+	<ol>
+		<li><a href="#human"><i>Homo sapiens</i> (Human)</a></li>
+		<li><a href="#drosi"><i>Drosophila melanogaster</i> (Fruit fly)</a></li>
+		<li><a href="#worm"><i>Caenorhabditis elegans</i></a></li>
+		<li><a href="#yeast"><i>Saccharomyces cerevisiae</i> (Baker's yeast)</a></li>
+	</ol>
+	
+	<a name="human"></a>
+	<h2>1. <i>Homo sapiens (Human)</i></h2>
+	<table id="Statistics_HS" class="fancy_table hovered_list">
+		<thead>
+			<tr>
+				<th>Data Type</th>
+				<th>Number of Proteins</th>
+				<th>Number of Localizations</th>
+				<th>Average localization score</th>
+				<th>Number of Interactions</th>
+				<th>Average Interaction Score</th>
+			</tr> 
+		</thead>
+		<tbody>
+			<tr>
+				<td><b>Compartmentalized Data</b>
+				<ul>
+					<li><b><i>All Localizations</i></b></li>
+					<li><i>Cytoplasm</i></li>
+					<li><i>Mitochondrion</i></li>
+					<li><i>Nucleus</i></li>
+					<li><i>Extracellular</i></li>
+					<li><i>Secretory Pathway</i></li>
+					<li><i>Membrane</i></li>
+				</ul>
+				</td>
+				<td><br/>
+				<ul>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><b>Interaction Data</b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+			</tr>
+			<tr>
+				<td><b>Localization Data</b>
+				<ul>
+					<li><b><i>All Localizations</i></b></li>
+					<li><i>Cytoplasm</i></li>
+					<li><i>Mitochondrion</i></li>
+					<li><i>Nucleus</i></li>
+					<li><i>Extracellular</i></li>
+					<li><i>Secretory Pathway</i></li>
+					<li><i>Membrane</i></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+			</tr>
+			</tr>
+		</tbody>
+	</table>
+	
+	<a name="drosi"></a>
+	<h2>2. <i>Drosophila melanogaster</i> (Fruit fly)</h2>
+	<table id="Statistics_DM" class="fancy_table hovered_list">
+		<thead>
+			<tr>
+				<th>Data Type</th>
+				<th>Number of Proteins</th>
+				<th>Number of Localizations</th>
+				<th>Average localization score</th>
+				<th>Number of Interactions</th>
+				<th>Average Interaction Score</th>
+			</tr> 
+		</thead>
+		<tbody>
+			<tr>
+				<td><b>Compartmentalized Data</b>
+				<ul>
+					<li><b><i>All Localizations</i></b></li>
+					<li><i>Cytoplasm</i></li>
+					<li><i>Mitochondrion</i></li>
+					<li><i>Nucleus</i></li>
+					<li><i>Extracellular</i></li>
+					<li><i>Secretory Pathway</i></li>
+					<li><i>Membrane</i></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><b>Interaction Data</b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+			</tr>
+			<tr>
+				<td><b>Localization Data</b>
+				<ul>
+					<li><b><i>All Localizations</i></b></li>
+					<li><i>Cytoplasm</i></li>
+					<li><i>Mitochondrion</i></li>
+					<li><i>Nucleus</i></li>
+					<li><i>Extracellular</i></li>
+					<li><i>Secretory Pathway</i></li>
+					<li><i>Membrane</i></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+			</tr>
+			</tr>
+		</tbody>
+	</table>
+	
+	<a name="worm"></a>
+	<h2>3. <i>Caenorhabditis elegans</i></h2>
+	<table id="Statistics_CE" class="fancy_table hovered_list">
+		<thead>
+			<tr>
+				<th>Data Type</th>
+				<th>Number of Proteins</th>
+				<th>Number of Localizations</th>
+				<th>Average localization score</th>
+				<th>Number of Interactions</th>
+				<th>Average Interaction Score</th>
+			</tr> 
+		</thead>
+		<tbody>
+			<tr>
+				<td><b>Compartmentalized Data</b>
+				<ul>
+					<li><b><i>All Localizations</i></b></li>
+					<li><i>Cytoplasm</i></li>
+					<li><i>Mitochondrion</i></li>
+					<li><i>Nucleus</i></li>
+					<li><i>Extracellular</i></li>
+					<li><i>Secretory Pathway</i></li>
+					<li><i>Membrane</i></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><b>Interaction Data</b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+			</tr>
+			<tr>
+				<td><b>Localization Data</b>
+				<ul>
+					<li><b><i>All Localizations</i></b></li>
+					<li><i>Cytoplasm</i></li>
+					<li><i>Mitochondrion</i></li>
+					<li><i>Nucleus</i></li>
+					<li><i>Extracellular</i></li>
+					<li><i>Secretory Pathway</i></li>
+					<li><i>Membrane</i></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+			</tr>
+			</tr>
+		</tbody>
+	</table>
+   
+	<a name="yeast"></a>
+	<h2>4. <i>Saccharomyces cerevisiae</i> (Baker's yeast)</h2>
+	<table id="Statistics_SC" class="fancy_table hovered_list">
+		<thead>
+			<tr>
+				<th>Data Type</th>
+				<th>Number of Proteins</th>
+				<th>Number of Localizations</th>
+				<th>Average localization score</th>
+				<th>Number of Interactions</th>
+				<th>Average Interaction Score</th>
+			</tr> 
+		</thead>
+		<tbody>
+			<tr>
+				<td><b>Compartmentalized Data</b>
+				<ul>
+					<li><b><i>All Localizations</i></b></li>
+					<li><i>Cytoplasm</i></li>
+					<li><i>Mitochondrion</i></li>
+					<li><i>Nucleus</i></li>
+					<li><i>Extracellular</i></li>
+					<li><i>Secretory Pathway</i></li>
+					<li><i>Membrane</i></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><b>Interaction Data</b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+				<td><b></b></td>
+			</tr>
+			<tr>
+				<td><b>Localization Data</b>
+				<ul>
+					<li><b><i>All Localizations</i></b></li>
+					<li><i>Cytoplasm</i></li>
+					<li><i>Mitochondrion</i></li>
+					<li><i>Nucleus</i></li>
+					<li><i>Extracellular</i></li>
+					<li><i>Secretory Pathway</i></li>
+					<li><i>Membrane</i></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+				<td>
+				<ul><br/>
+					<li><b></b></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				</td>
+			</tr>
+			</tr>
+		</tbody>
+	</table>
+        
+	<br /><br />
 	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
         
 {% endblock %}

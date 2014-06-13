@@ -5,7 +5,7 @@
 
 {% block bundlecontent %}
 
-	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Input Databases</li></ul></h1>
+	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Input Databases</li></ul></h1>
 	
 	<br/>
 	<p align="justify">ComPPI is an integrated database merging 10 protein-protein interaction and 9 subcellular localization databases.
@@ -20,14 +20,11 @@
 	To learn more about how we deal with different protein naming conventions and subcellular localizations click <a href="{{ path('ComppiDescriptionBundle_help') }}/naming_conventions">here</a> or <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs">here</a>.</p>
 	<br />
 	
-	<p align="center"><b>Choose input database type:</b></p>
-	<h2 align="center"><a href="{{ path('ComppiDescriptionBundle_help') }}/input_ppi">Input Protein-Protein Interaction Databases</a></h2>
-	<h2 align="center"><a href="{{ path('ComppiDescriptionBundle_help') }}/input_loc">Input Subcellular Localization Databases</a></h2>
-	<br/>
-	
+	<p align="center"><b>Choose input database type:</b>
+	<ul class="NavMenu" style="text-align: center;">
+		<li><b><a href="{{ path('ComppiDescriptionBundle_help') }}/input_ppi">Input Protein-Protein Interaction Databases</a></b></li>
+		<li><b><a href="{{ path('ComppiDescriptionBundle_help') }}/input_loc">Input Subcellular Localization Databases</a></b></li>
+	</ul></p>
 
-
-
-	
 	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
 {% endblock %}

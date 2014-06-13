@@ -1,502 +1,251 @@
 {# src/Comppi/ProteinSearchBundle/Resources/views/about.html.twig #}
 {% extends '::base.html.twig' %}
 
-<<<<<<< HEAD
-
-{% block title %}ComPPI - Help/Input Protein-Protein Interaction Databases{% endblock %}
-=======
-<<<<<<< HEAD
-{% block title %}ComPPI - Help/Input Protein-Protein Interaction Databases{% endblock %}
+{% block title %}ComPPI - Help / Input Databases / Input Protein-Protein Interaction Databases{% endblock %}
 
 {% block bundlecontent %}
 
-	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Input Protein-Protein Interaction Databases</li></ul></h1>
-	
-        <br/>
-        <p>Available species:</p>
-        <ul>
+	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li><a href="{{ path('ComppiDescriptionBundle_help') }}/input_databases">Input Databases</a></li><li>Input Protein-Protein Interaction Databases</li></ul></h1>
+
+        <p>ComPPI integrates multiple protein-protein interaction databases per each available species. Please click on the species to reach the table of the source databases:</p>
+        <ol>
             <li><a href="#human"><i>Homo sapiens</i> (Human)</a></li>
             <li><a href="#drosi"><i>Drosophila melanogaster</i> (Fruit fly)</a></li>
             <li><a href="#worm"><i>Caenorhabditis elegans</i></a></li>
             <li><a href="#yeast"><i>Saccharomyces cerevisiae</i> (Baker's yeast)</a></li>
-        </ul>
+        </ol>
         
-        <a name="human"><h2 align="center"><i>Homo sapiens (Human)</i></h2></a>
+    <a name="human"></a>
+	<br/><h2>1. <i>Homo sapiens (Human)</i></h2>
 	<table id="Input_PPI_Table_Human" class="fancy_table hovered_list">
-            <thead>
-                <tr>
-                    <th>Database Name</th>
-                    <th>Version number</th>
-                    <th>Pubmed ID</th>
-                    <!--<th>Protein Count</th>-->
-                    <!--<th>Interaction Count</th>-->
-                </tr> 
-            </thead>
-            <tbody>
-                <tr>
-                    <td><a href="http://thebiogrid.org/">BioGRID</a></td>
-                    <td>version: 3.2.111</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/23203989">23203989</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->             
-                </tr> 
-                <tr>
-                    <td><a href="http://ccsb.dfci.harvard.edu/web/www/ccsb/">CCSB</a></td>
-                    <td>date: 02.2011</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/21516116">21516116</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr> 
-                <tr>
-                    <td><a href="http://dip.doe-mbi.ucla.edu/dip/Main.cgi">DIP</a></td>
-                    <td>date: 17.01.2014</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/14681454">14681454</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr> 
-                <tr>
-                    <td><a href="http://mint.bio.uniroma2.it/HomoMINT/Welcome.do">HomoMINT</a></td>
-                    <td>date: 07.03.2011</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/16351748">16351748</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-                <tr>
-                    <td><a href="http://www.hprd.org/">HPRD</a></td>
-                    <td>date: 13.04.2010</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/18988627">18988627</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-                <tr>
-                    <td><a href="http://www.ebi.ac.uk/intact/">IntAct</a></td>
-                    <td>date: 11.06.2012</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/24234451">24234451</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-                <tr>    
-                    <td><a href="http://matrixdb.ibcp.fr/">MatrixDB</a></td>
-                    <td>date: 01.08.2012</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/20852260">20852260</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-                <tr>    
-                    <td><a href="http://mint.bio.uniroma2.it/mint/">MINT</a></td>
-                    <td>date: 26.03.2013</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/22096227">22096227</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-                <tr>   
-                    <td><a href="http://mips.helmholtz-muenchen.de/proj/ppi/">MIPS</a></td>
-                    <td>date: 2004</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/15531608">15531608</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>                   
-            </tbody>
-        </table>
+		<thead>
+			<tr>
+				<th>Database Name</th>
+				<th>Version number</th>
+				<th>Pubmed ID</th>
+				<!--<th>Protein Count</th>-->
+				<!--<th>Interaction Count</th>-->
+			</tr> 
+		</thead>
+		<tbody>
+			<tr>
+				<td><a href="http://thebiogrid.org/">BioGRID</a></td>
+				<td>version: 3.2.111</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/23203989">23203989</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->             
+			</tr> 
+			<tr>
+				<td><a href="http://ccsb.dfci.harvard.edu/web/www/ccsb/">CCSB</a></td>
+				<td>date: 02.2011</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/21516116">21516116</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr> 
+			<tr>
+				<td><a href="http://dip.doe-mbi.ucla.edu/dip/Main.cgi">DIP</a></td>
+				<td>date: 17.01.2014</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/14681454">14681454</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr> 
+			<tr>
+				<td><a href="http://mint.bio.uniroma2.it/HomoMINT/Welcome.do">HomoMINT</a></td>
+				<td>date: 07.03.2011</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/16351748">16351748</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr>     
+			<tr>
+				<td><a href="http://www.hprd.org/">HPRD</a></td>
+				<td>date: 13.04.2010</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/18988627">18988627</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr>     
+			<tr>
+				<td><a href="http://www.ebi.ac.uk/intact/">IntAct</a></td>
+				<td>date: 11.06.2012</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/24234451">24234451</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr>     
+			<tr>    
+				<td><a href="http://matrixdb.ibcp.fr/">MatrixDB</a></td>
+				<td>date: 01.08.2012</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/20852260">20852260</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr>     
+			<tr>    
+				<td><a href="http://mint.bio.uniroma2.it/mint/">MINT</a></td>
+				<td>date: 26.03.2013</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/22096227">22096227</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr>     
+			<tr>   
+				<td><a href="http://mips.helmholtz-muenchen.de/proj/ppi/">MIPS</a></td>
+				<td>date: 2004</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/15531608">15531608</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr>                   
+		</tbody>
+	</table>
 
-        <a name="drosi"><h2 align="center"><i>Drosophila melanogaster</i> (Fruit fly)</h2></a>
+    <a name="drosi"></a>
+	<br/><h2>2. <i>Drosophila melanogaster</i> (Fruit fly)</h2>
 	<table id="Input_PPI_Table_Drosi" class="fancy_table hovered_list">
-            <thead>
-                <tr>
-                    <th>Database Name</th>
-                    <th>Version number</th>
-                    <th>Pubmed ID</th>
-                    <!--<th>Protein Count</th>-->
-                    <!--<th>Interaction Count</th>-->
-                </tr> 
-            </thead>
-            <tbody>
-                 <tr>
-                    <td><a href="http://thebiogrid.org/">BioGRID</a></td>
-                    <td>version: 3.2.111</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/23203989">23203989</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->             
-                </tr> 
-                 <tr>
-                    <td><a href="http://dip.doe-mbi.ucla.edu/dip/Main.cgi">DIP</a></td>
-                    <td>date: 17.01.2014</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/14681454">14681454</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr> 
-                <tr>
-                    <td><a href="http://www.droidb.org/">DroID</a></td>
-                    <td>date: 01.2014</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/21036869">21036869</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr> 
-                <tr>
-                    <td><a href="http://www.ebi.ac.uk/intact/">IntAct</a></td>
-                    <td>date: 11.06.2012</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/24234451">24234451</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>    
-                <tr>    
-                    <td><a href="http://mint.bio.uniroma2.it/mint/">MINT</a></td>
-                    <td>date: 26.03.2013</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/22096227">22096227</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-            </tbody>
-        </table>
+		<thead>
+			<tr>
+				<th>Database Name</th>
+				<th>Version number</th>
+				<th>Pubmed ID</th>
+				<!--<th>Protein Count</th>-->
+				<!--<th>Interaction Count</th>-->
+			</tr> 
+		</thead>
+		<tbody>
+			 <tr>
+				<td><a href="http://thebiogrid.org/">BioGRID</a></td>
+				<td>version: 3.2.111</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/23203989">23203989</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->             
+			</tr> 
+			 <tr>
+				<td><a href="http://dip.doe-mbi.ucla.edu/dip/Main.cgi">DIP</a></td>
+				<td>date: 17.01.2014</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/14681454">14681454</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr> 
+			<tr>
+				<td><a href="http://www.droidb.org/">DroID</a></td>
+				<td>date: 01.2014</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/21036869">21036869</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr> 
+			<tr>
+				<td><a href="http://www.ebi.ac.uk/intact/">IntAct</a></td>
+				<td>date: 11.06.2012</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/24234451">24234451</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr>    
+			<tr>    
+				<td><a href="http://mint.bio.uniroma2.it/mint/">MINT</a></td>
+				<td>date: 26.03.2013</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/22096227">22096227</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr>     
+		</tbody>
+	</table>
         
-        <a name="worm"><h2 align="center"><i>Caenorhabditis elegans</i></h2></a>
+    <a name="worm"></a>
+	<br/><h2>3. <i>Caenorhabditis elegans</i></h2>
 	<table id="Input_PPI_Table_Worm" class="fancy_table hovered_list">
-            <thead>
-                <tr>
-                    <th>Database Name</th>
-                    <th>Version number</th>
-                    <th>Pubmed ID</th>
-                    <!--<th>Protein Count</th>-->
-                    <!--<th>Interaction Count</th>-->
-                </tr> 
-            </thead>
-            <tbody>
-                <tr>
-                    <td><a href="http://thebiogrid.org/">BioGRID</a></td>
-                    <td>version: 3.2.111</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/23203989">23203989</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->             
-                </tr> 
-                <tr>
-                    <td><a href="http://ccsb.dfci.harvard.edu/web/www/ccsb/">CCSB</a></td>
-                    <td>date: 02.2011</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/21516116">21516116</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr> 
-                <tr>
-                    <td><a href="http://dip.doe-mbi.ucla.edu/dip/Main.cgi">DIP</a></td>
-                    <td>date: 17.01.2014</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/14681454">14681454</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr> 
-                <tr>
-                    <td><a href="http://www.ebi.ac.uk/intact/">IntAct</a></td>
-                    <td>date: 11.06.2012</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/24234451">24234451</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-                <tr>    
-                    <td><a href="http://mint.bio.uniroma2.it/mint/">MINT</a></td>
-                    <td>date: 26.03.2013</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/22096227">22096227</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-            </tbody>
-        </table>
+		<thead>
+			<tr>
+				<th>Database Name</th>
+				<th>Version number</th>
+				<th>Pubmed ID</th>
+				<!--<th>Protein Count</th>-->
+				<!--<th>Interaction Count</th>-->
+			</tr> 
+		</thead>
+		<tbody>
+			<tr>
+				<td><a href="http://thebiogrid.org/">BioGRID</a></td>
+				<td>version: 3.2.111</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/23203989">23203989</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->             
+			</tr> 
+			<tr>
+				<td><a href="http://ccsb.dfci.harvard.edu/web/www/ccsb/">CCSB</a></td>
+				<td>date: 02.2011</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/21516116">21516116</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr> 
+			<tr>
+				<td><a href="http://dip.doe-mbi.ucla.edu/dip/Main.cgi">DIP</a></td>
+				<td>date: 17.01.2014</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/14681454">14681454</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr> 
+			<tr>
+				<td><a href="http://www.ebi.ac.uk/intact/">IntAct</a></td>
+				<td>date: 11.06.2012</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/24234451">24234451</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr>     
+			<tr>    
+				<td><a href="http://mint.bio.uniroma2.it/mint/">MINT</a></td>
+				<td>date: 26.03.2013</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/22096227">22096227</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr>     
+		</tbody>
+	</table>
         
-        <a name="yeast"><h2 align="center"><i>Saccharomyces cerevisiae</i> (Baker's yeast)</h2></a>
+    <a name="yeast"></a>
+	<br/><h2>4. <i>Saccharomyces cerevisiae</i> (Baker's yeast)</h2>
 	<table id="Input_PPI_Table_Yeast" class="fancy_table hovered_list">
-            <thead>
-                <tr>
-                    <th>Database Name</th>
-                    <th>Version number</th>
-                    <th>Pubmed ID</th>
-                    <!--<th>Protein Count</th>-->
-                    <!--<th>Interaction Count</th>-->
-                </tr> 
-            </thead>
-            <tbody>
-                <tr>
-                    <td><a href="http://thebiogrid.org/">BioGRID</a></td>
-                    <td>version: 3.2.111</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/23203989">23203989</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->             
-                </tr> 
-                <tr>
-                    <td><a href="http://ccsb.dfci.harvard.edu/web/www/ccsb/">CCSB</a></td>
-                    <td>date: 02.2011</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/21516116">21516116</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr> 
-                <tr>
-                    <td><a href="http://dip.doe-mbi.ucla.edu/dip/Main.cgi">DIP</a></td>
-                    <td>date: 17.01.2014</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/14681454">14681454</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr> 
-                <tr>
-                    <td><a href="http://www.ebi.ac.uk/intact/">IntAct</a></td>
-                    <td>date: 11.06.2012</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/24234451">24234451</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-                <tr>    
-                    <td><a href="http://mint.bio.uniroma2.it/mint/">MINT</a></td>
-                    <td>date: 26.03.2013</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/22096227">22096227</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-            </tbody>
-        </table>
-
-=======
-{% block title %}ComPPI - Help / Input Databases / PPI databases{% endblock %}
->>>>>>> 5aa4fcebd370768e7c16e25369fad410c812cc01
-
-{% block bundlecontent %}
-
-	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Input Protein-Protein Interaction Databases</li></ul></h1>
-	
-<<<<<<< HEAD
-        <br/>
-        <p>Available species:</p>
-        <ul>
-            <li><a href="#human"><i>Homo sapiens</i> (Human)</a></li>
-            <li><a href="#drosi"><i>Drosophila melanogaster</i> (Fruit fly)</a></li>
-            <li><a href="#worm"><i>Caenorhabditis elegans</i></a></li>
-            <li><a href="#yeast"><i>Saccharomyces cerevisiae</i> (Baker's yeast)</a></li>
-        </ul>
-        
-        <a name="human"><h2 align="center"><i>Homo sapiens (Human)</i></h2></a>
-	<table id="Input_PPI_Table_Human" class="fancy_table hovered_list">
-            <thead>
-                <tr>
-                    <th>Database Name</th>
-                    <th>Version number</th>
-                    <th>Pubmed ID</th>
-                    <!--<th>Protein Count</th>-->
-                    <!--<th>Interaction Count</th>-->
-                </tr> 
-            </thead>
-            <tbody>
-                <tr>
-                    <td><a href="http://thebiogrid.org/">BioGRID</a></td>
-                    <td>version: 3.2.111</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/23203989">23203989</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->             
-                </tr> 
-                <tr>
-                    <td><a href="http://ccsb.dfci.harvard.edu/web/www/ccsb/">CCSB</a></td>
-                    <td>date: 02.2011</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/21516116">21516116</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr> 
-                <tr>
-                    <td><a href="http://dip.doe-mbi.ucla.edu/dip/Main.cgi">DIP</a></td>
-                    <td>date: 17.01.2014</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/14681454">14681454</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr> 
-                <tr>
-                    <td><a href="http://mint.bio.uniroma2.it/HomoMINT/Welcome.do">HomoMINT</a></td>
-                    <td>date: 07.03.2011</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/16351748">16351748</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-                <tr>
-                    <td><a href="http://www.hprd.org/">HPRD</a></td>
-                    <td>date: 13.04.2010</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/18988627">18988627</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-                <tr>
-                    <td><a href="http://www.ebi.ac.uk/intact/">IntAct</a></td>
-                    <td>date: 11.06.2012</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/24234451">24234451</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-                <tr>    
-                    <td><a href="http://matrixdb.ibcp.fr/">MatrixDB</a></td>
-                    <td>date: 01.08.2012</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/20852260">20852260</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-                <tr>    
-                    <td><a href="http://mint.bio.uniroma2.it/mint/">MINT</a></td>
-                    <td>date: 26.03.2013</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/22096227">22096227</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-                <tr>   
-                    <td><a href="http://mips.helmholtz-muenchen.de/proj/ppi/">MIPS</a></td>
-                    <td>date: 2004</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/15531608">15531608</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>                   
-            </tbody>
-        </table>
-
-        <a name="drosi"><h2 align="center"><i>Drosophila melanogaster</i> (Fruit fly)</h2></a>
-	<table id="Input_PPI_Table_Drosi" class="fancy_table hovered_list">
-            <thead>
-                <tr>
-                    <th>Database Name</th>
-                    <th>Version number</th>
-                    <th>Pubmed ID</th>
-                    <!--<th>Protein Count</th>-->
-                    <!--<th>Interaction Count</th>-->
-                </tr> 
-            </thead>
-            <tbody>
-                 <tr>
-                    <td><a href="http://thebiogrid.org/">BioGRID</a></td>
-                    <td>version: 3.2.111</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/23203989">23203989</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->             
-                </tr> 
-                 <tr>
-                    <td><a href="http://dip.doe-mbi.ucla.edu/dip/Main.cgi">DIP</a></td>
-                    <td>date: 17.01.2014</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/14681454">14681454</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr> 
-                <tr>
-                    <td><a href="http://www.droidb.org/">DroID</a></td>
-                    <td>date: 01.2014</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/21036869">21036869</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr> 
-                <tr>
-                    <td><a href="http://www.ebi.ac.uk/intact/">IntAct</a></td>
-                    <td>date: 11.06.2012</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/24234451">24234451</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>    
-                <tr>    
-                    <td><a href="http://mint.bio.uniroma2.it/mint/">MINT</a></td>
-                    <td>date: 26.03.2013</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/22096227">22096227</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-            </tbody>
-        </table>
-        
-        <a name="worm"><h2 align="center"><i>Caenorhabditis elegans</i></h2></a>
-	<table id="Input_PPI_Table_Worm" class="fancy_table hovered_list">
-            <thead>
-                <tr>
-                    <th>Database Name</th>
-                    <th>Version number</th>
-                    <th>Pubmed ID</th>
-                    <!--<th>Protein Count</th>-->
-                    <!--<th>Interaction Count</th>-->
-                </tr> 
-            </thead>
-            <tbody>
-                <tr>
-                    <td><a href="http://thebiogrid.org/">BioGRID</a></td>
-                    <td>version: 3.2.111</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/23203989">23203989</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->             
-                </tr> 
-                <tr>
-                    <td><a href="http://ccsb.dfci.harvard.edu/web/www/ccsb/">CCSB</a></td>
-                    <td>date: 02.2011</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/21516116">21516116</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr> 
-                <tr>
-                    <td><a href="http://dip.doe-mbi.ucla.edu/dip/Main.cgi">DIP</a></td>
-                    <td>date: 17.01.2014</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/14681454">14681454</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr> 
-                <tr>
-                    <td><a href="http://www.ebi.ac.uk/intact/">IntAct</a></td>
-                    <td>date: 11.06.2012</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/24234451">24234451</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-                <tr>    
-                    <td><a href="http://mint.bio.uniroma2.it/mint/">MINT</a></td>
-                    <td>date: 26.03.2013</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/22096227">22096227</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-            </tbody>
-        </table>
-        
-        <a name="yeast"><h2 align="center"><i>Saccharomyces cerevisiae</i> (Baker's yeast)</h2></a>
-	<table id="Input_PPI_Table_Yeast" class="fancy_table hovered_list">
-            <thead>
-                <tr>
-                    <th>Database Name</th>
-                    <th>Version number</th>
-                    <th>Pubmed ID</th>
-                    <!--<th>Protein Count</th>-->
-                    <!--<th>Interaction Count</th>-->
-                </tr> 
-            </thead>
-            <tbody>
-                <tr>
-                    <td><a href="http://thebiogrid.org/">BioGRID</a></td>
-                    <td>version: 3.2.111</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/23203989">23203989</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->             
-                </tr> 
-                <tr>
-                    <td><a href="http://ccsb.dfci.harvard.edu/web/www/ccsb/">CCSB</a></td>
-                    <td>date: 02.2011</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/21516116">21516116</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr> 
-                <tr>
-                    <td><a href="http://dip.doe-mbi.ucla.edu/dip/Main.cgi">DIP</a></td>
-                    <td>date: 17.01.2014</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/14681454">14681454</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr> 
-                <tr>
-                    <td><a href="http://www.ebi.ac.uk/intact/">IntAct</a></td>
-                    <td>date: 11.06.2012</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/24234451">24234451</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-                <tr>    
-                    <td><a href="http://mint.bio.uniroma2.it/mint/">MINT</a></td>
-                    <td>date: 26.03.2013</td>
-                    <td><a href="http://www.ncbi.nlm.nih.gov/pubmed/22096227">22096227</a></td>
-                    <!--<td></td>-->
-                    <!--<td></td>-->
-                </tr>     
-            </tbody>
-        </table>
-=======
->>>>>>> e311427c5f33566ebab3ffe02bbbd87012ffa982
->>>>>>> 5aa4fcebd370768e7c16e25369fad410c812cc01
+		<thead>
+			<tr>
+				<th>Database Name</th>
+				<th>Version number</th>
+				<th>Pubmed ID</th>
+				<!--<th>Protein Count</th>-->
+				<!--<th>Interaction Count</th>-->
+			</tr> 
+		</thead>
+		<tbody>
+			<tr>
+				<td><a href="http://thebiogrid.org/">BioGRID</a></td>
+				<td>version: 3.2.111</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/23203989">23203989</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->             
+			</tr> 
+			<tr>
+				<td><a href="http://ccsb.dfci.harvard.edu/web/www/ccsb/">CCSB</a></td>
+				<td>date: 02.2011</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/21516116">21516116</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr> 
+			<tr>
+				<td><a href="http://dip.doe-mbi.ucla.edu/dip/Main.cgi">DIP</a></td>
+				<td>date: 17.01.2014</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/14681454">14681454</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr> 
+			<tr>
+				<td><a href="http://www.ebi.ac.uk/intact/">IntAct</a></td>
+				<td>date: 11.06.2012</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/24234451">24234451</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr>     
+			<tr>    
+				<td><a href="http://mint.bio.uniroma2.it/mint/">MINT</a></td>
+				<td>date: 26.03.2013</td>
+				<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/22096227">22096227</a></td>
+				<!--<td></td>-->
+				<!--<td></td>-->
+			</tr>     
+		</tbody>
+	</table>
 	
 	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
 {% endblock %}
