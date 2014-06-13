@@ -8,41 +8,41 @@
 	
 	<br /><p>ComPPI is a multicomponent, undirected, weighted protein-protein interaction network.
 	<ul>
-		<li>Nodes: proteins</li>
-		<li>Edges: undirected edges representing any relationship between two proteins</li>
-		<li>Edge weights: interaction scores</li>
+		<li><b>Nodes:</b> proteins</li>
+		<li><b>Edges:</b> undirected edges representing any relationship between two proteins</li>
+		<li><b>Edge weights:</b> interaction scores</li>
 	</ul></p>
 	
 	<h2>Node attributes</h2>
 	<p>
 	<ul>
-		<li>Name: the protein name in the strongest available naming convention, usually UniProt/Swiss-prot</li>
-		<li>Naming convention: the naming convention of the name</li>
-		<li>Synonyms: other names of the protein</li>
-		<li>Taxonomy ID: the GO Taxonomy ID of the related species, such as '9606'</li>
-		<li>Localization scores: the probability that the protein belongs to a given major localization</li>
-		<li>Major localizations: cytoplasm, nucleus, etc.</li>
-		<li>Minor localizations: the GO subcellular component IDs</li>
-		<li>Localization PubMed IDs: the PubMed IDs of the publications describing the source databases or the specific publication which relates the protein to a given localization</li>
-		<li>Localization source databases: the names of the source databases of the localization data</li>
-		<li>Localization experimental systems: the experimental system that associated the protein with a given localization (such as 'annotated protein expression')</li>
-		<li>Localization experimental system type: Unknown (0), experimental (1), predicted (2)</li>
+		<li><b>Name:</b> the protein name in the strongest available naming convention, usually UniProt/Swiss-prot</li>
+		<li><b>Naming convention:</b> the naming convention of the protein name</li>
+		<li><b>Synonyms:</b> other names of the protein</li>
+		<li><b>Taxonomy ID:</b> the GO Taxonomy ID of the related species, such as '9606'</li>
+		<li><b>Localization Scores:</b> the probability that the protein belongs to a given major localization</li>
+		<li><b>Major Localizations:</b> cytoplasm, nucleus, etc.</li>
+		<li><b>Minor Localizations:</b> the GO subcellular component IDs</li>
+		<li><b>Localization PubMed IDs:</b> the PubMed IDs of the publications describing the source databases or the specific publication which relates the protein to a given localization</li>
+		<li><b>Localization Source Databases:</b> the names of the source databases of the localization data</li>
+		<li><b>Localization Experimental Systems:</b> the experimental system that associated the protein with a given localization (such as 'annotated protein expression')</li>
+		<li><b>Localization Experimental System Type:</b> unknown (0), experimental (1), predicted (2)</li>
 	</ul></p>
 	
 	<h2>Edge attributes</h2>
 	<p>
 	<ul>
-		<li>Interaction score: the probability of the given interaction, can be thought of as edge weight</li>
-		<li>Source databases: the names of the databases that describe the interaction</li>
-		<li>Source PubMed IDs: the PubMed IDs of the publications describing the source databases or the specific publication which describes the interaction</li>
-		<li>Experimental systems: the experimental system that determined the interaction (such as 'yeast two-hybrid')</li>
-		<li>Experimental system type: Unknown (0), experimental (1), predicted (2)</li>
+		<li><b>Interaction Score:</b> the probability of the given interaction, can be thought of as edge weight</li>
+		<li><b>Source Databases:</b> the names of the databases that describe the interaction</li>
+		<li><b>Source PubMed IDs:</b> the PubMed IDs of the publications describing the source databases or the specific publication which describes the interaction</li>
+		<li><b>Experimental Systems:</b> the experimental system that determined the interaction (such as 'yeast two-hybrid')</li>
+		<li><b>Experimental System Type:</b> unknown (0), experimental (1), predicted (2)</li>
 	</ul></p>
 	
 	<h2>Notes</h2>
-	<p>The custom downloads contain various combinations of these, please refer to the <a href="{{ path('ComppiDescriptionBundle_help') }}/downloads">relevant help section</a> for further details.</p>
+	<p align="justify">The custom downloads contain various combinations of these, please refer to the <a href="{{ path('ComppiDescriptionBundle_help') }}/downloads">relevant help section</a> for further details.</p>
 	
-	<p>The nodes are identified by ComPPI IDs in the downloadable full database (SQL). These IDs are not stable, they may change in every release. If you use ComPPI to build a network, you may want to consider using the protein names as node IDs, otherwise networks of different ComPPI versions may not be compatible with each other.</p>
+	<p align="justify">The nodes are identified by ComPPI IDs in the downloadable full database (SQL). These IDs are not stable, they may change in every release. If you use ComPPI to build a network, you may want to consider using the protein names as node IDs, otherwise networks of different ComPPI versions may not be compatible with each other.</p>
 	
 	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
 {% endblock %}
