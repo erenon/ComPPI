@@ -4,17 +4,19 @@
 {% block title %}ComPPI - Help/Protein Search{% endblock %}
 
 {% block bundlecontent %}
-	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Protein Search</li></ul></h1>
+	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Protein Search</li></ul></h1>
 	
         <h2>Summary of the Protein Search page</h2>
-	<p align="justify">On the Protein Search page the user can search for the interactions of individual proteins.
-        After the wanted protein is submitted for search on the top of the result page the <a href="#intA">properties of the query protein</a> appear,
-        and after that the <a href="#int">interactions</a> are listed. All interactions contain information about the <a href="#intB">properties of the interacting partner</a>,
-        and the interaction score for the certain interaction.</p>
+	<p align="justify">The purpose of protein search is to provide the interactors of a query protein with all their localization data.
+	<br />The search starts with a form to specify the name of the query protein. The name can be a protein ID or a fragment of a name. A list of suggested names pops up after typing at least 3 characters. This search can be filtered to the available species as well. Move your mouse over any of the form elements to display a location-sensitive tooltip.
+	<br />If a single protein was found, the page of interactors is shown immediately. If there are multiple search results for a given protein name (or fragment), an intermediate page displays the available options.
+	<br />The interaction page displays the <a href="#intA">properties of the query protein</a> and the <a href="#int">interactions</a>. All interactions contain information about the <a href="#intB">properties of the interacting partner</a>,
+        and the interaction score of a certain interaction.</p>
         
-        <p align="justify">To learn more about how to use our Protein Search page check out our <a href="{{ path('ComppiDescriptionBundle_help') }}/tutorial#protsearch">Tutorial</a>!</p>
+        <!-- <p align="justify">To learn more about how to use our Protein Search page check out our <a href="{{ path('ComppiDescriptionBundle_help') }}/tutorial#protsearch">Tutorial</a>!</p> -->
         
-        <a name="intA"><h2>Properties of the query protein</h2></a>
+        <a name="intA"></a>
+		<h2>Properties of the query protein</h2>
         
         <p align="justify">On the top of the result page the following properties are listed about the query protein:
         <ol>
@@ -34,7 +36,8 @@
         </ol></p>
         
                
-        <a name="int"><h2>Properties of the interactions</h2></a>
+        <a name="int"></a>
+		<h2>Properties of the interactions</h2>
         
         <p align="justify">On the result page the interactions are listed after the box with the properties of the query protein. The following properties are included:
         <ol>
@@ -48,7 +51,8 @@
         </ol>
         </p>
         
-        <a name="intB"><h2>Properties of the interacting partners</h2></a>
+        <a name="intB"></a>
+		<h2>Properties of the interacting partners</h2>
         
         <p align="justify">The structure of the properties of the interacting partner:
         <ol>

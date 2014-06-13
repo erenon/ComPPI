@@ -5,7 +5,7 @@ html {
 }
 body, #Header, #Footer {
 	min-width: 1000px;
-	background: url("content_bg_25.png") 80% 80px no-repeat;
+	background: url("content_bg_25.png") 80% 110px no-repeat;
 }
 body  {
 	margin: 50px auto 10px auto;
@@ -18,23 +18,23 @@ body  {
 	margin: 0 0 2em 0;
     padding: 0;
 }
-#MainMenu, #NavMenu, #Footer, .listWithSeparator {
+#MainMenu, .NavMenu, #Footer, .listWithSeparator {
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
 }
-#MainMenu li, #NavMenu li, #Footer li, .listWithSeparator li {
+#MainMenu li, .NavMenu li, #Footer li, .listWithSeparator li {
 	margin: 0;
 	padding: 0;
 	color: #000;
 	display: inline;
 }
-#MainMenu li:after, #NavMenu li:after, #Footer li:after, .listWithSeparator li:after {
+#MainMenu li:after, .NavMenu li:after, #Footer li:after, .listWithSeparator li:after {
 	content: "//";
 	color: #909090;
 	margin: 0 12px;
 }
-#MainMenu li:last-child:after, #NavMenu li:last-child:after, #Footer li:last-child:after, .listWithSeparator li:last-child:after {
+#MainMenu li:last-child:after, .NavMenu li:last-child:after, #Footer li:last-child:after, .listWithSeparator li:last-child:after {
 	content: "";
 	margin: 0;
 }
@@ -367,7 +367,7 @@ textarea { height: 200px; }
 
 
 /* HELP */
-.backToTOC { text-align: right; margin-right: 200px; }
+.backToTOC { text-align: right; margin-top: 4em; margin-right: 100px; }
 
 /* CONTACT */
 #ContactForm { width: 600px; margin: 0 auto; }

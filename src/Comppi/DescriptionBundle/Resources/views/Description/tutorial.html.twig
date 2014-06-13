@@ -4,7 +4,7 @@
 {% block title %}ComPPI - Help/Tutorial{% endblock %}
 
 {% block bundlecontent %}
-	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Tutorial</li></ul></h1>
+	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Tutorial</li></ul></h1>
 	
         <br/>
         <p align="center">
@@ -15,19 +15,22 @@
         
 	<a name="protsearch"><h2>How to use the Protein Search page?</h2></a>
         
-        <p>To learn more about the Protein Search page navigate <a href="{{ path('ComppiDescriptionBundle_help') }}/protein_search">here</a>.</p>
-        
-        <!--PRINT SCREEN
-        - search - choose species - autocomplete- submit search -tooltips!
-        - multiple proteins - choose (UniProt and full name) - Details
-        - rsult
-            - query protein on the top - name, synonyms, loc info
-            - if no interactions: No interactions were found. (such as: Q761V2)
-            - interactions: list - interaction score, comppi interactors and uniprot link - details - synonyms and loc info-->
+	<p>The search starts with a form to specify the name of the query protein. This name can be a protein ID or a fragment of a name. A list of suggested names pops up after typing at least 3 characters. This search can be filtered to the available species as well. Move your mouse over any of the form elements to display a location-sensitive tooltip.
+<br />If a single protein was found, the page of interactors is shown immediately. If there are multiple search results for a given protein name (or fragment), an intermediate page displays the available options.</p>
+	
+	<p>Protein Search is described in details <a href="{{ path('ComppiDescriptionBundle_help') }}/protein_search">here</a>.</p>
+	
+	<!--PRINT SCREEN
+	- search - choose species - autocomplete- submit search -tooltips!
+	- multiple proteins - choose (UniProt and full name) - Details
+	- rsult
+		- query protein on the top - name, synonyms, loc info
+		- if no interactions: No interactions were found. (such as: Q761V2)
+		- interactions: list - interaction score, comppi interactors and uniprot link - details - synonyms and loc info-->
         
 	<a name="download"><h2>How to use the Downloads page?</h2></a>
 
-        <p>To learn more about the Downloads page navigate <a href="{{ path('ComppiDescriptionBundle_help') }}/downloads">here</a>.</p>
+    <p>To learn more about the Downloads page navigate <a href="{{ path('ComppiDescriptionBundle_help') }}/downloads">here</a>.</p>
 
         
 	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>

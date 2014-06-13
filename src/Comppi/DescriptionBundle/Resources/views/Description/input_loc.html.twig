@@ -5,7 +5,7 @@
 
 {% block bundlecontent %}
 
-	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Input Subcellular Localization Databases</li></ul></h1>
+	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li><a href="{{ path('ComppiDescriptionBundle_help') }}/input_databases">Input Databases</a></li><li>Input Subcellular Localization Databases</li></ul></h1>
 
 	<p>ComPPI integrates data from multiple localization databases. Please click on the species to see the table of relevant localization databases:</p>
 	<ol>
@@ -240,7 +240,6 @@
 		</tbody>
 	</table>
 
-	<br/><br/>
 	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
 	
 {% endblock %}
