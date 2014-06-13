@@ -749,9 +749,9 @@ if __name__ == '__main__':
 					ci.exportNetworkToCsv(
 						filtered_comppi,
 						os.path.join(ci.output_dir, 'comppi--interactions--tax_{}_loc_{}.txt.gz'.format(sp, loc)),
-						('name', 'synonyms', 'taxonomy_id'),
+						('name', 'naming_conv', 'synonyms', 'taxonomy_id'),
 						('weight', 'exp_sys_str', 'source_db', 'pubmed'),
-						('Protein A', 'Synonyms A', 'Taxonomy ID A', 'Protein B', 'Synonyms B', 'Taxonomy ID B', 'Interaction Score', 'Interaction Experimental System Type', 'Interaction Source Database', 'Interaction PubMed ID'),
+						('Protein A', 'Naming Convention A', 'Synonyms A', 'Taxonomy ID A', 'Protein B', 'Naming Convention B', 'Synonyms B', 'Taxonomy ID B', 'Interaction Score', 'Interaction Experimental System Type', 'Interaction Source Database', 'Interaction PubMed ID'),
 						skip_none_lines = False
 					)
 
