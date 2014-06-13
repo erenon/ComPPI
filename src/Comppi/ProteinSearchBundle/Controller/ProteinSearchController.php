@@ -354,9 +354,10 @@ class ProteinSearchController extends Controller
 			);
 			if ($mnlrc) {
 				$pl[$p->pid][$i]['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
-					.': <a href="#" title="'
+					.': '.$p->exp_sys
+					.' <span class="infobtn" title="'
 					.$p->exp_sys.': '.$loc_exp_sys.
-					'">'.$p->exp_sys.'</a>';
+					'"> ? </span>';
 			} else {
 				$pl[$p->pid][$i]['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
 					.': '.$p->exp_sys;

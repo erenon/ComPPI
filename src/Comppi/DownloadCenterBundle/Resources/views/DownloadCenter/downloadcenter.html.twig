@@ -17,16 +17,16 @@
 			<div id="DlSetButtons">
 			
 			<input type="radio" name="fDlSet" value="comp" id="fDlSetComp" class="btn radiobtn" checked="checked" />
-			<div class="DlSetHelp"><b>Selected dataset:</b> The interactome of the selected major subcellular localization. Contains only the interactions where at least one interactor is located in the selected subcellular localization.</div>
+			<div class="DlSetHelp"><b>Selected dataset:</b> The interactome of the selected major subcellular localization. Contains only the interactions where at least one interactor is located in the selected subcellular localization. <a href="{{ path('ComppiDescriptionBundle_help') }}/downloads#comp">Details...</a></div>
 			<label for="fDlSetComp" class="radioButtonLabel">Compartmentalized interactome</label><br />
 			
 			<input type="radio" name="fDlSet" value="int" id="fDlSetInt" class="btn radiobtn" />
-			<div class="DlSetHelp"><b>Selected dataset:</b> Integrated protein-protein interactions excluding the subcellular localizations.</div>
+			<div class="DlSetHelp"><b>Selected dataset:</b> Integrated protein-protein interactions excluding the subcellular localizations. <a href="{{ path('ComppiDescriptionBundle_help') }}/downloads#ppi">Details...</a></div>
 			<label for="fDlSetInt" class="radioButtonLabel">Integrated protein-protein interaction dataset</label><br />
 			{# csak első oszlop? #}
 			
 			<input type="radio" name="fDlSet" value="protnloc" id="fDlSetProtNLoc" class="btn radiobtn" />
-			<div class="DlSetHelp"><b>Selected dataset:</b> Integrated subcellular localization data of proteins excluding the interactions.</div>
+			<div class="DlSetHelp"><b>Selected dataset:</b> Integrated subcellular localization data of proteins excluding the interactions. <a href="{{ path('ComppiDescriptionBundle_help') }}/downloads#loc">Details...</a></div>
 			<label for="fDlSetProtNLoc" class="radioButtonLabel">Integrated subcellular localization dataset</label><br />
 			{# 3 oszlop #}
 			
