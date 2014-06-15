@@ -274,6 +274,7 @@ textarea { height: 200px; }
 	border-bottom: 1px solid #a9a9a9;
 	text-align: center;
 }
+#MainPageStatisticsTable th { background-color: #e9e9e9; }
 #MainPageStatisticsTable td { border-top: 1px solid red;}
 /*#MainPageStatisticsTable th { font-size: 10px; }*/
 #MainPageStatisticsTable th:last-child, #MainPageStatisticsTable td:last-child { border-right: 0; }

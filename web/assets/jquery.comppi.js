@@ -64,7 +64,7 @@ $(function() {
 
 // striped tables
 $(function() {
-	$("table.striped_table tbody tr:even").addClass("striped_row");
+	$("table.striped_table tbody > tr:odd").addClass("striped_row");
 });
 
 // show/hide protein interaction details
