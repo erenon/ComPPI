@@ -213,6 +213,11 @@ class ComppiInterface(object):
 			et			= self.getGlobalEdgeTable()
 			graph		= self.buildGraphFromEdgetable(et)
 			del et
+			
+			# there may be nodes without interactions - add these too
+			all_nodes	= c.getAllProteinIds()
+			graph		= c.addNodesToGraph(graph, all_nodes)
+			del all_nodes
 
 			# annotate the nodes
 			prot_dtls	= self.getProteinDetails()
@@ -250,7 +255,7 @@ class ComppiInterface(object):
 
 			del exp_sys
 
-			self.logging.debug("buildGlobalComppi(): global graph has been constructed de novo")
+			self.logging.debug("buildGlobalComppi(): global graph has been constructed de novo, number of nodes: {}, number of edges: {}".format(graph.number_of_nodes(), graph.number_of_edges()))
 
 			with gzip.open(self.comppi_global_graph_f, 'wb') as fp:
 				pickle.dump(graph, fp)
@@ -264,14 +269,14 @@ class ComppiInterface(object):
 
 		# get protein IDs by loc, IDs by species, intersect, and get the graph containing only those nodes
 		loc_node_ids = None
-		if loc in self.locs and species_id in self.specii:
+		if loc in self.loc_opts and species_id in self.specii:
 			loc_node_ids = self.getNodeIdsByMajorLoc(loc)
 			spec_node_ids = self.getNodeIdsBySpeciesId(species_id)
 			node_ids = set.intersection(loc_node_ids, spec_node_ids)
 			del loc_node_ids
 			del spec_node_ids
 			self.logging.debug("filterGraph(): graph filtered for loc and species")
-		elif loc in self.locs:
+		elif loc in self.loc_opts:
 			node_ids = self.getNodeIdsByMajorLoc(loc)
 			self.logging.debug("filterGraph(): graph filtered for loc")
 		elif species_id in self.specii:
@@ -282,7 +287,7 @@ class ComppiInterface(object):
 			return graph
 
 		# in-place filtering to save memory
-		graph.remove_nodes_from( [n for n in graph if n not in node_ids] )
+		graph.remove_nodes_from( [n for n in graph if n not in node_ids] ) # note the 'not in'
 
 		self.logging.info("filterGraph() returns with a filtered graph: {} nodes, {} edges".format(graph.number_of_nodes(), graph.number_of_edges()))
 		return graph
@@ -292,6 +297,34 @@ class ComppiInterface(object):
 		self.logging.debug("buildEgoGraph() started")
 
 		return nx.ego_graph(graph, node_id, radius=1, undirected=True)
+
+
+	def addNodesToGraph(self, graph, nodes):
+		"""
+			param nodes: any iterable
+		"""
+		self.logging.debug("addNodesToGraph() started")
+		graph.add_nodes_from(nodes)
+		return graph
+	
+	
+	def getAllProteinIds(self):
+		self.logging.debug("getAllProteinIds() started")
+		nodes = []
+		
+		cursor = self.connect()
+		with closing(cursor) as cur:
+			sql = """
+				SELECT DISTINCT id FROM Protein
+			"""
+			self.logging.debug(sql)
+			cur.execute(sql)
+			
+			for node_row in cur:
+				nodes.append(node_row[0])
+		
+		self.logging.debug("getAllProteinIds() returns with {} proteins".format(len(nodes)))
+		return nodes
 
 
 	def getProteinDetails(self):
@@ -447,24 +480,32 @@ class ComppiInterface(object):
 		"""
 			Get the distinct node IDs of the proteins belonging to a given major cell compartment.
 
-			param loc: string, the name of the major localization; see also self.locs
+			param loc: string, the name of the major localization; see also self.loc_opts (self.loc does not contain 'all', while self.loc_opts does)
 			returns: set, the unique node IDs
 		"""
 		self.logging.debug("getNodeIdsByMajorLoc() started, loc: '{}'".format(loc))
 
-		if loc not in self.locs:
+		if loc not in self.loc_opts:
 			raise ValueError("getNodeIdsByMajorLoc(): Unknown major localization name: '{}'".format(loc))
 
 		cursor = self.connect()
 		with closing(cursor) as cur:
-			sql = """
-				SELECT ptl.proteinId
-				FROM ProteinToLocalization ptl
-				LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
-				WHERE
-					lt.majorLocName = %s
-			"""
-			cur.execute(sql, (loc,))
+			if loc == 'all':
+				sql = """
+					SELECT ptl.proteinId
+					FROM ProteinToLocalization ptl
+					LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
+				"""
+				cur.execute(sql)
+			else:
+				sql = """
+					SELECT ptl.proteinId
+					FROM ProteinToLocalization ptl
+					LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
+					WHERE
+						lt.majorLocName = %s
+				"""
+				cur.execute(sql, (loc,))
 			n_ids = set([l[0] for l in cur])
 
 			self.logging.debug("getNodeIdsByMajorLoc() returns with {} node IDs".format(len(n_ids)))
