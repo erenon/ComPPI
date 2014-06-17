@@ -35,13 +35,13 @@
         
     <br /><a name="basics"></a>
 	<h3>1. Basics of the ComPPI scoring system</h3>
-	<p align="justify">We work with probabilities where the events are independent. The two basic operations are:
+	<p align="justify">We assumed that the different localization entries are independent. Thus we have used the following two basic operations:
 	<ul>
 		<li>AND (⊕) [standard multiplication, a⊕b=a*b]</li>
 		<li>OR (Ⓥ) [aⓋb = 1-(1-a)*(1-b)]</li>
 	</ul>
 	The ComPPI scoring system works with the major localizations of the proteins, described <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs">here</a>.
-	The localization and confidence score is calculated using a PHP script, while the scores are stored in the SQL-based database.</p></p>
+	The localization and interaction score is calculated using a PHP script, while the scores are stored in the SQL-based database.</p></p>
 
 
 	<br /><a name="locscore"></a>
@@ -74,9 +74,9 @@
 
 	<br /><img src="http://www.linkgroup.hu/pic/score_3.png" alt="loc_sum" height="123" width="212" /></p>
 	
-	<p align="justify">The full equation of the interaction score is the following:
+	<!--<p align="justify">The full equation of the interaction score is the following:
 	
-	<br /><img src="http://www.linkgroup.hu/pic/score_4.png" alt="loc_sum" height="248" width="765" /></p>
+	<br /><img src="http://www.linkgroup.hu/pic/score_4.png" alt="loc_sum" height="248" width="765" /></p>-->
         
 	<!--<a name="scoreopt"><h3>Optimalization</h3></a>-->
 	<!--
