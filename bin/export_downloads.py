@@ -535,6 +535,69 @@ class ComppiInterface(object):
 			self.logging.debug("getNodeIdsBySpeciesId() returns with {} node IDs".format(len(n_ids)))
 
 			return n_ids
+		
+	
+	def exportCompartmentToCsv(self, graph, filename, node_columns, edge_columns, header = tuple(), flatten = True, skip_none_lines = True):
+
+		self.logging.info("""exportCompartmentToCsv() started,
+			filename: {}
+			header: {}
+			node_columns: {}
+			edge_columns: {}
+			flatten: {}
+			skip_none_lines: {}
+		""".format(filename, header, node_columns, edge_columns, flatten, skip_none_lines))
+
+		if header and (len(header) != (len(node_columns)*2 + len(edge_columns))):
+			raise ValueError("""exportNetworkToCsv(): length of header is not the same as 2*node columns + edge columns!
+				node colums: {}
+				edge columns: {}
+				header: {}
+				""".format(node_columns, edge_columns, header))
+
+		row_count = 0
+		with gzip.open(filename, 'w') as fp:
+			csvw = csv.writer(
+				io.TextIOWrapper(fp, newline="", write_through=True), # text into binary file
+				delimiter="\t",
+				quoting=csv.QUOTE_MINIMAL
+			)
+
+			# header
+			if header:
+				csvw.writerow([attr for attr in header])
+			else:
+				h1 = []
+				h2 = []
+				h3 = []
+				for attr in node_columns:
+					h1.append("node1:{}".format(attr))
+					h2.append("node2:{}".format(attr))
+				for attr in edge_columns:
+					h3.append(attr)
+				csvw.writerow(h1 + h2 + h3)
+
+			# export data
+			for n1, n2, e in graph.edges_iter(data=True):
+				n1_d = nx.get_node_attributes(graph, n1)
+				n2_d = nx.get_node_attributes(graph, n2)
+				mlocsc_n1 = n1_d.get('loc_scores', {})
+				mlocsc_n2 = n2_d.get('loc_scores', {})
+				majorlocs_n1 = set(mlocsc_n1.keys())
+				majorlocs_n2 = set(mlocsc_n2.keys())
+				
+				common_mlocs = set.intersection(majorlocs_n1, majorlocs_n1)
+				
+				if common_mlocs:
+					curr_node1_cells	= self._aggregateCsvCells(graph.node[n1], node_columns, flatten, skip_none_lines)
+					curr_node2_cells	= self._aggregateCsvCells(graph.node[n2], node_columns, flatten, skip_none_lines)
+					curr_edge_cells	= self._aggregateCsvCells(e, edge_columns, flatten, skip_none_lines)
+	
+					if curr_node1_cells and curr_node2_cells and curr_edge_cells:
+						csvw.writerow(curr_node1_cells + curr_node2_cells + curr_edge_cells)
+						row_count += 1
+
+		self.logging.debug("exportNetworkToCsv() returns with {} rows + header".format(row_count))
 
 
 	def exportNetworkToCsv(self, graph, filename, node_columns, edge_columns, header = tuple(), flatten = True, skip_none_lines = True):
