@@ -94,6 +94,7 @@ h3 { margin-top: 1em; margin-bottom: 0; }
 li { list-style-type: square; }
 
 .center { text-align: center; }
+.clear-both { clear: both; }
 .help { margin: 1em 0; }
 .help_details {}
 .infobtn {
@@ -316,7 +317,7 @@ textarea { height: 200px; }
 #ProteinSearchSelectorTbl td:last-child { width: 20%; text-align: center; }
 #ProteinSearchSelectorTbl { width: auto; margin: 1em auto; }
 
-#ps-interactionStats { float: right; font-weight: bold; margin-top: 0; padding: 5px; }
+#ps-interactionStats { float: left; font-weight: bold; margin: 0 15px 1em 0; padding: 5px; }
 #ps-keyProtein { margin-bottom: 2em; }
 #ps-keyProtein h1 { padding: 17px 10px; }
 .ps-actorA { padding: 10px 20px; width: 80px; border-top: 1px dotted #909090; height:  100%; }
@@ -346,7 +347,7 @@ textarea { height: 200px; }
 .ps-stripeOdd { background-color: #efeff2; }
 .ps-sysType1 { font-weight: bold; }
 #ps-keyProtein table { margin: 0; }
-.ps-actorB table, #ps-keyProtein table { border-spacing: 0; width: 100%; }
+.ps-actorB table, #ps-keyProtein table { margin-top: 0; border-spacing: 0; width: 100%; }
 .ps-actorB table th, #ps-keyProtein table th { font-size: 1em; margin: 0; padding: 2px 4px; background: #c0c0c0; border-color: #c0c0c0; color: #000; text-align: center; }
 .ps-actorB table td, #ps-keyProtein table td { margin: 0; padding: 2px; border: 1px solid #c0c0c0; }
 .ps-actorB table tr td:last-child, #ps-keyProtein table tr td:last-child { text-align: center; }
