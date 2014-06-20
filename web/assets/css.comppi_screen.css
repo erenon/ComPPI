@@ -22,21 +22,25 @@ body  {
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
+	font-weight: bold;
 }
 #MainMenu li, .NavMenu li, #Footer li, .listWithSeparator li {
 	margin: 0;
 	padding: 0;
 	color: #000;
 	display: inline;
+	
 }
 #MainMenu li:after, .NavMenu li:after, #Footer li:after, .listWithSeparator li:after {
 	content: "//";
 	color: #909090;
 	margin: 0 12px;
+	
 }
 #MainMenu li:last-child:after, .NavMenu li:last-child:after, #Footer li:last-child:after, .listWithSeparator li:last-child:after {
 	content: "";
 	margin: 0;
+	
 }
 #MainMenu { margin: 0; padding: 0; text-align: right; text-transform: uppercase; }
 #MainMenu a { padding-top: 10px; text-decoration: none; font-weight: 105%; color: #000;  }
@@ -51,7 +55,7 @@ body  {
 	color: #666;
 	font-variant: small-caps;
 	font-size: 1.1em;
-	font-weight: lighter;
+	font-weight: bold;
 	letter-spacing: 1px;
 }
 #Header img { border: 0; }
@@ -84,7 +88,7 @@ a:visited { text-decoration: underline; }
 }
 a img { border: 0; }
 li { margin: 0.5em 0; }
-h1 { margin-top: 2em; margin-bottom: 0.5em; font-size: 1.5em; font-weight: 100; font-variant: small-caps; }
+h1 { margin-top: 2em; margin-bottom: 0.5em; font-size: 1.5em; font-weight: bold; font-variant: small-caps; }
 h2 { margin-top: 2em; margin-bottom: 0.5em; font-size: 1.25em; font-weight: 500; font-variant: small-caps; }
 h3 { margin-top: 1em; margin-bottom: 0; }
 li { list-style-type: square; }

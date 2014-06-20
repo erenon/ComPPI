@@ -1,10 +1,10 @@
 {# src/Comppi/ProteinSearchBundle/Resources/views/about.html.twig #}
 {% extends '::base.html.twig' %}
 
-{% block title %}ComPPI - Help/Interaction and Localization Score{% endblock %}
+{% block title %}ComPPI - Help/Localization and Interaction Score{% endblock %}
 
 {% block bundlecontent %}
-	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Interaction and Localization Score</li></ul></h1>
+	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Localization and Interaction Score</li></ul></h1>
       
 	<h2>Summary of the ComPPI scoring system</h2>
 	
@@ -93,5 +93,6 @@
 	<p></p>
 -->
 
-	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
+	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Help Table of Contents</a>
+        <br/><a href="{{ path('ComppiDescriptionBundle_about') }}">&#x21e6; Back to Starting Page</a></p>
 {% endblock %}

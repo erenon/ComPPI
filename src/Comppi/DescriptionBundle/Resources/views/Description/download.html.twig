@@ -7,8 +7,8 @@
 	
 	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Download Custom Datasets</li></ul></h1>
         
-        <h2>Summary of the Downloads page</h2>
-	<p align="justify">On the <a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}/searchform">Downloads</a> page the user can download the following predefined custom datasets and the full database:
+        <h2>Summary of the <a href="{{ path('DownloadCenterBundle_downloads') }}">Downloads</a> page</h2>
+	<p align="justify">On the <a href="{{ path('DownloadCenterBundle_downloads') }}">Downloads</a> page the user can download the following predefined custom datasets and the full database:
         <ul>
             <li><a href="#comp">Compartmentalized Interactome</a></li>
             <li><a href="#ppi">Integrated Protein-Protein Interaction Dataset</a></li>
@@ -167,6 +167,7 @@
         
         <p align="justify">More information about the output formats on the Downloads page <a href="{{ path('ComppiDescriptionBundle_help') }}/output_formats">here</a>.</p>
 	
-	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
+	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Help Table of Contents</a>
+        <br/><a href="{{ path('ComppiDescriptionBundle_about') }}">&#x21e6; Back to Starting Page</a></p>
 
 {% endblock %}

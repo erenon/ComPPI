@@ -27,12 +27,17 @@
         The downloaded file is appropiate for further manipulation in Excel as well. 
         More details about the <i>Downloads</i> page <a href="{{ path('ComppiDescriptionBundle_help') }}/downloads">here</a>.</p> 
         
-        <p> 
-        The full database of the current and previous releases is also available on the <i>Downloads</i> page in <b>SQL</b> format.
+        <p align="justify">
+        The full database of the current and previous releases is available on the <i>Downloads</i> page in <b>SQL</b> format.
+        <br/><b>Note</b> that in the downloadable full database the nodes are identified by ComPPI IDs.
+        These IDs are not stable, they may change in every release.
+	If you use ComPPI to build a network, you may want to consider using the protein names as node IDs,
+	otherwise networks of different ComPPI versions may not be compatible with each other.</p>
         </p>
         
         <p>The downloaded files are compressed using the <a href="http://www.gzip.org/">Gzip</a> package to improve the speed of the downloads.</p>
            
 
-	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
+	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Help Table of Contents</a>
+        <br/><a href="{{ path('ComppiDescriptionBundle_about') }}">&#x21e6; Back to Starting Page</a></p>
 {% endblock %}

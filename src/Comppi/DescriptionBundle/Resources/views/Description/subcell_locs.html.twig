@@ -10,7 +10,7 @@
 	
 	<p align="justify">In summary ComPPI contains 214 526 major localizations for 120 898 proteins
 	(no localization for 8609 proteins). The average number of major localizations for one protein is 1.77.
-	The interaction and localization score algorithm works with major localizations (detailed below).</p>
+	The localization and interaction score algorithm works with major localizations (detailed below).</p>
 	
 	<p>The final distribution of the proteins in the major localizations:
 		<ul>
@@ -79,10 +79,10 @@
 	<h3>3. Experimental system type of the subcellular localization data</h3>
 	
 	<p>The differences in the <a href="#origin">origin</a> of the subcellular localization data indicate that we had to arrange the system types into
-	experimental (1), predicted (2), and unknown (0) origin. To learn more about our system types navigate
+	experimental (1), predicted (2), and unknown (0) origin. To learn more about our system types click
 	<a href="http://bificomp2.sote.hu:22422/comppi/files/85e7056adb541d5a18c60792457986c71a3a0ab0/databases/systemtypes/system.csv">here</a>.</p>
 	
-	<p>Because of the redundancy in the nomenclature of the system types we had to map the synonyms into a common name. To learn more about our system type synonyms navigate
+	<p>Because of the redundancy in the nomenclature of the system types we had to map the synonyms into a common name. To learn more about our system type synonyms click
 	<a href="http://bificomp2.sote.hu:22422/comppi/files/85e7056adb541d5a18c60792457986c71a3a0ab0/databases/systemtypes/synonym.csv">here</a>.</p>
 	
 	<p>The subcellular localization data from the Gene Ontology is one of our biggest resources.
@@ -125,5 +125,6 @@
 	</ul>
 	</p>
 	
-	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
+	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Help Table of Contents</a>
+        <br/><a href="{{ path('ComppiDescriptionBundle_about') }}">&#x21e6; Back to Starting Page</a></p>
 {% endblock %}
