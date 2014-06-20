@@ -4,5 +4,12 @@
 {% block title %}ComPPI - Protein Search - The Compartmentalized Protein-Protein Interaction Database{% endblock %}
 
 {% block bundlecontent %}
+    <h1>Search</h1>
+    
+    <p align="justify">Direct search option for individual proteins with autocomplete function giving their subcellular localization,
+    their interactions and the likelihood of their interactions considering the subcellular localization of the interacting partners.
+    <br/><a href="{{ path('ComppiDescriptionBundle_help') }}/protein_search">Details</a> and
+    <a href="{{ path('ComppiDescriptionBundle_help') }}/tutorial">Tutorial</a>
+    </p>
 {% include 'ComppiProteinSearchBundle:ProteinSearch:searchform.html.twig' %}
 {% endblock %}
