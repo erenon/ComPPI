@@ -15,15 +15,22 @@
 		<span class="ps-detailLabel"> {{ protein.fullname }} </span>&nbsp;&nbsp;&nbsp;//&nbsp;&nbsp;&nbsp;<a href="{{ protein.uniprot_link }}" title="Find more information about {{ protein.name }} in the UniProt database">UniProt Profile</a>&nbsp;<img src="{{ asset('assets/linkout.png') }}" />
 	{% endif %}
 	
-		<br/><h3 class="ps-detailLabel">Number of <a href="#interactors" title="Jump to the interactors">Interactions</a>:</h3> {{ protein.interactionNumber }}
-		<br/><h3 class="ps-detailLabel">Average Interaction Score:</h3> {% if protein.avgConfScore is empty %} N/A {% else %} {{ protein.avgConfScore }}% {% endif %}
+		<table class="fancy_table" id="ps-interactionStats" width="400">
+		<tr>
+			<td><h3 class="ps-detailLabel">Number of <a href="#interactors" title="Jump to the interactors">Interactions</a></h3></td>
+			<td>{{ protein.interactionNumber }}</td>
+		</tr><tr>
+			<td><h3 class="ps-detailLabel">Average Interaction Score</h3></td>
+			<td>{% if protein.avgConfScore is empty %} N/A {% else %} {{ protein.avgConfScore }}% {% endif %}</td>
+		</tr>
+		</table>
 	
 		<!-- {# <div id="ps-interactionStats" class="fancy_box_body">
 			Number of <a href="#interactors" title="Jump to the interactors">Interactions</a>: {{ protein.interactionNumber }}
 			<br>Average Interaction Score: {% if protein.avgConfScore is empty %} N/A {% else %} {{ protein.avgConfScore }}% {% endif %}
 		</div> #} -->
 
-		<br/><br/><h3 class="ps-detailLabel">Localizations:</h3>
+		<br/><h3 class="ps-detailLabel">Localizations:</h3>
 		{% if protein.locs is not empty %}
 		<table class="fancy_table hovered_list">
 			<thead>

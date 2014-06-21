@@ -141,7 +141,7 @@ li { list-style-type: square; }
 }
 /* empty space between thead and tbody */
 .fancy_table tbody:before {
-    line-height:7px;
+    line-height:5px;
     content:"-";
     color: #c0c0c0;
 	visibility: hidden;
@@ -316,7 +316,17 @@ textarea { height: 200px; }
 #ProteinSearchSelectorTbl td:last-child { width: 20%; text-align: center; }
 #ProteinSearchSelectorTbl { width: auto; margin: 1em auto; }
 
-#ps-interactionStats { width: 400px; font-weight: bold; margin: 0 15px 1em 0; padding: 5px; }
+#ps-interactionStats {
+	margin: 0;
+	padding: 5px;
+}
+table#ps-interactionStats.fancy_table { width: 400px; margin-top: 1em; }
+table#ps-interactionStats.fancy_table tbody:before {
+    content:"";
+    color: #c0c0c0;
+	visibility: hidden;
+}
+#ps-interactionStats td { text-align: left; }
 #ps-keyProtein { margin-bottom: 2em; }
 #ps-keyProtein h1 { padding: 17px 10px; }
 .ps-actorA { padding: 10px 20px; width: 80px; border-top: 1px dotted #909090; height:  100%; text-align: center !important; }
