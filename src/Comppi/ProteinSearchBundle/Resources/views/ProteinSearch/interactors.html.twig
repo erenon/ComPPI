@@ -11,17 +11,19 @@
 	<div id="ps-keyProtein" class="fancy_box">
 	<h1>{{ protein.name }}</h1>
 	<div class="fancy_box_body">
-		<div id="ps-interactionStats" class="fancy_box_body">
-			Number of Interactions: {{ protein.interactionNumber }}
-			<br>Average Interaction Score: {% if protein.avgConfScore is empty %} N/A {% else %} {{ protein.avgConfScore }}% {% endif %}
-		</div>
-
 		{% if protein.fullname is defined %}
 		<span class="ps-detailLabel"> {{ protein.fullname }} </span>&nbsp;&nbsp;&nbsp;//&nbsp;&nbsp;&nbsp;<a href="{{ protein.uniprot_link }}" title="Find more information about {{ protein.name }} in the UniProt database">UniProt Profile</a>&nbsp;<img src="{{ asset('assets/linkout.png') }}" />
-		{% endif %}
+	{% endif %}
+	
+		<br/><h3 class="ps-detailLabel">Number of <a href="#interactors" title="Jump to the interactors">Interactions</a>:</h3> {{ protein.interactionNumber }}
+		<br/><h3 class="ps-detailLabel">Average Interaction Score:</h3> {% if protein.avgConfScore is empty %} N/A {% else %} {{ protein.avgConfScore }}% {% endif %}
+	
+		<!-- {# <div id="ps-interactionStats" class="fancy_box_body">
+			Number of <a href="#interactors" title="Jump to the interactors">Interactions</a>: {{ protein.interactionNumber }}
+			<br>Average Interaction Score: {% if protein.avgConfScore is empty %} N/A {% else %} {{ protein.avgConfScore }}% {% endif %}
+		</div> #} -->
 
-		<div class="clear-both"></div>
-		<h3 class="ps-detailLabel">Localizations:</h3>
+		<br/><br/><h3 class="ps-detailLabel">Localizations:</h3>
 		{% if protein.locs is not empty %}
 		<table class="fancy_table hovered_list">
 			<thead>
@@ -72,6 +74,7 @@
 	<p class="center"><a href="{{ url('ComppiProteinSearchBundle_interactors', {'comppi_id': comppi_id, 'get_interactions': 1}) }}" class="btn btn_submit">Download The Interactions</a></p> #}
 
 	{% if ls %}
+	<a name="interactors"></a>
 	<table class="fancy_table striped_table">
 	<thead>
 	<tr>

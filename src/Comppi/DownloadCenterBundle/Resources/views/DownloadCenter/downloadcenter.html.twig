@@ -4,7 +4,7 @@
 {% block title %}ComPPI - Downloads - The Compartmentalized Protein-Protein Interaction Database{% endblock %}
 
 {% block bundlecontent %}
-<h1>Predefined Datasets (Tab-separated, GZIPped Text Files)</h1>
+<h1>Predefined Datasets</h1>
 
 {% if error_msgs is defined %}
 <p class="msg_error">{{error_msgs}}</p>
@@ -20,7 +20,6 @@
 		<div class="DlSetHelp"><b>Selected dataset:</b> The interactome of the selected major subcellular localization. Contains only the interactions where at least one interactor is located in the selected subcellular localization.
 		<a href="{{ path('ComppiDescriptionBundle_help') }}/downloads#comp">Details</a> and <a href="{{ path('ComppiDescriptionBundle_help') }}/tutorial">Tutorial</a></div>
 		<label for="fDlSetComp" class="radioButtonLabel">Compartmentalized interactome</label><br />
-		
 		
 		<input type="radio" name="fDlSet" value="int" id="fDlSetInt" class="btn radiobtn" />
 		<div class="DlSetHelp"><b>Selected dataset:</b> Integrated protein-protein interactions excluding the subcellular localizations.
@@ -81,7 +80,7 @@
 </form>
 
 
-<h1>Current and Previous Releases (SQL)</h1>
+<h1>Current and Previous Releases</h1>
 
 {% if releases_ls|length > 0 %}
 	<ul id="dlCenterReleases">{% for f in releases_ls %}

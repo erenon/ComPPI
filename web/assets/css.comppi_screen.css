@@ -316,7 +316,7 @@ textarea { height: 200px; }
 #ProteinSearchSelectorTbl td:last-child { width: 20%; text-align: center; }
 #ProteinSearchSelectorTbl { width: auto; margin: 1em auto; }
 
-#ps-interactionStats { float: left; font-weight: bold; margin: 0 15px 1em 0; padding: 5px; }
+#ps-interactionStats { width: 400px; font-weight: bold; margin: 0 15px 1em 0; padding: 5px; }
 #ps-keyProtein { margin-bottom: 2em; }
 #ps-keyProtein h1 { padding: 17px 10px; }
 .ps-actorA { padding: 10px 20px; width: 80px; border-top: 1px dotted #909090; height:  100%; text-align: center !important; }
@@ -385,6 +385,8 @@ textarea { height: 200px; }
 	vertical-align: top;
 }
 #HelpPageTOC td ol li { padding: 4px; }
+#HelpPageTOC td ol li:nth-child(even), #HelpPageTOC td ol li:nth-child(even) a { color: rgb(240, 88, 23); }
+#HelpPageTOC td ol li:nth-child(odd), #HelpPageTOC td ol li:nth-child(odd) a { color: rgb(147, 41, 0); }
 .backToTOC { text-align: right; margin-top: 4em; margin-right: 100px; }
 
 /* CONTACT */
