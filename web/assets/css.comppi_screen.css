@@ -5,7 +5,7 @@ html {
 }
 body, #Header, #Footer {
 	min-width: 1000px;
-	background: url("content_bg_25.png") 80% 110px no-repeat;
+	background: url("content_bg_25_12.png") 80% 110px no-repeat;
 }
 body  {
 	margin: 50px auto 10px auto;
@@ -373,6 +373,18 @@ textarea { height: 200px; }
 
 
 /* HELP */
+#HelpPageTOC {
+	margin: 0 auto;
+}
+#HelpPageTOC td {
+	width: 50%;
+	padding: 0 10px;
+	text-align: left;
+	font-size: 1.2em;
+	/*font-variant: small-caps;*/
+	vertical-align: top;
+}
+#HelpPageTOC td ol li { padding: 4px; }
 .backToTOC { text-align: right; margin-top: 4em; margin-right: 100px; }
 
 /* CONTACT */

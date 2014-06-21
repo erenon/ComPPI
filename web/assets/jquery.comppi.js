@@ -6,7 +6,7 @@ $(document).ready(function(){
 	$("table.striped_table tbody > tr:odd").addClass("striped_row");
 	
 	// highlighted list lines
-	$(".hovered_list li, .hovered_list tr").not(":first").hover(
+	$(".hovered_list li, .hovered_list tr").hover(
 		function() { $(this).addClass('hovered_listline'); },
 		function() { $(this).removeClass('hovered_listline'); }
 	);
