@@ -325,7 +325,7 @@ class ProteinSearchController extends Controller
 
 		$sql_pl = 'SELECT
 				ptl.proteinId as pid, ptl.localizationId AS locId, ptl.sourceDb, ptl.pubmedId,
-				lt.name as minorLocName, lt.majorLocName,
+				lt.name as minorLocName, lt.goCode, lt.majorLocName,
 				st.name AS exp_sys, st.confidenceType AS exp_sys_type
 			FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
 			LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
@@ -365,8 +365,10 @@ class ProteinSearchController extends Controller
 			$pl[$p->pid][$i]['loc_exp_sys_type'] = $p->exp_sys_type;
 			if (!empty($p->minorLocName)) {
 				$pl[$p->pid][$i]['small_loc'] = ucfirst($p->minorLocName);
+				$pl[$p->pid][$i]['go_code'] = ucfirst($p->goCode);
 			} else {
 				$pl[$p->pid][$i]['small_loc'] = 'N/A';
+				$pl[$p->pid][$i]['go_code'] = 'N/A';
 			}
 			if (!empty($p->majorLocName)) {
 				$pl[$p->pid][$i]['large_loc'] = ucfirst($p->majorLocName);

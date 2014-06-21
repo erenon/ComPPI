@@ -38,7 +38,7 @@
 			{% for l in protein.locs %}
 			<tr class="ps-sysType{{ l.loc_exp_sys_type }}">
 			<td>{{ l.large_loc }}</td>
-			<td>{{ l.small_loc }}</td>
+			<td>{{ l.small_loc }} ({{ l.go_code }})</td>
 			<td>{{ l.loc_score }}%</td>
 			<td>{{ l.loc_exp_sys|raw }}</td>
 			<td>{% if l.source_db %} {{ l.source_db }} {% endif %}</td>
@@ -118,7 +118,7 @@
 					{% for l in p['locs'] %}
 					<tr class="ps-sysType{{ l.loc_exp_sys_type }}">
 					<td>{{ l.large_loc }}</td>
-					<td>{{ l.small_loc }}</td>
+					<td>{{ l.small_loc }} ({{ l.go_code }})</td>
 					<td>{{ l.loc_score }}%</td>
 					<td>{{ l.loc_exp_sys|raw }}</td>
 					<td>{% if l.source_db %} {{ l.source_db }} {% endif %}</td>
