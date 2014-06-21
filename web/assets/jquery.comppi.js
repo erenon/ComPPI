@@ -2,10 +2,9 @@ $(document).ready(function(){
 	// first input autofokus
 	$("input[type='text']:eq(0)").focus();
 
-	// outlinks
-	//$('a[target="_blank"]').append(' <img src="outlink.png" alt="Link goes out from comppi." />');
-	// this does not work - what the FUCK, Symfony?!
-
+	// striped tables
+	$("table.striped_table tbody > tr:odd").addClass("striped_row");
+	
 	// highlighted list lines
 	$(".hovered_list li, .hovered_list tr").not(":first").hover(
 		function() { $(this).addClass('hovered_listline'); },
@@ -60,11 +59,6 @@ $(function() {
 			at: "left top"
 		}
 	});
-});
-
-// striped tables
-$(function() {
-	$("table.striped_table tbody > tr:odd").addClass("striped_row");
 });
 
 // show/hide protein interaction details

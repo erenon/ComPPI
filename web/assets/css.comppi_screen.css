@@ -78,6 +78,7 @@ a { color: rgb(240, 88, 23); text-decoration: none; font-weight: bold; }
 a:hover { color: #CC0000; }
 a:visited { text-decoration: underline; }
 .msg_error { font-size: 1.2em; font-weight: bold; color: red; text-align: center; }
+.striped_row { background-color: #efeff2; } /* keep this before .hovered_listline, otherwise striped rows will not be highlighted */
 .hovered_listline {
 	background-color: #d0d0d0;
     -o-transition: all 0.1s ease-in-out;
@@ -202,8 +203,6 @@ li { list-style-type: square; }
     -moz-box-shadow: 5px 5px 5px 0px #999;
     box-shadow: 5px 5px 5px 0px #999;
 }
-
-.striped_row { background-color: #efeff2; }
 
 .taxonomic_name { font-style: italic; }
 
