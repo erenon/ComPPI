@@ -129,15 +129,15 @@ li { list-style-type: square; }
 }
 .fancy_table tbody {
 	background-color: #fff;
+    box-shadow: 5px 5px 5px 0px #999;
     -webkit-box-shadow: 5px 5px 5px 0px #999;
     -moz-box-shadow: 5px 5px 5px 0px #999;
-    box-shadow: 5px 5px 5px 0px #999;
 }
 .fancy_table thead {
 	padding-bottom: 10px;
+    box-shadow: 5px 5px 5px 0px #999;
 	-webkit-box-shadow: 5px 5px 5px 0px #999;
     -moz-box-shadow: 5px 5px 5px 0px #999;
-    box-shadow: 5px 5px 5px 0px #999;
 }
 /* empty space between thead and tbody */
 .fancy_table tbody:before {
@@ -190,18 +190,18 @@ li { list-style-type: square; }
 	color: #fff;
 	background-color: rgb(150, 152, 155);
 	border: 1px solid rgb(150, 152, 155);
+    box-shadow: 5px 5px 5px 0px #999;
     -webkit-box-shadow: 5px 5px 5px 0px #999;
     -moz-box-shadow: 5px 5px 5px 0px #999;
-    box-shadow: 5px 5px 5px 0px #999;
 }
 .fancy_box_body {
 	margin-top: 7px;
 	padding: 10px;
 	border: 1px solid rgb(150, 152, 155);
 	background-color: #fff;
+    box-shadow: 5px 5px 5px 0px #999;
     -webkit-box-shadow: 5px 5px 5px 0px #999;
     -moz-box-shadow: 5px 5px 5px 0px #999;
-    box-shadow: 5px 5px 5px 0px #999;
 }
 
 .taxonomic_name { font-style: italic; }
@@ -217,9 +217,9 @@ li { list-style-type: square; }
 	font-weight: lighter;
 	letter-spacing: 1px;
 	border: 0;
+    box-shadow: 5px 5px 5px 0px #999;
 	-webkit-box-shadow: 5px 5px 5px 0px #999;
     -moz-box-shadow: 5px 5px 5px 0px #999;
-    box-shadow: 5px 5px 5px 0px #999;
 }
 a.btn:hover { color: #000; }
 label {
@@ -248,9 +248,9 @@ textarea { height: 200px; }
 	height: auto;
 	margin: 5px 10px 5px 0;
 	padding: 0;
+    box-shadow: 5px 5px 5px 0px #999;
 	-webkit-box-shadow: 5px 5px 5px 0px #999;
     -moz-box-shadow: 5px 5px 5px 0px #999;
-    box-shadow: 5px 5px 5px 0px #999;
 }
 
 /* ABOUT / MAIN PAGE */
