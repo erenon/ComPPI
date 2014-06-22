@@ -85,6 +85,7 @@ class ComppiInterface(object):
 	def connect(self):
 		if self.db_conn is None:
 			self.logging.info("Connecting to database...")
+			# throws mysql.connector.errors.InterfaceError if no server
 			self.db_conn = mysql.connector.connect(
 				host=self.db_host,
 				user=self.db_user,
@@ -118,27 +119,37 @@ class ComppiInterface(object):
 			self.logging.debug(sql)
 			cur.execute(sql)
 
-			et = []
+			et_buffer = {} # buffer for existing edges
 			for iid, actor_a, actor_b, i_src_db, i_pubmed, i_score, i_exp_sys_t in cur:
 				# each row: (node A comppi ID, node B comppi ID, {dict of edge properties})
 				if i_score is None:
-					i_score = 0.0
+					i_score = 0.0 # ambivalent, true 0.0 and None both map to 0.0
 				else:
 					i_score = float(i_score)
 
-				et.append(
-					(
-						actor_a,
-						actor_b,
-						{
-							'weight': i_score,
-							'source_db': i_src_db,
-							'pubmed': i_pubmed,
-							'edge_id': iid,
-							'exp_system_type_id': i_exp_sys_t
-						}
-					)
-				)
+				# add edge if it's new
+				if (actor_a, actor_b) not in et_buffer:
+					#try:
+					et_buffer[(actor_a, actor_b)] = {
+						'weight': [i_score],
+						'source_dbs': [i_src_db],
+						'pubmed_ids': [i_pubmed],
+						'edge_ids': [iid],
+						'exp_system_type_ids': [i_exp_sys_t]
+					}
+				
+				# aggregate data per edge if the edge already exists
+				else:
+					d = et_buffer[(actor_a, actor_b)]
+					
+					d['weight'].append(i_score)
+					d['source_dbs'].append(i_src_db)
+					d['pubmed_ids'].append(i_pubmed)
+					d['edge_ids'].append(iid)
+					d['exp_system_type_ids'].append(i_exp_sys_t)
+			
+			# convert the much faster et_buffer to the required edge table format
+			et = [(actors[0], actors[1], attribs) for actors, attribs in et_buffer.items()]
 
 			self.logging.debug("getGlobalEdgeTable() returns with {} rows".format(len(et)))
 			return et
@@ -215,8 +226,8 @@ class ComppiInterface(object):
 			del et
 			
 			# there may be nodes without interactions - add these too
-			all_nodes	= c.getAllProteinIds()
-			graph		= c.addNodesToGraph(graph, all_nodes)
+			all_nodes	= self.getAllProteinIds()
+			graph		= self.addNodesToGraph(graph, all_nodes)
 			del all_nodes
 
 			# annotate the nodes
@@ -249,9 +260,13 @@ class ComppiInterface(object):
 			exp_sys		= self.getExperimentalSystemTypes()
 
 			for n1, n2, e_attr in graph.edges_iter(data=True):
-				est_id = e_attr.get('exp_system_type_id')
-				if est_id is not None:
-					e_attr['exp_sys_str'] = exp_sys.get(est_id)
+				# experimental system type edge attribute
+				e_attr['exp_sys_types'] = [] # create it
+				
+				est_ids = e_attr.get('exp_system_type_ids') # fill it if available
+				if isinstance(est_ids, list):
+					for est_id in est_ids:
+						e_attr['exp_sys_types'].append(exp_sys.get(est_id))
 
 			del exp_sys
 
@@ -476,36 +491,42 @@ class ComppiInterface(object):
 			return d
 
 
-	def getNodeIdsByMajorLoc(self, loc):
+	def getNodeIdsByMajorLoc(self, locs):
 		"""
-			Get the distinct node IDs of the proteins belonging to a given major cell compartment.
+			Get the distinct node IDs of the proteins belonging to one or more major cell compartments.
 
 			param loc: string, the name of the major localization; see also self.loc_opts (self.loc does not contain 'all', while self.loc_opts does)
 			returns: set, the unique node IDs
 		"""
-		self.logging.debug("getNodeIdsByMajorLoc() started, loc: '{}'".format(loc))
+		self.logging.debug("getNodeIdsByMajorLoc() started, loc(s): '{}'".format(locs))
 
-		if loc not in self.loc_opts:
-			raise ValueError("getNodeIdsByMajorLoc(): Unknown major localization name: '{}'".format(loc))
+		# ugly parameter mapping thanks to the poor mysql.connector API
+		if locs=='all':
+			locs = "'" + "', '".join(self.locs) + "'"
+		elif isinstance(locs, str):
+			if locs not in self.locs:
+				raise ValueError("getNodeIdsByMajorLoc(): Unknown major localization name: '{}'".format(locs))
+			locs = "'" + locs + "'"
+		elif isinstance(locs, (tuple, list)):
+			for ll in locs:
+				if ll not in self.locs:
+					raise ValueError("getNodeIdsByMajorLoc(): Unknown major localization name: '{}' in '{}'".format(ll, locs))
+			locs = "'" + "', '".join(locs) + "'"
+		else:
+			raise ValueError("getNodeIdsByMajorLoc(): Major loc(s) must be in a tuple or a valid string. Locs: '{}'".format(locs))
 
 		cursor = self.connect()
 		with closing(cursor) as cur:
-			if loc == 'all':
-				sql = """
-					SELECT ptl.proteinId
-					FROM ProteinToLocalization ptl
-					LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
-				"""
-				cur.execute(sql)
-			else:
-				sql = """
-					SELECT ptl.proteinId
-					FROM ProteinToLocalization ptl
-					LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
-					WHERE
-						lt.majorLocName = %s
-				"""
-				cur.execute(sql, (loc,))
+			sql = """
+				SELECT ptl.proteinId
+				FROM ProteinToLocalization ptl
+				LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
+				WHERE
+					lt.majorLocName IN({})
+			""".format(locs)
+			self.logging.debug("getNodeIdsByMajorLoc(): {}".format(sql))
+			cur.execute(sql)
+			
 			n_ids = set([l[0] for l in cur])
 
 			self.logging.debug("getNodeIdsByMajorLoc() returns with {} node IDs".format(len(n_ids)))
@@ -579,19 +600,20 @@ class ComppiInterface(object):
 
 			# export data
 			for n1, n2, e in graph.edges_iter(data=True):
-				n1_d = nx.get_node_attributes(graph, n1)
-				n2_d = nx.get_node_attributes(graph, n2)
-				mlocsc_n1 = n1_d.get('loc_scores', {})
-				mlocsc_n2 = n2_d.get('loc_scores', {})
-				majorlocs_n1 = set(mlocsc_n1.keys())
-				majorlocs_n2 = set(mlocsc_n2.keys())
+				n1_d = graph.node[n1]
+				n2_d = graph.node[n2]
+				#mlocsc_n1 = n1_d.get('loc_scores', {})
+				#mlocsc_n2 = n2_d.get('loc_scores', {})
+				#majorlocs_n1 = set(mlocsc_n1.keys())
+				#majorlocs_n2 = set(mlocsc_n2.keys())
 				
-				common_mlocs = set.intersection(majorlocs_n1, majorlocs_n1)
+				common_mlocs = set.intersection(set(n1_d['major_locs']), set(n2_d['major_locs']))
 				
 				if common_mlocs:
-					curr_node1_cells	= self._aggregateCsvCells(graph.node[n1], node_columns, flatten, skip_none_lines)
-					curr_node2_cells	= self._aggregateCsvCells(graph.node[n2], node_columns, flatten, skip_none_lines)
-					curr_edge_cells	= self._aggregateCsvCells(e, edge_columns, flatten, skip_none_lines)
+					#print("{}->{}, mlocs1: {}, mlocs2: {}, common: {}".format(n1, n2, majorlocs_n1, majorlocs_n2, common_mlocs))
+					curr_node1_cells = self._aggregateCsvCells(graph.node[n1], node_columns, flatten, skip_none_lines)
+					curr_node2_cells = self._aggregateCsvCells(graph.node[n2], node_columns, flatten, skip_none_lines)
+					curr_edge_cells	 = self._aggregateCsvCells(e, edge_columns, flatten, skip_none_lines)
 	
 					if curr_node1_cells and curr_node2_cells and curr_edge_cells:
 						csvw.writerow(curr_node1_cells + curr_node2_cells + curr_edge_cells)
@@ -837,11 +859,11 @@ if __name__ == '__main__':
 					)
 
 				if args.type=='compartment' or args.type=='all':
-					ci.exportNetworkToCsv(
+					ci.exportCompartmentToCsv(
 						filtered_comppi,
 						os.path.join(ci.output_dir, 'comppi--compartments--tax_{}_loc_{}.txt.gz'.format(sp, loc)),
 						('name', 'naming_conv', 'loc_scores', 'minor_locs', 'loc_exp_sys_types', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
-						('weight', 'exp_sys_str', 'source_db', 'pubmed'),
+						('weight', 'exp_sys_types', 'source_dbs', 'pubmed_ids'),
 						(	'Interactor A', 'Naming Convention A', 'Major Loc A With Loc Score', 'Minor Loc A', 'Loc Experimental System Type A', 'Loc Source DB A', 'Loc PubMed ID A', 'Taxonomy ID A',
 							'Interactor B', 'Naming Convention B', 'Major Loc B With Loc Score', 'Minor Loc B', 'Loc Experimental System Type B', 'Loc Source DB B', 'Loc PubMed ID B', 'Taxonomy ID B',
 							'Interaction Score', 'Interaction Experimental System Type', 'Interaction Source Database', 'Interaction PubMed ID'
@@ -854,7 +876,7 @@ if __name__ == '__main__':
 						filtered_comppi,
 						os.path.join(ci.output_dir, 'comppi--interactions--tax_{}_loc_{}.txt.gz'.format(sp, loc)),
 						('name', 'naming_conv', 'synonyms', 'taxonomy_id'),
-						('weight', 'exp_sys_str', 'source_db', 'pubmed'),
+						('weight', 'exp_sys_types', 'source_dbs', 'pubmed_ids'),
 						('Protein A', 'Naming Convention A', 'Synonyms A', 'Taxonomy ID A', 'Protein B', 'Naming Convention B', 'Synonyms B', 'Taxonomy ID B', 'Interaction Score', 'Interaction Experimental System Type', 'Interaction Source Database', 'Interaction PubMed ID'),
 						skip_none_lines = False
 					)
