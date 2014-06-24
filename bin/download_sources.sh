@@ -113,12 +113,12 @@ then
 fi
 
 # Human Protein Atlas
-#if [ ! -f subcellular_location.csv ]
-#then
-#    wget http://www.proteinatlas.org/download/subcellular_location.csv.zip -O ./proteinAtlas.zip
-#    unzip proteinAtlas.zip
-#    rm proteinAtlas.zip
-#fi
+if [ ! -f subcellular_location.csv ]
+then
+    wget http://www.proteinatlas.org/download/subcellular_location.csv.zip -O ./proteinAtlas.zip
+    unzip proteinAtlas.zip
+    rm proteinAtlas.zip
+fi
 
 ### Interactions
 
