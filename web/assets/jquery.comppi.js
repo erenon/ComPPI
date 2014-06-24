@@ -1,4 +1,12 @@
 $(document).ready(function(){
+	// tooltips
+	$( document ).tooltip({
+		position: {
+			my: "left bottom-10px",
+			at: "left top"
+		}
+	});
+	
 	// first input autofokus
 	$("input[type='text']:eq(0)").focus();
 
@@ -34,8 +42,9 @@ $(document).ready(function(){
 	$("input[name='fDlSet']:checked").change(); // trigger the event for first time
 });
 
-// search autocomplete
+// PROTEIN SEARCH
 $(function() {
+	// search autocomplete
 	$("#fProtSearchKeyword").autocomplete({
 		source: function(request, response){
 			// hardcoded URL for live environment: ugly, but it works..
@@ -49,23 +58,45 @@ $(function() {
 			// submit?
 		}
 	});
-});
-
-// tooltips
-$(function() {
-	$( document ).tooltip({
-		position: {
-			my: "left bottom-10px",
-			at: "left top"
+	
+	// show/hide advanced search
+	$("#fProtSearchAdvancedContainer").hide();
+	
+	single_title = $("#fProtSearchKeyword").attr("title");
+	textarea_title = $("#fProtSearchKeyword").attr("txttitle");
+	
+	$("#fProtSearchAdvancedBtn").click(function() {
+		var is_hidden = $("#fProtSearchAdvancedContainer").is(":hidden");
+		$("#fProtSearchAdvancedContainer").slideToggle();
+		
+		if (is_hidden) {
+			$("#fProtSearchKeyword")
+				.addClass("fProtSearchKeywordAsTextarea")
+				.attr(
+					"title",
+					textarea_title
+				)
+		} else {
+			$("#fProtSearchKeyword")
+				.removeClass("fProtSearchKeywordAsTextarea")
+				.attr(
+					"title",
+					single_title
+				)
 		}
+		
+		return false;
 	});
-});
-
-// show/hide protein interaction details
-$(function() {
+	
+	// show/hide protein interaction details
 	$(".ps-actorBDetails").hide();
 	$(".ps-detailsOpener").click(function() {
 		$(this).siblings(".ps-actorBDetails:first").slideToggle();
 		return false;
 	});
+});
+
+
+$(function() {
+	
 });

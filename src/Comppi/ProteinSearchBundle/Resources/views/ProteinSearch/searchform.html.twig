@@ -1,35 +1,52 @@
 {# src/Comppi/ProteinSearchBundle/Resources/views/searchform.html.twig #}
 
 <div class="center">
-
-<form id="ProteinSearchForm" action="{{ path('ComppiProteinSearchBundle_proteinsearch') }}" method="post" {{ form_enctype(form) }}>
-	{{ form_errors(form) }}
-
-	{{ form_row(form.protein_names) }}<br />
-	{{ form_row(form.species) }}<br />
-	{{ form_row(form.majorloc) }}<br />
-
-	{{ form_rest(form) }}
-
-	<input class="btn btn_submit" type="submit" name="fProtSearchSubmit" id="fProtSearchSubmit" value="Submit Search" title="Click 'Submit Search' to send your request." />
-</form>
+<form id="ProteinSearchForm" action="protein_search" method="post">
+<table><tr>
 	
-	
-{# <form id="ProteinSearchForm" action="protein_search" method="post">
+	<!-- upper left section -->
+	<td>
 	<label for="fProtSearchKeyword" id="fProtSearchKeywordLabel">Protein Name:
 	</label>
-	<input type="text" name="fProtSearchKeyword" id="fProtSearchKeyword" value="{{ keyword }}" title="Start typing to get a list of suggested proteins; autocomplete appears after 3 characters." />
+	<textarea name="fProtSearchKeyword" id="fProtSearchKeyword" title="Start typing to get a list of suggested proteins; autocomplete appears after 3 characters. The search is case-insensitive." txttitle="Search for up to 100 protein names, each in a new row. Autocomplete is disabled for multisearch. The search is case-insensitive.">{{ keyword }}</textarea>
+	{# <input type="text" name="fProtSearchKeyword" id="fProtSearchKeyword" value="{{ keyword }}" title="Start typing to get a list of suggested proteins; autocomplete appears after 3 characters." /> #}
+	</td>
+	
+	<!-- upper right section -->
+	<td>
+	<input type="button" class="btn" name="fProtSearchAdvanced" id="fProtSearchAdvancedBtn" value="Advanced Settings" title="Click to display the advanced settings." />
+	
 	<input class="btn btn_submit" type="submit" name="fProtSearchSubmit" id="fProtSearchSubmit" value="Submit Search" title="Click 'Submit Search' to send your request." />
-	<br />
+	</td>
 
+</tr><tr id="fProtSearchAdvancedContainer">
+	
+	<!-- lower left section -->
+	<td>
+	<label id="fProtSearchSpeciesLabel">Species:</label>
 	<div id="fProtSearchSpecContainer">
 		{% for s in species_list %}
-		<input type="radio" name="fProtSearchSpecies" id="fProtSearch{{ s.abbreviation }}" class="radiobtn"value="{{ s.abbreviation }}"{% if requested_species[s.abbreviation] is defined %} checked="checked"{% endif %} title="Click on a species to select it."/>
-		<label for="fProtSearch{{ s.abbreviation }}" class="radioButtonLabel taxonomic_name">{{ s.shortname }}</label>
+		<input type="checkbox" name="fProtSearchSp[{{ s.code }}]" id="fProtSearchSp{{ s.code }}" class="checkbox" value="{{ s.code }}"{% if s.checked %} checked="checked"{% endif %} title="Click on a species to select it."/>
+		<label for="fProtSearchSp{{ s.code }}" class="radioButtonLabel taxonomic_name">{{ s.name }}</label>
 		<br />
 		{% endfor %}
 	</div>
-</form> #}
+	</td>
+	
+	<!-- lower right section -->
+	<td>
+	<label id="fProtSearchLocLabel">Compartment:</label>
+	<div id="fProtSearchLocContainer">
+		{% for ml in majorloc_list %}
+		<input type="checkbox" name="fProtSearchLoc[{{ ml.code }}]" id="fProtSearchLoc{{ ml.code }}" class="checkbox" value="{{ ml.code }}"{% if ml.checked %} checked="checked"{% endif %} title="Click on a cell compartment to select it."/>
+		<label for="fProtSearchLoc{{ ml.code }}" class="radioButtonLabel">{{ ml.name }}</label>
+		<br />
+		{% endfor %}
+	</div>
+	</td>
+
+</tr></table>
+</form>
 </div>
 
 {% if result_msg %}
