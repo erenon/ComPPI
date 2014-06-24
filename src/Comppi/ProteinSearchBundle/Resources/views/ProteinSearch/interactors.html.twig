@@ -40,7 +40,7 @@
 			<th title="The probability of the protein belonging to the given major localization">Localization Probability</th>
 			<th title="The type of the experiment that related the protein to the localization">Experiment Type</th>
 			<th title="The source database of the protein-localization data">Source Database</th>
-			<th title="The publication about the source database or the protein localization">PubMed</th>
+			<th title="The publication about the source database or the protein localization">PubMed ID</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -93,7 +93,7 @@
 	<tr class="{% if loop.index is odd %}ps-stripeEven{% else %}ps-stripeOdd{% endif %}">
 		<td class="ps-actorA">
 			<h1>{{ protein.name }}</h1>
-			<div class="ps-CS" title="Interaction score based on the subcellular localization of the interacting partners. It reflects how likely the given interaction is if the localizations are considered.">Interaction Score <div>{{ p.confScore }}%</div></div>
+			<div class="ps-CS" title="Interaction score based on the subcellular localization of the interacting partners. It reflects the probability of the interaction taking into account the localization of the interactors.">Interaction Score <div>{{ p.confScore }}%</div></div>
 		</td>
 		<td class="ps-actorB">
 			<h1>{{ p.prot_name }}</h1> ({{ p.prot_naming }})
@@ -121,7 +121,7 @@
 					<th title="The probability of the protein belonging to the given major localization">Localization Probability</th>
 					<th title="The type of the experiment that related the protein to the localization">Experiment Type</th>
 					<th title="The source database of the protein-localization data">Source Database</th>
-					<th title="The publication about the source database or the protein localization">PubMed</th>
+					<th title="The publication about the source database or the protein localization">PubMed ID</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -159,4 +159,8 @@
 	<p class="center"><b>No interactions were found.</b></p>
 	{% endif %}
 
+<p class="backToTOC"><a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}">&#x21e6; Back to the Search Page</a>
+<br/><a href="{{ path('ComppiDescriptionBundle_about') }}">&#x21e6; Back to Starting Page</a></p>
+	
+	
 {% endblock %}

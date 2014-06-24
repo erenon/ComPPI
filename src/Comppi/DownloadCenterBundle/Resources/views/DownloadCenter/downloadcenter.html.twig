@@ -4,6 +4,8 @@
 {% block title %}ComPPI - Downloads - The Compartmentalized Protein-Protein Interaction Database{% endblock %}
 
 {% block bundlecontent %}
+	
+<a name="predefined"></a>
 <h1>Predefined Datasets</h1>
 
 {% if error_msgs is defined %}
@@ -79,8 +81,8 @@
 	
 </form>
 
-
-<h1>Current and Previous Releases</h1>
+<a name="releases"></a>
+<h1>Current and Previous Releases in SQL format</h1>
 
 {% if releases_ls|length > 0 %}
 	<ul id="dlCenterReleases">{% for f in releases_ls %}
