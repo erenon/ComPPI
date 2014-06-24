@@ -1,6 +1,21 @@
 {# src/Comppi/ProteinSearchBundle/Resources/views/searchform.html.twig #}
+
 <div class="center">
-<form id="ProteinSearchForm" action="protein_search" method="post">
+
+<form id="ProteinSearchForm" action="{{ path('ComppiProteinSearchBundle_proteinsearch') }}" method="post" {{ form_enctype(form) }}>
+	{{ form_errors(form) }}
+
+	{{ form_row(form.protein_names) }}<br />
+	{{ form_row(form.species) }}<br />
+	{{ form_row(form.majorloc) }}<br />
+
+	{{ form_rest(form) }}
+
+	<input class="btn btn_submit" type="submit" name="fProtSearchSubmit" id="fProtSearchSubmit" value="Submit Search" title="Click 'Submit Search' to send your request." />
+</form>
+	
+	
+{# <form id="ProteinSearchForm" action="protein_search" method="post">
 	<label for="fProtSearchKeyword" id="fProtSearchKeywordLabel">Protein Name:
 	</label>
 	<input type="text" name="fProtSearchKeyword" id="fProtSearchKeyword" value="{{ keyword }}" title="Start typing to get a list of suggested proteins; autocomplete appears after 3 characters." />
@@ -14,7 +29,7 @@
 		<br />
 		{% endfor %}
 	</div>
-</form>
+</form> #}
 </div>
 
 {% if result_msg %}

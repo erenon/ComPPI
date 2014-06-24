@@ -4,7 +4,8 @@ namespace Comppi\ProteinSearchBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\HttpFoundation\Request;
+use Comppi\ProteinSearchBundle\Entity\ProteinSearch;
 
 class ProteinSearchController extends Controller
 {
@@ -70,43 +71,86 @@ class ProteinSearchController extends Controller
 		'Support Vector Machine'
 	);
 	private $verbose = false;
-	private $verbose_log = array();
-	private $search_range_start = 0; // current page * search_result_per_page -> search query limit from here
-	private $search_result_per_page = 10; // search query limit offset (0: no limit)
+	//private $verbose_log = array();
+	//private $search_range_start = 0; // current page * search_result_per_page -> search query limit from here
+	//private $search_result_per_page = 10; // search query limit offset (0: no limit)
 	private $uniprot_root = 'http://www.uniprot.org/uniprot/';
 	private $exptype = array(
 		0 => 'Unknown',
 		1 => 'Experimental',
 		2 => 'Predicted'
 	);
-	private $autocomplete_url = "./protein_search/autocomplete/";
-	private $autocomplete_url_dev = "/comppi/ComPPI_dualon/web/app_dev.php/protein_search/autocomplete/";
+	//private $autocomplete_url = "./protein_search/autocomplete/";
+	//private $autocomplete_url_dev = "/comppi/ComPPI_dualon/web/app_dev.php/protein_search/autocomplete/";
 
 	// PROTEIN SEARCH
 	//public function proteinSearchAction($protein_name, $requested_species, $current_page)
-	public function proteinSearchAction()
+	public function proteinSearchAction(Request $request)
     {
-		$protein_name = '';
-		$requested_species = '';
-		$current_page = '';
-		$keyword = $this->initKeyword($protein_name);
-		$species_id = $this->initSpecies($requested_species);
-		$current_page = $this->initPageNum($current_page);
-		$sp = $this->getSpeciesProvider();
-		$spDescriptors = $sp->getDescriptors();
+		//$protein_name = '';
+		//$requested_species = '';
+		//$current_page = '';
+		//$keyword = $this->initKeyword($protein_name);
+		//$species_id = $this->initSpecies($requested_species);
+		//$current_page = $this->initPageNum($current_page);
+		//$sp = $this->getSpeciesProvider();
+		//$spDescriptors = $sp->getDescriptors();
 
+		$prot_search = new ProteinSearch();
+		$form = $this->createFormBuilder($prot_search)
+			->add('protein_names', 'textarea',
+				array('attr' => array(
+					'title' => 'Start typing to get a list of suggested proteins; autocomplete appears after 3 characters.'
+					)
+				)
+			)
+			->add('species', 'choice', array(
+				'choices' => array(
+					0 => 'H. sapiens',
+					1 => 'D. melanogaster',
+					2 => 'C. elegans',
+					3 => 'S. cerevisiae'
+				),
+				'attr' => array('class' => 'radiobtn'),
+				'multiple' => true,
+				'expanded' => true,
+				'required' => true)
+			)
+			->add('majorloc', 'choice', array(
+				'choices' => array(
+					'cytoplasm' => 'Cytoplasm',
+					'extracellular' => 'Extracellular Matrix',
+					'mitochondrion' => 'Mitochondrion',
+					'nucleus' => 'Nucleus',
+					'membrane' => 'Plasma Membrane',
+					'secretory-pathway' => 'Secretory Pathway',
+				),
+				'multiple' => true,
+				'expanded' => true,
+				'required' => true)
+			)
+			->getForm();
 
 		$T = array(
-			'verbose_log' => '',
-			'species_list' => $spDescriptors,
-			'requested_species' => array('hs'=>1),
+			'form' => $form->createView(),
             'ls' => array(),
-			'keyword' => '',
 			'result_msg' => '',
 			'uniprot_root' => $this->uniprot_root
-			//'autocomplete_url' = $this->autocomplete
         );
+		
+		if ($request->getMethod() == 'POST') {
+			$form->bindRequest($request);
+		
+			if ($form->isValid()) {
+				$form->get('protein_names')->getData();
+				
+				//return $this->redirect($this->generateUrl('ContactBundle_contact'));
+			}
+		}
+		
+		return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
 
+		/*
 		//$request = $this->getRequest();
 		if (!empty($keyword)) // @TODO: require species
 		{
@@ -170,7 +214,7 @@ class ProteinSearchController extends Controller
 			}
 		} else {
 			return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
-		}
+		}*/
 	}
 
 
