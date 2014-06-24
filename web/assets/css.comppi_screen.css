@@ -383,6 +383,23 @@ table#ps-interactionStats.fancy_table tbody:before {
 
 
 /* HELP */
+
+#Statistics_HS_comp td { width: 17%; }
+#Statistics_HS_int td { width: 17%; }
+#Statistics_HS_loc td { width: 17%; }
+
+#Statistics_DM_comp td { width: 17%; }
+#Statistics_DM_int td { width: 17%; }
+#Statistics_DM_loc td { width: 17%; }
+
+#Statistics_CE_comp td { width: 17%; }
+#Statistics_CE_int td { width: 17%; }
+#Statistics_CE_loc td { width: 17%; }
+
+#Statistics_SC_comp td { width: 17%; }
+#Statistics_SC_int td { width: 17%; }
+#Statistics_SC_loc td { width: 17%; }
+
 #HelpPageTOC {
 	margin: 0 auto;
 }
