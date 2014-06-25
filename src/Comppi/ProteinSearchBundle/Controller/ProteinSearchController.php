@@ -259,7 +259,6 @@ class ProteinSearchController extends Controller
 					$sql_cond_lf[]		= 'majorLocName IN(?)';
 					$sql_cond_val_lf[]	= $sql_cond_mloc;
 					$sql_cond_type_lf[]	= \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
-					echo("FILT: MAJOR LOC; ".implode(',', $sql_cond_mloc));
 				}
 				
 				// filter for localization score treshold
@@ -268,7 +267,6 @@ class ProteinSearchController extends Controller
 					$sql_cond_lf[]		= 'score > ?';
 					$sql_cond_val_lf[]	= strval($loc_treshold);
 					$sql_cond_type_lf[]	= \PDO::PARAM_STR;
-					echo("FILT: TRESHOLD; ".$loc_treshold);
 				}
 				
 				// assemble and execute the query
@@ -331,7 +329,7 @@ class ProteinSearchController extends Controller
 						'name' => $p->name,
 						'name2' => $p->proteinName,
 						'namingConvention' => $p->namingConvention,
-						'species' => $spDescriptors[$p->specieId]->shortname,
+						'species' => $this->species_list[$p->specieId],
 						'uniprot_link' => $this->uniprot_root.$p->proteinName
 					);
 				}
