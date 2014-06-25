@@ -101,7 +101,6 @@ $(function() {
 	$("#fProtSearchReset").click(function() {
 		$("#fProtSearchKeyword").val("");
 		$("#ProteinSearchForm input:checkbox").attr("checked", "checked");
-		return false;
 	});
 	
 	// show/hide protein interaction details
