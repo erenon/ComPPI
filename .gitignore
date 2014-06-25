@@ -19,11 +19,6 @@ web/export_downloads.log
 .settings
 
 databases
-databases/ce
-databases/dm
-databases/hs
-databases/sc
-
 databases2
 
 #build

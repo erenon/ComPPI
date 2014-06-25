@@ -4,20 +4,27 @@ namespace Comppi\ProteinSearchBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\HttpFoundation\Request;
+use Comppi\ProteinSearchBundle\Entity\ProteinSearch;
 
 class ProteinSearchController extends Controller
 {
 	// private $DB; use $this->getDBConnection() @TODO: switch to the conn representation of the controller
 	private $speciesProvider = null;
 	private $localizationTranslator = null;
-	private $major_loc_gos = array (
-		'GO:0043226',
-		'GO:0005739',
-		'GO:0005634',
-		'GO:0005576',
-		'GO:secretory_pathway',
-		'GO:0016020'
+	private $species_list = array(
+		0 => 'H. sapiens',
+		1 => 'D. melanogaster',
+		2 => 'C. elegans',
+		3 => 'S. cerevisiae'
+	);
+	private $majorloc_list = array (
+		'cytoplasm' => 'Cytoplasm',
+		'extracellular' => 'Extracellular Matrix',
+		'mitochondrion' => 'Mitochondrion',
+		'nucleus' => 'Nucleus',
+		'membrane' => 'Plasma Membrane',
+		'secretory-pathway' => 'Secretory Pathway',
 	);
 	private $minor_loc_abbr_patterns = array(
 		'EXP',
@@ -70,43 +77,240 @@ class ProteinSearchController extends Controller
 		'Support Vector Machine'
 	);
 	private $verbose = false;
-	private $verbose_log = array();
-	private $search_range_start = 0; // current page * search_result_per_page -> search query limit from here
-	private $search_result_per_page = 10; // search query limit offset (0: no limit)
+	//private $verbose_log = array();
+	//private $search_range_start = 0; // current page * search_result_per_page -> search query limit from here
+	//private $search_result_per_page = 10; // search query limit offset (0: no limit)
 	private $uniprot_root = 'http://www.uniprot.org/uniprot/';
 	private $exptype = array(
 		0 => 'Unknown',
 		1 => 'Experimental',
 		2 => 'Predicted'
 	);
-	private $autocomplete_url = "./protein_search/autocomplete/";
-	private $autocomplete_url_dev = "/comppi/ComPPI_dualon/web/app_dev.php/protein_search/autocomplete/";
+	//private $autocomplete_url = "./protein_search/autocomplete/";
+	//private $autocomplete_url_dev = "/comppi/ComPPI_dualon/web/app_dev.php/protein_search/autocomplete/";
 
 	// PROTEIN SEARCH
 	//public function proteinSearchAction($protein_name, $requested_species, $current_page)
-	public function proteinSearchAction()
+	public function proteinSearchAction(Request $request)
     {
-		$protein_name = '';
-		$requested_species = '';
-		$current_page = '';
-		$keyword = $this->initKeyword($protein_name);
-		$species_id = $this->initSpecies($requested_species);
-		$current_page = $this->initPageNum($current_page);
-		$sp = $this->getSpeciesProvider();
-		$spDescriptors = $sp->getDescriptors();
-
+		//$protein_name = '';
+		//$requested_species = '';
+		//$current_page = '';
+		//$keyword = $this->initKeyword($protein_name);
+		//$species_id = $this->initSpecies($requested_species);
+		//$current_page = $this->initPageNum($current_page);
+		//$sp = $this->getSpeciesProvider();
+		//$spDescriptors = $sp->getDescriptors();
 
 		$T = array(
-			'verbose_log' => '',
-			'species_list' => $spDescriptors,
-			'requested_species' => array('hs'=>1),
             'ls' => array(),
 			'keyword' => '',
 			'result_msg' => '',
 			'uniprot_root' => $this->uniprot_root
-			//'autocomplete_url' = $this->autocomplete
         );
+		
+		// PREPARE THE SEARCH FORM
+		// species in the form
+		foreach ($this->species_list as $sp_code => $sp_name)
+		{
+			$T['species_list'][$sp_code] = array(
+				'code' => $sp_code,
+				'name' => $sp_name,
+				'checked' => true
+			);
+			if ($request->getMethod() == 'POST' and !isset($_POST['fProtSearchSp'][(string)$sp_code]))
+			{
+				$T['species_list'][$sp_code]['checked'] = false;
+			}
+		}
+		
+		// major locs in the form
+		foreach ($this->majorloc_list as $mloc_code => $mloc_name)
+		{
+			$T['majorloc_list'][$mloc_code] = array(
+				'code' => $mloc_code,
+				'name' => $mloc_name,
+				'checked' => true
+			);
+			if ($request->getMethod() == 'POST' and !isset($_POST['fProtSearchLoc'][(string)$mloc_code]))
+			{
+				$T['majorloc_list'][$mloc_code]['checked'] = false;
+			}
+		}
+		
+		
+		// PROTEIN SEARCH SUBMITTED
+		if ($request->getMethod() == 'POST') {
+			$DB = $this->getDbConnection();
+			
+			// PREPARE THE SEARCH CONDITIONS
+			// SQL parameters: protein names as keywords
+			$T['keyword'] = htmlspecialchars(strip_tags($_POST['fProtSearchKeyword']));
+			$sql_cond_keywords = preg_split(
+				"/\r\n|\n|\r/", // consider various platforms
+				(isset($_POST['fProtSearchKeyword']) ? $_POST['fProtSearchKeyword'] : '')
+			);
+			if (!empty($sql_cond_keywords))
+			{
+				foreach ($sql_cond_keywords as $kk => $kwrd)
+				{
+					$sql_cond_keywords[$kk] = strtolower(trim($kwrd));
+				}
+			} else {
+				$err[] = 'Please fill in a protein name.';
+			}
+			
+			# SQL parameters: species
+			$sql_cond_sp = [];
+			if (!empty($_POST['fProtSearchSp']))
+			{
+				//$cond_sp = [];
+				foreach ($_POST['fProtSearchSp'] as $fsp_code => $fsp_name)
+				{
+					if (isset($this->species_list[(int)$fsp_code]))
+					{
+						$sql_cond_sp[$fsp_code] = $fsp_code;
+					}
+				}
+				//$sql_cond_sp = "'" . join("', '", $cond_sp) . "'";
+			} else {
+				$err[] = 'Please select at least one species.';
+			}
+			
+			# SQL parameters: major localizations = compartments
+			$sql_cond_mloc = [];
+			if (!empty($_POST['fProtSearchLoc']))
+			{
+				foreach ($_POST['fProtSearchLoc'] as $fmloc_code => $fmloc_name)
+				{
+					if (isset($this->majorloc_list[(int)$fmloc_code]))
+					{
+						$sql_cond_mloc[$fmloc_code] = $fmloc_code;
+					}
+				}
+				//$sql_cond_mloc = "'".join("', '", $cond_mloc)."'";
+			} else {
+				$err[] = 'Please select at least one subcellular compartment.';
+			}
+			
+			// check for validation errors
+			if (!empty($err))
+			{
+				$err_msgs = implode(' ', $err);
+				$this->get('session')->setFlash('ps-errors', $err_msgs);
+				
+				return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
+			}
+			
+			
+			// FIND THE PROTEIN IDS FROM THE MAIN PROTEINS, THE SYNONYMS AND THE LOCALIZATIONS
+			// the old server can't handle complex mysql queries -> separate them
+			// protein IDs from the strongest naming convention
+			$r_prots_strongest = $DB->executeQuery(
+				"SELECT id FROM Protein WHERE LOWER(proteinName) IN(?) AND specieId IN(?)",
+				array($sql_cond_keywords, $sql_cond_sp),
+				array(\Doctrine\DBAL\Connection::PARAM_STR_ARRAY, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+			);
+			if (!$r_prots_strongest)
+				die('Protein IDs by strongest naming convention query failed!');
+			$pids_by_strongest = $r_prots_strongest->fetchAll(\PDO::FETCH_COLUMN, 0);
+			
+			// protein IDs from the synonyms
+			$r_name_to_prot = $DB->executeQuery(
+				"SELECT proteinId FROM NameToProtein WHERE LOWER(name) IN(?) AND specieId IN(?)",
+				array($sql_cond_keywords, $sql_cond_sp),
+				array(\Doctrine\DBAL\Connection::PARAM_STR_ARRAY, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+			);
+			if (!$r_name_to_prot)
+				die('Protein IDs by synonyms query failed!');
+			$pids_by_n2p = $r_name_to_prot->fetchAll(\PDO::FETCH_COLUMN, 0);
 
+			// protein IDs from the localizations table
+			// filter only if *not* all major localizations are selected
+			$pids_by_loc = [];
+			if (!empty($sql_cond_mloc) && count($sql_cond_mloc)<count($this->majorloc_list))
+			{
+				$r_pids_by_loc = $DB->executeQuery(
+					"SELECT proteinId FROM Loctree WHERE majorLocName IN(?)",
+					array($sql_cond_mloc, $sql_cond_sp),
+					array(\Doctrine\DBAL\Connection::PARAM_STR_ARRAY, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+				);
+				if (!$r_pids_by_loc)
+					die('Protein IDs by localization query failed!');
+				$pids_by_loc = $r_pids_by_loc->fetchAll(\PDO::FETCH_COLUMN, 0);
+			}
+			
+			// merge the unique protein IDs = requested proteins
+			$prot_ids = array_unique(array_merge($pids_by_strongest, $pids_by_n2p, $pids_by_loc));
+
+			// INTERACTORS PAGE / PROTEIN SELECTOR PAGE / NOT FOUND
+			// only 1 protein ID = exact match -> display the interators page
+			if (count($prot_ids)==1)
+			{
+				return $this->redirect($this->generateUrl(
+					'ComppiProteinSearchBundle_interactors',
+					array('comppi_id' => $prot_ids[0]))
+				);
+			}
+			// multiple protein IDs -> display the intermediate page to select one
+			elseif (count($prot_ids)>1)
+			{
+				$r_prots = $DB->executeQuery(
+					"
+						SELECT
+							n2p.name, n2p.specieId, n2p.proteinId, n2p.namingConvention, p.proteinName
+						FROM
+							NameToProtein n2p, Protein p
+						WHERE
+								n2p.proteinId=p.id
+							AND p.id IN(?)
+						GROUP BY p.proteinName
+						ORDER BY p.proteinName DESC
+					",
+					array($prot_ids),
+					array(\Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+				);
+				if (!$r_prots)
+					die('Protein search base on protein IDs failed!');
+				
+				while ($p = $r_prots->fetch(\PDO::FETCH_OBJ))
+				{
+					$pids[] = $p->proteinId;
+					$T['ls'][] = array(
+						'comppi_id' => $p->proteinId,
+						'name' => $p->name,
+						'name2' => $p->proteinName,
+						'namingConvention' => $p->namingConvention,
+						'species' => $this->species_list[(int)$p->specieId],
+						'uniprot_link' => $this->uniprot_root.$p->proteinName
+					);
+				}
+				// attach the full protein names to the list
+				if (!empty($pids)) {
+					$full_names = $this->getProteinSynonyms($pids);
+					foreach ($T['ls'] as $i=>$vals) {
+						$T['ls'][$i]['full_name'] = $full_names[$T['ls'][$i]['comppi_id']]['syn_fullname'];
+					}
+				} else {
+					die("Protein IDs are missing for the full name query of the result selector!");
+				}
+				
+				return $this->render(
+					'ComppiProteinSearchBundle:ProteinSearch:middlepage.html.twig',
+					$T
+				);
+			}
+			// no proteins were found
+			else
+			{
+				$T['result_msg'] = 'No proteins were found.';;
+			}
+		}
+		
+		//die(var_dump($T));
+		return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
+
+		/*
 		//$request = $this->getRequest();
 		if (!empty($keyword)) // @TODO: require species
 		{
@@ -170,7 +374,7 @@ class ProteinSearchController extends Controller
 			}
 		} else {
 			return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
-		}
+		}*/
 	}
 
 
