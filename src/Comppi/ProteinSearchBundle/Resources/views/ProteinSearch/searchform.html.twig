@@ -20,7 +20,7 @@
 	
 	<input class="btn btn_submit" type="submit" name="fProtSearchSubmit" id="fProtSearchSubmit" value="Submit Search" title="Click 'Submit Search' to send your request." />
 	
-	<input class="btn" type="reset" name="fProtSearchReset" id="fProtSearchReset" value="Reset Advanced Settings" title="Click to reset the settings to default values." />
+	<input class="btn" type="reset" name="fProtSearchReset" id="fProtSearchReset" value="Reset Settings" title="Click to reset the settings to default values." />
 	</div>
 	
 	<div class="clear-both"></div>
@@ -30,7 +30,7 @@
 	<label id="fProtSearchSpeciesLabel">Species:</label>
 	<div id="fProtSearchSpecContainer">
 		{% for s in species_list %}
-		<input type="checkbox" name="fProtSearchSp[{{ s.code }}]" id="fProtSearchSp{{ s.code }}" class="checkbox" value="{{ s.code }}"{% if s.checked %} checked="checked"{% endif %} title="Click on a species to toggle it, checked species are included."/>
+		<input type="checkbox" name="fProtSearchSp[{{ s.code }}]" id="fProtSearchSp{{ s.code }}" class="checkbox" value="{{ s.code }}"{% if s.checked %} checked="checked"{% endif %} title="Click on a species to toggle it, proteins of the checked species are included in the search results."/>
 		<label for="fProtSearchSp{{ s.code }}" class="radioButtonLabel taxonomic_name">{{ s.name }}</label>
 		<br />
 		{% endfor %}
@@ -42,7 +42,7 @@
 	<label id="fProtSearchLocLabel">Compartment:</label>
 	<div id="fProtSearchLocContainer">
 		{% for ml in majorloc_list %}
-		<input type="checkbox" name="fProtSearchLoc[{{ ml.code }}]" id="fProtSearchLoc{{ ml.code }}" class="checkbox" value="{{ ml.code }}"{% if ml.checked %} checked="checked"{% endif %} title="Click on a cell compartment to toggle it, checked compartments are included."/>
+		<input type="checkbox" name="fProtSearchLoc[{{ ml.code }}]" id="fProtSearchLoc{{ ml.code }}" class="checkbox" value="{{ ml.code }}"{% if ml.checked %} checked="checked"{% endif %} title="Click on a cell compartment to toggle it, proteins from the checked compartments are included in the search results."/>
 		<label for="fProtSearchLoc{{ ml.code }}" class="radioButtonLabel">{{ ml.name }}</label>
 		<br />
 		{% endfor %}

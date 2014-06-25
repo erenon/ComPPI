@@ -311,7 +311,7 @@ textarea { height: 200px; }
 #fProtSearchKeyword { width: 250px; height: 24px; margin: 2px 20px; overflow-y: auto; }
 /*.fProtSearchKeywordAsTextarea { height: 100px; }*/
 #fProtSearchAdvancedBtn { width: 260px; margin-top: 0; }
-#fProtSearchReset { margin-top: 0.5em; width: 330px; }
+#fProtSearchReset { margin-top: 0.5em; width: 210px; }
 #fProtSearchSubmit { width: 200px; margin-left: 20px; }
 #fProtSearchSpecContainer, #fProtSearchLocContainer {
 	width: 250px;

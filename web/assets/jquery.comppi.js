@@ -64,6 +64,7 @@ $(function() {
 	
 	orig_title = $("#fProtSearchKeyword").attr("title");
 	orig_height = $("#fProtSearchKeyword").height();
+	orig_height = orig_height.toString() + 'px';
 	textarea_title = $("#fProtSearchKeyword").attr("txttitle");
 	
 	$("#fProtSearchAdvancedBtn").click(function() {
@@ -72,12 +73,12 @@ $(function() {
 		
 		if (is_hidden) {
 			$("#fProtSearchKeyword")
-				.height(100)
+				.animate({height:'110px'})
 				.attr("title", textarea_title)
 				.autocomplete( "option", "disabled", true );
 		} else {
 			$("#fProtSearchKeyword")
-				.height(orig_height)
+				.animate({height:orig_height})
 				.attr("title", orig_title)
 				.autocomplete( "option", "disabled", false );
 		}
@@ -88,9 +89,11 @@ $(function() {
 	// maintain user experience:
 	// if textarea is in simple search mode (like an input field), then
 	// submit when Enter key is pressed
-	$("#fProtSearchKeyword").live("keypress", function(e) {
-		if (e.keyCode == 13 && $("#fProtSearchReset").is(":hidden")) {
+	$("#fProtSearchKeyword").on("keydown", function(event) {
+		if (event.keyCode == 13 && $("#fProtSearchReset").is(":hidden")) {
+			//window.alert('IGEN')
 			$("#ProteinSearchForm").submit();
+			return false;
 		}
 	});
 	
