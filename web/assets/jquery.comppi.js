@@ -60,63 +60,65 @@ $(function() {
 	});
 	
 	// show/hide advanced search
-	$("#fProtSearchContainerLL, #fProtSearchContainerLR, #fProtSearchReset").hide();
-	
-	orig_title = $("#fProtSearchKeyword").attr("title");
-	orig_height = $("#fProtSearchKeyword").height();
-	orig_height = orig_height.toString() + 'px';
-	textarea_title = $("#fProtSearchKeyword").attr("txttitle");
-	
-	$("#fProtSearchAdvancedBtn").click(function() {
-		var is_hidden = $("#fProtSearchContainerLL, #fProtSearchContainerLR").is(":hidden");
-		$("#fProtSearchContainerLL, #fProtSearchContainerLR, #fProtSearchReset").slideToggle(300);
+	if ($("#fProtSearchKeyword").length) {
+		$("#fProtSearchContainerLL, #fProtSearchContainerLR, #fProtSearchReset").hide();
 		
-		if (is_hidden) {
-			$("#fProtSearchKeyword")
-				.animate({height:'110px'})
-				.attr("title", textarea_title)
-				.autocomplete( "option", "disabled", true );
-		} else {
-			$("#fProtSearchKeyword")
-				.animate({height:orig_height})
-				.attr("title", orig_title)
-				.autocomplete( "option", "disabled", false );
-		}
+		orig_title = $("#fProtSearchKeyword").attr("title");
+		orig_height = $("#fProtSearchKeyword").height();
+		orig_height = orig_height.toString() + 'px';
+		textarea_title = $("#fProtSearchKeyword").attr("txttitle");
 		
-		return false;
-	});
-	
-	// maintain user experience:
-	// if textarea is in simple search mode (like an input field), then
-	// submit when Enter key is pressed instead of inserting new line
-	$("#fProtSearchKeyword").on("keydown", function(event) {
-		if (event.keyCode == 13 && $("#fProtSearchReset").is(":hidden")) {
-			//window.alert('IGEN')
-			$("#ProteinSearchForm").submit();
+		$("#fProtSearchAdvancedBtn").click(function() {
+			var is_hidden = $("#fProtSearchContainerLL, #fProtSearchContainerLR").is(":hidden");
+			$("#fProtSearchContainerLL, #fProtSearchContainerLR, #fProtSearchReset").slideToggle(300);
+			
+			if (is_hidden) {
+				$("#fProtSearchKeyword")
+					.animate({height:'110px'})
+					.attr("title", textarea_title)
+					.autocomplete( "option", "disabled", true );
+			} else {
+				$("#fProtSearchKeyword")
+					.animate({height:orig_height})
+					.attr("title", orig_title)
+					.autocomplete( "option", "disabled", false );
+			}
+			
 			return false;
-		}
-	});
-	
-	// localization score treshold slider for protein search
-	$("#fProtSearchLocScoreSlider").slider({
-		min: 0,
-		max: 100,
-		range: "max",
-		value: 0,
-		slide: function( event, ui ) {
-			$("#fProtSearchLocScore" ).val( ui.value );
-		},
-		change: function(event, ui) {
-			//
-		},
-	});
-	$("#fProtSearchLocScore").val( $("#fProtSearchLocScoreSlider").slider("value") );
-	
-	// reset the protein search form
-	$("#fProtSearchReset").click(function() {
-		$("#fProtSearchKeyword").val("");
-		$("#ProteinSearchForm input:checkbox").attr("checked", "checked");
-	});
+		});
+				
+		// maintain user experience:
+		// if textarea is in simple search mode (like an input field), then
+		// submit when Enter key is pressed instead of inserting new line
+		$("#fProtSearchKeyword").on("keydown", function(event) {
+			if (event.keyCode == 13 && $("#fProtSearchReset").is(":hidden")) {
+				//window.alert('IGEN')
+				$("#ProteinSearchForm").submit();
+				return false;
+			}
+		});
+		
+		// localization score treshold slider for protein search
+		$("#fProtSearchLocScoreSlider").slider({
+			min: 0,
+			max: 100,
+			range: "max",
+			value: 0,
+			slide: function( event, ui ) {
+				$("#fProtSearchLocScore" ).val( ui.value );
+			},
+			change: function(event, ui) {
+				//
+			},
+		});
+		$("#fProtSearchLocScore").val( $("#fProtSearchLocScoreSlider").slider("value") );
+		
+		// reset the protein search form
+		$("#fProtSearchReset").click(function() {
+			$("#fProtSearchKeyword").val("");
+			$("#ProteinSearchForm input:checkbox").attr("checked", "checked");
+		});
+	}
 	
 	// show/hide protein interaction details
 	$(".ps-actorBDetails").hide();
@@ -124,9 +126,4 @@ $(function() {
 		$(this).siblings(".ps-actorBDetails:first").slideToggle();
 		return false;
 	});
-});
-
-
-$(function() {
-	
 });
