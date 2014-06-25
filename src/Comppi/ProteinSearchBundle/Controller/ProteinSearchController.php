@@ -18,11 +18,11 @@ class ProteinSearchController extends Controller
 	);
 	private $majorloc_list = array (
 		'cytoplasm' => 'Cytoplasm',
-		'extracellular' => 'Extracellular Matrix',
 		'mitochondrion' => 'Mitochondrion',
 		'nucleus' => 'Nucleus',
-		'membrane' => 'Plasma Membrane',
+		'extracellular' => 'Extracellular',
 		'secretory-pathway' => 'Secretory Pathway',
+		'membrane' => 'Membrane',
 	);
 	private $minor_loc_abbr_patterns = array(
 		'EXP',
@@ -269,8 +269,8 @@ class ProteinSearchController extends Controller
 					$sql_cond_type_lf[]	= \PDO::PARAM_STR;
 				}
 				
-				// assemble and execute the query
-				if ($sql_cond_lf && $sql_cond_val_lf && $sql_cond_type_lf)
+				// assemble and execute the query if not only protein IDs are defined
+				if (count($sql_cond_lf)>1 && count($sql_cond_val_lf)>1 && count($sql_cond_type_lf)>1)
 				{
 					$r_pids_by_loc = $DB->executeQuery(
 						"SELECT proteinId FROM LocalizationScore WHERE "
