@@ -115,12 +115,12 @@ class ProteinSearchController extends Controller
 			);
 			if ($request_m=='POST' and !isset($_POST['fProtSearchSp'][(string)$sp_code]))
 			{
-				$T['species_list'][$sp_code]['checked'] = false;
+				$T['species_list'][(string)$sp_code]['checked'] = false;
 			}
 			// protein name from URL hooked on protein search
 			if (!empty($keyword))
 			{
-				$_POST['fProtSearchSp'][$sp_code] = true;
+				$_POST['fProtSearchSp'][(string)$sp_code] = true;
 			}
 		}
 		
@@ -246,35 +246,39 @@ class ProteinSearchController extends Controller
 			$pids_by_loc = [];
 			if (!empty($sql_cond_mloc))
 			{
-				$sql_for_loc_filt = "
-					SELECT proteinId
-					FROM LocalizationScore
-					WHERE  AND score > ?
-				";
-				$sql_cond_for_loc_filt = [];
-				$sql_cond_val_for_loc_filt = [];
-				$sql_cond_type_for_loc_filt = [];
+				// IMPORTANT to prefilter for the already found protein IDs,
+				// otherwise the loc-based protein pool would be HUGE
+				$prot_ids = array_unique(array_merge($pids_by_strongest, $pids_by_n2p));
+				$sql_cond_lf[]		= 'proteinId IN(?)';
+				$sql_cond_val_lf[]	= $prot_ids;
+				$sql_cond_type_lf[]	= \Doctrine\DBAL\Connection::PARAM_INT_ARRAY;
 				
+				// filter for major localizations if not all were selected
 				if (count($sql_cond_mloc)<count($this->majorloc_list))
 				{
-					$sql_cond_for_loc_filt[] = 'majorLocName IN(?)';
-					$sql_cond_val_for_loc_filt[] = $sql_cond_mloc;
-					$sql_cond_type_for_loc_filt[] = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
+					$sql_cond_lf[]		= 'majorLocName IN(?)';
+					$sql_cond_val_lf[]	= $sql_cond_mloc;
+					$sql_cond_type_lf[]	= \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
+					echo("FILT: MAJOR LOC; ".implode(',', $sql_cond_mloc));
 				}
 				
+				// filter for localization score treshold
 				if ($loc_treshold>0.0)
 				{
-					$sql_cond_for_loc_filt[] = 'score > ?';
-					$sql_cond_val_for_loc_filt[] = strval($loc_treshold);
-					$sql_cond_type_for_loc_filt[] = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
+					$sql_cond_lf[]		= 'score > ?';
+					$sql_cond_val_lf[]	= strval($loc_treshold);
+					$sql_cond_type_lf[]	= \PDO::PARAM_STR;
+					echo("FILT: TRESHOLD; ".$loc_treshold);
 				}
 				
-				if ($sql_cond_for_loc_filt && $sql_cond_val_for_loc_filt && $sql_cond_type_for_loc_filt)
+				// assemble and execute the query
+				if ($sql_cond_lf && $sql_cond_val_lf && $sql_cond_type_lf)
 				{
-										$r_pids_by_loc = $DB->executeQuery(
-						"SELECT proteinId FROM LocalizationScore WHERE ".implode(' AND ', $sql_cond_for_loc_filt),
-						$sql_cond_val_for_loc_filt,
-						$sql_cond_type_for_loc_filt
+					$r_pids_by_loc = $DB->executeQuery(
+						"SELECT proteinId FROM LocalizationScore WHERE "
+							.implode(' AND ', $sql_cond_lf),
+						$sql_cond_val_lf,
+						$sql_cond_type_lf
 					);
 					
 					if (!$r_pids_by_loc)
@@ -288,7 +292,6 @@ class ProteinSearchController extends Controller
 			
 			// MERGE THE UNIQUE PROTEIN IDS = REQUESTED PROTEINS
 			$prot_ids = array_unique(array_merge($pids_by_strongest, $pids_by_n2p, $pids_by_loc));
-
 			
 			// INTERACTORS PAGE / PROTEIN SELECTOR PAGE / NOT FOUND
 			// only 1 protein ID = exact match -> display the interators page
@@ -328,7 +331,7 @@ class ProteinSearchController extends Controller
 						'name' => $p->name,
 						'name2' => $p->proteinName,
 						'namingConvention' => $p->namingConvention,
-						'species' => $this->species_list[(int)$p->specieId],
+						'species' => $spDescriptors[$p->specieId]->shortname,
 						'uniprot_link' => $this->uniprot_root.$p->proteinName
 					);
 				}

@@ -60,7 +60,7 @@ $(function() {
 	});
 	
 	// show/hide advanced search
-	//$("#fProtSearchContainerLL, #fProtSearchContainerLR, #fProtSearchReset").hide();
+	$("#fProtSearchContainerLL, #fProtSearchContainerLR, #fProtSearchReset").hide();
 	
 	orig_title = $("#fProtSearchKeyword").attr("title");
 	orig_height = $("#fProtSearchKeyword").height();
@@ -88,7 +88,7 @@ $(function() {
 	
 	// maintain user experience:
 	// if textarea is in simple search mode (like an input field), then
-	// submit when Enter key is pressed
+	// submit when Enter key is pressed instead of inserting new line
 	$("#fProtSearchKeyword").on("keydown", function(event) {
 		if (event.keyCode == 13 && $("#fProtSearchReset").is(":hidden")) {
 			//window.alert('IGEN')
@@ -98,7 +98,6 @@ $(function() {
 	});
 	
 	// localization score treshold slider for protein search
-	//$("#fProtSearchLocScore").hide();
 	$("#fProtSearchLocScoreSlider").slider({
 		min: 0,
 		max: 100,
