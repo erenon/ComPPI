@@ -60,7 +60,7 @@ $(function() {
 	});
 	
 	// show/hide advanced search
-	$("#fProtSearchContainerLL, #fProtSearchContainerLR, #fProtSearchReset").hide();
+	//$("#fProtSearchContainerLL, #fProtSearchContainerLR, #fProtSearchReset").hide();
 	
 	orig_title = $("#fProtSearchKeyword").attr("title");
 	orig_height = $("#fProtSearchKeyword").height();
@@ -96,6 +96,22 @@ $(function() {
 			return false;
 		}
 	});
+	
+	// localization score treshold slider for protein search
+	//$("#fProtSearchLocScore").hide();
+	$("#fProtSearchLocScoreSlider").slider({
+		min: 0,
+		max: 100,
+		range: "max",
+		value: 0,
+		slide: function( event, ui ) {
+			$("#fProtSearchLocScore" ).val( ui.value );
+		},
+		change: function(event, ui) {
+			//
+		},
+	});
+	$("#fProtSearchLocScore").val( $("#fProtSearchLocScoreSlider").slider("value") );
 	
 	// reset the protein search form
 	$("#fProtSearchReset").click(function() {
