@@ -1,5 +1,4 @@
 <?php
-
 namespace Comppi\ProteinSearchBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -9,7 +8,6 @@ use Comppi\ProteinSearchBundle\Entity\ProteinSearch;
 
 class ProteinSearchController extends Controller
 {
-	// private $DB; use $this->getDBConnection() @TODO: switch to the conn representation of the controller
 	private $speciesProvider = null;
 	private $localizationTranslator = null;
 	private $species_list = array(
@@ -78,29 +76,25 @@ class ProteinSearchController extends Controller
 	);
 	private $verbose = false;
 	//private $verbose_log = array();
-	//private $search_range_start = 0; // current page * search_result_per_page -> search query limit from here
-	//private $search_result_per_page = 10; // search query limit offset (0: no limit)
 	private $uniprot_root = 'http://www.uniprot.org/uniprot/';
 	private $exptype = array(
 		0 => 'Unknown',
 		1 => 'Experimental',
 		2 => 'Predicted'
 	);
-	//private $autocomplete_url = "./protein_search/autocomplete/";
-	//private $autocomplete_url_dev = "/comppi/ComPPI_dualon/web/app_dev.php/protein_search/autocomplete/";
 
 	// PROTEIN SEARCH
 	//public function proteinSearchAction($protein_name, $requested_species, $current_page)
-	public function proteinSearchAction(Request $request)
+	public function proteinSearchAction($keyword)
     {
-		//$protein_name = '';
-		//$requested_species = '';
-		//$current_page = '';
-		//$keyword = $this->initKeyword($protein_name);
-		//$species_id = $this->initSpecies($requested_species);
-		//$current_page = $this->initPageNum($current_page);
-		//$sp = $this->getSpeciesProvider();
-		//$spDescriptors = $sp->getDescriptors();
+		// $keyword is the way to handle protein_search/PROTEIN_NAME type requests
+		// = protein name from URL hooked on protein search
+		if (!empty($keyword))
+		{
+			$_POST['fProtSearchKeyword'] = $keyword;
+		}
+		
+		$request_m = $this->get('request')->getMethod();
 
 		$T = array(
             'ls' => array(),
@@ -118,9 +112,14 @@ class ProteinSearchController extends Controller
 				'name' => $sp_name,
 				'checked' => true
 			);
-			if ($request->getMethod() == 'POST' and !isset($_POST['fProtSearchSp'][(string)$sp_code]))
+			if ($request_m=='POST' and !isset($_POST['fProtSearchSp'][(string)$sp_code]))
 			{
 				$T['species_list'][$sp_code]['checked'] = false;
+			}
+			// protein name from URL hooked on protein search
+			if (!empty($keyword))
+			{
+				$_POST['fProtSearchSp'][$sp_code] = true;
 			}
 		}
 		
@@ -132,15 +131,20 @@ class ProteinSearchController extends Controller
 				'name' => $mloc_name,
 				'checked' => true
 			);
-			if ($request->getMethod() == 'POST' and !isset($_POST['fProtSearchLoc'][(string)$mloc_code]))
+			if ($request_m=='POST' and !isset($_POST['fProtSearchLoc'][(string)$mloc_code]))
 			{
 				$T['majorloc_list'][$mloc_code]['checked'] = false;
+			}
+			// protein name from URL hooked on protein search
+			if (!empty($keyword))
+			{
+				$_POST['fProtSearchLoc'][$mloc_code] = true;
 			}
 		}
 		
 		
 		// PROTEIN SEARCH SUBMITTED
-		if ($request->getMethod() == 'POST') {
+		if ($request_m=='POST' or !empty($keyword)) {
 			$DB = $this->getDbConnection();
 			
 			// PREPARE THE SEARCH CONDITIONS
@@ -240,9 +244,11 @@ class ProteinSearchController extends Controller
 				$pids_by_loc = $r_pids_by_loc->fetchAll(\PDO::FETCH_COLUMN, 0);
 			}
 			
-			// merge the unique protein IDs = requested proteins
+			
+			// MERGE THE UNIQUE PROTEIN IDS = REQUESTED PROTEINS
 			$prot_ids = array_unique(array_merge($pids_by_strongest, $pids_by_n2p, $pids_by_loc));
 
+			
 			// INTERACTORS PAGE / PROTEIN SELECTOR PAGE / NOT FOUND
 			// only 1 protein ID = exact match -> display the interators page
 			if (count($prot_ids)==1)
