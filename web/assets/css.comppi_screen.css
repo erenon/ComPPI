@@ -95,7 +95,7 @@ h3 { margin-top: 1em; margin-bottom: 0; }
 li { list-style-type: square; }
 
 .center { text-align: center; }
-.clear-both { clear: both; }
+.clear-both { clear: both; margin: 0; }
 .help { margin: 1em 0; }
 .help_details {}
 .infobtn {
@@ -119,6 +119,7 @@ li { list-style-type: square; }
 .infobtn a { color: #E0DFDC; text-decoration: none; }
 .infobtn a:hover { color: #fff; }
 .message_success { font-weight: bold; color: #008800; }
+.message_error { font-weight: bold; color: #ff0000; }
 
 .fancy_table {
 	width: 100%;
@@ -296,13 +297,21 @@ textarea { height: 200px; }
 
 /* PROTEIN SEARCH */
 #ProteinSearchForm { width: 1000px; margin: 0 auto; padding: 0; text-align: left; }
-#ProteinSearchForm table { border-collapse: collapse; border: 0; }
+#fProtSearchContainerUL, #fProtSearchContainerUR, #fProtSearchContainerLL, #fProtSearchContainerLR {
+	float: left;
+	width: 500px;
+	margin: 0;
+	padding-bottom: 2em;
+}
+#fProtSearchContainerUR { text-align: center; }
+/*#ProteinSearchForm table { border-collapse: collapse; border: 0; }
 #ProteinSearchForm table td { width: 500px; padding-bottom: 1em; vertical-align: top; }
-#ProteinSearchForm table td label { clear: both; }
+#ProteinSearchForm table td label { clear: both; }*/
 #fProtSearchKeywordLabel, #fProtSearchSpeciesLabel, #fProtSearchLocLabel { width: 175px; float: left; }
-#fProtSearchKeyword { width: 250px; height: 24px; margin: 2px 20px; }
-.fProtSearchKeywordAsTextarea { height: 100px; }
-#fProtSearchAdvancedBtn { width: 250px; margin-top: 0; }
+#fProtSearchKeyword { width: 250px; height: 24px; margin: 2px 20px; overflow-y: auto; }
+/*.fProtSearchKeywordAsTextarea { height: 100px; }*/
+#fProtSearchAdvancedBtn { width: 260px; margin-top: 0; }
+#fProtSearchReset { margin-top: 0.5em; width: 330px; }
 #fProtSearchSubmit { width: 200px; margin-left: 20px; }
 #fProtSearchSpecContainer, #fProtSearchLocContainer {
 	width: 250px;

@@ -60,31 +60,44 @@ $(function() {
 	});
 	
 	// show/hide advanced search
-	$("#fProtSearchAdvancedContainer").hide();
+	$("#fProtSearchContainerLL, #fProtSearchContainerLR, #fProtSearchReset").hide();
 	
-	single_title = $("#fProtSearchKeyword").attr("title");
+	orig_title = $("#fProtSearchKeyword").attr("title");
+	orig_height = $("#fProtSearchKeyword").height();
 	textarea_title = $("#fProtSearchKeyword").attr("txttitle");
 	
 	$("#fProtSearchAdvancedBtn").click(function() {
-		var is_hidden = $("#fProtSearchAdvancedContainer").is(":hidden");
-		$("#fProtSearchAdvancedContainer").slideToggle();
+		var is_hidden = $("#fProtSearchContainerLL, #fProtSearchContainerLR").is(":hidden");
+		$("#fProtSearchContainerLL, #fProtSearchContainerLR, #fProtSearchReset").slideToggle(300);
 		
 		if (is_hidden) {
 			$("#fProtSearchKeyword")
-				.addClass("fProtSearchKeywordAsTextarea")
-				.attr(
-					"title",
-					textarea_title
-				)
+				.height(100)
+				.attr("title", textarea_title)
+				.autocomplete( "option", "disabled", true );
 		} else {
 			$("#fProtSearchKeyword")
-				.removeClass("fProtSearchKeywordAsTextarea")
-				.attr(
-					"title",
-					single_title
-				)
+				.height(orig_height)
+				.attr("title", orig_title)
+				.autocomplete( "option", "disabled", false );
 		}
 		
+		return false;
+	});
+	
+	// maintain user experience:
+	// if textarea is in simple search mode (like an input field), then
+	// submit when Enter key is pressed
+	$("#fProtSearchKeyword").live("keypress", function(e) {
+		if (e.keyCode == 13 && $("#fProtSearchReset").is(":hidden")) {
+			$("#ProteinSearchForm").submit();
+		}
+	});
+	
+	// reset the protein search form
+	$("#fProtSearchReset").click(function() {
+		$("#fProtSearchKeyword").val("");
+		$("#ProteinSearchForm input:checkbox").attr("checked", "checked");
 		return false;
 	});
 	

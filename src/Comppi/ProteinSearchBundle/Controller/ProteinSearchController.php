@@ -157,7 +157,7 @@ class ProteinSearchController extends Controller
 					$sql_cond_keywords[$kk] = strtolower(trim($kwrd));
 				}
 			} else {
-				$err = array('err-no_keywords', 'Please fill in a protein name.');
+				$err[] = 'Please fill in a protein name.';
 			}
 			
 			# SQL parameters: species
@@ -174,7 +174,7 @@ class ProteinSearchController extends Controller
 				}
 				//$sql_cond_sp = "'" . join("', '", $cond_sp) . "'";
 			} else {
-				$err = array('err-no_sp', 'Please select at least one species.');
+				$err[] = 'Please select at least one species.';
 			}
 			
 			# SQL parameters: major localizations = compartments
@@ -190,7 +190,16 @@ class ProteinSearchController extends Controller
 				}
 				//$sql_cond_mloc = "'".join("', '", $cond_mloc)."'";
 			} else {
-				$err = array('err-no_mloc', 'Please select at least one subcellular compartment.');
+				$err[] = 'Please select at least one subcellular compartment.';
+			}
+			
+			// check for validation errors
+			if (!empty($err))
+			{
+				$err_msgs = implode(' ', $err);
+				$this->get('session')->setFlash('ps-errors', $err_msgs);
+				
+				return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
 			}
 			
 			
@@ -233,8 +242,6 @@ class ProteinSearchController extends Controller
 			
 			// merge the unique protein IDs = requested proteins
 			$prot_ids = array_unique(array_merge($pids_by_strongest, $pids_by_n2p, $pids_by_loc));
-
-			var_dump($sql_cond_keywords);
 
 			// INTERACTORS PAGE / PROTEIN SELECTOR PAGE / NOT FOUND
 			// only 1 protein ID = exact match -> display the interators page
