@@ -30,8 +30,8 @@
 	<label id="fProtSearchSpeciesLabel">Species:</label>
 	<div id="fProtSearchSpecContainer">
 		{% for s in species_list %}
-		<input type="checkbox" name="fProtSearchSp[{{ s.code }}]" id="fProtSearchSp{{ s.code }}" class="checkbox" value="{{ s.code }}"{% if s.checked %} checked="checked"{% endif %} title="Click on a species to toggle it, proteins of the checked species are included in the search results."/>
-		<label for="fProtSearchSp{{ s.code }}" class="radioButtonLabel taxonomic_name">{{ s.name }}</label>
+		<input type="checkbox" name="fProtSearchSp[{{ s.code }}]" id="fProtSearchSp{{ s.code }}" class="checkbox" value="{{ s.code }}"{% if s.checked %} checked="checked"{% endif %} />
+		<label for="fProtSearchSp{{ s.code }}" class="radioButtonLabel taxonomic_name" title="Click on a species to toggle it, proteins of the checked species are included in the search results.">{{ s.name }}</label>
 		<br />
 		{% endfor %}
 	</div>
@@ -42,15 +42,15 @@
 	<label id="fProtSearchLocLabel">Localizations:</label>
 	<div id="fProtSearchLocContainer">
 		{% for ml in majorloc_list %}
-		<input type="checkbox" name="fProtSearchLoc[{{ ml.code }}]" id="fProtSearchLoc{{ ml.code }}" class="checkbox" value="{{ ml.code }}"{% if ml.checked %} checked="checked"{% endif %} title="Click on a cell compartment to toggle it, proteins from the checked compartments are included in the search results."/>
-		<label for="fProtSearchLoc{{ ml.code }}" class="radioButtonLabel">{{ ml.name }}</label>
+		<input type="checkbox" name="fProtSearchLoc[{{ ml.code }}]" id="fProtSearchLoc{{ ml.code }}" class="checkbox" value="{{ ml.code }}"{% if ml.checked %} checked="checked"{% endif %} />
+		<label for="fProtSearchLoc{{ ml.code }}" class="radioButtonLabel" title="Click on a cell compartment to toggle it, proteins from the checked compartments are included in the search results.">{{ ml.name }}</label>
 		<br />
 		{% endfor %}
 	</div>
 	
 	<br /><br />
-	<label for="fProtSearchLocScoreSlider" title="Localization probability describes how likely it is that a protein is related to a subcellular compartment.">Localization Probability Threshold:</label>
-	<div id="fProtSearchLocScoreSlider" title="Search for proteins that have higher localization probability than the set threshold for at least one selected compartment. All interactors and localizations will be displayed for the resulting proteins."></div>
+	<label for="fProtSearchLocScoreSlider" title="Localization probability describes how likely it is that a protein is related to a subcellular compartment.">Localization Probability Threshold (%):</label>
+	<div id="fProtSearchLocScoreSlider" title="Search for proteins that have higher localization probability for at least one selected compartment than the set threshold. The treshold applies to the localizations of the query protein, not to the localizations of the interactors."></div>
 	<input type="text" name="fProtSearchLocScore" id="fProtSearchLocScore" value="0.0" />
 	</div>
 
