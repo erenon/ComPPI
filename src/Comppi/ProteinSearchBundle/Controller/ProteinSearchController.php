@@ -83,8 +83,24 @@ class ProteinSearchController extends Controller
 		2 => 'Predicted'
 	);
 
-	// PROTEIN SEARCH
-	//public function proteinSearchAction($protein_name, $requested_species, $current_page)
+
+	/*	PROTEIN SEARCH
+	 *	Find the proteins by their names or fragments of their names,
+	 *	and filter the results by species, major localization and localization score.
+	 *
+	 *	The search string is splitted by new lines, and the fragments
+	 *	are used as right-open needles in the
+	 *	Protein.proteinName and NameToProtein.name
+	 *	database fields (LIKE 'keyword1%' OR LIKE 'keyword2%').
+	 *
+	 *	The protein IDs found in Protein and NameToProtein are pooled together ($PID_POOL),
+	 *	and filtered by localization and loc. score (from the LocalizationScore table)
+	 *	if those are requested.
+	 *	If this final protein ID pool contains only one protein, then the
+	 *	interactor page is displayed, otherwise an intermediate protein selector page is shown.
+	 *
+	 *	This logic ensures that our old server can bear with the load.
+	*/
 	public function proteinSearchAction($keyword)
     {
 		// $keyword is the way to handle protein_search/PROTEIN_NAME type requests
@@ -159,7 +175,7 @@ class ProteinSearchController extends Controller
 			{
 				foreach ($sql_cond_keywords as $kk => $kwrd)
 				{
-					$sql_cond_keywords[$kk] = strtolower(trim($kwrd));
+					$sql_cond_keywords[$kk] = strtolower(trim($kwrd)).'%'; // note the %
 				}
 			} else {
 				$err[] = 'Please fill in a protein name.';
@@ -219,9 +235,13 @@ class ProteinSearchController extends Controller
 			
 			// FIND THE PROTEIN IDS FROM THE MAIN PROTEINS, THE SYNONYMS AND THE LOCALIZATIONS
 			// the old server can't handle complex mysql queries -> separate them
+			
 			// protein IDs from the strongest naming convention
+			// E.g. SELECT id FROM Protein WHERE (LOWER(proteinName) LIKE '%keyword1%' AND LOWER(proteinName) LIKE '%keyword2%') AND specieUd IN(0,1,3)
 			$r_prots_strongest = $DB->executeQuery(
-				"SELECT id FROM Protein WHERE LOWER(proteinName) IN(?) AND specieId IN(?)",
+				// PDO does not offer features for multiple LIKEs
+				// note that %s are already around keywords
+				"SELECT id FROM Protein WHERE (".implode(' OR ', array_fill(0, count($sql_cond_keywords), "LOWER(proteinName) LIKE ?")).") AND specieId IN(?)",
 				array($sql_cond_keywords, $sql_cond_sp),
 				array(\Doctrine\DBAL\Connection::PARAM_STR_ARRAY, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
 			);
@@ -230,27 +250,30 @@ class ProteinSearchController extends Controller
 			$pids_by_strongest = $r_prots_strongest->fetchAll(\PDO::FETCH_COLUMN, 0);
 			
 			// protein IDs from the synonyms
-			$r_name_to_prot = $DB->executeQuery(
-				"SELECT proteinId FROM NameToProtein WHERE LOWER(name) IN(?) AND specieId IN(?)",
+			// E.g. SELECT proteinId FROM NameToProtein WHERE (LOWER(name) LIKE '%keyword1%' OR LOWER(name) LIKE '%keyword2%') AND specieUd IN(0,1,3)
+			$r_n2p = $DB->executeQuery(
+				"SELECT proteinId FROM NameToProtein WHERE (".implode(' OR ', array_fill(0, count($sql_cond_keywords), "LOWER(name) LIKE ?")).") AND specieId IN(?)",
 				array($sql_cond_keywords, $sql_cond_sp),
 				array(\Doctrine\DBAL\Connection::PARAM_STR_ARRAY, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
 			);
-			if (!$r_name_to_prot)
+			if (!$r_n2p)
 			{
 				die('Protein IDs by synonyms query failed!');
 			}
-			$pids_by_n2p = $r_name_to_prot->fetchAll(\PDO::FETCH_COLUMN, 0);
+			$pids_by_n2p = $r_n2p->fetchAll(\PDO::FETCH_COLUMN, 0);
 
+			// PROTEIN ID POOL: MERGE THE UNIQUE PROTEIN IDS FROM PROTEIN NAMES
+			$PID_POOL = array_unique(array_merge($pids_by_strongest, $pids_by_n2p));
+			
 			// protein IDs from the localizations table
 			// filter only if *not* all major localizations are selected
 			$pids_by_loc = [];
-			if (!empty($sql_cond_mloc))
+			if (!empty($PID_POOL) && !empty($sql_cond_mloc))
 			{
 				// IMPORTANT to prefilter for the already found protein IDs,
 				// otherwise the loc-based protein pool would be HUGE
-				$prot_ids = array_unique(array_merge($pids_by_strongest, $pids_by_n2p));
 				$sql_cond_lf[]		= 'proteinId IN(?)';
-				$sql_cond_val_lf[]	= $prot_ids;
+				$sql_cond_val_lf[]	= $PID_POOL;
 				$sql_cond_type_lf[]	= \Doctrine\DBAL\Connection::PARAM_INT_ARRAY;
 				
 				// filter for major localizations if not all were selected
@@ -283,25 +306,26 @@ class ProteinSearchController extends Controller
 					{
 						die('Protein IDs by localization query failed!');
 					}
-					$pids_by_loc = $r_pids_by_loc->fetchAll(\PDO::FETCH_COLUMN, 0);
+					
+					// IMPORTANT: proteins should be filtered by localization and loc. score
+					$PID_POOL = $r_pids_by_loc->fetchAll(\PDO::FETCH_COLUMN, 0);
 				}
 			}
 			
-			
-			// MERGE THE UNIQUE PROTEIN IDS = REQUESTED PROTEINS
-			$prot_ids = array_unique(array_merge($pids_by_strongest, $pids_by_n2p, $pids_by_loc));
+			// use distinct protein IDs
+			$PID_POOL = array_unique($PID_POOL);
 			
 			// INTERACTORS PAGE / PROTEIN SELECTOR PAGE / NOT FOUND
 			// only 1 protein ID = exact match -> display the interators page
-			if (count($prot_ids)==1)
+			if (count($PID_POOL)==1)
 			{
 				return $this->redirect($this->generateUrl(
 					'ComppiProteinSearchBundle_interactors',
-					array('comppi_id' => $prot_ids[0]))
+					array('comppi_id' => $PID_POOL[0]))
 				);
 			}
 			// multiple protein IDs -> display the intermediate page to select one
-			elseif (count($prot_ids)>1)
+			elseif (count($PID_POOL)>1)
 			{
 				$r_prots = $DB->executeQuery(
 					"
@@ -315,7 +339,7 @@ class ProteinSearchController extends Controller
 						GROUP BY p.proteinName
 						ORDER BY p.proteinName DESC
 					",
-					array($prot_ids),
+					array($PID_POOL),
 					array(\Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
 				);
 				if (!$r_prots)
@@ -337,7 +361,11 @@ class ProteinSearchController extends Controller
 				if (!empty($pids)) {
 					$full_names = $this->getProteinSynonyms($pids);
 					foreach ($T['ls'] as $i=>$vals) {
-						$T['ls'][$i]['full_name'] = $full_names[$T['ls'][$i]['comppi_id']]['syn_fullname'];
+						if (isset($full_names[$T['ls'][$i]['comppi_id']]['syn_fullname'])) {
+							$T['ls'][$i]['full_name'] = $full_names[$T['ls'][$i]['comppi_id']]['syn_fullname'];
+						} else {
+							$T['ls'][$i]['full_name'] = 'N/A';
+						}
 					}
 				} else {
 					die("Protein IDs are missing for the full name query of the result selector!");
@@ -739,8 +767,6 @@ class ProteinSearchController extends Controller
 			$interaction_rows[$actor->iid] = '('.$actor->iid.', '.$comppi_id.', '.$actor->actorId.')';
 			$protein_rows[$actor->proteinId] = '('.$actor->proteinId.", 0, '".$actor->proteinName."')";
 		}
-
-		//die(var_dump($first_neighbours));
 
 		// GET THE INTERACTIONS AMONG THE FIRST NEIGHBOURS
 		$sql_neighbour_links = "SELECT DISTINCT i.id as iid, p1.id as p1id, p1.proteinName as proteinA, p2.id as p2id, p2.proteinName as proteinB, ptl1.id as protLocAId, ptl1.localizationId as locAId, ptl2.id as protLocBId, ptl2.localizationId as locBId, st1.id as sysTypeAId, st1.confidenceType as confTypeA, st2.id as sysTypeBId, st1.confidenceType as confTypeB
