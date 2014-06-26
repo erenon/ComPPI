@@ -99,15 +99,16 @@ class ProteinSearchController extends Controller
 	 *	If this final protein ID pool contains only one protein, then the
 	 *	interactor page is displayed, otherwise an intermediate protein selector page is shown.
 	 *
-	 *	This logic ensures that our old server can bear with the load.
+	 *	This logic and the monolithic protein search ensures that
+	 *	our old server can handle the load.
 	*/
-	public function proteinSearchAction($keyword)
+	public function proteinSearchAction($get_keyword)
     {
-		// $keyword is the way to handle protein_search/PROTEIN_NAME type requests
+		// $get_keyword is the way to handle protein_search/PROTEIN_NAME type requests
 		// = protein name from URL hooked on protein search
-		if (!empty($keyword))
+		if (!empty($get_keyword))
 		{
-			$_POST['fProtSearchKeyword'] = $keyword;
+			$_POST['fProtSearchKeyword'] = $get_keyword; // validated later
 		}
 		
 		$request_m = $this->get('request')->getMethod();
@@ -134,7 +135,7 @@ class ProteinSearchController extends Controller
 				$T['species_list'][(string)$sp_code]['checked'] = false;
 			}
 			// protein name from URL hooked on protein search
-			if (!empty($keyword))
+			if (!empty($get_keyword))
 			{
 				$_POST['fProtSearchSp'][(string)$sp_code] = true;
 			}
@@ -153,32 +154,61 @@ class ProteinSearchController extends Controller
 				$T['majorloc_list'][$mloc_code]['checked'] = false;
 			}
 			// protein name from URL hooked on protein search
-			if (!empty($keyword))
+			if (!empty($get_keyword))
 			{
 				$_POST['fProtSearchLoc'][$mloc_code] = true;
 			}
 		}
 		
+		// loc treshold in the form
+		if (!empty($_POST['fProtSearchLocScore']) && 0<(int)$_POST['fProtSearchLocScore'] && (int)$_POST['fProtSearchLocScore']<=100)
+		{
+			$T['loc_score_slider_val'] = (int)$_POST['fProtSearchLocScore'];
+		} else {
+			$T['loc_score_slider_val'] = 0;
+		}
+
 		
 		// PROTEIN SEARCH SUBMITTED
-		if ($request_m=='POST' or !empty($keyword)) {
+		if ($request_m=='POST' or !empty($get_keyword)) {
 			$DB = $this->getDbConnection();
+			$PID_POOL = []; // protein ID pool == protein IDs of the search result
+			
+			$keywords = array_filter(preg_split(
+				"/\r\n|\n|\r/", // consider various platforms
+				(isset($_POST['fProtSearchKeyword']) ? $_POST['fProtSearchKeyword'] : '')
+			));
+			
+			// update template for the form
+			$T['keyword'] = htmlspecialchars(strip_tags(implode(PHP_EOL, $keywords)));
 			
 			// PREPARE THE SEARCH CONDITIONS
 			// SQL parameters: protein names as keywords
-			$T['keyword'] = htmlspecialchars(strip_tags($_POST['fProtSearchKeyword']));
-			$sql_cond_keywords = preg_split(
-				"/\r\n|\n|\r/", // consider various platforms
-				(isset($_POST['fProtSearchKeyword']) ? $_POST['fProtSearchKeyword'] : '')
-			);
-			if (!empty($sql_cond_keywords))
+			if (!empty($keywords))
 			{
-				foreach ($sql_cond_keywords as $kk => $kwrd)
+				foreach ($keywords as $kk => $kwrd)
 				{
-					$sql_cond_keywords[$kk] = strtolower(trim($kwrd)).'%'; // note the %
+					$keywords[$kk] = strtolower(trim($kwrd));
 				}
 			} else {
 				$err[] = 'Please fill in a protein name.';
+			}
+			
+			// too many protein names has been requested
+			if (count($keywords)>100)
+			{
+				$T['result_msg'] = count($keywords)
+					.' protein names were posted (maximum 100 are allowed).
+						This would slow down our service, therefore the request has been cancelled.
+						Please use a shorter query list, extract the data from the <a href="'
+					.$this->generateUrl('DownloadCenterBundle_downloads')
+					.'">downloads</a> or <a href="'
+					.$this->generateUrl('ContactBundle_contact')
+					.'">contact us</a> with specified details.';
+				return $this->render(
+					'ComppiProteinSearchBundle:ProteinSearch:index.html.twig',
+					$T
+				);
 			}
 			
 			# SQL parameters: species
@@ -236,32 +266,58 @@ class ProteinSearchController extends Controller
 			// FIND THE PROTEIN IDS FROM THE MAIN PROTEINS, THE SYNONYMS AND THE LOCALIZATIONS
 			// the old server can't handle complex mysql queries -> separate them
 			
-			// protein IDs from the strongest naming convention
-			// E.g. SELECT id FROM Protein WHERE (LOWER(proteinName) LIKE '%keyword1%' AND LOWER(proteinName) LIKE '%keyword2%') AND specieUd IN(0,1,3)
-			$r_prots_strongest = $DB->executeQuery(
-				// PDO does not offer features for multiple LIKEs
-				// note that %s are already around keywords
-				"SELECT id FROM Protein WHERE (".implode(' OR ', array_fill(0, count($sql_cond_keywords), "LOWER(proteinName) LIKE ?")).") AND specieId IN(?)",
-				array($sql_cond_keywords, $sql_cond_sp),
-				array(\Doctrine\DBAL\Connection::PARAM_STR_ARRAY, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+			// Doctrine does not support multiple LIKE conditions, plus
+			// unexplained Doctrine error if query builder is used
+			// -> assemble the queries manually
+			
+			// $cond_for_pn_pal: [keyw1, keyw2, [1, 2, 0]]
+/*			$cond_for_pn_pal = $keywords; // LIKE 'keyword%': parameters injected as single parameters instead of a single array
+			$cond_for_pn_pal[] = $sql_cond_sp; // AND species IN(1,2): species are injected as a single array
+			$cond_type_for_pn_pal = array_fill( // each keyword has the PARAM_STR type
+				0,
+				count($keywords),
+				\PDO::PARAM_STR
 			);
-			if (!$r_prots_strongest)
+			$cond_type_for_pn_pal[] = \Doctrine\DBAL\Connection::PARAM_INT_ARRAY; */// species IDs are in an array
+			
+			// protein IDs from the strongest naming convention
+			$r_prots_keyw_cond = [];
+			foreach ($keywords as $kw)
+			{
+				$kw = $DB->quote($kw); // ke\yw'ord -> 'ke\\yw\'rd'
+				$kw = substr_replace($kw, '%', strlen($kw)-1, 0); // 'ke\\yw\'rd' -> 'ke\\yw\'rd%'
+				$r_prots_keyw_cond[] = "LOWER(proteinName) LIKE " . $kw;
+			}
+			$r_prots = $DB->executeQuery(
+				"SELECT id FROM Protein WHERE ("
+					.implode(' OR ', $r_prots_keyw_cond)
+					.") AND specieId IN(".implode(',', $sql_cond_sp).")"
+			);
+			if (!$r_prots)
+			{
 				die('Protein IDs by strongest naming convention query failed!');
-			$pids_by_strongest = $r_prots_strongest->fetchAll(\PDO::FETCH_COLUMN, 0);
+			}
+			$pids_by_strongest = $r_prots->fetchAll(\PDO::FETCH_COLUMN, 0);
 			
 			// protein IDs from the synonyms
-			// E.g. SELECT proteinId FROM NameToProtein WHERE (LOWER(name) LIKE '%keyword1%' OR LOWER(name) LIKE '%keyword2%') AND specieUd IN(0,1,3)
+			$r_n2p_keyw_cond = [];
+			foreach ($keywords as $kw)
+			{
+				$kw = $DB->quote($kw); // ke\yw'ord -> 'ke\\yw\'rd'
+				$kw = substr_replace($kw, '%', strlen($kw)-1, 0); // 'ke\\yw\'rd' -> 'ke\\yw\'rd%'
+				$r_n2p_keyw_cond[] = "LOWER(name) LIKE " . $kw;
+			}
 			$r_n2p = $DB->executeQuery(
-				"SELECT proteinId FROM NameToProtein WHERE (".implode(' OR ', array_fill(0, count($sql_cond_keywords), "LOWER(name) LIKE ?")).") AND specieId IN(?)",
-				array($sql_cond_keywords, $sql_cond_sp),
-				array(\Doctrine\DBAL\Connection::PARAM_STR_ARRAY, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+				"SELECT proteinId FROM NameToProtein WHERE ("
+					.implode(' OR ', $r_n2p_keyw_cond)
+					.") AND specieId IN(".implode(',', $sql_cond_sp).")"
 			);
 			if (!$r_n2p)
 			{
 				die('Protein IDs by synonyms query failed!');
 			}
 			$pids_by_n2p = $r_n2p->fetchAll(\PDO::FETCH_COLUMN, 0);
-
+			
 			// PROTEIN ID POOL: MERGE THE UNIQUE PROTEIN IDS FROM PROTEIN NAMES
 			$PID_POOL = array_unique(array_merge($pids_by_strongest, $pids_by_n2p));
 			
@@ -327,7 +383,7 @@ class ProteinSearchController extends Controller
 			// multiple protein IDs -> display the intermediate page to select one
 			elseif (count($PID_POOL)>1)
 			{
-				$r_prots = $DB->executeQuery(
+				$r_psr = $DB->executeQuery( // protein search results
 					"
 						SELECT
 							n2p.name, n2p.specieId, n2p.proteinId, n2p.namingConvention, p.proteinName
@@ -342,10 +398,10 @@ class ProteinSearchController extends Controller
 					array($PID_POOL),
 					array(\Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
 				);
-				if (!$r_prots)
+				if (!$r_psr)
 					die('Protein search base on protein IDs failed!');
 				
-				while ($p = $r_prots->fetch(\PDO::FETCH_OBJ))
+				while ($p = $r_psr->fetch(\PDO::FETCH_OBJ))
 				{
 					$pids[] = $p->proteinId;
 					$T['ls'][] = array(
@@ -379,7 +435,7 @@ class ProteinSearchController extends Controller
 			// no proteins were found
 			else
 			{
-				$T['result_msg'] = 'No proteins were found.';;
+				$T['result_msg'] = 'No proteins were found.';
 			}
 		}
 		
@@ -481,10 +537,10 @@ class ProteinSearchController extends Controller
 	}
 
 
-	public function autocompleteAction($keyword)
+	public function autocompleteAction($get_keyword)
 	{
 		$DB = $this->getDbConnection();
-		$r_i = $DB->executeQuery("SELECT name FROM ProteinName WHERE name LIKE ? ORDER BY LENGTH(name) LIMIT 15", array("%$keyword%"));
+		$r_i = $DB->executeQuery("SELECT name FROM ProteinName WHERE name LIKE ? ORDER BY LENGTH(name) LIMIT 15", array("%$get_keyword%"));
 		if (!$r_i) throw new \ErrorException('Autocomplete query failed!');
 
 		$list = array();
@@ -641,67 +697,6 @@ class ProteinSearchController extends Controller
 		return 'http://www.ncbi.nlm.nih.gov/pubmed/'.$pubmed_uid;
 	}
 
-	private function initKeyword($protein_name)
-	{
-
-		// $request->request->get('fProtSearchKeyword') is not empty even if no keyword was filled in!
-		if (!empty($_POST['fProtSearchKeyword']))
-		{
-			$keyword = $_POST['fProtSearchKeyword'];
-		}
-		else if (!empty($protein_name))
-		{
-			$keyword = $protein_name;
-		}
-		// Form was submitted, but we haven't had any keyword
-		elseif (isset($_SESSION['protein_search_keyword']))
-		{
-			//$this->get('session')->getFlashBag()->add('no_keyword_err', 'Please fill in a keyword!');
-			$keyword = $_SESSION['protein_search_keyword'];
-		}
-		else
-		{
-			$keyword = '';
-		}
-		return $keyword;
-	}
-
-	/*
-		@var $requested_species the list of species abbreviations separated by commas, e.g. hs,ce
-	*/
-	private function initSpecies($requested_species = '')
-	{
-		$species_provider = $this->getSpeciesProvider();
-
-		if (!empty($_POST['fProtSearchSpecies'])) {
-			// this ensures that we need an exact match from the input to be valid
-			// if we don't get back an object, then the form was forged
-			$o_sp_descriptor = $species_provider->getSpecieByAbbreviation($_POST['fProtSearchSpecies']);
-			$species_id = $o_sp_descriptor->id;
-		} elseif (!empty($requested_species)) {
-			$o_sp_descriptor = $species_provider->getSpecieByAbbreviation($requested_species);
-			$species_id = $o_sp_descriptor->id;
-		} else {
-			$species_id = 0; // human
-		}
-
-		// add the taxonomical abbreviations of all species, they'll be needed on the species selector buttons
-		$descriptors = $species_provider->getDescriptors();
-		foreach($descriptors as $o)
-		{
-			$o->shortname = substr_replace($o->name, '. ', 1, strpos($o->name, ' '));
-		}
-
-		return $species_id;
-	}
-
-	private function initPageNum($curr_page)
-	{
-		$page = (preg_match('/^[0-9][0-9]*$/', $curr_page) ? (int)$curr_page : 0);
-		$this->search_range_start = $page * $this->search_result_per_page;
-
-		return $page;
-	}
 
 	private function getSpeciesProvider()
 	{

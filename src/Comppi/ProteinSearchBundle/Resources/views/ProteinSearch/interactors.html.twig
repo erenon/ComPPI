@@ -132,7 +132,7 @@
 					<td>{{ l.loc_score }}%</td>
 					<td>{{ l.loc_exp_sys|raw }}</td>
 					<td>{% if l.source_db %} {{ l.source_db }} {% endif %}</td>
-					<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank" title="Direct link to the publication that relates the protein to the localization.">PubMed&nbsp;<img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
+					<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank" title="Direct link to the publication or database that relates the protein to the localization.">PubMed&nbsp;<img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
 					</tr>
 					{% endfor %}
 					</tbody>

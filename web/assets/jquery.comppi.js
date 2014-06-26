@@ -4,7 +4,8 @@ $(document).ready(function(){
 		position: {
 			my: "left bottom-10px",
 			at: "left top"
-		}
+		},
+		show: {delay: 250}
 	});
 	
 	// first input autofokus
@@ -103,7 +104,7 @@ $(function() {
 			min: 0,
 			max: 100,
 			range: "max",
-			value: 0,
+			value: $("#fProtSearchLocScore").val(),
 			slide: function( event, ui ) {
 				$("#fProtSearchLocScore" ).val( ui.value );
 			},
