@@ -537,15 +537,21 @@ class ProteinSearchController extends Controller
 	}
 
 
-	public function autocompleteAction($get_keyword)
+	public function autocompleteAction($keyword)
 	{
 		$DB = $this->getDbConnection();
-		$r_i = $DB->executeQuery("SELECT name FROM ProteinName WHERE name LIKE ? ORDER BY LENGTH(name) LIMIT 15", array("%$get_keyword%"));
-		if (!$r_i) throw new \ErrorException('Autocomplete query failed!');
-
-		$list = array();
-		while ($p = $r_i->fetch(\PDO::FETCH_OBJ))
-			$list[] = $p->name;
+		$r_i = $DB->executeQuery(
+		"
+			SELECT name
+			FROM ProteinName
+			WHERE name LIKE ?
+			ORDER BY LENGTH(name)
+			LIMIT 100
+			",
+			array("%$keyword%")
+		);
+		if (!$r_i) { return new Response(json_encode(array('QUERY FAILED'))); }
+		$list = $r_i->fetchAll(\PDO::FETCH_COLUMN, 0);
 
         return new Response(json_encode($list));
 	}
