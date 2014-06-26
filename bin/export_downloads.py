@@ -131,7 +131,7 @@ class ComppiInterface(object):
 				if (actor_a, actor_b) not in et_buffer:
 					#try:
 					et_buffer[(actor_a, actor_b)] = {
-						'weight': [i_score],
+						'weight': i_score, # weights are always the same for the same interactors
 						'source_dbs': [i_src_db],
 						'pubmed_ids': [i_pubmed],
 						'edge_ids': [iid],
