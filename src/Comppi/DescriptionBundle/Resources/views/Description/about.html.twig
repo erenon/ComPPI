@@ -11,7 +11,7 @@
 <h1>What is ComPPI?</h1>
 <p>Protein-protein interaction networks are spatially and temporally merged from the results of various experimental and predicting methods. These often ignore localization data, which in turn deteriorates the data quality and its predictive potential.</p>
 <p>We present ComPPI, the <b>compartmentalized protein-protein interaction database</b>, which provides qualitative information on the <b>interactions, proteins and their localizations</b> integrated from <a href="{{ path('ComppiDescriptionBundle_help') }}/input_databases">multiple databases</a>.</p>
-<p>The overlap of the data among various databases can be very low <a href="http://www.nature.com/nmeth/journal/v6/n1/abs/nmeth.1284.html" title="Cusick et al, 2009, Nature Methods: Literature-curated protein interaction datasets (click to open the abstract)" target="_blank">[1]</a>, therefore the <b>integration</b> results in improved data quality.</p>
+<p>The overlap of the data among various databases can be very low <a href="http://www.nature.com/nmeth/journal/v6/n1/abs/nmeth.1284.html" title="Cusick et al, 2009, Nature Methods: Literature-curated protein interaction datasets (click to open the abstract)" target="_blank">(1)</a>, therefore the <b>integration</b> results in improved data quality.</p>
 <p>The subcellular localizations of the interacting proteins are often not taken into consideration, leading to networks with many false positive interactions. Creating a consensus between the available interaction and localization data further improves the data quality.</p>
 <p>ComPPI introduces two novel quantitative scores, the <a href="{{ path('ComppiDescriptionBundle_help') }}/scores#locscore">localization score</a>
 and the <a href="{{ path('ComppiDescriptionBundle_help') }}/scores#intscore">interaction score</a>,
@@ -78,7 +78,7 @@ Localization score for the proteins and interaction score for the protein-protei
 <a href="{{ path('ComppiDescriptionBundle_help') }}/scores">Details...</a>
 </li>
 <li><h3>Search</h3>
-Direct search option for individual proteins with autocomplete function giving their subcellular localization,
+Direct search option for individual proteins with autocomplete function and advanced search options for list of proteins giving their subcellular localization,
 their interactions and the likelihood of their interactions considering the subcellular localization of the interacting partners.<br />
 <a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}">Details...</a>
 </li>
