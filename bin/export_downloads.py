@@ -142,7 +142,7 @@ class ComppiInterface(object):
 				else:
 					d = et_buffer[(actor_a, actor_b)]
 					
-					d['weight'].append(i_score)
+					#d['weight'].append(i_score) - add weights only once
 					d['source_dbs'].append(i_src_db)
 					d['pubmed_ids'].append(i_pubmed)
 					d['edge_ids'].append(iid)
