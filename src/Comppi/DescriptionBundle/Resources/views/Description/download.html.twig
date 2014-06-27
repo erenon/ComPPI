@@ -21,7 +21,7 @@
 	<h2>Compartmentalized Interactome</h2>	
         
         <p align="justify">The <b>Compartmentalized Interactome</b> is the protein-protein interaction network of the selected major subcellular localization.
-        This dataset contains only the interactions where <b>at least one of the interactors is located in the selected subcellular localization</b>.</p>
+        This dataset contains only those interactions in which <b>both interactors share at least one common subcellular localization</b>.</p>
         
         <p align="justify">Customization options:
         <ul>
@@ -106,7 +106,8 @@
             <li><b>Synonyms B</b>: list of the protein name synonyms for the interactor protein B</li>
             <li><b>Naming Convention A</b>: naming convention for the interactor protein A</li>
             <li><b>Taxonomy ID B</b>: the taxonomy ID of the interactor protein B</li>
-            <li><b>Interaction Score</b>: the interaction score gives the propability of the interaction in a compartment dependent manner</li>
+            <li><b>Interaction Score</b>: the interaction score gives the propability of the interaction in a compartment dependent manner 
+            (Note that the interaction score is 0, if there was no localization information for one, or both of the interactors.)</li>
             <li><b>Interaction Experimental System Type</b>: list of the experimental system types for the given interaction</li>
             <li><b>Interaction Source Database</b>: list of the source databases for the given interaction</li>
             <li><b>Interaction PubMed ID</b>: list of the PubMed Ids for the sources of the given interaction</li>
