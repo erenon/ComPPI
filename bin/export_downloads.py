@@ -126,6 +126,9 @@ class ComppiInterface(object):
 					i_score = 0.0 # ambivalent, true 0.0 and None both map to 0.0
 				else:
 					i_score = float(i_score)
+				
+				if i_pubmed==0:
+					i_pubmed = 'N/A'
 
 				# add edge if it's new
 				if (actor_a, actor_b) not in et_buffer:
@@ -400,7 +403,7 @@ class ComppiInterface(object):
 		loc_scores = {}
 		with closing(cursor_ls) as cur_ls:
 			sql_ls = """
-				SELECT proteinId, majorLocName, score FROM  LocalizationScore ls
+				SELECT proteinId, majorLocName, score FROM LocalizationScore ls
 			"""
 			self.logging.debug(sql_ls)
 			cur_ls.execute(sql_ls)
@@ -609,7 +612,7 @@ class ComppiInterface(object):
 				
 				common_mlocs = set.intersection(set(n1_d['major_locs']), set(n2_d['major_locs']))
 				
-				if common_mlocs:
+				if common_mlocs and ('N/A' not in common_mlocs):
 					#print("{}->{}, mlocs1: {}, mlocs2: {}, common: {}".format(n1, n2, majorlocs_n1, majorlocs_n2, common_mlocs))
 					curr_node1_cells = self._aggregateCsvCells(graph.node[n1], node_columns, flatten, skip_none_lines)
 					curr_node2_cells = self._aggregateCsvCells(graph.node[n2], node_columns, flatten, skip_none_lines)
