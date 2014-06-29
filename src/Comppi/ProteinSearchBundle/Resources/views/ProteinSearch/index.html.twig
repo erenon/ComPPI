@@ -6,11 +6,12 @@
 {% block bundlecontent %}
     <h1>Search</h1>
     
-    <p align="justify"><a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}">Basic Search</a> option for individual proteins with autocomplete function giving their subcellular localization,
-    their interactions and the likelihood of their interactions considering the subcellular localization of the interacting partners.</p>
     
-    <p align="justify"><a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}">Advanced Search</a> option allows the user to set the filtration of the query protein for the available species and subcellular localizations.
-    Localization probability can be set numerically or by moving the slider.</p>
+    <p align="justify">Proteins can be searched in all species and subcellular localizations by filling in partial or full protein name and clicking on <b>Search</b>.
+    A list of suggested protein names will pop up after typing in 3 characters.</p>
+
+    <p align="justify">The <b>Advanced Settings</b> options allow the customization of the species, the subcellular localization and the localization probability threshold.
+    These parameters apply to the query protein, not to the interactors.</p>
     
     <p>
     <a href="{{ path('ComppiDescriptionBundle_help') }}/protein_search">Details</a> and
