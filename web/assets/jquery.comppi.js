@@ -62,7 +62,7 @@ $(function() {
 	
 	// show/hide advanced search
 	if ($("#fProtSearchKeyword").length) {
-		$("#fProtSearchContainerLL, #fProtSearchContainerLR, #fProtSearchReset").hide();
+		$("#fProtSearchContainerLL, #fProtSearchContainerLR").hide();
 		
 		// remove comment to enable multiline advanced search
 		//orig_title = $("#fProtSearchKeyword").attr("title");
@@ -72,7 +72,7 @@ $(function() {
 		
 		$("#fProtSearchAdvancedBtn").click(function() {
 			//var is_hidden = $("#fProtSearchContainerLL, #fProtSearchContainerLR").is(":hidden");
-			$("#fProtSearchContainerLL, #fProtSearchContainerLR, #fProtSearchReset").slideToggle(300);
+			$("#fProtSearchContainerLL, #fProtSearchContainerLR").slideToggle(300);
 			
 			// remove comment to enable multiline advanced search
 			//if (is_hidden) {
