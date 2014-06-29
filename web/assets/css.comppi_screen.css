@@ -222,6 +222,7 @@ li { list-style-type: square; }
 	-webkit-box-shadow: 5px 5px 5px 0px #999;
     -moz-box-shadow: 5px 5px 5px 0px #999;
 }
+.btn:hover { color: #000; }
 a.btn:hover { color: #000; }
 label {
 	display: block;
@@ -310,9 +311,9 @@ textarea { height: 200px; }
 #fProtSearchKeywordLabel, #fProtSearchSpeciesLabel, #fProtSearchLocLabel { width: 175px; float: left; }
 #fProtSearchKeyword { width: 250px; height: 24px; margin: 2px 20px; overflow-y: auto; }
 /*.fProtSearchKeywordAsTextarea { height: 100px; }*/
-#fProtSearchAdvancedBtn { width: 260px; margin-top: 0; }
-#fProtSearchReset { margin-top: 0.5em; width: 210px; }
-#fProtSearchSubmit { width: 200px; margin-left: 20px; }
+#fProtSearchSubmit { width: 110px; /*width: 200px; margin-left: 20px;*/ }
+#fProtSearchAdvancedBtn { width: 250px; margin-left: 10px; /*width: 260px; margin-top: 0;*/ }
+#fProtSearchReset { width: 96px; margin-left: 10px; /* margin-top: 0.5em; width: 210px;*/ }
 #fProtSearchSpecContainer, #fProtSearchLocContainer {
 	width: 250px;
 	margin: 10px 0 0 15px;
