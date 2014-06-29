@@ -9,7 +9,7 @@ $(document).ready(function(){
 	});
 	
 	// first input autofokus
-	$("input[type='text']:eq(0)").focus();
+	//$("input[type='text']:eq(0)").focus();
 
 	// striped tables
 	$("table.striped_table tbody > tr:odd").addClass("striped_row");
@@ -123,6 +123,8 @@ $(function() {
 		// reset the protein search form
 		$("#fProtSearchReset").click(function() {
 			$("#fProtSearchKeyword").val("");
+			$("#fProtSearchLocScore").val(0);
+			$("#fProtSearchLocScoreSlider").slider("value", 0);
 			$("#ProteinSearchForm input:checkbox").attr("checked", "checked");
 		});
 	}
