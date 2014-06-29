@@ -6,10 +6,17 @@
 {% block bundlecontent %}
     <h1>Search</h1>
     
-    <p align="justify">Direct search option for individual proteins with autocomplete function giving their subcellular localization,
-    their interactions and the likelihood of their interactions considering the subcellular localization of the interacting partners.
-    <br/><a href="{{ path('ComppiDescriptionBundle_help') }}/protein_search">Details</a> and
+    <p align="justify"><a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}">Basic Search</a> option for individual proteins with autocomplete function giving their subcellular localization,
+    their interactions and the likelihood of their interactions considering the subcellular localization of the interacting partners.</p>
+    
+    <p align="justify"><a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}">Advanced Search</a> option allows the user to set the filtration of the query protein for the available species and subcellular localizations.
+    Localization probability can be set numerically or by moving the slider.</p>
+    
+    <p>
+    <a href="{{ path('ComppiDescriptionBundle_help') }}/protein_search">Details</a> and
     <a href="{{ path('ComppiDescriptionBundle_help') }}/tutorial">Tutorial</a>
     </p>
+    </br>
+    
 {% include 'ComppiProteinSearchBundle:ProteinSearch:searchform.html.twig' %}
 {% endblock %}
