@@ -120,13 +120,7 @@ $(function() {
 			$("#fProtSearchLocScoreSlider").slider("value", $("#fProtSearchLocScore").val());
 		});
 		
-		// reset the protein search form
-		$("#fProtSearchReset").click(function() {
-			$("#fProtSearchKeyword").val("");
-			$("#fProtSearchLocScore").val(0);
-			$("#fProtSearchLocScoreSlider").slider("value", 0);
-			$("#ProteinSearchForm input:checkbox").attr("checked", "checked");
-		});
+		
 	}
 	
 	// show/hide protein interaction details
@@ -134,5 +128,15 @@ $(function() {
 	$(".ps-detailsOpener").click(function() {
 		$(this).siblings(".ps-actorBDetails:first").slideToggle();
 		return false;
+	});
+});
+
+$(function() {
+	// reset the protein search form
+	$("#fProtSearchReset").click(function() {
+		$("#fProtSearchKeyword").attr("value", ""); // .val("") does not work - jQuery bug?
+		$("#fProtSearchLocScore").attr("value", 0);
+		$("#fProtSearchLocScoreSlider").slider("value", 0);
+		$("#ProteinSearchForm input:checkbox").attr("checked", "checked");
 	});
 });
