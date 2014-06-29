@@ -10,17 +10,17 @@
 	<div id="fProtSearchContainerUL">
 	<label for="fProtSearchKeyword" id="fProtSearchKeywordLabel">Protein Name:
 	</label>
-	<textarea name="fProtSearchKeyword" required="required" id="fProtSearchKeyword" title="Start typing to get a list of suggested proteins; autocomplete appears after 3 characters. The search is case-insensitive." txttitle="Search for up to 100 protein names, each in a new row. Autocomplete is disabled for multisearch. The search is case-insensitive.">{{ keyword }}</textarea>
-	{# <input type="text" name="fProtSearchKeyword" id="fProtSearchKeyword" value="{{ keyword }}" title="Start typing to get a list of suggested proteins; autocomplete appears after 3 characters." /> #}
+	{# <textarea name="fProtSearchKeyword" required="required" id="fProtSearchKeyword" title="Start typing to get a list of suggested proteins; autocomplete appears after 3 characters. The search is case-insensitive." txttitle="Search for up to 100 protein names, each in a new row. Autocomplete is disabled for multisearch. The search is case-insensitive.">{{ keyword }}</textarea> #}
+	<input type="text" name="fProtSearchKeyword" value="{{ keyword }}" id="fProtSearchKeyword" required="required" title="Start typing to get a list of suggested proteins; autocomplete appears after 3 characters. The search is case-insensitive." />
 	</div>
 	
 	<!-- upper right section -->
 	<div id="fProtSearchContainerUR">
-	<input type="button" class="btn" name="fProtSearchAdvanced" id="fProtSearchAdvancedBtn" value="Advanced Settings" title="Click to display/hide the advanced settings." />
+	<input class="btn btn_submit" type="submit" name="fProtSearchSubmit" id="fProtSearchSubmit" value="Search" title="Click 'Submit Search' to send your request." />
 	
-	<input class="btn btn_submit" type="submit" name="fProtSearchSubmit" id="fProtSearchSubmit" value="Submit Search" title="Click 'Submit Search' to send your request." />
+	<input type="button" class="btn" name="fProtSearchAdvanced" id="fProtSearchAdvancedBtn" value="Advanced Search &raquo;" title="Click to display/hide the advanced settings." />
 	
-	<input class="btn" type="reset" name="fProtSearchReset" id="fProtSearchReset" value="Reset Settings" title="Click to reset the settings to default values." />
+	<input class="btn" type="reset" name="fProtSearchReset" id="fProtSearchReset" value="Reset" title="Click to reset the settings to default values." />
 	</div>
 	
 	<div class="clear-both"></div>

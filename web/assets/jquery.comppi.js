@@ -64,26 +64,28 @@ $(function() {
 	if ($("#fProtSearchKeyword").length) {
 		$("#fProtSearchContainerLL, #fProtSearchContainerLR, #fProtSearchReset").hide();
 		
-		orig_title = $("#fProtSearchKeyword").attr("title");
-		orig_height = $("#fProtSearchKeyword").height();
-		orig_height = orig_height.toString() + 'px';
-		textarea_title = $("#fProtSearchKeyword").attr("txttitle");
+		// remove comment to enable multiline advanced search
+		//orig_title = $("#fProtSearchKeyword").attr("title");
+		//orig_height = $("#fProtSearchKeyword").height();
+		//orig_height = orig_height.toString() + 'px';
+		//textarea_title = $("#fProtSearchKeyword").attr("txttitle");
 		
 		$("#fProtSearchAdvancedBtn").click(function() {
-			var is_hidden = $("#fProtSearchContainerLL, #fProtSearchContainerLR").is(":hidden");
+			//var is_hidden = $("#fProtSearchContainerLL, #fProtSearchContainerLR").is(":hidden");
 			$("#fProtSearchContainerLL, #fProtSearchContainerLR, #fProtSearchReset").slideToggle(300);
 			
-			if (is_hidden) {
-				$("#fProtSearchKeyword")
-					.animate({height:'110px'})
-					.attr("title", textarea_title)
-					.autocomplete( "option", "disabled", true );
-			} else {
-				$("#fProtSearchKeyword")
-					.animate({height:orig_height})
-					.attr("title", orig_title)
-					.autocomplete( "option", "disabled", false );
-			}
+			// remove comment to enable multiline advanced search
+			//if (is_hidden) {
+			//	$("#fProtSearchKeyword")
+			//		.animate({height:'110px'})
+			//		.attr("title", textarea_title)
+			//		.autocomplete( "option", "disabled", true );
+			//} else {
+			//	$("#fProtSearchKeyword")
+			//		.animate({height:orig_height})
+			//		.attr("title", orig_title)
+			//		.autocomplete( "option", "disabled", false );
+			//}
 			
 			return false;
 		});
@@ -91,13 +93,13 @@ $(function() {
 		// maintain user experience:
 		// if textarea is in simple search mode (like an input field), then
 		// submit when Enter key is pressed instead of inserting new line
-		$("#fProtSearchKeyword").on("keydown", function(event) {
-			if (event.keyCode == 13 && $("#fProtSearchReset").is(":hidden")) {
-				//window.alert('IGEN')
-				$("#ProteinSearchForm").submit();
-				return false;
-			}
-		});
+		//$("#fProtSearchKeyword").on("keydown", function(event) {
+		//	if (event.keyCode == 13 && $("#fProtSearchReset").is(":hidden")) {
+		//		//window.alert('IGEN')
+		//		$("#ProteinSearchForm").submit();
+		//		return false;
+		//	}
+		//});
 		
 		// localization score treshold slider for protein search
 		$("#fProtSearchLocScoreSlider").slider({
@@ -113,6 +115,10 @@ $(function() {
 			},
 		});
 		$("#fProtSearchLocScore").val( $("#fProtSearchLocScoreSlider").slider("value") );
+		// slider should follow the typed in value
+		$("#fProtSearchLocScore").on("keyup", function(event) {
+			$("#fProtSearchLocScoreSlider").slider("value", $("#fProtSearchLocScore").val());
+		});
 		
 		// reset the protein search form
 		$("#fProtSearchReset").click(function() {
