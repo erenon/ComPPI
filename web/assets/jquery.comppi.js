@@ -60,83 +60,10 @@ $(function() {
 		}
 	});
 	
-	// show/hide advanced search
-	if ($("#fProtSearchKeyword").length) {
-		$("#fProtSearchContainerLL, #fProtSearchContainerLR").hide();
-		
-		// remove comment to enable multiline advanced search
-		//orig_title = $("#fProtSearchKeyword").attr("title");
-		//orig_height = $("#fProtSearchKeyword").height();
-		//orig_height = orig_height.toString() + 'px';
-		//textarea_title = $("#fProtSearchKeyword").attr("txttitle");
-		
-		$("#fProtSearchAdvancedBtn").click(function() {
-			//var is_hidden = $("#fProtSearchContainerLL, #fProtSearchContainerLR").is(":hidden");
-			$("#fProtSearchContainerLL, #fProtSearchContainerLR").slideToggle(300);
-			
-			// remove comment to enable multiline advanced search
-			//if (is_hidden) {
-			//	$("#fProtSearchKeyword")
-			//		.animate({height:'110px'})
-			//		.attr("title", textarea_title)
-			//		.autocomplete( "option", "disabled", true );
-			//} else {
-			//	$("#fProtSearchKeyword")
-			//		.animate({height:orig_height})
-			//		.attr("title", orig_title)
-			//		.autocomplete( "option", "disabled", false );
-			//}
-			
-			return false;
-		});
-				
-		// maintain user experience:
-		// if textarea is in simple search mode (like an input field), then
-		// submit when Enter key is pressed instead of inserting new line
-		//$("#fProtSearchKeyword").on("keydown", function(event) {
-		//	if (event.keyCode == 13 && $("#fProtSearchReset").is(":hidden")) {
-		//		//window.alert('IGEN')
-		//		$("#ProteinSearchForm").submit();
-		//		return false;
-		//	}
-		//});
-		
-		// localization score treshold slider for protein search
-		$("#fProtSearchLocScoreSlider").slider({
-			min: 0,
-			max: 100,
-			range: "max",
-			value: $("#fProtSearchLocScore").val(),
-			slide: function( event, ui ) {
-				$("#fProtSearchLocScore" ).val( ui.value );
-			},
-			change: function(event, ui) {
-				//
-			},
-		});
-		$("#fProtSearchLocScore").val( $("#fProtSearchLocScoreSlider").slider("value") );
-		// slider should follow the typed in value
-		$("#fProtSearchLocScore").on("keyup", function(event) {
-			$("#fProtSearchLocScoreSlider").slider("value", $("#fProtSearchLocScore").val());
-		});
-		
-		
-	}
-	
 	// show/hide protein interaction details
 	$(".ps-actorBDetails").hide();
 	$(".ps-detailsOpener").click(function() {
 		$(this).siblings(".ps-actorBDetails:first").slideToggle();
 		return false;
-	});
-});
-
-$(function() {
-	// reset the protein search form
-	$("#fProtSearchReset").click(function() {
-		$("#fProtSearchKeyword").attr("value", ""); // .val("") does not work - jQuery bug?
-		$("#fProtSearchLocScore").attr("value", 0);
-		$("#fProtSearchLocScoreSlider").slider("value", 0);
-		$("#ProteinSearchForm input:checkbox").attr("checked", "checked");
 	});
 });
