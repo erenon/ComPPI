@@ -241,7 +241,7 @@ class ProteinSearchController extends Controller
 				}
 				//$sql_cond_mloc = "'".join("', '", $cond_mloc)."'";
 			} else {
-				//$err[] = 'Please select at least one subcellular compartment.';
+				$err[] = 'Please select at least one subcellular compartment.';
 			}
 			
 			# SQL parameters: localization treshold
