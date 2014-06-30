@@ -9,15 +9,19 @@
         <h2>Summary of the <a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}">Search</a> page</h2>
         
         <p align="justify">The purpose of <a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}">Search</a> is to explore the interactors of the query protein with all their localization data.
-        The search can be <b>Basic Search</b>, <b>Advanced Search</b> or <b>Direct Protein ID Search</b>.
+        <!--The search can be <b>Basic Search</b>, <b>Advanced Search</b> or <b>Direct Protein ID Search</b>.-->
+        The search can be basic <b>Search</b> or <b>Direct Protein ID Search</b>.
         We will list the details of these three options below.</p>
 
-        <p align="justify"><b>Basic Search</b> starts with a form to specify the name of the query protein.
+        <p align="justify"><b>Search</b><!--<b>Basic Search</b>--> starts with a form to specify the name of the query protein.
         The search term can be the full ID or even a fragment of the name of the protein.
-        A list of suggested names pops up after typing at least 3 characters.</p>
+        A list of suggested names pops up after typing at least 3 characters.
+        The user may set the filtration of the query protein for the available species.</p>
 
-        <p align="justify">Using the <b>Advanced Search</b> option the user may set the filtration of the query protein for the available species and subcellular localizations.
-        Localization probability can be set numerically or by moving the slider. The advanced parameters apply only to the query protein, not to the interactors, therefore you may see other localizations or lower localization probabilities from the interactors (the search is permissive, not restrictive).</p> 
+        
+        <!--<p align="justify">Using the <b>Advanced Search</b> option the user may set the filtration of the query protein for the available species and subcellular localizations.
+        Localization probability can be set numerically or by moving the slider. The advanced parameters apply only to the query protein, not to the interactors,
+        therefore you may see other localizations or lower localization probabilities from the interactors (the search is permissive, not restrictive).</p>--> 
 
         <p align="justify">If a single protein was found, the page of interactors is shown immediately.
         If there are multiple search results for a given protein name (or fragment), an intermediate page displays the available options.
@@ -28,7 +32,7 @@
         http://comppi.linkgroup.hu/protein_search/{protein ID, such as the requested UniProtKB accesison}.
         Try this example to explore the interactions of the Polyductin protein: <a href="http://comppi.linkgroup.hu/protein_search/P08F94">http://comppi.linkgroup.hu/protein_search/P08F94</a></p>
         
-        <p>Visit our <a href="{{ path('ComppiDescriptionBundle_help') }}/tutorial">Tutorial</a> to learn more about how to use the <b>Search</b> page or
+        <p>Visit our <a href="{{ path('ComppiDescriptionBundle_help') }}/tutorial#protsearch">Tutorial</a> to learn more about how to use the <b>Search</b> page or
         move your mouse over any of the <b>Search</b> form elements to display a location-sensitive tooltip.</p>
         
         <!-- <p align="justify">To learn more about how to use our Protein Search page check out our <a href="{{ path('ComppiDescriptionBundle_help') }}/tutorial#protsearch">Tutorial</a>!</p> -->
