@@ -94,7 +94,7 @@ h2 { margin-top: 2em; margin-bottom: 0.5em; font-size: 1.25em; font-weight: 500;
 h3 { margin-top: 1em; margin-bottom: 0; }
 li { list-style-type: square; }
 
-.center { text-align: center; }
+.center { text-align: center; margin: 0; }
 .clear-both { clear: both; margin: 0; }
 .help { margin: 1em 0; }
 .help_details {}
@@ -118,8 +118,24 @@ li { list-style-type: square; }
 }
 .infobtn a { color: #E0DFDC; text-decoration: none; }
 .infobtn a:hover { color: #fff; }
-.message_success { font-weight: bold; color: #008800; }
-.message_error { font-weight: bold; color: #ff0000; }
+.message_success, .message_error {
+	width: 100%;
+	margin: 1em 0;
+	padding: 10px;
+	text-align: center;
+}
+.message_success {
+	border-top: 1px solid #00aa00;
+	border-bottom: 1px solid #00aa00;
+	background-color: #DEF4DE;
+	color: #006B00; }
+.message_error {
+	font-weight: bold;
+	border-top: 1px solid #F24141;
+	border-bottom: 1px solid #F24141;
+	background-color: #F4D7D7;
+	color: #cc0000;
+}
 
 .fancy_table {
 	width: 100%;
@@ -302,8 +318,9 @@ textarea { height: 200px; }
 	float: left;
 	width: 500px;
 	margin: 0;
-	padding-bottom: 2em;
+	padding: 0;
 }
+#fProtSearchContainerLL, #fProtSearchContainerLR { padding: 1em 0; }
 #fProtSearchContainerUR { text-align: center; }
 /*#ProteinSearchForm table { border-collapse: collapse; border: 0; }
 #ProteinSearchForm table td { width: 500px; padding-bottom: 1em; vertical-align: top; }

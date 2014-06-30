@@ -118,7 +118,8 @@ class ProteinSearchController extends Controller
 			'keyword' => '',
 			'result_msg' => '',
 			'loc_treshold' => 0.0,
-			'uniprot_root' => $this->uniprot_root
+			'uniprot_root' => $this->uniprot_root,
+			'form_error_messages' => '',
         );
 		
 		// PREPARE THE SEARCH FORM
@@ -252,12 +253,12 @@ class ProteinSearchController extends Controller
 				$loc_treshold = $_POST['fProtSearchLocScore']/100;
 			}
 			
-			
 			// check for validation errors
 			if (!empty($err))
 			{
-				$err_msgs = implode(' ', $err);
-				$this->get('session')->setFlash('ps-errors', $err_msgs);
+				//$err_msgs = implode(' ', $err);
+				//$this->get('session')->setFlash('ps-errors', $err_msgs, $persist = false);
+				$T['form_error_messages'] = implode("<br />", $err);
 				
 				return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
 			}

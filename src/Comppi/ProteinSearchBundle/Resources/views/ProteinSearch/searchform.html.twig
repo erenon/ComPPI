@@ -1,17 +1,17 @@
 {# src/Comppi/ProteinSearchBundle/Resources/views/searchform.html.twig #}
 
-<div class="center">
-{% if app.session.hasFlash('ps-errors') %}
-<p class="message_error"> {{ app.session.flash('ps-errors') }} </p>
+{% if form_error_messages %}
+<p class="message_error"> {{ form_error_messages|raw }} </p>
 {% endif %}
-	
+
+<div class="center">	
 <form id="ProteinSearchForm" action="protein_search" method="post">
 	<!-- upper left section -->
 	<div id="fProtSearchContainerUL">
 	<label for="fProtSearchKeyword" id="fProtSearchKeywordLabel">Protein Name:
 	</label>
 	{# <textarea name="fProtSearchKeyword" required="required" id="fProtSearchKeyword" title="Start typing to get a list of suggested proteins; autocomplete appears after 3 characters. The search is case-insensitive." txttitle="Search for up to 100 protein names, each in a new row. Autocomplete is disabled for multisearch. The search is case-insensitive.">{{ keyword }}</textarea> #}
-	<input type="text" name="fProtSearchKeyword" value="{{ keyword }}" id="fProtSearchKeyword" required="required" title="Start typing to get a list of suggested proteins; autocomplete appears after 3 characters. The search is case-insensitive." />
+	<input type="text" name="fProtSearchKeyword" value="{{ keyword }}" id="fProtSearchKeyword" title="Start typing to get a list of suggested proteins; autocomplete appears after 3 characters. The search is case-insensitive." />
 	</div>
 	
 	<!-- upper right section -->
