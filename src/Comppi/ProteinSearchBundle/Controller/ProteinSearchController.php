@@ -570,9 +570,9 @@ class ProteinSearchController extends Controller
 		$prot_details['locs'] = (!empty($prot_details['locs'][$comppi_id]) ? $prot_details['locs'][$comppi_id] : array());
 
 		$syns = $this->getProteinSynonyms(array($comppi_id));
-		$prot_details['synonyms'] = $syns[$comppi_id]['synonyms'];
+		$prot_details['synonyms'] = (!empty($syns[$comppi_id]['synonyms']) ? $syns[$comppi_id]['synonyms'] : []);
 		$prot_details['fullname'] = (!empty($syns[$comppi_id]['syn_fullname']) ? $syns[$comppi_id]['syn_fullname'] : '');
-		$prot_details['uniprot_link'] = $this->uniprot_root.$prot_details['name'];
+		$prot_details['uniprot_link'] = (!empty($this->uniprot_root.$prot_details['name']) ? $this->uniprot_root.$prot_details['name'] : '');
 
 		return $prot_details;
 	}
