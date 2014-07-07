@@ -286,7 +286,8 @@ class ProteinSearchController extends Controller
 			foreach ($keywords as $kw)
 			{
 				$kw = $DB->quote($kw); // ke\yw'ord -> 'ke\\yw\'rd'
-				$kw = substr_replace($kw, '%', strlen($kw)-1, 0); // 'ke\\yw\'rd' -> 'ke\\yw\'rd%'
+				$kw = substr_replace($kw, '%', 1, 0); // 'ke\\yw\'rd' -> '%ke\\yw\'rd'
+				$kw = substr_replace($kw, '%', strlen($kw)-1, 0); // '%ke\\yw\'rd' -> '%ke\\yw\'rd%'
 				$r_prots_keyw_cond[] = "LOWER(proteinName) LIKE " . $kw;
 			}
 			$r_prots = $DB->executeQuery(
@@ -305,6 +306,7 @@ class ProteinSearchController extends Controller
 			foreach ($keywords as $kw)
 			{
 				$kw = $DB->quote($kw); // ke\yw'ord -> 'ke\\yw\'rd'
+				$kw = substr_replace($kw, '%', 1, 0); // 'ke\\yw\'rd' -> '%ke\\yw\'rd'
 				$kw = substr_replace($kw, '%', strlen($kw)-1, 0); // 'ke\\yw\'rd' -> 'ke\\yw\'rd%'
 				$r_n2p_keyw_cond[] = "LOWER(name) LIKE " . $kw;
 			}
