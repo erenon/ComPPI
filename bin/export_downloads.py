@@ -821,7 +821,10 @@ if __name__ == '__main__':
 		c = ComppiInterface()
 		comppi = c.buildGlobalComppi()
 		egograph = c.buildEgoGraph(comppi, args.node_id)
-		print(egograph.edges(data=True))
+		#print(egograph.edges(data=True))
+		nx.write_gml(egograph, 'egograf.gml')
+		#nx.write_gexf(egograph, 'egograf.gexf')
+		#nx.write_graphml(egograph, 'egograf.graphml')
 	elif args.mode=='export':
 		c = ComppiInterface()
 		all_specii = c.specii_opts
