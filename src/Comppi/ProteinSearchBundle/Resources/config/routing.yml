@@ -1,6 +1,6 @@
 ComppiProteinSearchBundle_proteinsearch:
-    pattern:  /protein_search
-    defaults: { _controller: ComppiProteinSearchBundle:ProteinSearch:proteinSearch }
+    pattern:  /protein_search/{get_keyword}
+    defaults: { _controller: ComppiProteinSearchBundle:ProteinSearch:proteinSearch, get_keyword: '' }
 
 ComppiProteinSearchBundle_interactors:
     pattern:  /protein_search/interactors/{comppi_id}/{get_interactions}

@@ -5,10 +5,10 @@
 
 {% block bundlecontent %}
 	
-	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Download of Custom Datasets</li></ul></h1>
+	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Download Custom Datasets</li></ul></h1>
         
-        <h2>Summary of the Downloads page</h2>
-	<p align="justify">On the <a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}/searchform">Downloads</a> page the user can download the following predefined custom datasets and the full database:
+        <h2>Summary of the <a href="{{ path('DownloadCenterBundle_downloads') }}">Downloads</a> page</h2>
+	<p align="justify">On the <a href="{{ path('DownloadCenterBundle_downloads') }}">Downloads</a> page the user can download the following predefined custom datasets and the full database:
         <ul>
             <li><a href="#comp">Compartmentalized Interactome</a></li>
             <li><a href="#ppi">Integrated Protein-Protein Interaction Dataset</a></li>
@@ -17,10 +17,11 @@
         </ul>
         </p>
         
-        <a name="comp"><h2>Compartmentalized Interactome</h2></a>
+        <a name="comp"></a>
+	<h2>Compartmentalized Interactome</h2>	
         
         <p align="justify">The <b>Compartmentalized Interactome</b> is the protein-protein interaction network of the selected major subcellular localization.
-        This dataset contains only the interactions where <b>at least one of the interactors is located in the selected subcellular localization</b>.</p>
+        This dataset contains only those interactions in which <b>both interactors share at least one common subcellular localization</b>.</p>
         
         <p align="justify">Customization options:
         <ul>
@@ -76,7 +77,8 @@
 
         
                
-        <a name="ppi"><h2>Integrated Protein-Protein Interaction Dataset</h2></a>
+        <a name="ppi"></a>
+        <h2>Integrated Protein-Protein Interaction Dataset</h2>
         
         <p align="justify">The <b>Integrated Protein-Protein Interaction Dataset</b> contains all the interactions for the choosen species excluding the subcellular localizations.</p> 
         
@@ -98,11 +100,14 @@
         <ul>
             <li><b>Protein A</b>: UniProt accession of the interactor protein A</li>
             <li><b>Synonyms A</b>: list of the protein name synonyms for the interactor protein A</li>
+            <li><b>Naming Convention A</b>: naming convention for the interactor protein A</li>
             <li><b>Taxonomy ID A</b>: the taxonomy ID of the interactor protein B</li>
             <li><b>Protein B</b>: UniProt accession of the interactor protein B</li>
             <li><b>Synonyms B</b>: list of the protein name synonyms for the interactor protein B</li>
+            <li><b>Naming Convention A</b>: naming convention for the interactor protein A</li>
             <li><b>Taxonomy ID B</b>: the taxonomy ID of the interactor protein B</li>
-            <li><b>Interaction Score</b>: the interaction score gives the propability of the interaction in a compartment dependent manner</li>
+            <li><b>Interaction Score</b>: the interaction score gives the propability of the interaction in a compartment dependent manner 
+            (Note that the interaction score is 0, if there was no localization information for one, or both of the interactors.)</li>
             <li><b>Interaction Experimental System Type</b>: list of the experimental system types for the given interaction</li>
             <li><b>Interaction Source Database</b>: list of the source databases for the given interaction</li>
             <li><b>Interaction PubMed ID</b>: list of the PubMed Ids for the sources of the given interaction</li>
@@ -110,7 +115,8 @@
         </p>
 
         
-        <a name="loc"><h2>Integrated Subcellular Localization Dataset</h2></a>
+        <a name="loc"></a>
+        <h2>Integrated Subcellular Localization Dataset</h2>
         
         <p align="justify">The <b>Integrated Subcellular Localization Dataset</b> contains all the localization data for the proteins excluding the interactions.</p>
         
@@ -143,7 +149,7 @@
         <p align="justify">The <b>Integrated Subcellular Localization Dataset</b> contains the following data columns (the entries are separated by |):
         <ul>
             <li><b>Protein Name</b>: UniProt accession of the protein</li>
-            <li><b>Naming Convention</b>: naming convention for the protein<</li>
+            <li><b>Naming Convention</b>: naming convention for the protein</li>
             <li><b>Synonyms</b>: list of the protein name synonyms for the protein</li>
             <li><b>Major Loc With Loc Score</b>: list of the major subcellular localizations where the protein exists and the corresponding localization score for the protein</li>
             <li><b>Minor Loc</b>: list of the minor localizations where the protein exists for the protein</li>
@@ -154,13 +160,15 @@
         </ul>
         </p>
 
-        <a name="full"><h2>Full database - Current and Previous Releases</h2></a>
+        <a name="full"></a>
+        <h2>Full database - Current and Previous Releases</h2>
         
         <p align="justify">The ComPPI <b>Full Database</b> download allows the user o download the current or previous releases of the ComPPI database.
         The downloaded database is in SQL format and contains all the information stored in the ComPPI database.</p>
         
         <p align="justify">More information about the output formats on the Downloads page <a href="{{ path('ComppiDescriptionBundle_help') }}/output_formats">here</a>.</p>
 	
-	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
+	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Help Table of Contents</a>
+        <br/><a href="{{ path('ComppiDescriptionBundle_about') }}">&#x21e6; Back to Starting Page</a></p>
 
 {% endblock %}

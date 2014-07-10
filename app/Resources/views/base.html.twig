@@ -24,10 +24,11 @@
 		<div id="HeaderSlogan">Compartmentalized Protein-Protein Interaction Database</div>
 		<ul id="MainMenu">
 			<li><a href="{{ path('ComppiDescriptionBundle_about') }}">Home</a></li>
-			<li><a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}">Protein Search</a></li>
+			<li><a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}">Search</a></li>
 			<li><a href="{{ path('DownloadCenterBundle_downloads') }}">Downloads</a></li>
 			<li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li>
-			<li><a href="{{ path('ContactBundle_contact') }}">Contact Us</a></li>
+			<li><a href="{{ path('ComppiDescriptionBundle_help') }}/tutorial">Tutorial</a></li>
+			<li><a href="{{ path('ContactBundle_contact') }}">Contact  Us</a></li>
 		</ul>
 		</div>
 	{% endblock %}
@@ -37,10 +38,10 @@
 		</div>
 		
 		<ul id="Footer">
-			<li>ComPPI v1.0 (last update: 13/06/2014 - beta, unpublished)</li>
+			<li>ComPPI v1.0 (last update: 29/06/2014 - unpublished)</li>
 			<li><a href="{{ path('ComppiDescriptionBundle_impressum') }}">Impressum</a></li>
-			<li><a href="{{ path('ComppiDescriptionBundle_help') }}#cite">Citation</a></li>
-			<li><a href="{{ path('ComppiDescriptionBundle_help') }}/terms_of_use">Terms of use</a></li>
+			<li><a href="{{ path('ComppiDescriptionBundle_help') }}/cite_us">Citation</a></li>
+			<li><a href="{{ path('ComppiDescriptionBundle_help') }}/terms_of_use">Terms of Use</a></li>
 		</ul>
     </body>
 </html>

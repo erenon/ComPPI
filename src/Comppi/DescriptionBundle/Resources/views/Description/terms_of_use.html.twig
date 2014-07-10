@@ -6,19 +6,18 @@
 {% block bundlecontent %}
 	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Terms of Use</li></ul></h1>
 	
-	<h2>ComPPI & Open Source</h2>
+	<h2>ComPPI Is Open Source</h2>
 	
-        <h2>Source code</h2>
-	<p align='justify'>The source code of the ComPPI database and web application is entirely open to the public.<br/>
-	The user can reach the ComPPI source code in <a href="http://bificomp2.sote.hu:22422/comppi/summary">RhodeCode</a></p>
-        
-        <h2>Issue tracking</h2>
-	<p align='justify'>Issue tracking is available through <a href="http://bificomp2.sote.hu/redmine/projects/comppi">Redmine</a>.<br/>
-        We use "private" issues during development, but we strongly appreciate if you could create a new "public" issue with your comments.</p>
-	
-        <h2>License</h2>
+	<p>The ComPPI database and the related source code are entirely open to the public. We invite everyone to extend the codebase or the datasets, to request features or to report bugs.  To do so, please feel free to post an issue into our issue tracking system.
+	<ul>
+		<li>Issue Tracking (feature requests, bug reports): <a href="http://bificomp2.sote.hu/redmine/projects/comppi">Redmine</a></li>
+		<li>Source Code: <a href="http://bificomp2.sote.hu:22422/comppi/summary">RhodeCode</a></li>
+	</ul></p>
+
+    <h2>License</h2>
 	<p><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">ComPPI</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License.</a></p>
         <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>
 	
-	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
+	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Help Table of Contents</a>
+        <br/><a href="{{ path('ComppiDescriptionBundle_about') }}">&#x21e6; Back to Starting Page</a></p>
 {% endblock %}

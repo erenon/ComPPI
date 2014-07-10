@@ -7,7 +7,8 @@
 
 	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li><a href="{{ path('ComppiDescriptionBundle_help') }}/input_databases">Input Databases</a></li><li>Input Protein-Protein Interaction Databases</li></ul></h1>
 
-        <p>ComPPI integrates multiple protein-protein interaction databases per each available species. Please click on the species to reach the table of the source databases:</p>
+	<br/>
+        <p>ComPPI integrates multiple protein-protein interaction databases regarding each available species. Please click on the species to reach the table of the source databases:</p>
         <ol>
             <li><a href="#human"><i>Homo sapiens</i> (Human)</a></li>
             <li><a href="#drosi"><i>Drosophila melanogaster</i> (Fruit fly)</a></li>
@@ -16,8 +17,8 @@
         </ol>
         
     <a name="human"></a>
-	<br/><h2>1. <i>Homo sapiens (Human)</i></h2>
-	<table id="Input_PPI_Table_Human" class="fancy_table hovered_list">
+	<br/><h2>1. <i>Homo sapiens</i> (Human)</h2>
+	<table id="Input_PPI_Table_Human" class="fancy_table hovered_list striped_table">
 		<thead>
 			<tr>
 				<th>Database Name</th>
@@ -96,7 +97,7 @@
 
     <a name="drosi"></a>
 	<br/><h2>2. <i>Drosophila melanogaster</i> (Fruit fly)</h2>
-	<table id="Input_PPI_Table_Drosi" class="fancy_table hovered_list">
+	<table id="Input_PPI_Table_Drosi" class="fancy_table hovered_list striped_table">
 		<thead>
 			<tr>
 				<th>Database Name</th>
@@ -147,7 +148,7 @@
         
     <a name="worm"></a>
 	<br/><h2>3. <i>Caenorhabditis elegans</i></h2>
-	<table id="Input_PPI_Table_Worm" class="fancy_table hovered_list">
+	<table id="Input_PPI_Table_Worm" class="fancy_table hovered_list striped_table">
 		<thead>
 			<tr>
 				<th>Database Name</th>
@@ -198,7 +199,7 @@
         
     <a name="yeast"></a>
 	<br/><h2>4. <i>Saccharomyces cerevisiae</i> (Baker's yeast)</h2>
-	<table id="Input_PPI_Table_Yeast" class="fancy_table hovered_list">
+	<table id="Input_PPI_Table_Yeast" class="fancy_table hovered_list striped_table">
 		<thead>
 			<tr>
 				<th>Database Name</th>
@@ -247,5 +248,6 @@
 		</tbody>
 	</table>
 	
-	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
+	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Help Table of Contents</a>
+        <br/><a href="{{ path('ComppiDescriptionBundle_about') }}">&#x21e6; Back to Starting Page</a></p>
 {% endblock %}

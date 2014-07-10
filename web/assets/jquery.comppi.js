@@ -1,42 +1,24 @@
 $(document).ready(function(){
+	// tooltips
+	$( document ).tooltip({
+		position: {
+			my: "left bottom-10px",
+			at: "left top"
+		},
+		show: {delay: 250}
+	});
+	
 	// first input autofokus
-	$("input[type='text']:eq(0)").focus();
+	//$("input[type='text']:eq(0)").focus();
 
-	// outlinks
-	//$('a[target="_blank"]').append(' <img src="outlink.png" alt="Link goes out from comppi." />');
-	// this does not work - what the FUCK, Symfony?!
-
+	// striped tables
+	$("table.striped_table tbody > tr:odd").addClass("striped_row");
+	
 	// highlighted list lines
-	$(".hovered_list li, .hovered_list tr").not(":first").hover(
+	$(".hovered_list li, .hovered_list tr").hover(
 		function() { $(this).addClass('hovered_listline'); },
 		function() { $(this).removeClass('hovered_listline'); }
 	);
-
-	// Search / Download Advanced Parameters
-	/*$("#AdvSearchFrame").hide();
-	$("#AdvSearchBtn").click(function() {
-		$("#AdvSearchFrame").slideToggle(500);
-	});*/
-
-	// ToggleButtons
-	// @TODO: create an abstract solution for this
-	/*$(".toggleButton").click(function() {
-		var field_name = "#" + $(this).attr("id").replace("Btn", "");
-		if ( $(this).hasClass('btn_green') ) {
-			$(this).removeClass('btn_green');
-			$(field_name).attr('value', 0);
-		} else {
-			$(this).addClass('btn_green');
-			$(field_name).attr('value', 1);
-		}
-	});*/
-
-	// radio buttons
-
-	/*$("#ProteinSearchSpecies").buttonset();
-	$("#DlSetButtons").buttonset();
-	$("#DlSpeciesButtons").buttonset();
-	$("#DlLocButtons").buttonset();*/
 
 	// DOWNLOADS
 	$("input[name='fDlSet']").change(function() {
@@ -59,45 +41,11 @@ $(document).ready(function(){
 		$("#DlSetHelpDisplay").html( $(this).next(".DlSetHelp").html() ).fadeIn();
 	});
 	$("input[name='fDlSet']:checked").change(); // trigger the event for first time
-
-	//$(":radio.btn").hide();
-	/*$(":radio.btn + label").addClass("btn").click(function(){
-		if ( $(this).hasClass('btn_green') ) {
-			$(this).removeClass('btn_green').prev(":radio").prop("checked", false);
-		} else {
-			$(":radio.btn_green").removeClass('btn_green').prev(":radio").prop("checked", false);
-			$(this).addClass('btn_green').prev(":radio").prop("checked", true);
-			$(this).siblings(":radio").removeClass('btn_green').prop("checked", false);
-		}
-	});*/
-	//$(":radio.btn:checked + label").addClass("btn_green");
-
-
-	/*$('#ProteinSearchForm:radio').each(function(){
-		var id = $(this).attr("id");
-		var label = $('label[for="' + id + '"]');
-
-		$(this).add(label).css("display", "none").after();
-		$(this).before('<input type="button" id="'+ id +'Btn" value="'+ $(label).text() +'" class="btn radioButton" />');
-		if ($(this).is(':checked')) {
-			$('#'+id+'Btn').addClass("btn_green");
-		}
-		$('#'+id+'Btn').on('click', function(){
-			if ($(this).hasClass('btn_green')) {
-				$(this).removeClass('btn_green');
-				$("#"+id).removeAttr("checked", "checked").attr('value', 0);
-			} else {
-				$('.radioButton').removeClass('btn_green');
-				$(':radio').removeAttr('checked').attr('value', 0);
-				$(this).addClass('btn_green');
-				$('#'+id).attr('checked', 'checked').attr('value', 1);
-			}
-		});
-	});*/
 });
 
-// search autocomplete
+// PROTEIN SEARCH
 $(function() {
+	// search autocomplete
 	$("#fProtSearchKeyword").autocomplete({
 		source: function(request, response){
 			// hardcoded URL for live environment: ugly, but it works..
@@ -111,23 +59,84 @@ $(function() {
 			// submit?
 		}
 	});
-});
-
-// tooltips
-$(function() {
-	$( document ).tooltip({
-		position: {
-			my: "left bottom-10px",
-			at: "left top"
-		}
-	});
-});
-
-// show/hide protein interaction details
-$(function() {
+	
+	// show/hide advanced search
+	if ($("#fProtSearchKeyword").length) {
+		$("#fProtSearchContainerLL, #fProtSearchContainerLR").hide();
+		
+		// remove comment to enable multiline advanced search
+		//orig_title = $("#fProtSearchKeyword").attr("title");
+		//orig_height = $("#fProtSearchKeyword").height();
+		//orig_height = orig_height.toString() + 'px';
+		//textarea_title = $("#fProtSearchKeyword").attr("txttitle");
+		
+		$("#fProtSearchAdvancedBtn").click(function() {
+			//var is_hidden = $("#fProtSearchContainerLL, #fProtSearchContainerLR").is(":hidden");
+			$("#fProtSearchContainerLL, #fProtSearchContainerLR").slideToggle(300);
+			
+			// remove comment to enable multiline advanced search
+			//if (is_hidden) {
+			//	$("#fProtSearchKeyword")
+			//		.animate({height:'110px'})
+			//		.attr("title", textarea_title)
+			//		.autocomplete( "option", "disabled", true );
+			//} else {
+			//	$("#fProtSearchKeyword")
+			//		.animate({height:orig_height})
+			//		.attr("title", orig_title)
+			//		.autocomplete( "option", "disabled", false );
+			//}
+			
+			return false;
+		});
+				
+		// maintain user experience:
+		// if textarea is in simple search mode (like an input field), then
+		// submit when Enter key is pressed instead of inserting new line
+		//$("#fProtSearchKeyword").on("keydown", function(event) {
+		//	if (event.keyCode == 13 && $("#fProtSearchReset").is(":hidden")) {
+		//		//window.alert('IGEN')
+		//		$("#ProteinSearchForm").submit();
+		//		return false;
+		//	}
+		//});
+		
+		// localization score treshold slider for protein search
+		$("#fProtSearchLocScoreSlider").slider({
+			min: 0,
+			max: 100,
+			range: "max",
+			value: $("#fProtSearchLocScore").val(),
+			slide: function( event, ui ) {
+				$("#fProtSearchLocScore" ).val( ui.value );
+			},
+			change: function(event, ui) {
+				//
+			},
+		});
+		$("#fProtSearchLocScore").val( $("#fProtSearchLocScoreSlider").slider("value") );
+		// slider should follow the typed in value
+		$("#fProtSearchLocScore").on("keyup", function(event) {
+			$("#fProtSearchLocScoreSlider").slider("value", $("#fProtSearchLocScore").val());
+		});
+		
+		
+	}
+	
+	// show/hide protein interaction details
 	$(".ps-actorBDetails").hide();
 	$(".ps-detailsOpener").click(function() {
 		$(this).siblings(".ps-actorBDetails:first").slideToggle();
 		return false;
+	});
+});
+
+$(function() {
+	// reset the protein search form
+	$("#fProtSearchReset").click(function() {
+		$("#fProtSearchKeyword").attr("value", ""); // .val("") does not work - jQuery bug?
+		$("#fProtSearchLocScore").attr("value", 0);
+		$("#fProtSearchLocScoreSlider").slider("value", 0);
+		$("#ProteinSearchForm input:checkbox").attr("checked", "checked");
 	});
 });

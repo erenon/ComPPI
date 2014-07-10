@@ -16,7 +16,7 @@ class ContactController extends Controller
         $contact = new Contact();
 		$form = $this->createFormBuilder($contact)
 			->add('name')
-			->add('email', 'email')
+			->add('email', 'email', array('label' => 'E-mail'))
 			->add('message', 'textarea')
 			->getForm();
 

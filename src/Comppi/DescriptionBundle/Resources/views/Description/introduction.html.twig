@@ -7,24 +7,40 @@
 	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Introduction</li></ul></h1>
 	
 	<p align='justify'>Protein-protein interaction data often contain false interactions, which could not occur in the living cell.
-        The identification of the interactions with high-throughput technics, such as the yeast two-hybrid or the co-immunoprecipitation methods, do not take into consideration the subcellular localization of the proteins.</p>
+        The identification of the interactions with high-throughput technics, such as the yeast two-hybrid or the co-immunoprecipitation methods,
+	do not take into consideration the subcellular localization of the proteins.</p>
         
-	<p>Here we present a compartmentalized protein-protein interaction database, ComPPI, to filter out the interactions where the interacting proteins have no common subcellular localization.</p>
+	<p>Here we present a compartmentalized protein-protein interaction database, ComPPI,
+	to filter out the interactions where the interacting proteins have no common
+	<a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs">subcellular localization</a>.</p>
 	
 	<p>ComPPI offers the following novel options:</p>
 	<ul>
-		<li>a.)	an integrated dataset of 10 protein-protein interaction and 9 subcellular localization databases covering four species (<i>S. cerevisiae</i>, <i>C. elegans</i>, <i>D. melanogaster</i>, <i>H. sapiens</i>);</li>
-		<li>b.)	a hierarchic structure of subcellular localizations using >1600 Gene Ontology cellular component terms;</li>
-		<li>c.)	an interaction score based on the localization score  of the interacting proteins comprising data-quality and a consensus of the subcellular localization;</li>
-		<li>d.)	search option for individual proteins;</li>
-		<li>e.)	download options of whole-proteome or organelle-specific interactomes and subcellular localization data.</li>
+		<li>a.)	an integrated dataset of 10 <a href="{{ path('ComppiDescriptionBundle_help') }}/input_ppi">protein-protein interaction</a>
+		and 9 <a href="{{ path('ComppiDescriptionBundle_help') }}/input_loc">subcellular localization</a> databases covering four
+		<a href="{{ path('ComppiDescriptionBundle_help') }}/species">species</a> (<i>S. cerevisiae</i>, <i>C. elegans</i>, <i>D. melanogaster</i>, <i>H. sapiens</i>);</li>
+		<li>b.)	a hierarchic structure of <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#structure">subcellular localizations</a> using 1600+ Gene Ontology cellular component terms;</li>
+		<li>c.)	an <a href="{{ path('ComppiDescriptionBundle_help') }}/scores#intscore">interaction score</a>
+		based on the <a href="{{ path('ComppiDescriptionBundle_help') }}/scores#locscore">localization score</a>  of the interacting proteins comprising data-quality and a consensus of the <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#origin">subcellular localization</a>;</li>
+		<!--<li>d.) <a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}">Search option</a>
+		for individual proteins with autocomplete function giving their subcellular localization,
+		their interactions and the likelihood of their interactions considering the subcellular localization of the interacting partners;</li>-->
+		<li>d.)	<a href="{{ path('ComppiProteinSearchBundle_proteinsearch') }}">Basic and Advanced Search options</a>
+		for individual proteins with autocomplete function giving their subcellular localization,
+		their interactions and the likelihood of their interactions considering the subcellular localization of the interacting partners;</li>
+		<li>e.)	<a href="{{ path('DownloadCenterBundle_downloads') }}">Download options</a> of
+		<a href="{{ path('ComppiDescriptionBundle_help') }}/downloads#int">whole-proteome</a> or
+		<a href="{{ path('ComppiDescriptionBundle_help') }}/downloads#comp">organelle-specific</a> interactomes and
+		<a href="{{ path('ComppiDescriptionBundle_help') }}/downloads#loc">subcellular localization</a> data.</li>
 </ul>
 	
-	<p align='justify'>Because of the novel features of points from a.) to e.), ComPPI is useful for the analysis of experimental results in biochemistry, molecular biology and proteomics as well as for proteome- and interactome-wide studies in bioinformatics and network science helping cellular biology, medicine and drug design.
+	<p align='justify'>Because of the novel features of points from a.) to e.), ComPPI is useful for the analysis of experimental results in biochemistry,
+	molecular biology and proteomics as well as for proteome- and interactome-wide studies in
+	<a href="{{ path('ComppiDescriptionBundle_help') }}/comppi_as_network">bioinformatics and network science</a> helping cellular biology, medicine and drug design.
 	</p>
 	
-	<br/>
-	<p align='justify'>(<b>Note</b> that ComPPI uses a protein ID mapping method to find the most relevant naming convention of the proteins. See more about our protein names <a href="{{ path('ComppiDescriptionBundle_help') }}/naming_conventions">here</a>.)</p>
+	<!--<p align='justify'>(<b>Note</b> that ComPPI uses a protein ID mapping method to find the most relevant naming convention of the proteins. See more about our protein names <a href="{{ path('ComppiDescriptionBundle_help') }}/naming_conventions">here</a>.)</p>-->
 	
-	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
+	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Help Table of Contents</a>
+        <br/><a href="{{ path('ComppiDescriptionBundle_about') }}">&#x21e6; Back to Starting Page</a></p>
 {% endblock %}

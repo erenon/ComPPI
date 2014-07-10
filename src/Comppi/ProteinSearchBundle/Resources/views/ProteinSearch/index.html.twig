@@ -4,5 +4,19 @@
 {% block title %}ComPPI - Protein Search - The Compartmentalized Protein-Protein Interaction Database{% endblock %}
 
 {% block bundlecontent %}
+    <h1>Search</h1>
+
+    <p align="justify">Proteins can be searched in all species and subcellular localizations by filling in a partial or full protein name and clicking on <b>Search</b>.
+    A list of suggested protein names will pop up after typing in 3 characters.</p>
+
+    <!---->
+    <p align="justify"><b>Advanced Settings</b> allow the customization of the species, the subcellular localization and the localization probability threshold.
+    Version(s) of the query protein, which fulfill these parameters, will appear on the screen.</p>
+    
+    <p>
+    <a href="{{ path('ComppiDescriptionBundle_help') }}/protein_search">Details</a> and
+    <a href="{{ path('ComppiDescriptionBundle_help') }}/tutorial#protsearch">Tutorial</a>
+    </p>
+    
 {% include 'ComppiProteinSearchBundle:ProteinSearch:searchform.html.twig' %}
 {% endblock %}
