@@ -311,10 +311,10 @@ class ComppiInterface(object):
 		return graph
 
 
-	def buildEgoGraph(self, graph, node_id):
+	def buildEgoGraph(self, graph, node_id, radius=1):
 		self.logging.debug("buildEgoGraph() started")
 
-		return nx.ego_graph(graph, node_id, radius=1, undirected=True)
+		return nx.ego_graph(graph, node_id, radius=radius, undirected=True)
 
 
 	def addNodesToGraph(self, graph, nodes):
@@ -865,6 +865,9 @@ if __name__ == '__main__':
 					)
 
 				if args.type=='compartment' or args.type=='all':
+					# all locs for compartments == all proteins that belong to all compartments
+					# some proteins may not have localization data
+					# -> all locs for compartments is not the same as all locs for interaction
 					ci.exportCompartmentToCsv(
 						filtered_comppi,
 						os.path.join(ci.output_dir, 'comppi--compartments--tax_{}_loc_{}.txt.gz'.format(sp, loc)),
@@ -878,8 +881,14 @@ if __name__ == '__main__':
 					)
 
 				if args.type=='interaction' or args.type=='all':
+					# "all locs" for interactions == filtering by localization is completely turned off
+					if loc=='all':
+						out_graph = comppi
+					else:
+						out_graph = filtered_comppi
+					
 					ci.exportNetworkToCsv(
-						filtered_comppi,
+						out_graph,
 						os.path.join(ci.output_dir, 'comppi--interactions--tax_{}_loc_{}.txt.gz'.format(sp, loc)),
 						('name', 'naming_conv', 'synonyms', 'taxonomy_id'),
 						('weight', 'exp_sys_types', 'source_dbs', 'pubmed_ids'),
