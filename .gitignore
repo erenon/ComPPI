@@ -18,8 +18,10 @@ web/export_downloads.log
 .project
 .settings
 
-databases
-databases2
+databases/ce
+databases/dm
+databases/hs
+databases/sc
 
 #build
 build 

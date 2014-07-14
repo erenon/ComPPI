@@ -1,0 +1,93 @@
+two-hybrid screening;yeast two-hybrid;yeast 2-hybrid;Y2H;two hybrid array;two hybrid;HQ Y2H;2 hybrid
+X-ray fiber diffraction;x-ray fiber diffraction
+X-ray diffraction;x-ray diffraction;x ray scattering
+X-ray crystallography;x-ray crystallography
+physical interaction;si-mi:MI:1204;physical association;physical;direct interaction;association
+unspecified method;not available;Manual upload
+two-hybrid fragment pooling approach;two hybrid fragment pooling approach;two hybrid pooling approach
+ToxR dimerization assay;tox-r dimerization assay
+three-hybrid screening;three hybrid;protein tri hybrid;protein three hybrid;3 hybrid method
+TAP-tag co-immunoprecipitation;tap tag coimmunoprecipitation
+T7 phage display;t7 phage display
+SVM decision tree;SVM decision tree (predicted)
+surface plasmon resonance array (SPR);surface plasmon resonance array;surface plasmon resonance;surface plasmon resonance;spr
+structure-based prediction;structure based prediction
+staining;Staining
+Split Renilla luciferase complementation;Split renilla luciferase complementation
+spike;Spike
+solid-phase assay;solid phase assay
+RNA interference;rna interference
+reverse two-hybrid;reverse two hybrid
+pull-down;pull down
+pTarget method;pTarget
+proximity enzyme-linked immunosorbent assay;proximity enzyme linked immunosorbent assay
+proteinchip;proteinchip(r
+predicted;interaction prediction
+phosphotransferase assay;phosphotransfer reaction;phosphotransfer assay
+PAML algorithm;PA ML algorythm;PA ML algorythm (predicted)
+nuclear magnetic resonance (NMR);nuclear magnetic resonance
+methyltransferase radiometric assay;methyltransferase assay
+mammalian protein-protein interaction trap;mammalian protein protein interaction trap
+LexA dimerization assay;lex-a dimerization assay
+lambda repressor two-hybrid;lambda repressor two hybrid
+kinase homogeneous time-resolved fluorescence;kinase homogeneous time resolved fluorescence
+IntAct;IntAct-SS;IntAct-LS
+in vivo;VV;VV;in vivo
+in vitro;VT; VT
+immunodepleted co-immunoprecipitation;immunodepleted coimmunoprecipitation
+annotated protein expression (APE);APE;APE (experimental)
+homogeneous time-resolved fluorescence;homogeneous time resolved fluorescence
+GTPase assay;gtpase assay
+GST pull-down;gst pull down
+genetic;genetic interference
+GDP/GTP exchange assay;gdp/gtp exchange assay
+Gal4-VP16 complementation;gal4 vp16 complementation
+enzymatic footprinting;footprinting
+fluorescence resonance energy transfer (FRET);fluorescent resonance energy transfer
+far-Western blotting;far western blotting
+experimental;experimental knowledge based;experimental interaction detection;experimental interac;Experimental (experimental);Experiment Type (experimental)
+enzyme-linked immunosorbent assay (ELISA);elisa;enzyme linked immunosorbent assay;elisa: enzyme-linked immunosorbent assay
+electrophoretic mobility shift assay;emsa
+enzymatic study;enzymatic reaction
+electron paramagnetic resonance;electron resonance
+deubiquitinase assay;deubiquitination reaction
+cosedimentation through density gradient;density sedimentation
+cosedimentation in solution;cosedimentation
+co-purification;copurification
+demethylase assay;demethylation reaction
+cross-linking study;cross-linking studies;crosslink
+comigration in SDS-PAGE;comigration in sds page
+co-immunoprecipitation;coimmunoprecipitation;coip
+blue native PAGE;blue native page
+bioluminescence resonance energy transfer (BRET);bioluminescence resonance energy transfer
+beta-lactamase complementation;beta lactamase complementation
+beta-galactosidase complementation;beta galactosidase complementation
+affinity chromatography technology;affinity technology
+ATPase assay;atpase assay
+atomic force microscopy (AFM);atomic force microscopy
+antisense RNA;antisense rna
+anti-tag co-immunoprecipitation;anti tag coimmunoprecipitation
+anti-bait co-immunoprecipitation;anti bait coimmunoprecipitation
+ADP ribosylation reaction;adp ribosylation reaction
+inferred from experiment;EXP
+inferred from direct assay;IDA
+inferred from physical interaction;IPI
+inferred from mutant phenotype;IMP
+inferred from genetic interaction;IGI
+inferred from expression pattern;IEP
+inferred from sequence or structural similarity;ISS
+inferred from sequence orthology;ISO
+inferred from sequence alignment;ISA
+inferred from sequence model;ISM
+inferred from genomic context;IGC
+inferred from biological aspect of ancestor;IBA
+inferred from biological aspect of descendant;IBD
+inferred from key residues;IKR
+inferred from rapid divergence;IRD
+inferred from reviewed computational analysis;RCA
+traceable author statement;TAS
+non-traceable author statement;NAS
+inferred by curator;IC
+no biological data available;ND
+inferred from electronic annotation;IEA
+not recorded;NR
