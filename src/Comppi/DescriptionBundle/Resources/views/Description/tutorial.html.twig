@@ -4,10 +4,101 @@
 {% block title %}ComPPI - Help/Tutorial{% endblock %}
 
 {% block bundlecontent %}
-	<h1><ul id="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Tutorial</li></ul></h1>
+	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Tutorial</li></ul></h1>
 	
+        <br/>
+        <h2>Visit our tutorials:</h2>
+        <ul>
+            <li><a href="#protsearch">How to use the Search page?</a></li>
+            <li><a href="#download">How to use the Downloads page?</a></li>
+        </ul>
+                
+        
+	<a name="protsearch"></a>
+        <h2>How to use the Search page?</h2>
+        
+        <ol>
+		<li><a href="#start">I. How to start a Basic Search for a protein?</a></li>
+                <!--<li><a href="#start">I. How to start the search for a protein?</a></li>-->
+                <li><a href="#start2">II. How to start an Advanced Search for a protein?</a></li>
+                <!--<li><a href="#multiple">II. What if multiple proteins were found?</a></li>-->
+                <li><a href="#multiple">III. What if multiple proteins were found?</a></li>
+                <!--<li><a href="#noint">III. What if no interactions were found?</a></li>-->
+		<li><a href="#noint">IV. What if no interactions were found?</a></li>
+                <!--<li><a href="#result">IV. What can I find on the results page?</a></li>-->
+		<li><a href="#result">V. What can I find on the results page?</a></li>
+                <!--<li><a href="#intdist">V. What can I find out about the interactions?</a></li>-->
+		<li><a href="#intdist">VI. What can I find out about the interactions?</a></li>
+	</ol>
+        <p>Learn more about the Search page in <a href="{{ path('ComppiDescriptionBundle_help') }}/protein_search">details</a>.</p>
+        
+        <a name="start"></a>
+        <div class="center">
+            <img src="http://www.linkgroup.hu/pic/comppi_tutorial_protsearch_1.JPG" alt="protein search tutorial 1" />
+        </div>
+        
+        <a name="start2"></a>
+        <div class="center">
+            <img src="http://www.linkgroup.hu/pic/comppi_tutorial_protsearch_2.JPG" alt="protein search tutorial 2" />
+        </div>
 	
-	
-	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Table of Contents</a></p>
+        <a name="multiple"></a>
+        <div class="center">
+            <img src="http://www.linkgroup.hu/pic/comppi_tutorial_protsearch_3.JPG" alt="protein search tutorial 3" />
+        </div>
+        
+        <a name="noint"></a>
+        <div class="center">
+            <img src="http://www.linkgroup.hu/pic/comppi_tutorial_protsearch_4.JPG" alt="protein search tutorial 4" />
+        </div>
+        
+        <a name="result"></a>
+        <div class="center">
+            <img src="http://www.linkgroup.hu/pic/comppi_tutorial_protsearch_5.JPG" alt="protein search tutorial 5" />
+        </div>
+        
+        <a name="intdist"></a>
+        <div class="center">
+            <img src="http://www.linkgroup.hu/pic/comppi_tutorial_protsearch_6.JPG" alt="protein search tutorial 6" />
+        </div>
+        
+    
+    
+        <a name="download"></a>
+        <h2>How to use the Downloads page?</h2>
+        
+        <ol>
+		<li><a href="#comp">I. How to download the compartmentalized interactome?</a></li>
+                <li><a href="#ppi">II. How to download the integrated protein-protein interaction dataset?</a></li>
+		<li><a href="#loc">III. How to download the integrated subcellular localization dataset?</a></li>
+		<li><a href="#full">IV. How to reach the full release of the ComPPI database?</a></li>
+	</ol>
+        <p>Learn more about the Downloads page in <a href="{{ path('ComppiDescriptionBundle_help') }}/downloads">details</a>.</p>
+
+        
+        <a name="comp"></a>
+        <div class="center">
+            <img src="http://www.linkgroup.hu/pic/comppi_tutorial_download_1.JPG" alt="download tutorial 1" />
+        </div>
+        
+        <a name="ppi"></a>
+        <div class="center">
+            <img src="http://www.linkgroup.hu/pic/comppi_tutorial_download_2.JPG" alt="download tutorial 2" />
+        </div>
+        
+        <a name="loc"></a>
+        <div class="center">
+            <img src="http://www.linkgroup.hu/pic/comppi_tutorial_download_3.JPG" alt="download tutorial 3" />
+        </div>
+        
+        <a name="full"></a>
+        <div class="center">
+            <img src="http://www.linkgroup.hu/pic/comppi_tutorial_download_4.JPG" alt="download tutorial 4" />
+        </div>
+
+
+        
+	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Help Table of Contents</a>
+        <br/><a href="{{ path('ComppiDescriptionBundle_about') }}">&#x21e6; Back to Starting Page</a></p>
         
 {% endblock %}

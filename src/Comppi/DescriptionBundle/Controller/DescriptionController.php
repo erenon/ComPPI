@@ -22,6 +22,9 @@ class DescriptionController extends Controller
             case 'cite_us':
                 $t = 'ComppiDescriptionBundle:Description:cite_us.html.twig';
                 break;
+            case 'comppi_as_network':
+                $t = 'ComppiDescriptionBundle:Description:comppi_as_network.html.twig';
+                break;
             case 'downloads':
                 $t = 'ComppiDescriptionBundle:Description:download.html.twig';
                 break;

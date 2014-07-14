@@ -45,7 +45,7 @@ class SystemTypeTranslator
         );
 
         $this->systemTypeInsert = $this->connection->prepare(
-        	'INSERT INTO SystemType VALUES (NULL, ?, ?)'
+        	'INSERT IGNORE INTO SystemType VALUES (NULL, ?, ?)'
         );
 
         $this->loadSynonyms($synonymFile);

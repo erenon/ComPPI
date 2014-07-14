@@ -18,16 +18,15 @@ web/export_downloads.log
 .project
 .settings
 
-databases
 databases/ce
 databases/dm
 databases/hs
 databases/sc
-
-databases2
 
 #build
 build 
 
 comppi.komodoproject
 bin/global_comppi_graph.gzpickle
+bin/__pycache__
+bin/export_test.py

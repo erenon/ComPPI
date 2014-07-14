@@ -1,0 +1,7 @@
+parameters:
+#    contact.example.class: Comppi\ContactBundle\Example
+
+services:
+#    contact.example:
+#        class: %contact.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

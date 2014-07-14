@@ -1,23 +1,28 @@
 <?php
-
 namespace Comppi\ProteinSearchBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\HttpFoundation\Request;
+use Comppi\ProteinSearchBundle\Entity\ProteinSearch;
 
 class ProteinSearchController extends Controller
 {
-	// private $DB; use $this->getDBConnection() @TODO: switch to the conn representation of the controller
 	private $speciesProvider = null;
 	private $localizationTranslator = null;
-	private $major_loc_gos = array (
-		'GO:0043226',
-		'GO:0005739',
-		'GO:0005634',
-		'GO:0005576',
-		'GO:secretory_pathway',
-		'GO:0016020'
+	private $species_list = array(
+		0 => 'H. sapiens',
+		1 => 'D. melanogaster',
+		2 => 'C. elegans',
+		3 => 'S. cerevisiae'
+	);
+	private $majorloc_list = array (
+		'cytoplasm' => 'Cytoplasm',
+		'mitochondrion' => 'Mitochondrion',
+		'nucleus' => 'Nucleus',
+		'extracellular' => 'Extracellular',
+		'secretory-pathway' => 'Secretory Pathway',
+		'membrane' => 'Membrane',
 	);
 	private $minor_loc_abbr_patterns = array(
 		'EXP',
@@ -70,76 +75,336 @@ class ProteinSearchController extends Controller
 		'Support Vector Machine'
 	);
 	private $verbose = false;
-	private $verbose_log = array();
-	private $search_range_start = 0; // current page * search_result_per_page -> search query limit from here
-	private $search_result_per_page = 10; // search query limit offset (0: no limit)
+	//private $verbose_log = array();
 	private $uniprot_root = 'http://www.uniprot.org/uniprot/';
 	private $exptype = array(
 		0 => 'Unknown',
 		1 => 'Experimental',
 		2 => 'Predicted'
 	);
-	private $autocomplete_url = "./protein_search/autocomplete/";
-	private $autocomplete_url_dev = "/comppi/ComPPI_dualon/web/app_dev.php/protein_search/autocomplete/";
 
-	// PROTEIN SEARCH
-	//public function proteinSearchAction($protein_name, $requested_species, $current_page)
-	public function proteinSearchAction()
+
+	/*	PROTEIN SEARCH
+	 *	Find the proteins by their names or fragments of their names,
+	 *	and filter the results by species, major localization and localization score.
+	 *
+	 *	The search string is splitted by new lines, and the fragments
+	 *	are used as right-open needles in the
+	 *	Protein.proteinName and NameToProtein.name
+	 *	database fields (LIKE 'keyword1%' OR LIKE 'keyword2%').
+	 *
+	 *	The protein IDs found in Protein and NameToProtein are pooled together ($PID_POOL),
+	 *	and filtered by localization and loc. score (from the LocalizationScore table)
+	 *	if those are requested.
+	 *	If this final protein ID pool contains only one protein, then the
+	 *	interactor page is displayed, otherwise an intermediate protein selector page is shown.
+	 *
+	 *	This logic and the monolithic protein search ensures that
+	 *	our old server can handle the load.
+	*/
+	public function proteinSearchAction($get_keyword)
     {
-		$protein_name = '';
-		$requested_species = '';
-		$current_page = '';
-		$keyword = $this->initKeyword($protein_name);
-		$species_id = $this->initSpecies($requested_species);
-		$current_page = $this->initPageNum($current_page);
-		$sp = $this->getSpeciesProvider();
-		$spDescriptors = $sp->getDescriptors();
-
+		// $get_keyword is the way to handle protein_search/PROTEIN_NAME type requests
+		// = protein name from URL hooked on protein search
+		if (!empty($get_keyword))
+		{
+			$_POST['fProtSearchKeyword'] = $get_keyword; // validated later
+		}
+		
+		$request_m = $this->get('request')->getMethod();
 
 		$T = array(
-			'verbose_log' => '',
-			'species_list' => $spDescriptors,
-			'requested_species' => array('hs'=>1),
             'ls' => array(),
 			'keyword' => '',
 			'result_msg' => '',
-			'uniprot_root' => $this->uniprot_root
-			//'autocomplete_url' = $this->autocomplete
+			'loc_treshold' => 0.0,
+			'uniprot_root' => $this->uniprot_root,
+			'form_error_messages' => '',
         );
-
-		//$request = $this->getRequest();
-		if (!empty($keyword)) // @TODO: require species
+		
+		// PREPARE THE SEARCH FORM
+		// species in the form
+		foreach ($this->species_list as $sp_code => $sp_name)
 		{
-			$DB = $this->getDbConnection();
-			$T['keyword'] = htmlspecialchars(strip_tags($keyword));
-
-			$r_prots_by_name = $DB->executeQuery("SELECT
-				n2p.name, n2p.specieId, n2p.proteinId, n2p.namingConvention, p.proteinName
-			  FROM
-				NameToProtein n2p, Protein p
-			  WHERE
-					n2p.proteinId=p.id
-				AND n2p.name=?
-				AND p.specieId=?
-			  GROUP BY p.proteinName
-			  ORDER BY p.proteinName DESC", array($keyword, $species_id));
-			if (!$r_prots_by_name)
-				throw new \ErrorException('Interaction query failed!');
-
-			// exact match to a protein -> we show its interactions
-			if ($r_prots_by_name->rowCount()==1)
+			$T['species_list'][$sp_code] = array(
+				'code' => $sp_code,
+				'name' => $sp_name,
+				'checked' => true
+			);
+			if ($request_m=='POST' and !isset($_POST['fProtSearchSp'][(string)$sp_code]))
 			{
-				$prot_details = $r_prots_by_name->fetch(\PDO::FETCH_OBJ);
-				//die(var_dump($prot_details->proteinId));
-				// forward creates an internal call to a controller and returns a Response
+				$T['species_list'][(string)$sp_code]['checked'] = false;
+			}
+			// protein name from URL hooked on protein search
+			if (!empty($get_keyword))
+			{
+				$_POST['fProtSearchSp'][(string)$sp_code] = true;
+			}
+		}
+		
+		// major locs in the form
+		foreach ($this->majorloc_list as $mloc_code => $mloc_name)
+		{
+			$T['majorloc_list'][$mloc_code] = array(
+				'code' => $mloc_code,
+				'name' => $mloc_name,
+				'checked' => true
+			);
+			if ($request_m=='POST' and !isset($_POST['fProtSearchLoc'][(string)$mloc_code]))
+			{
+				$T['majorloc_list'][$mloc_code]['checked'] = false;
+			}
+			// protein name from URL hooked on protein search
+			if (!empty($get_keyword))
+			{
+				$_POST['fProtSearchLoc'][$mloc_code] = true;
+			}
+		}
+		
+		// loc treshold in the form
+		if (!empty($_POST['fProtSearchLocScore']) && 0<(int)$_POST['fProtSearchLocScore'] && (int)$_POST['fProtSearchLocScore']<=100)
+		{
+			$T['loc_score_slider_val'] = (int)$_POST['fProtSearchLocScore'];
+		} else {
+			$T['loc_score_slider_val'] = 0;
+		}
+
+		
+		// PROTEIN SEARCH SUBMITTED
+		if ($request_m=='POST' or !empty($get_keyword)) {
+			$DB = $this->getDbConnection();
+			$PID_POOL = []; // protein ID pool == protein IDs of the search result
+			
+			$keywords = array_filter(preg_split(
+				"/\r\n|\n|\r/", // consider various platforms
+				(isset($_POST['fProtSearchKeyword']) ? $_POST['fProtSearchKeyword'] : '')
+			));
+			
+			// update template for the form
+			$T['keyword'] = htmlspecialchars(strip_tags(implode(PHP_EOL, $keywords)));
+			
+			// PREPARE THE SEARCH CONDITIONS
+			// SQL parameters: protein names as keywords
+			if (!empty($keywords))
+			{
+				foreach ($keywords as $kk => $kwrd)
+				{
+					$keywords[$kk] = strtolower(trim($kwrd));
+				}
+			} else {
+				$err[] = 'Please fill in a protein name.';
+			}
+			
+			// too many protein names has been requested
+			if (count($keywords)>100)
+			{
+				$T['result_msg'] = count($keywords)
+					.' protein names were posted (maximum 100 are allowed).
+						This would slow down our service, therefore the request has been cancelled.
+						Please use a shorter query list, extract the data from the <a href="'
+					.$this->generateUrl('DownloadCenterBundle_downloads')
+					.'">downloads</a> or <a href="'
+					.$this->generateUrl('ContactBundle_contact')
+					.'">contact us</a> with specified details.';
+				return $this->render(
+					'ComppiProteinSearchBundle:ProteinSearch:index.html.twig',
+					$T
+				);
+			}
+			
+			# SQL parameters: species
+			$sql_cond_sp = [];
+			if (!empty($_POST['fProtSearchSp']))
+			{
+				//$cond_sp = [];
+				foreach ($_POST['fProtSearchSp'] as $fsp_code => $fsp_name)
+				{
+					if (isset($this->species_list[(int)$fsp_code]))
+					{
+						$sql_cond_sp[$fsp_code] = $fsp_code;
+					}
+				}
+				//$sql_cond_sp = "'" . join("', '", $cond_sp) . "'";
+			} else {
+				$err[] = 'Please select at least one species.';
+			}
+			
+			# SQL parameters: major localizations = compartments
+			$sql_cond_mloc = [];
+			if (!empty($_POST['fProtSearchLoc']))
+			{
+				foreach ($_POST['fProtSearchLoc'] as $fmloc_code => $fmloc_name)
+				{
+					if (isset($this->majorloc_list[$fmloc_code]))
+					{
+						$sql_cond_mloc[] = $fmloc_code; # discard keys!
+					}
+				}
+				//$sql_cond_mloc = "'".join("', '", $cond_mloc)."'";
+			} else {
+				$err[] = 'Please select at least one subcellular compartment.';
+			}
+			
+			# SQL parameters: localization treshold
+			$loc_treshold = 0.0;
+			if (!empty($_POST['fProtSearchLocScore']))
+			{
+				$T['loc_treshold'] = (int)$_POST['fProtSearchLocScore'];
+				$loc_treshold = $_POST['fProtSearchLocScore']/100;
+			}
+			
+			// check for validation errors
+			if (!empty($err))
+			{
+				//$err_msgs = implode(' ', $err);
+				//$this->get('session')->setFlash('ps-errors', $err_msgs, $persist = false);
+				$T['form_error_messages'] = implode("<br />", $err);
+				
+				return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
+			}
+			
+			
+			// FIND THE PROTEIN IDS FROM THE MAIN PROTEINS, THE SYNONYMS AND THE LOCALIZATIONS
+			// the old server can't handle complex mysql queries -> separate them
+			
+			// Doctrine does not support multiple LIKE conditions, plus
+			// unexplained Doctrine error if query builder is used
+			// -> assemble the queries manually
+			
+			// $cond_for_pn_pal: [keyw1, keyw2, [1, 2, 0]]
+/*			$cond_for_pn_pal = $keywords; // LIKE 'keyword%': parameters injected as single parameters instead of a single array
+			$cond_for_pn_pal[] = $sql_cond_sp; // AND species IN(1,2): species are injected as a single array
+			$cond_type_for_pn_pal = array_fill( // each keyword has the PARAM_STR type
+				0,
+				count($keywords),
+				\PDO::PARAM_STR
+			);
+			$cond_type_for_pn_pal[] = \Doctrine\DBAL\Connection::PARAM_INT_ARRAY; */// species IDs are in an array
+			
+			// protein IDs from the strongest naming convention
+			$r_prots_keyw_cond = [];
+			foreach ($keywords as $kw)
+			{
+				$kw = $DB->quote($kw); // ke\yw'ord -> 'ke\\yw\'rd'
+				$kw = substr_replace($kw, '%', 1, 0); // 'ke\\yw\'rd' -> '%ke\\yw\'rd'
+				$kw = substr_replace($kw, '%', strlen($kw)-1, 0); // '%ke\\yw\'rd' -> '%ke\\yw\'rd%'
+				$r_prots_keyw_cond[] = "LOWER(proteinName) LIKE " . $kw;
+			}
+			$r_prots = $DB->executeQuery(
+				"SELECT id FROM Protein WHERE ("
+					.implode(' OR ', $r_prots_keyw_cond)
+					.") AND specieId IN(".implode(',', $sql_cond_sp).")"
+			);
+			if (!$r_prots)
+			{
+				die('Protein IDs by strongest naming convention query failed!');
+			}
+			$pids_by_strongest = $r_prots->fetchAll(\PDO::FETCH_COLUMN, 0);
+			
+			// protein IDs from the synonyms
+			$r_n2p_keyw_cond = [];
+			foreach ($keywords as $kw)
+			{
+				$kw = $DB->quote($kw); // ke\yw'ord -> 'ke\\yw\'rd'
+				$kw = substr_replace($kw, '%', 1, 0); // 'ke\\yw\'rd' -> '%ke\\yw\'rd'
+				$kw = substr_replace($kw, '%', strlen($kw)-1, 0); // 'ke\\yw\'rd' -> 'ke\\yw\'rd%'
+				$r_n2p_keyw_cond[] = "LOWER(name) LIKE " . $kw;
+			}
+			$r_n2p = $DB->executeQuery(
+				"SELECT proteinId FROM NameToProtein WHERE ("
+					.implode(' OR ', $r_n2p_keyw_cond)
+					.") AND specieId IN(".implode(',', $sql_cond_sp).")"
+			);
+			if (!$r_n2p)
+			{
+				die('Protein IDs by synonyms query failed!');
+			}
+			$pids_by_n2p = $r_n2p->fetchAll(\PDO::FETCH_COLUMN, 0);
+			
+			// PROTEIN ID POOL: MERGE THE UNIQUE PROTEIN IDS FROM PROTEIN NAMES
+			$PID_POOL = array_unique(array_merge($pids_by_strongest, $pids_by_n2p));
+			
+			// protein IDs from the localizations table
+			// filter only if *not* all major localizations are selected
+			$pids_by_loc = [];
+			if (!empty($PID_POOL) && !empty($sql_cond_mloc))
+			{
+				// IMPORTANT to prefilter for the already found protein IDs,
+				// otherwise the loc-based protein pool would be HUGE
+				$sql_cond_lf[]		= 'proteinId IN(?)';
+				$sql_cond_val_lf[]	= $PID_POOL;
+				$sql_cond_type_lf[]	= \Doctrine\DBAL\Connection::PARAM_INT_ARRAY;
+				
+				// filter for major localizations if not all were selected
+				if (count($sql_cond_mloc)<count($this->majorloc_list))
+				{
+					$sql_cond_lf[]		= 'majorLocName IN(?)';
+					$sql_cond_val_lf[]	= $sql_cond_mloc;
+					$sql_cond_type_lf[]	= \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
+				}
+				
+				// filter for localization score treshold
+				if ($loc_treshold>0.0)
+				{
+					$sql_cond_lf[]		= 'score > ?';
+					$sql_cond_val_lf[]	= strval($loc_treshold);
+					$sql_cond_type_lf[]	= \PDO::PARAM_STR;
+				}
+				
+				// assemble and execute the query if not only protein IDs are defined
+				if (count($sql_cond_lf)>1 && count($sql_cond_val_lf)>1 && count($sql_cond_type_lf)>1)
+				{
+					$r_pids_by_loc = $DB->executeQuery(
+						"SELECT proteinId FROM LocalizationScore WHERE "
+							.implode(' AND ', $sql_cond_lf),
+						$sql_cond_val_lf,
+						$sql_cond_type_lf
+					);
+					
+					if (!$r_pids_by_loc)
+					{
+						die('Protein IDs by localization query failed!');
+					}
+					
+					// IMPORTANT: proteins should be filtered by localization and loc. score
+					$PID_POOL = $r_pids_by_loc->fetchAll(\PDO::FETCH_COLUMN, 0);
+				}
+			}
+			
+			// use distinct protein IDs
+			$PID_POOL = array_unique($PID_POOL);
+			
+			// INTERACTORS PAGE / PROTEIN SELECTOR PAGE / NOT FOUND
+			// only 1 protein ID = exact match -> display the interators page
+			if (count($PID_POOL)==1)
+			{
 				return $this->redirect($this->generateUrl(
 					'ComppiProteinSearchBundle_interactors',
-					array('comppi_id' => $prot_details->proteinId))
-                );
+					array('comppi_id' => $PID_POOL[0]))
+				);
 			}
-			// multiple proteins found -> user has to select
-			elseif ($r_prots_by_name->rowCount()>1) {
-				while ($p = $r_prots_by_name->fetch(\PDO::FETCH_OBJ))
+			// multiple protein IDs -> display the intermediate page to select one
+			elseif (count($PID_POOL)>1)
+			{
+				$r_psr = $DB->executeQuery( // protein search results
+					"
+						SELECT
+							n2p.name, n2p.specieId, n2p.proteinId, n2p.namingConvention, p.proteinName
+						FROM
+							NameToProtein n2p, Protein p
+						WHERE
+								n2p.proteinId=p.id
+							AND p.id IN(?)
+						GROUP BY p.proteinName
+						ORDER BY p.proteinName DESC
+					",
+					array($PID_POOL),
+					array(\Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+				);
+				if (!$r_psr)
+					die('Protein search base on protein IDs failed!');
+				
+				while ($p = $r_psr->fetch(\PDO::FETCH_OBJ))
 				{
 					$pids[] = $p->proteinId;
 					$T['ls'][] = array(
@@ -147,7 +412,7 @@ class ProteinSearchController extends Controller
 						'name' => $p->name,
 						'name2' => $p->proteinName,
 						'namingConvention' => $p->namingConvention,
-						'species' => $spDescriptors[$p->specieId]->shortname,
+						'species' => $this->species_list[$p->specieId],
 						'uniprot_link' => $this->uniprot_root.$p->proteinName
 					);
 				}
@@ -155,22 +420,29 @@ class ProteinSearchController extends Controller
 				if (!empty($pids)) {
 					$full_names = $this->getProteinSynonyms($pids);
 					foreach ($T['ls'] as $i=>$vals) {
-						$T['ls'][$i]['full_name'] = $full_names[$T['ls'][$i]['comppi_id']]['syn_fullname'];
+						if (isset($full_names[$T['ls'][$i]['comppi_id']]['syn_fullname'])) {
+							$T['ls'][$i]['full_name'] = $full_names[$T['ls'][$i]['comppi_id']]['syn_fullname'];
+						} else {
+							$T['ls'][$i]['full_name'] = 'N/A';
+						}
 					}
 				} else {
 					die("Protein IDs are missing for the full name query of the result selector!");
 				}
-				return $this->render('ComppiProteinSearchBundle:ProteinSearch:middlepage.html.twig', $T);
+				
+				return $this->render(
+					'ComppiProteinSearchBundle:ProteinSearch:middlepage.html.twig',
+					$T
+				);
 			}
-			// no protein was found
+			// no proteins were found
 			else
 			{
-				$T['result_msg'] = 'The requested protein was not found.';
-				return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
+				$T['result_msg'] = 'No proteins were found.';
 			}
-		} else {
-			return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
 		}
+		
+		return $this->render('ComppiProteinSearchBundle:ProteinSearch:index.html.twig', $T);
 	}
 
 
@@ -271,12 +543,18 @@ class ProteinSearchController extends Controller
 	public function autocompleteAction($keyword)
 	{
 		$DB = $this->getDbConnection();
-		$r_i = $DB->executeQuery("SELECT name FROM ProteinName WHERE name LIKE ? ORDER BY LENGTH(name) LIMIT 15", array("%$keyword%"));
-		if (!$r_i) throw new \ErrorException('Autocomplete query failed!');
-
-		$list = array();
-		while ($p = $r_i->fetch(\PDO::FETCH_OBJ))
-			$list[] = $p->name;
+		$r_i = $DB->executeQuery(
+		"
+			SELECT name
+			FROM ProteinName
+			WHERE name LIKE ?
+			ORDER BY LENGTH(name)
+			LIMIT 100
+			",
+			array("%$keyword%")
+		);
+		if (!$r_i) { return new Response(json_encode(array('QUERY FAILED'))); }
+		$list = $r_i->fetchAll(\PDO::FETCH_COLUMN, 0);
 
         return new Response(json_encode($list));
 	}
@@ -294,9 +572,9 @@ class ProteinSearchController extends Controller
 		$prot_details['locs'] = (!empty($prot_details['locs'][$comppi_id]) ? $prot_details['locs'][$comppi_id] : array());
 
 		$syns = $this->getProteinSynonyms(array($comppi_id));
-		$prot_details['synonyms'] = $syns[$comppi_id]['synonyms'];
-		$prot_details['fullname'] = $syns[$comppi_id]['syn_fullname'];
-		$prot_details['uniprot_link'] = $this->uniprot_root.$prot_details['name'];
+		$prot_details['synonyms'] = (!empty($syns[$comppi_id]['synonyms']) ? $syns[$comppi_id]['synonyms'] : []);
+		$prot_details['fullname'] = (!empty($syns[$comppi_id]['syn_fullname']) ? $syns[$comppi_id]['syn_fullname'] : '');
+		$prot_details['uniprot_link'] = (!empty($this->uniprot_root.$prot_details['name']) ? $this->uniprot_root.$prot_details['name'] : '');
 
 		return $prot_details;
 	}
@@ -325,7 +603,7 @@ class ProteinSearchController extends Controller
 
 		$sql_pl = 'SELECT
 				ptl.proteinId as pid, ptl.localizationId AS locId, ptl.sourceDb, ptl.pubmedId,
-				lt.name as minorLocName, lt.majorLocName,
+				lt.name as minorLocName, lt.goCode, lt.majorLocName,
 				st.name AS exp_sys, st.confidenceType AS exp_sys_type
 			FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
 			LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
@@ -354,9 +632,10 @@ class ProteinSearchController extends Controller
 			);
 			if ($mnlrc) {
 				$pl[$p->pid][$i]['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
-					.': <a href="#" title="'
+					.': '.$p->exp_sys
+					.' <span class="infobtn" title="'
 					.$p->exp_sys.': '.$loc_exp_sys.
-					'">'.$p->exp_sys.'</a>';
+					'"> ? </span>';
 			} else {
 				$pl[$p->pid][$i]['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
 					.': '.$p->exp_sys;
@@ -364,19 +643,21 @@ class ProteinSearchController extends Controller
 			$pl[$p->pid][$i]['loc_exp_sys_type'] = $p->exp_sys_type;
 			if (!empty($p->minorLocName)) {
 				$pl[$p->pid][$i]['small_loc'] = ucfirst($p->minorLocName);
+				$pl[$p->pid][$i]['go_code'] = ucfirst($p->goCode);
 			} else {
 				$pl[$p->pid][$i]['small_loc'] = 'N/A';
+				$pl[$p->pid][$i]['go_code'] = 'N/A';
 			}
 			if (!empty($p->majorLocName)) {
 				$pl[$p->pid][$i]['large_loc'] = ucfirst($p->majorLocName);
 				if (!empty($loc_scores[$p->pid][$p->majorLocName])) {
-					$pl[$p->pid][$i]['loc_score'] = round($loc_scores[$p->pid][$p->majorLocName], 2);
+					$pl[$p->pid][$i]['loc_score'] = round($loc_scores[$p->pid][$p->majorLocName], 2)*100;
 				} else {
-					$pl[$p->pid][$i]['loc_score'] = 0.0;
+					$pl[$p->pid][$i]['loc_score'] = 0;
 				}
 			} else {
 				$pl[$p->pid][$i]['large_loc'] = 'N/A';
-				$pl[$p->pid][$i]['loc_score'] = 0.0;
+				$pl[$p->pid][$i]['loc_score'] = 0;
 			}
 		}
 		$this->verbose ? $this->verbose_log[] = count($pl).' protein locations found' : '';
@@ -425,67 +706,6 @@ class ProteinSearchController extends Controller
 		return 'http://www.ncbi.nlm.nih.gov/pubmed/'.$pubmed_uid;
 	}
 
-	private function initKeyword($protein_name)
-	{
-
-		// $request->request->get('fProtSearchKeyword') is not empty even if no keyword was filled in!
-		if (!empty($_POST['fProtSearchKeyword']))
-		{
-			$keyword = $_POST['fProtSearchKeyword'];
-		}
-		else if (!empty($protein_name))
-		{
-			$keyword = $protein_name;
-		}
-		// Form was submitted, but we haven't had any keyword
-		elseif (isset($_SESSION['protein_search_keyword']))
-		{
-			//$this->get('session')->getFlashBag()->add('no_keyword_err', 'Please fill in a keyword!');
-			$keyword = $_SESSION['protein_search_keyword'];
-		}
-		else
-		{
-			$keyword = '';
-		}
-		return $keyword;
-	}
-
-	/*
-		@var $requested_species the list of species abbreviations separated by commas, e.g. hs,ce
-	*/
-	private function initSpecies($requested_species = '')
-	{
-		$species_provider = $this->getSpeciesProvider();
-
-		if (!empty($_POST['fProtSearchSpecies'])) {
-			// this ensures that we need an exact match from the input to be valid
-			// if we don't get back an object, then the form was forged
-			$o_sp_descriptor = $species_provider->getSpecieByAbbreviation($_POST['fProtSearchSpecies']);
-			$species_id = $o_sp_descriptor->id;
-		} elseif (!empty($requested_species)) {
-			$o_sp_descriptor = $species_provider->getSpecieByAbbreviation($requested_species);
-			$species_id = $o_sp_descriptor->id;
-		} else {
-			$species_id = 0; // human
-		}
-
-		// add the taxonomical abbreviations of all species, they'll be needed on the species selector buttons
-		$descriptors = $species_provider->getDescriptors();
-		foreach($descriptors as $o)
-		{
-			$o->shortname = substr_replace($o->name, '. ', 1, strpos($o->name, ' '));
-		}
-
-		return $species_id;
-	}
-
-	private function initPageNum($curr_page)
-	{
-		$page = (preg_match('/^[0-9][0-9]*$/', $curr_page) ? (int)$curr_page : 0);
-		$this->search_range_start = $page * $this->search_result_per_page;
-
-		return $page;
-	}
 
 	private function getSpeciesProvider()
 	{
@@ -551,8 +771,6 @@ class ProteinSearchController extends Controller
 			$interaction_rows[$actor->iid] = '('.$actor->iid.', '.$comppi_id.', '.$actor->actorId.')';
 			$protein_rows[$actor->proteinId] = '('.$actor->proteinId.", 0, '".$actor->proteinName."')";
 		}
-
-		//die(var_dump($first_neighbours));
 
 		// GET THE INTERACTIONS AMONG THE FIRST NEIGHBOURS
 		$sql_neighbour_links = "SELECT DISTINCT i.id as iid, p1.id as p1id, p1.proteinName as proteinA, p2.id as p2id, p2.proteinName as proteinB, ptl1.id as protLocAId, ptl1.localizationId as locAId, ptl2.id as protLocBId, ptl2.localizationId as locBId, st1.id as sysTypeAId, st1.confidenceType as confTypeA, st2.id as sysTypeBId, st1.confidenceType as confTypeB

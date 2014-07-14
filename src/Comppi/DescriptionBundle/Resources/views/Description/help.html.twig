@@ -6,10 +6,11 @@
 {% block bundlecontent %}
 
 	<h1>Help & Description</h1>
-	
-	<br />
-	<a name="toc"></a>
-	<ol id="HelpToc">
+
+<div class="center">
+<table id="HelpPageTOC"><tr>
+<td>
+	<ol>
 		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/introduction">Introduction</a></li>
 		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/tutorial">Tutorial</a></li>
 		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/statistics">Statistics</a></li>
@@ -17,18 +18,27 @@
 		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/input_databases">Input Databases</a></li>
 		<ul>
 			<li><a href="{{ path('ComppiDescriptionBundle_help') }}/input_ppi">Input Protein-Protein Interaction Databases</a></li>
-			<li><a href="{{ path('ComppiDescriptionBundle_help') }}/input_loc">Input Subcellular Localization Databases</a></li>
+			<li><a href="{{ path('ComppiDescriptionBundle_help') }}/input_loc">Input Subcellular Localization Databases	</a></li>
 		</ul>
 		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs">Subcellular Localizations</a></li>
 		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/naming_conventions">Protein Naming Conventions</a></li>
-		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/scores">Interaction and Localization Score</a></li>
-		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/protein_search">Protein Search</a></li>
-		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/downloads">Download of Custom Datasets</a></li>
+	</ol>
+
+</td> <!-- end of left column -->
+
+<td>
+	<ol>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/scores">Localization and Interaction Scores</a></li>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/protein_search">Search</a></li>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/downloads">Download Custom Datasets</a></li>
 		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/output_formats">Output Formats</a></li>
 		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/terms_of_use">ComPPI & Open Source</a></li>
 		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/cite_us">How to Cite ComPPI?</a></li>
+		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/comppi_as_network">ComPPI for Network Scientists</a></li>
 		<li><a href="{{ path('ComppiDescriptionBundle_help') }}/other_tools_and_sources">Other Tools and Resources</a></li>
-		<br/>
 	</ol>
+</td> <!-- end of right column -->
+</tr></table>
+</div>
 	
 {% endblock %}

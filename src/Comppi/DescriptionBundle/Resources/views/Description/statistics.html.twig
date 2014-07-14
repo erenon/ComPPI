@@ -1,0 +1,679 @@
+{# src/Comppi/ProteinSearchBundle/Resources/views/about.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %}ComPPI - Help/Statistics{% endblock %}
+
+{% block bundlecontent %}
+	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Statistics</li></ul></h1>
+
+	<p align="justify">On the <b>Statistics</b> page you can find more information about the properties of the ComPPI dataset.
+        The <a href="#summary">Statistics Summary</a> describes the summarized number of proteins, interactions and localizations, and the average localization and interaction scores for all species.
+        The <a href="#detailed">Detailed Statistics</a> describes the number of proteins, interactions and localizations, and the average localization and interaction scores for the certain localizations of the choosen species.</p>
+        
+	<p align="justify">Learn more about the <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs">subcellular localization data</a>.</p>
+	
+	<p align="justify">Find out more about the <a href="{{ path('ComppiDescriptionBundle_help') }}/scores">ComPPI scoring system</a><!--
+        and the distribution of the <a href="{{ path('ComppiDescriptionBundle_help') }}/scores#locdist">localization</a>
+        and the <a href="{{ path('ComppiDescriptionBundle_help') }}/scores#intdist">interaction score</a>-->.</p>
+	
+	<a name="summary"></a>
+	<h2>Statistics Summary</h2>
+	
+	<table id="Summary_Statistics" class="fancy_table hovered_list striped_table">
+		<thead>
+			<tr>
+				<th>Data Type</th>
+				<th>Number of Proteins</th>
+				<th>Number of Localizations</th>
+				<th>Average localization score</th>
+				<th>Number of Interactions</th>
+				<th>Average Interaction Score</th>
+			</tr> 
+		</thead>
+		<tbody>
+			<tr>
+				<td><b>Compartmentalization of proteins and interactions</b></td>
+				<td><b>43 835</b></td>
+				<td><b>95 980</b></td>
+				<td><b>74%</b></td>
+				<td><b>555 628</b></td>
+				<td><b>73%</b></td>
+			</tr>
+			<tr>
+				<td><b>Interaction Data</b></td>
+				<td><b>47 352</b></td>
+				<td><b>-</b></td>
+				<td><b>-</b></td>
+				<td><b>678 352</b></td>
+				<td><b>64%</b></td>
+			</tr>
+			<tr>
+				<td><b>Localization data</b></td>
+				<td><b>120 898</b></td>
+				<td><b>214 526</b></td>
+				<td><b>70%</b></td>
+				<td><b>-</b></td>
+				<td><b>-</b></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<a name="detailed"><h2>Detailed Statistics</h2></a>
+	
+	<p>Available species:</p>
+	<ol>
+		<li><a href="#human"><i>Homo sapiens</i> (Human)</a></li>
+		<li><a href="#drosi"><i>Drosophila melanogaster</i> (Fruit fly)</a></li>
+		<li><a href="#worm"><i>Caenorhabditis elegans</i></a></li>
+		<li><a href="#yeast"><i>Saccharomyces cerevisiae</i> (Baker's yeast)</a></li>
+	</ol>
+	
+	<a name="human"></a>
+	<h2>1. <i>Homo sapiens (Human)</i></h2>
+	<table id="Statistics_HS_comp" class="fancy_table hovered_list striped_table">
+		<thead>
+			<tr>
+				<th>Data Type</th>
+				<th>Number of Proteins</th>
+				<th>Number of Localizations</th>
+				<th>Average localization score</th>
+				<th>Number of Interactions</th>
+				<th>Average Interaction Score</th>
+			</tr> 
+		</thead>
+		<tbody>
+			<tr>
+				<td colspan="6"><b>Compartmentalization of proteins and interactions</b></td>
+                        </tr>
+                        <tr>
+                                <td><b><i>All Localizations</i></b></td>
+                                <td><b>19 939</b></td>
+                                <td><b>51 855</b></td>
+                                <td><b>81%</b></td>
+                                <td><b>285 552</b></td>
+                                <td><b>85%</b></td>
+                        </tr>
+                        <tr>
+                                <td><i>Cytoplasm</i></td>
+                                <td>13 959</td>
+                                <td>40 100</td>
+                                <td>80%</td>
+                                <td>209 363</td>
+                                <td>88%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Mitochondrion</i></td>
+                                <td>2265</td>
+                                <td>7555</td>
+                                <td>80%</td>
+                                <td>11 282</td>
+                                <td>89%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Nucleus</i></td>
+                                <td>11 422</td>
+                                <td>30 268</td>
+                                <td>80%</td>
+                                <td>175 492</td>
+                                <td>90%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Extracellular</i></td>
+                                <td>5918</td>
+                                <td>22 689</td>
+                                <td>84%</td>
+                                <td>30 456</td>
+                                <td>96%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Secretory Pathway</i></td>
+                                <td>6115</td>
+                                <td>22 330</td>
+                                <td>81%</td>
+                                <td>33 515</td>
+                                <td>93%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Membrane</i></td>
+                                <td>8535</td>
+                                <td>30 381</td>
+                                <td>82%</td>
+                                <td>59 636</td>
+                                <td>93%</td>
+                        </tr>
+                </tbody>
+        </table>
+        <table id="Statistics_HS_int" class="fancy_table hovered_list striped_table">
+                <tbody>
+			<tr>
+			<td><b>Interaction Data</b></td>
+                        <td><b>20 340</b></td>
+                        <td><b>-</b></td>
+                        <td><b>-</b></td>
+                        <td><b>307 742</b></td>
+                        <td><b>79%</b></td>
+                        </tr>
+                </tbody>
+        </table>
+        <table id="Statistics_HS_loc" class="fancy_table hovered_list striped_table">        
+                <tbody>
+                    <tr>
+				<td colspan="6"><b>Localization Data</b></td>
+                        </tr>
+                        <tr>
+                                <td><b><i>All Localizations</i></b></td>
+                                <td><b>72 185</b></td>
+                                <td><b>133 963</b></td>
+                                <td><b>71%</b></td>
+                                <td><b>-</b></td>
+                                <td><b>-</b></td>
+                        </tr>
+                        <tr>
+                                <td><i>Cytoplasm</i></td>
+                                <td>36 499</td>
+                                <td>81 178</td>
+                                <td>74%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Mitochondrion</i></td>
+                                <td>9635</td>
+                                <td>23 729</td>
+                                <td>69%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Nucleus</i></td>
+                                <td>31 188</td>
+                                <td>62 384</td>
+                                <td>75%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Extracellular</i></td>
+                                <td>11 738</td>
+                                <td>38 679</td>
+                                <td>80%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Secretory Pathway</i></td>
+                                <td>17 717</td>
+                                <td>48 447</td>
+                                <td>71%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Membrane</i></td>
+                                <td>21 187</td>
+                                <td>69 789</td>
+                                <td>72%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                </tbody>
+	</table>
+	
+	<a name="drosi"></a>
+	<h2>2. <i>Drosophila melanogaster</i> (Fruit fly)</h2>
+	<table id="Statistics_DM_comp" class="fancy_table hovered_list striped_table">
+		<thead>
+			<tr>
+				<th>Data Type</th>
+				<th>Number of Proteins</th>
+				<th>Number of Localizations</th>
+				<th>Average localization score</th>
+				<th>Number of Interactions</th>
+				<th>Average Interaction Score</th>
+			</tr> 
+		</thead>
+                <tbody>
+                    <tr>
+				<td colspan="6"><b>Compartmentalization of proteins and interactions</b></td>
+                        </tr>
+                        <tr>
+                                <td><b><i>All Localizations</i></b></td>
+                                <td><b>13 362</b></td>
+                                <td><b>21 818</b></td>
+                                <td><b>76%</b></td>
+                                <td><b>137 735</b></td>
+                                <td><b>68%</b></td>
+                        </tr>
+                        <tr>
+                                <td><i>Cytoplasm</i></td>
+                                <td>7057</td>
+                                <td>13 184</td>
+                                <td>76%</td>
+                                <td>81 671</td>
+                                <td>70%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Mitochondrion</i></td>
+                                <td>914</td>
+                                <td>1853</td>
+                                <td>77%</td>
+                                <td>3742</td>
+                                <td>73%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Nucleus</i></td>
+                                <td>5515</td>
+                                <td>9574</td>
+                                <td>76%</td>
+                                <td>48 430</td>
+                                <td>72%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Extracellular</i></td>
+                                <td>740</td>
+                                <td>1827</td>
+                                <td>73%</td>
+                                <td>1497</td>
+                                <td>73%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Secretory Pathway</i></td>
+                                <td>2284</td>
+                                <td>4882</td>
+                                <td>74%</td>
+                                <td>10 650</td>
+                                <td>66%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Membrane</i></td>
+                                <td>2964</td>
+                                <td>5891</td>
+                                <td>77%</td>
+                                <td>15 870</td>
+                                <td>73%</td>
+                        </tr>
+                </tbody>
+        </table>
+        <table id="Statistics_DM_int" class="fancy_table hovered_list striped_table">        
+                <tbody>
+			<tr>
+			<td><b>Interaction Data</b></td>
+                        <td><b>15 531</b></td>
+                        <td><b>-</b></td>
+                        <td><b>-</b></td>
+                        <td><b>221 653</b></td>
+                        <td><b>42%</b></td>
+                        </tr>
+                </tbody>
+        </table>
+        <table id="Statistics_DM_loc" class="fancy_table hovered_list striped_table">        
+                <tbody>
+                    <tr>
+				<td colspan="6"><b>Localization Data</b></td>
+                        </tr>
+                        <tr>
+                                <td><b><i>All Localizations</i></b></td>
+                                <td><b>22 088</b></td>
+                                <td><b>31 936</b></td>
+                                <td><b>74%</b></td>
+                                <td><b>-</b></td>
+                                <td><b>-</b></td>
+                        </tr>
+                        <tr>
+                                <td><i>Cytoplasm</i></td>
+                                <td>9210</td>
+                                <td>16 294</td>
+                                <td>75%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Mitochondrion</i></td>
+                                <td>1910</td>
+                                <td>3606</td>
+                                <td>75%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Nucleus</i></td>
+                                <td>7349</td>
+                                <td>12 098</td>
+                                <td>75%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Extracellular</i></td>
+                                <td>2181</td>
+                                <td>4724</td>
+                                <td>72%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Secretory Pathway</i></td>
+                                <td>4927</td>
+                                <td>9383</td>
+                                <td>66%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Membrane</i></td>
+                                <td>6360</td>
+                                <td>10 630</td>
+                                <td>66%</td>
+                                <td>-</td>
+                                <td>-</td
+                        </tr>
+                </tbody>
+	</table>
+	
+	<a name="worm"></a>
+	<h2>3. <i>Caenorhabditis elegans</i></h2>
+	<table id="Statistics_CE_comp" class="fancy_table hovered_list striped_table">
+		<thead>
+			<tr>
+				<th>Data Type</th>
+				<th>Number of Proteins</th>
+				<th>Number of Localizations</th>
+				<th>Average localization score</th>
+				<th>Number of Interactions</th>
+				<th>Average Interaction Score</th>
+			</tr> 
+		</thead>
+                <tbody>
+                    <tr>
+				<td colspan="6"><b>Compartmentalization of proteins and interactions</b></td>
+                        </tr>
+                        <tr>
+                                <td><b><i>All Localizations</i></b></td>
+                                <td><b>4481</b></td>
+                                <td><b>8502</b></td>
+                                <td><b>68%</b></td>
+                                <td><b>12 899</b></td>
+                                <td><b>61%</b></td>
+                        </tr>
+                        <tr>
+                                <td><i>Cytoplasm</i></td>
+                                <td>2609</td>
+                                <td>5418</td>
+                                <td>69%</td>
+                                <td>6584</td>
+                                <td>65%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Mitochondrion</i></td>
+                                <td>224</td>
+                                <td>396</td>
+                                <td>67%</td>
+                                <td>198</td>
+                                <td>61%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Nucleus</i></td>
+                                <td>2223</td>
+                                <td>4474</td>
+                                <td>68%</td>
+                                <td>6274</td>
+                                <td>67%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Extracellular</i></td>
+                                <td>68</td>
+                                <td>162</td>
+                                <td>64%</td>
+                                <td>80</td>
+                                <td>51%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Secretory Pathway</i></td>
+                                <td>1032</td>
+                                <td>2263</td>
+                                <td>66%</td>
+                                <td>1560</td>
+                                <td>59%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Membrane</i></td>
+                                <td>629</td>
+                                <td>1541</td>
+                                <td>68%</td>
+                                <td>1269</td>
+                                <td>62%</td>
+                        </tr>
+                </tbody>
+        </table>
+        <table id="Statistics_CE_int" class="fancy_table hovered_list striped_table">        
+                <tbody>
+			<tr>
+			<td><b>Interaction Data</b></td>
+                        <td><b>5259</b></td>
+                        <td><b>-</b></td>
+                        <td><b>-</b></td>
+                        <td><b>17 822</b></td>
+                        <td><b>44%</b></td>
+                        </tr>
+                </tbody>
+        </table>
+        <table id="Statistics_CE_loc" class="fancy_table hovered_list striped_table">        
+                <tbody>
+                    <tr>
+				<td colspan="6"><b>Localization Data</b></td>
+                        </tr>
+                        <tr>
+                                <td><b><i>All Localizations</i></b></td>
+                                <td><b>20 072</b></td>
+                                <td><b>34 612</b></td>
+                                <td><b>61%</b></td>
+                                <td><b>-</b></td>
+                                <td><b>-</b></td>
+                        </tr>
+                        <tr>
+                                <td><i>Cytoplasm</i></td>
+                                <td>9568</td>
+                                <td>18 533</td>
+                                <td>63%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Mitochondrion</i></td>
+                                <td>2293</td>
+                                <td>5039</td>
+                                <td>60%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Nucleus</i></td>
+                                <td>7674</td>
+                                <td>14 744</td>
+                                <td>62%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Extracellular</i></td>
+                                <td>1662</td>
+                                <td>3719</td>
+                                <td>60%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Secretory Pathway</i></td>
+                                <td>6222</td>
+                                <td>12 827</td>
+                                <td>60%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Membrane</i></td>
+                                <td>7193</td>
+                                <td>15 423</td>
+                                <td>55%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                </tbody>
+	</table>
+   
+	<a name="yeast"></a>
+	<h2>4. <i>Saccharomyces cerevisiae</i> (Baker's yeast)</h2>
+	<table id="Statistics_SC_comp" class="fancy_table hovered_list striped_table">
+		<thead>
+			<tr>
+				<th>Data Type</th>
+				<th>Number of Proteins</th>
+				<th>Number of Localizations</th>
+				<th>Average localization score</th>
+				<th>Number of Interactions</th>
+				<th>Average Interaction Score</th>
+			</tr> 
+		</thead>
+                <tbody>
+                    <tr>
+				<td colspan="6"><b>Compartmentalization of proteins and interactions</b></td>
+                        </tr>
+                        <tr>
+                                <td><b><i>All Localizations</i></b></td>
+                                <td><b>6053</b></td>
+                                <td><b>13 805</b></td>
+                                <td><b>72%</b></td>
+                                <td><b>119 442</b></td>
+                                <td><b>77%</b></td>
+                        </tr>
+                        <tr>
+                                <td><i>Cytoplasm</i></td>
+                                <td>4064</td>
+                                <td>9749</td>
+                                <td>74%</td>
+                                <td>83 145</td>
+                                <td>80%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Mitochondrion</i></td>
+                                <td>2040</td>
+                                <td>5212</td>
+                                <td>70%</td>
+                                <td>18 532</td>
+                                <td>74%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Nucleus</i></td>
+                                <td>3584</td>
+                                <td>8513</td>
+                                <td>73%</td>
+                                <td>62 609</td>
+                                <td>84%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Extracellular</i></td>
+                                <td>147</td>
+                                <td>480</td>
+                                <td>70%</td>
+                                <td>231</td>
+                                <td>86%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Secretory Pathway</i></td>
+                                <td>1088</td>
+                                <td>3277</td>
+                                <td>73%</td>
+                                <td>5805</td>
+                                <td>88%</td>
+                        </tr>
+                        <tr>
+                                <td><i>Membrane</i></td>
+                                <td>1882</td>
+                                <td>5393</td>
+                                <td>72%</td>
+                                <td>11 985</td>
+                                <td>89%</td
+                        </tr
+                </tbody>
+        </table>
+        <table id="Statistics_SC_int" class="fancy_table hovered_list striped_table">        
+                <tbody>
+			<tr>
+			<td><b>Interaction Data</b></td>
+                        <td><b>6223</b></td>
+                        <td><b>-</b></td>
+                        <td><b>-</b></td>
+                        <td><b>131 135</b></td>
+                        <td><b>71%</b></td>
+                        </tr>
+                </tbody>
+        </table>
+        <table id="Statistics_SC_loc" class="fancy_table hovered_list striped_table">
+                <tbody>
+                    <tr>
+				<td colspan="6"><b>Localization Data</b></td>
+                        </tr>
+                        <tr>
+                                <td><b><i>All Localizations</i></b></td>
+                                <td><b>6553</b></td>
+                                <td><b>13 924</b></td>
+                                <td><b>66%</b></td>
+                                <td><b>-</b></td>
+                                <td><b>-</b></td>
+                        </tr>
+                        <tr>
+                                <td><i>Cytoplasm</i></td>
+                                <td>4211</td>
+                                <td>9725</td>
+                                <td>73%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Mitochondrion</i></td>
+                                <td>2200</td>
+                                <td>5389</td>
+                                <td>69%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Nucleus</i></td>
+                                <td>3749</td>
+                                <td>8519</td>
+                                <td>72%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Extracellular</i></td>
+                                <td>282</td>
+                                <td>890</td>
+                                <td>69%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Secretory Pathway</i></td>
+                                <td>1230</td>
+                                <td>3576</td>
+                                <td>72%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                        <tr>
+                                <td><i>Membrane</i></td>
+                                <td>2242</td>
+                                <td>6135</td>
+                                <td>69%</td>
+                                <td>-</td>
+                                <td>-</td>
+                        </tr>
+                </tbody>
+	</table>
+        
+	<br /><br />
+	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Help Table of Contents</a>
+        <br/><a href="{{ path('ComppiDescriptionBundle_about') }}">&#x21e6; Back to Starting Page</a></p>
+        
+{% endblock %}

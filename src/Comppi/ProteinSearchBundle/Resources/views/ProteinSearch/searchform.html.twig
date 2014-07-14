@@ -1,20 +1,65 @@
 {# src/Comppi/ProteinSearchBundle/Resources/views/searchform.html.twig #}
-<div class="center">
-<form id="ProteinSearchForm" action="protein_search" method="post">
-	<label for="fProtSearchKeyword" id="fProtSearchKeywordLabel">Protein Name:</label>
-	<input type="text" name="fProtSearchKeyword" id="fProtSearchKeyword" value="{{ keyword }}" title="Start typing to get a list of suggested proteins; autocomplete appears after 3 characters." />
-	<input class="btn btn_submit" type="submit" name="fProtSearchSubmit" id="fProtSearchSubmit" value="Submit Search" title="Click 'Submit Search' to send your request." />
 
-	<div id="fProtSearchSpecContainer"
+{% if form_error_messages %}
+<p class="message_error"> {{ form_error_messages|raw }} </p>
+{% endif %}
+
+<div class="center">	
+<form id="ProteinSearchForm" action="protein_search" method="post">
+	<!-- upper left section -->
+	<div id="fProtSearchContainerUL">
+	<label for="fProtSearchKeyword" id="fProtSearchKeywordLabel">Protein Name:
+	</label>
+	{# <textarea name="fProtSearchKeyword" required="required" id="fProtSearchKeyword" title="Start typing to get a list of suggested proteins; autocomplete appears after 3 characters. The search is case-insensitive." txttitle="Search for up to 100 protein names, each in a new row. Autocomplete is disabled for multisearch. The search is case-insensitive.">{{ keyword }}</textarea> #}
+	<input type="text" name="fProtSearchKeyword" value="{{ keyword }}" id="fProtSearchKeyword" title="Start typing to get a list of suggested proteins; autocomplete appears after 3 characters. The search is case-insensitive." />
+	</div>
+	
+	<!-- upper right section -->
+	<div id="fProtSearchContainerUR">
+	<input class="btn btn_submit" type="submit" name="fProtSearchSubmit" id="fProtSearchSubmit" value="Search" title="Click 'Search' to send your request." />
+	
+	<input type="button" class="btn" name="fProtSearchAdvanced" id="fProtSearchAdvancedBtn" value="Advanced Settings &raquo;" title="Click 'Advanced Settings' to customize the species, the subcellular localizations and the probability of these localizations." />
+	
+	<input class="btn" type="reset" name="fProtSearchReset" id="fProtSearchReset" value="Reset&times;" title="Click to reset the settings to default values." />
+	</div>
+	
+	<div class="clear-both"></div>
+	
+	<!-- lower left section -->
+	<div id="fProtSearchContainerLL">
+	<label id="fProtSearchSpeciesLabel">Species:</label>
+	<div id="fProtSearchSpecContainer">
 		{% for s in species_list %}
+		<input type="checkbox" name="fProtSearchSp[{{ s.code }}]" id="fProtSearchSp{{ s.code }}" class="checkbox" value="{{ s.code }}"{% if s.checked %} checked="checked"{% endif %} />
+		<label for="fProtSearchSp{{ s.code }}" class="radioButtonLabel taxonomic_name" title="Click on a species to toggle it, proteins of the checked species are included in the search results.">{{ s.name }}</label>
 		<br />
-		<input type="radio" name="fProtSearchSpecies" id="fProtSearch{{ s.abbreviation }}" class="btn radiobtn"value="{{ s.abbreviation }}"{% if requested_species[s.abbreviation] is defined %} checked="checked"{% endif %} title="Click on a species to select it."/>
-		<label for="fProtSearch{{ s.abbreviation }}" class="radioButtonLabel taxonomic_name">{{ s.shortname }}</label>
 		{% endfor %}
 	</div>
+	</div>
+	
+	<!-- lower right section -->
+	<div id="fProtSearchContainerLR">
+	<label id="fProtSearchLocLabel">Localizations:</label>
+	<div id="fProtSearchLocContainer">
+		{% for ml in majorloc_list %}
+		<input type="checkbox" name="fProtSearchLoc[{{ ml.code }}]" id="fProtSearchLoc{{ ml.code }}" class="checkbox" value="{{ ml.code }}"{% if ml.checked %} checked="checked"{% endif %} />
+		<label for="fProtSearchLoc{{ ml.code }}" class="radioButtonLabel" title="Click on a cell compartment to toggle it, proteins from the checked compartments are included in the search results.">{{ ml.name }}</label>
+		<br />
+		{% endfor %}
+	</div>
+	
+	<br /><br />
+	<label for="fProtSearchLocScoreSlider" title="Localization probability describes how likely it is that a protein is related to a subcellular compartment.">Localization Probability Threshold (%):</label>
+	<div id="fProtSearchLocScoreSlider" title="Search for proteins that have higher localization probability for at least one selected compartment than the set threshold. The threshold applies to the localizations of the query protein, not to the localizations of the interactors."></div>
+	<input type="text" name="fProtSearchLocScore" id="fProtSearchLocScore" value="{{ loc_score_slider_val }}" />
+	</div>
+
+</tr></table>
 </form>
 </div>
 
+<div class="clear-both"></div>
+
 {% if result_msg %}
-	<p id="protSearchResultMsg">{{ result_msg }}</p>
+	<p id="protSearchResultMsg">{{ result_msg|raw }}</p>
 {% endif %}
