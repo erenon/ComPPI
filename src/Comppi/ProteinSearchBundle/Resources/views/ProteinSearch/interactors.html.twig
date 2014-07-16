@@ -88,7 +88,7 @@
 			</tbody>
 		</table>
 		{% else %}
-			Not available.
+			Not available or filtering requirements are stricter.
 		{% endif %}
 
 		{% if protein.synonyms is defined %}
@@ -143,7 +143,7 @@
 			<div class="ps-actorBDetails">
 
 				<p><h3 class="ps-detailLabel">Localizations:</h3>
-				{% if p['locs'] is defined %}
+				{% if p['locs'] is not empty %}
 				<table class="fancy_table hovered_list">
 					<thead>
 					<tr>
@@ -169,7 +169,7 @@
 					</tbody>
 				</table></p>
 				{% else %}
-				Not available.
+				Not available or filtering requirements are stricter.
 				{% endif %}
 				
 				{% if p.synonyms is defined %}

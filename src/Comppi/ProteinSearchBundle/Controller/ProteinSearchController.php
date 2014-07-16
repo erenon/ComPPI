@@ -743,6 +743,11 @@ class ProteinSearchController extends Controller
 			}
 		}
 		
+		// The threshold sliders operate in the [0,100] range with integers (for user conveninence),
+		// but the loc. score is stored in the [0,1] range with floats.
+		// Therefore a 100% loc on the front-end may mean anything from 0.99 to 1.0.
+		// To address this, the threshold is lowered by 0.001,
+		// therefore the error range of 0.01 is compressed to 0.001.
 		$loc_prob = round($loc_score_threshold/100, 3, PHP_ROUND_HALF_DOWN);
 		$loc_prob = (float)$loc_prob;
 		// we need to lower a bit the threshold,
@@ -762,121 +767,123 @@ class ProteinSearchController extends Controller
 		}
 		if (!empty($loc_score_threshold))
 		{
-			$sql_ls .= " AND score >= ".$loc_prob.")";
+			$sql_ls .= " AND score >= ".$loc_prob;
 		}
 		$this->verbose ? $this->verbose_log[] = $sql_ls : '';
 
-		var_dump($sql_ls);
-		
 		if (!$r_ls = $DB->executeQuery($sql_ls))
 			die('LocalizationScore query failed!');
 
 		$loc_scores = array();
-		$protein_ids = array();
 		while ($ls = $r_ls->fetch(\PDO::FETCH_OBJ))
 		{
 			$loc_scores[$ls->pid][$ls->majorLocName] = $ls->score;
-			$protein_ids[$ls->pid] = $ls->pid;
 		}
-		
-		// select only the localization details for those proteins,
-		// that have a localization score
-		if (!empty($protein_ids))
+
+		// do NOT use protein IDs from the 'LocalizationScore' query above
+		// it breaks the behavior of displaying localizations
+		// with partially missing data
+		$sql_pl = '
+			SELECT
+				ptl.proteinId as pid, ptl.localizationId AS locId,
+				ptl.sourceDb, ptl.pubmedId,
+				lt.name as minorLocName, lt.goCode, lt.majorLocName,
+				st.name AS exp_sys, st.confidenceType AS exp_sys_type
+			FROM
+				ProtLocToSystemType pltst,
+				SystemType st,
+				ProteinToLocalization ptl
+			LEFT JOIN
+				Loctree lt ON ptl.localizationId=lt.id
+			WHERE ptl.id=pltst.protLocId
+				AND pltst.systemTypeId=st.id
+				AND ptl.proteinId IN ('.join(',', $comppi_ids).')';
+		$this->verbose ? $this->verbose_log[] = $sql_pl : '';
+
+		if (!$r_pl = $DB->executeQuery($sql_pl))
+			die('ProteinToLocalization query failed!');
+
+		$i = 0;
+		while ($p = $r_pl->fetch(\PDO::FETCH_OBJ))
 		{
-			$sql_pl = 'SELECT
-					ptl.proteinId as pid, ptl.localizationId AS locId, ptl.sourceDb, ptl.pubmedId,
-					lt.name as minorLocName, lt.goCode, lt.majorLocName,
-					st.name AS exp_sys, st.confidenceType AS exp_sys_type
-				FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
-				LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
-				WHERE ptl.id=pltst.protLocId
-					AND pltst.systemTypeId=st.id
-					AND ptl.proteinId IN ('.join(',', $protein_ids).')';
-			$this->verbose ? $this->verbose_log[] = $sql_pl : '';
-	
-			if (!$r_pl = $DB->executeQuery($sql_pl))
-				die('ProteinToLocalization query failed!');
-	
-			$i = 0;
-			while ($p = $r_pl->fetch(\PDO::FETCH_OBJ))
-			{
-				$i++;
-				$mnlrc = 0; // minor loc replacement count
-				$tmp = array(); // buffer
-				$add = false; // flag determining if the row will be kept
-	
-				$tmp['source_db'] = $p->sourceDb;
-				$tmp['pubmed_link'] = $this->linkToPubmed($p->pubmedId);
-				// loc exp sys type replacement: IPI -> IPI: Inferred From Physical Interaction
-				$loc_exp_sys = str_replace(
-					$this->minor_loc_abbr_patterns,
-					$this->minor_loc_abbr_replacements,
-					$p->exp_sys,
-					$mnlrc
-				);
-				if ($mnlrc) {
-					$tmp['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
-						.': '.$p->exp_sys
-						.' <span class="infobtn" title="'
-						.$p->exp_sys.': '.$loc_exp_sys.
-						'"> ? </span>';
+			$i++;
+			$mnlrc = 0; // minor loc replacement count
+			$tmp = array(); // buffer
+			$add = false; // flag determining if the row will be kept
+
+			// assemble the current localization data
+			$tmp['source_db'] = $p->sourceDb;
+			$tmp['pubmed_link'] = $this->linkToPubmed($p->pubmedId);
+			// loc exp sys type replacement: IPI -> IPI: Inferred From Physical Interaction
+			$loc_exp_sys = str_replace(
+				$this->minor_loc_abbr_patterns,
+				$this->minor_loc_abbr_replacements,
+				$p->exp_sys,
+				$mnlrc
+			);
+			if ($mnlrc) {
+				$tmp['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
+					.': '.$p->exp_sys
+					.' <span class="infobtn" title="'
+					.$p->exp_sys.': '.$loc_exp_sys.
+					'"> ? </span>';
+			} else {
+				$tmp['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
+					.': '.$p->exp_sys;
+			}
+			$tmp['loc_exp_sys_type'] = $p->exp_sys_type;
+			if (!empty($p->minorLocName)) {
+				$tmp['small_loc'] = ucfirst($p->minorLocName);
+				$tmp['go_code'] = ucfirst($p->goCode);
+			} else {
+				$tmp['small_loc'] = 'N/A';
+				$tmp['go_code'] = 'N/A';
+			}
+			if (!empty($p->majorLocName)) {
+				$tmp['large_loc'] = ucfirst($p->majorLocName) /*. '['.$p->locId.']'*/;
+				if (!empty($loc_scores[$p->pid][$p->majorLocName])) {
+					$tmp['loc_score'] = round($loc_scores[$p->pid][$p->majorLocName], 3)*100;
 				} else {
-					$tmp['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
-						.': '.$p->exp_sys;
-				}
-				$tmp['loc_exp_sys_type'] = $p->exp_sys_type;
-				if (!empty($p->minorLocName)) {
-					$tmp['small_loc'] = ucfirst($p->minorLocName);
-					$tmp['go_code'] = ucfirst($p->goCode);
-				} else {
-					$tmp['small_loc'] = 'N/A';
-					$tmp['go_code'] = 'N/A';
-				}
-				if (!empty($p->majorLocName)) {
-					$tmp['large_loc'] = ucfirst($p->majorLocName) . '['.$p->locId.']';
-					if (!empty($loc_scores[$p->pid][$p->majorLocName])) {
-						$tmp['loc_score'] = round($loc_scores[$p->pid][$p->majorLocName], 3)*100;
-					} else {
-						$tmp['loc_score'] = 0;
-					}
-				} else {
-					$tmp['large_loc'] = 'N/A';
 					$tmp['loc_score'] = 0;
 				}
-				
-				if (empty($requested_major_locs) && empty($loc_score_threshold))
-				{
-					// no filtering requirements -> add
-					$add = true;
-				}
-				elseif (empty($loc_score_threshold) && isset($requested_major_locs[$tmp['large_loc']])) // isset is faster than in_array
-				{
-					// no loc score, but major loc is set -> add
-					$add = true;
-				}
-				elseif (empty($requested_major_locs) && $tmp['loc_score']>$loc_prob)
-				{
-					// no major loc, but loc score is set -> add
-					$add = true;
-				}
-				elseif (
-					!empty($requested_major_locs) &&
-					!empty($loc_score_threshold) &&
-					isset($requested_major_locs[$tmp['large_loc']]) &&
-					$tmp['loc_score']>$loc_prob
-				) {
-					// both major loc and loc score requirements are fulfilled
-					$add = true;
-				}
-				
-				// add the final assembled localization row
-				if ($add)
-				{
-					$pl[$p->pid][$i] = $tmp;
-				}
-				
-				unset($tmp);
+			} else {
+				$tmp['large_loc'] = 'N/A';
+				$tmp['loc_score'] = 0;
 			}
+
+			// filter the results if needed
+			if (empty($requested_major_locs) && empty($loc_score_threshold))
+			{
+				// no filtering requirements -> add
+				$add = true;
+			}
+			elseif (empty($loc_score_threshold) && isset($requested_major_locs[$p->majorLocName])) // isset is faster than in_array
+			{
+				// no loc score, but major loc is set -> add
+				$add = true;
+			}
+			elseif (empty($requested_major_locs) && $tmp['loc_score']>$loc_prob)
+			{
+				// no major loc, but loc score is set -> add
+				$add = true;
+			}
+			elseif (
+				!empty($requested_major_locs) &&
+				!empty($loc_score_threshold) &&
+				isset($requested_major_locs[$p->majorLocName]) &&
+				$tmp['loc_score']>$loc_prob
+			) {
+				// both major loc and loc score requirements are fulfilled
+				$add = true;
+			}
+			
+			// add the final assembled localization row
+			if ($add)
+			{
+				$pl[$p->pid][$i] = $tmp;
+			}
+			
+			unset($tmp);
 		}
 
 		$this->verbose ? $this->verbose_log[] = count($pl).' protein locations found' : '';
