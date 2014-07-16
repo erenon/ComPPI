@@ -592,6 +592,17 @@ class ProteinSearchController extends Controller
 		$T['protein']['species'] = $this->species_list[$T['protein']['species']];
 		
 		// INTERACTORS
+		// The threshold sliders operate in the [0,100] range with integers (for user conveninence),
+		// but the confidence score (CS) is stored in the [0,1] range with floats.
+		// Therefore a 100% CS on the front-end may mean anything from 0.99 to 1.0.
+		// To address this, the threshold is lowered by 0.001,
+		// therefore the error range of 0.01 is compressed to 0.001.
+		$conf_score_cond = round($T['conf_score_slider_val']/100, 3, PHP_ROUND_HALF_DOWN);
+		$conf_score_cond = (float)$conf_score_cond;
+		if ($conf_score_cond>0.001) {
+			$conf_score_cond = $conf_score_cond-0.001;
+		}
+		
 		$r_interactors = $DB->executeQuery(
 			"SELECT DISTINCT
 				i.id AS iid, i.sourceDb, i.pubmedId,
@@ -602,7 +613,7 @@ class ProteinSearchController extends Controller
 			LEFT JOIN ConfidenceScore cs ON i.id=cs.interactionId
 			WHERE (actorAId = $comppi_id OR actorBId = $comppi_id)
 			" . (!empty($T['conf_score_slider_val'])
-				? " AND cs.score >= ".(float)($T['conf_score_slider_val']/100) // safe from SQL injection
+				? " AND cs.score >= ".$conf_score_cond // safe from SQL injection
 				: '')
 			. "
 			ORDER BY cs.score DESC"
