@@ -16,9 +16,9 @@
 		{% endif %}
 		
 		<div class="fancy_box_body" id="ps-interactorFilter">
-		<!-- <p class="help">Use these elements to filter the results page.</p> -->
+		<p class="help"><span class="ps-detailLabel">Custom Settings:</span> Use these elements to filter the details displayed on this page.</p>
 		<form action="{{ comppi_id }}" method="post">
-			<label for="fIntFiltConfScoreSlider" title="Confidence score describes how likely it is that two proteins are interacting if their subcellular compartment are considered.">Confidence Score Threshold (%):</label>
+			<label for="fIntFiltConfScoreSlider" title="Interaction score describes how likely it is that two proteins are interacting if their subcellular compartment are considered.">Confidence Score Threshold (%):</label>
 			<input type="text" name="fIntFiltConfScore" id="fIntFiltConfScore" value="{{ conf_score_slider_val }}" />
 			<div id="fIntFiltConfScoreSlider" title="Filter the results to interactions that have higher confidence score than the set threshold."></div>
 			<br /><br />
@@ -88,7 +88,7 @@
 			</tbody>
 		</table>
 		{% else %}
-			Not available or filtering requirements are stricter.
+			Not available or custom settings are stricter.
 		{% endif %}
 
 		{% if protein.synonyms is defined %}
@@ -116,7 +116,10 @@
 	<table class="fancy_table striped_table">
 	<thead>
 	<tr>
-		<th colspan="2" class="ps-resultsHeader">Interactions</th>
+		<th colspan="2" class="ps-resultsHeader">
+		<h1>Interactions</h1>
+		<a href="#" id="ps-allDetailsOpener" class="ps-detailsOpener" title="Click to display the details of all the interactors. Click again to close all Details panels.">All Details</a>
+		</th>
 	</tr>
 	</thead>
 	<tbody>

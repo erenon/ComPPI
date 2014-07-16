@@ -160,6 +160,19 @@ $(function() {
 	});
 	
 	// show/hide protein interaction details
+	display_all_details = false;
+	$("#ps-allDetailsOpener").click(function() {
+		display_all_details = !display_all_details;
+		
+		if (display_all_details) {
+			$(".ps-actorBDetails").show();
+		} else {
+			$(".ps-actorBDetails").hide();
+		}
+		
+		return false;
+	});
+	
 	$(".ps-actorBDetails").hide();
 	$(".ps-detailsOpener").click(function() {
 		$(this).siblings(".ps-actorBDetails:first").slideToggle();
