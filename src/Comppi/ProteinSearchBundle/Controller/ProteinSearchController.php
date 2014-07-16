@@ -624,6 +624,8 @@ class ProteinSearchController extends Controller
 			//if ($i->namingConvention=='UniProtKB-AC')
 			$T['ls'][$i->pid]['uniprot_outlink'] = $this->uniprot_root.$i->name;
 			$T['ls'][$i->pid]['confScore'] = round($i->confScore, 3)*100;
+			$T['ls'][$i->pid]['int_source_db'] = $i->sourceDb;
+			$T['ls'][$i->pid]['int_pubmed_link'] = $this->linkToPubmed($i->pubmedId);
 			$confScoreAvg += (float)$i->confScore;
 			$confCounter++;
 
