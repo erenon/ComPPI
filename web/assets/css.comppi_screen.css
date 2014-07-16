@@ -408,7 +408,7 @@ table#ps-interactionStats.fancy_table tbody:before {
 #fIntFiltSubmit { margin-left: 110px; }
 #fIntFiltReset { margin-left: 20px; }
 #fIntFiltConfScoreSlider, #fIntFiltLocScoreSlider { width: 150px; float: right; margin-top: 8px; }
-#fIntFiltConfScore, #fIntFiltLocScore { width: 58px; height: 40px; margin-top: -2px; text-align: center; float: right; }
+#fIntFiltConfScore, #fIntFiltLocScore { width: 35px; height: 25px; margin-top: -2px; text-align: center; float: right; }
 label#fIntFiltLocLabel { width: 120px; }
 #fIntFiltLocContainer { float: right; margin: 2px 0 25px 0; }
 
