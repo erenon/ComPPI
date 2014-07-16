@@ -438,6 +438,8 @@ class ProteinSearchController extends Controller
 					die("Protein IDs are missing for the full name query of the result selector!");
 				}
 				
+				$T['found_num'] = count($T['ls']);
+				
 				return $this->render(
 					'ComppiProteinSearchBundle:ProteinSearch:middlepage.html.twig',
 					$T
@@ -603,6 +605,15 @@ class ProteinSearchController extends Controller
 			$conf_score_cond = $conf_score_cond-0.001;
 		}
 		
+		// number of all interactors of the protein
+		$r_all_int_count = $DB->executeQuery(
+			"SELECT COUNT(DISTINCT actorAId, actorBId) AS row_count
+			FROM Interaction
+			WHERE (actorAId = $comppi_id OR actorBId = $comppi_id)"
+		);
+		$T['all_interactors_count'] = $r_all_int_count->fetch(\PDO::FETCH_OBJ)->row_count;
+		
+		// interactors according to the current settings
 		$r_interactors = $DB->executeQuery(
 			"SELECT DISTINCT
 				i.id AS iid, i.sourceDb, i.pubmedId,
@@ -637,8 +648,10 @@ class ProteinSearchController extends Controller
 			//if ($i->namingConvention=='UniProtKB-AC')
 			$T['ls'][$i->pid]['uniprot_outlink'] = $this->uniprot_root.$i->name;
 			$T['ls'][$i->pid]['confScore'] = round($i->confScore, 3)*100;
-			$T['ls'][$i->pid]['int_source_db'] = $i->sourceDb;
-			$T['ls'][$i->pid]['int_pubmed_link'] = $this->linkToPubmed($i->pubmedId);
+			// note that there may be multiple source DBs and PubMed IDs
+			$T['ls'][$i->pid]['int_source_db'][$i->sourceDb] = $i->sourceDb;
+			$pml = $this->linkToPubmed($i->pubmedId);
+			$T['ls'][$i->pid]['int_pubmed_link'][$pml] = $pml;
 			$confScoreAvg += (float)$i->confScore;
 			$confCounter++;
 

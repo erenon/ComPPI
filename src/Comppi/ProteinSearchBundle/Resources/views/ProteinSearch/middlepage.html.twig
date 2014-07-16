@@ -6,8 +6,7 @@
 {% block bundlecontent %}
 	{% include 'ComppiProteinSearchBundle:ProteinSearch:searchform.html.twig' %}
 	
-	<p class="message_success"><b>As the result of your search query, the following multiple proteins were found. If you want to see their detailed localization and/or interaction pattern, please select one of them.</b>
-		<br />(Please note that localization and interaction patterns contain all data of the given protein.)
+	<p class="message_success"><b>As the result of your search query, the following {{ found_num }} proteins were found. If you want to see their detailed localization and/or interaction pattern, please select one of them.</b>
 </p>
 	
 	{% if ls %}

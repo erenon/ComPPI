@@ -16,7 +16,7 @@
 		{% endif %}
 		
 		<div class="fancy_box_body" id="ps-interactorFilter">
-		<p class="help"><span class="ps-detailLabel">Custom Settings:</span> Use these controls to filter the details displayed on this page.</p>
+		<p class="help"><span class="ps-detailLabel">Custom Settings:</span> Use these controls to filter the details displayed on this page. The parameters apply to both the query protein and its interactors.</p>
 		<form action="{{ comppi_id }}" method="post">
 			<label for="fIntFiltConfScoreSlider" title="Interaction score describes how likely it is that two proteins are interacting if their subcellular compartment are considered.">Interaction Score Threshold (%):</label>
 			<input type="text" name="fIntFiltConfScore" id="fIntFiltConfScore" value="{{ conf_score_slider_val }}" />
@@ -51,7 +51,7 @@
 		</tr>
 		<tr>
 			<td><h3 class="ps-detailLabel">Number of <a href="#interactors" title="Jump to the interactors">Interactions</a></h3></td>
-			<td>{{ protein.interactionNumber }}</td>
+			<td>{{ protein.interactionNumber }} / {{ all_interactors_count }}</td>
 		</tr><tr>
 			<td><h3 class="ps-detailLabel">Average Interaction Score</h3></td>
 			<td>{% if protein.avgConfScore is empty %} N/A {% else %} {{ protein.avgConfScore }}% {% endif %}</td>
@@ -188,10 +188,21 @@
 				{% endif %}
 
 				<p>
-				<h3 class="ps-detailLabel">Interaction Source Database:</h3> {{ p.int_source_db }}
+				{% if p.int_source_db is not empty %}
+				<h3 class="ps-detailLabel">Interaction Source Database:</h3>
+				{% for sdb in p.int_source_db %}
+					{{ sdb }}{% if not loop.last %}, {% endif %}
+				{% endfor %}
+				{% endif %}
+				
+				{% if p.int_pubmed_link is not empty %}
 				<br /><h3 class="ps-detailLabel">Interaction Source Publication:</h3>
-				<a href="{{ p.int_pubmed_link }}" target="_blank">PubMed&nbsp;<img src="{{ asset('assets/linkout.png') }}" /></a>
+				{% for l in p.int_pubmed_link %}
+					<a href="{{ l }}" target="_blank">PubMed&nbsp;<img src="{{ asset('assets/linkout.png') }}" /></a>{% if not loop.last %}, {% endif %}
+				{% endfor %}
+				{% endif %}
 				</p>
+				
 			</div>
 		</td>
 	</tr>
