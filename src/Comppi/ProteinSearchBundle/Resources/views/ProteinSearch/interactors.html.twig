@@ -12,10 +12,39 @@
 	<h1>{{ protein.name }}</h1>
 	<div class="fancy_box_body">
 		{% if protein.fullname is defined %}
-		<span class="ps-detailLabel"> {{ protein.fullname }} </span>&nbsp;&nbsp;&nbsp;//&nbsp;&nbsp;&nbsp;<a href="{{ protein.uniprot_link }}" title="Find more information about {{ protein.name }} in the UniProt database">UniProt Profile</a>&nbsp;<img src="{{ asset('assets/linkout.png') }}" />
-	{% endif %}
+		<span class="ps-detailLabel"> {{ protein.fullname }} </span>&nbsp;&nbsp;&nbsp;//&nbsp;&nbsp;&nbsp;<a href="{{ protein.uniprot_link }}" title="Find more information about {{ protein.name }} in the UniProt database">UniProt Profile</a>&nbsp;<img src="{{ asset('assets/linkout.png') }}" /><br />
+		{% endif %}
+		
+		<div class="fancy_box_body" id="ps-interactorFilter">
+		<!-- <p class="help">Use these elements to filter the results page.</p> -->
+		<form action="{{ comppi_id }}" method="post">
+			<label for="fIntFiltConfScoreSlider" title="Confidence score describes how likely it is that two proteins are interacting if their subcellular compartment are considered.">Confidence Score Threshold (%):</label>
+			<input type="text" name="fIntFiltConfScore" id="fIntFiltConfScore" value="{{ conf_score_slider_val }}" />
+			<div id="fIntFiltConfScoreSlider" title="Filter the results to interactions that have higher confidence score than the set threshold."></div>
+			<br /><br />
+			
+			<label id="fIntFiltLocLabel">Localizations:</label>
+			<div id="fIntFiltLocContainer">
+			{% for ml in majorloc_list %}
+			<input type="checkbox" name="fIntFiltLoc[{{ ml.code }}]" id="fIntFiltLoc{{ ml.code }}" class="checkbox" value="{{ ml.code }}"{% if ml.checked %} checked="checked"{% endif %} />
+			<label for="fIntFiltLoc{{ ml.code }}" class="radioButtonLabel" title="Click on a cell compartment to toggle it, proteins from the checked compartments are included in the search results.">{{ ml.name }}</label>
+				
+			{% if loop.index%3==0 %}<br />{% endif %}
+			{% endfor %}
+			</div>
+			<br />
+			
+			<label for="fIntFiltLocScoreSlider" title="Localization probability describes how likely it is that a protein is related to a subcellular compartment.">Localization Probability Threshold (%):</label>
+			<input type="text" name="fIntFiltLocScore" id="fIntFiltLocScore" value="{{ loc_score_slider_val }}" />
+			<div id="fIntFiltLocScoreSlider" title="Filter the results to proteins that have higher localization probability than the set threshold."></div>
+			<br />
+			
+			<input class="btn btn_submit" type="submit" name="fIntFiltSubmit" id="fIntFiltSubmit" value="Filter" title="Click 'Filter' to filter the results with the above set values." />
+			<input class="btn btn_submit" type="submit" name="fIntFiltReset" id="fIntFiltReset" value="Reset" title="Click 'Reset' to reset all filters and display the default result page." />
+		</form>
+		</div>
 	
-		<table class="fancy_table" id="ps-interactionStats" width="400">
+		<table class="fancy_table" id="ps-interactionStats">
 		<tr>
 			<td><h3 class="ps-detailLabel">Number of <a href="#interactors" title="Jump to the interactors">Interactions</a></h3></td>
 			<td>{{ protein.interactionNumber }}</td>
@@ -24,6 +53,8 @@
 			<td>{% if protein.avgConfScore is empty %} N/A {% else %} {{ protein.avgConfScore }}% {% endif %}</td>
 		</tr>
 		</table>
+
+		<div class="clear-both"></div>
 	
 		<!-- {# <div id="ps-interactionStats" class="fancy_box_body">
 			Number of <a href="#interactors" title="Jump to the interactors">Interactions</a>: {{ protein.interactionNumber }}

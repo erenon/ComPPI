@@ -119,9 +119,45 @@ $(function() {
 		$("#fProtSearchLocScore").on("keyup", function(event) {
 			$("#fProtSearchLocScoreSlider").slider("value", $("#fProtSearchLocScore").val());
 		});
-		
-		
 	}
+	
+	// confidence score treshold slider for interactor filtering
+	$("#fIntFiltConfScoreSlider").slider({
+		min: 0,
+		max: 100,
+		range: "max",
+		value: $("#fIntFiltConfScore").val(),
+		slide: function( event, ui ) {
+			$("#fIntFiltConfScore" ).val( ui.value );
+		},
+		change: function(event, ui) {
+			//
+		},
+	});
+	$("#fIntFiltConfScore").val( $("#fIntFiltConfScoreSlider").slider("value") );
+	// slider should follow the typed in value
+	$("#fIntFiltConfScore").on("keyup", function(event) {
+		$("#fIntFiltConfScoreSlider").slider("value", $("#fIntFiltConfScore").val());
+	});
+	
+	// localization score treshold slider for interactor filtering
+	$("#fIntFiltLocScoreSlider").slider({
+		min: 0,
+		max: 100,
+		range: "max",
+		value: $("#fIntFiltLocScore").val(),
+		slide: function( event, ui ) {
+			$("#fIntFiltLocScore" ).val( ui.value );
+		},
+		change: function(event, ui) {
+			//
+		},
+	});
+	$("#fIntFiltLocScore").val( $("#fIntFiltLocScoreSlider").slider("value") );
+	// slider should follow the typed in value
+	$("#fIntFiltLocScore").on("keyup", function(event) {
+		$("#fIntFiltLocScoreSlider").slider("value", $("#fIntFiltLocScore").val());
+	});
 	
 	// show/hide protein interaction details
 	$(".ps-actorBDetails").hide();
