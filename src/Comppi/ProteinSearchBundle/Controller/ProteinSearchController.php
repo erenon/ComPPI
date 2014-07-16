@@ -588,6 +588,8 @@ class ProteinSearchController extends Controller
 			($filter_by_mlocs ? $requested_major_locs : array()),
 			$T['loc_score_slider_val']
 		);
+		// convert species ID to name
+		$T['protein']['species'] = $this->species_list[$T['protein']['species']];
 		
 		// INTERACTORS
 		$r_interactors = $DB->executeQuery(
