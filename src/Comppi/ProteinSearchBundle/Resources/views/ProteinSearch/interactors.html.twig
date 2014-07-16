@@ -16,11 +16,11 @@
 		{% endif %}
 		
 		<div class="fancy_box_body" id="ps-interactorFilter">
-		<p class="help"><span class="ps-detailLabel">Custom Settings:</span> Use these elements to filter the details displayed on this page.</p>
+		<p class="help"><span class="ps-detailLabel">Custom Settings:</span> Use these controls to filter the details displayed on this page.</p>
 		<form action="{{ comppi_id }}" method="post">
-			<label for="fIntFiltConfScoreSlider" title="Interaction score describes how likely it is that two proteins are interacting if their subcellular compartment are considered.">Confidence Score Threshold (%):</label>
+			<label for="fIntFiltConfScoreSlider" title="Interaction score describes how likely it is that two proteins are interacting if their subcellular compartment are considered.">Interaction Score Threshold (%):</label>
 			<input type="text" name="fIntFiltConfScore" id="fIntFiltConfScore" value="{{ conf_score_slider_val }}" />
-			<div id="fIntFiltConfScoreSlider" title="Filter the results to interactions that have higher confidence score than the set threshold."></div>
+			<div id="fIntFiltConfScoreSlider" title="Filter to interactions that have higher interaction score than the set threshold."></div>
 			<br /><br />
 			
 			<label id="fIntFiltLocLabel">Localizations:</label>
@@ -36,7 +36,7 @@
 			
 			<label for="fIntFiltLocScoreSlider" title="Localization probability describes how likely it is that a protein is related to a subcellular compartment.">Localization Probability Threshold (%):</label>
 			<input type="text" name="fIntFiltLocScore" id="fIntFiltLocScore" value="{{ loc_score_slider_val }}" />
-			<div id="fIntFiltLocScoreSlider" title="Filter the results to proteins that have higher localization probability than the set threshold."></div>
+			<div id="fIntFiltLocScoreSlider" title="Filter to proteins that have higher localization probability than the set threshold."></div>
 			<br />
 			
 			<input class="btn btn_submit" type="submit" name="fIntFiltSubmit" id="fIntFiltSubmit" value="Filter" title="Click 'Filter' to filter the results with the above set values." />
