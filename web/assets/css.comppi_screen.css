@@ -447,6 +447,8 @@ label#fIntFiltLocLabel { width: 120px; }
 .ps-actorB table td, #ps-keyProtein table td { margin: 0; padding: 2px; border: 1px solid #c0c0c0; }
 .ps-actorB table tr td:last-child, #ps-keyProtein table tr td:last-child { text-align: center; }
 
+.white-popup { text-align: center; font-weight: bold; font-size: 1.2em; color: #fff; }
+
 
 /* DOWNLOADS */
 /*#DownloadForm { text-align: left; margin-top: 1em; }

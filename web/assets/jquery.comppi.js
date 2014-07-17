@@ -178,6 +178,25 @@ $(function() {
 		$(this).siblings(".ps-actorBDetails:first").slideToggle();
 		return false;
 	});
+
+	function longSearchWarning() {
+
+	}
+	
+	// display warning if protein search lasts too long
+	$("#fProtSearchSubmit").click(function(){
+		setTimeout(
+			function() {
+				$.magnificPopup.open({
+					items: {
+						src: '<div class="white-popup">Exceptionally this search lasts longer than 3 seconds, the results will appear soon on the screen.</div>',
+						type: 'inline'
+					}
+				});
+			},
+			3000 // time of the timeout
+		)
+	});
 });
 
 $(function() {
