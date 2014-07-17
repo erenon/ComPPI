@@ -448,7 +448,7 @@ class ProteinSearchController extends Controller
 			// no proteins were found
 			else
 			{
-				$T['result_msg'] = 'No proteins were found.';
+				$T['result_msg'] = 'No proteins were found with the current settings.';
 			}
 		}
 		
