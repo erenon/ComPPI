@@ -492,8 +492,8 @@ class ProteinSearchController extends Controller
 		}
 		// set the requested value if the form was posted
 		elseif (
-			!empty($_POST['fIntFiltConfScore']) &&
-			0<(int)$_POST['fIntFiltConfScore'] &&
+			isset($_POST['fIntFiltConfScore']) &&
+			0<=(int)$_POST['fIntFiltConfScore'] &&
 			(int)$_POST['fIntFiltConfScore']<=100
 		) {
 			$T['conf_score_slider_val']
