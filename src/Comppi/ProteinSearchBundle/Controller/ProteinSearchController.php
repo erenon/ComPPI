@@ -633,13 +633,11 @@ class ProteinSearchController extends Controller
 		if (!$r_interactors)
 			die('Interactor query failed!');
 
+		// there may be multiple interactions between the same interactors
 		$confScoreAvg = 0.0;
-		// there may be a significant difference between
-		// the number of proteins and the number of cycles (one protein multiple times?)
-		// therefore a separate counter is needed
 		$confCounter = 0;
 
-		// interactors skeleton
+		// interactors skeleton: data keyed by the ComPPI ID of the interactor protein
 		while ($i = $r_interactors->fetch(\PDO::FETCH_OBJ))
 		{
 			$T['ls'][$i->pid]['prot_id'] = $i->pid;
@@ -647,16 +645,15 @@ class ProteinSearchController extends Controller
 			$T['ls'][$i->pid]['prot_naming'] = $i->namingConvention;
 			//if ($i->namingConvention=='UniProtKB-AC')
 			$T['ls'][$i->pid]['uniprot_outlink'] = $this->uniprot_root.$i->name;
+			$T['ls'][$i->pid]['orig_conf_score'] = $i->confScore;
 			$T['ls'][$i->pid]['confScore'] = round($i->confScore, 3)*100;
 			// note that there may be multiple source DBs and PubMed IDs
 			$T['ls'][$i->pid]['int_source_db'][$i->sourceDb] = $i->sourceDb;
 			$pml = $this->linkToPubmed($i->pubmedId);
 			$T['ls'][$i->pid]['int_pubmed_link'][$pml] = $pml;
-			$confScoreAvg += (float)$i->confScore;
-			$confCounter++;
 
 			$protein_ids[$i->pid] = $i->pid;
-			$interaction_ids[$i->iid] = $i->iid;
+			//$interaction_ids[$i->iid] = $i->iid;
 		}
 
 		// @TODO: letölthető dataset
@@ -679,27 +676,35 @@ class ProteinSearchController extends Controller
 			// synonyms for the interactor
 			$protein_synonyms = $this->getProteinSynonyms($protein_ids);
 
-			// update the existing skeleton (therefore reference is needed)
+			// interactors: update the existing skeleton (therefore reference is needed)
 			foreach($T['ls'] as $pid => &$actor)
 			{
-				// localizations to interactors
-				$actor['locs'] = @$protein_locs[$pid]; // suppress errors, locs may be empty
-				
-				// synonyms only if there were loc data or no filtering at all,
-				// otherwise remove the interaction because
-				// localization does not fulfill the filtering requirements
-				if ($filter_by_mlocs and empty($actor['locs']))
+				// keep the interaction e if no filtering is set, or
+				// 
+				if ($filter_by_mlocs and empty($protein_locs[$pid]))
 				{
 					unset($T['ls'][$pid]);
 				}
 				else
 				{
+					if (empty($protein_locs[$pid])) {
+						$protein_locs[$pid] = array();
+					}
+					
+					// attach localizations to interactors
+					$actor['locs'] = $protein_locs[$pid];
+					
 					// synonyms to interactors
 					if (!empty($protein_synonyms[$pid]['syn_fullname']))
 						$actor['syn_fullname'] =  $protein_synonyms[$pid]['syn_fullname'];
 					if (!empty($protein_synonyms[$pid]['synonyms']))
 						$actor['synonyms'] = $protein_synonyms[$pid]['synonyms'];
 					//$actor['syn_namings'] = (empty($protein_synonyms[$pid]['syn_namings']) ? array() : $protein_synonyms[$pid]['syn_namings']);
+					
+					// add the confidence score to the average
+					// only if interaction is kept
+					$confScoreAvg += (float)$actor['orig_conf_score'];
+					$confCounter++;
 				}
 			}
 		}
