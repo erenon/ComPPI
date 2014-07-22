@@ -176,7 +176,17 @@ class ProteinSearchController extends Controller
 				= $_SESSION['loc_score_slider_val']
 				= 0;
 		}
-
+		
+		// inherit to interactors
+		$T['inherit_filters_checked']
+			= $_SESSION['inherit_filters_checked']
+			= true;
+		if (isset($_POST['fProtSearchSubmit']) && !isset($_POST['fProtSearchInheritFilters']))
+		{
+			$T['inherit_filters_checked']
+				= $_SESSION['inherit_filters_checked']
+				= false;
+			}
 		
 		// PROTEIN SEARCH SUBMITTED
 		if ($request_m=='POST' or !empty($get_keyword)) {
@@ -483,6 +493,12 @@ class ProteinSearchController extends Controller
 		);
 		
 		// FILTER: CONFIDENCE SCORE THRESHOLD
+		// inherit from main search form: reset to defaults
+		if (!$_SESSION['inherit_filters_checked'])
+		{
+			$_POST['fIntFiltReset'] = true;
+		}
+		
 		// set default value if the form was reset
 		if (isset($_POST['fIntFiltReset']))
 		{
