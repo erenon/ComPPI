@@ -16,12 +16,8 @@
 		{% endif %}
 		
 		<div class="fancy_box_body" id="ps-interactorFilter">
-		<p class="help"><span class="ps-detailLabel">Custom Settings:</span> Use these controls to filter the details displayed on this page. The parameters apply to both the query protein and its interactors.</p>
+		<p class="help"><span class="ps-detailLabel">Custom Settings:</span> Use these controls to filter the details displayed on this page. The parameters apply to both the query protein and its interactors. <a href="{{ path('ComppiDescriptionBundle_help') }}/tutorial#interactor_filtering">Details</a></p>
 		<form action="{{ comppi_id }}" method="post">
-			<label for="fIntFiltConfScoreSlider" title="Interaction score describes how likely it is that two proteins are interacting if their subcellular compartment are considered.">Interaction Score Threshold (%):</label>
-			<input type="text" name="fIntFiltConfScore" id="fIntFiltConfScore" value="{{ conf_score_slider_val }}" />
-			<div id="fIntFiltConfScoreSlider" title="Filter to interactions that have higher interaction score than the set threshold."></div>
-			<br /><br />
 			
 			<label id="fIntFiltLocLabel">Localizations:</label>
 			<div id="fIntFiltLocContainer">
@@ -34,15 +30,22 @@
 			</div>
 			<br />
 			
-			<label for="fIntFiltLocScoreSlider" title="Localization probability describes how likely it is that a protein is related to a subcellular compartment.">Localization Probability Threshold (%):</label>
+			<label for="fIntFiltLocScoreSlider" title="Localization probability describes how likely it is that a protein is localized in a subcellular compartment.">Localization Probability Threshold (%):</label>
 			<input type="text" name="fIntFiltLocScore" id="fIntFiltLocScore" value="{{ loc_score_slider_val }}" />
-			<div id="fIntFiltLocScoreSlider" title="Filter to proteins that have higher localization probability than the set threshold."></div>
+			<div id="fIntFiltLocScoreSlider" title="Filters to query proteins and interactors that have higher localization probability than the set threshold."></div>
+			<br /><br />
+			
+			<label for="fIntFiltConfScoreSlider" title="Interaction score describes how likely it is that two proteins are interacting if their subcellular compartment are considered.">Interaction Score Threshold (%):</label>
+			<input type="text" name="fIntFiltConfScore" id="fIntFiltConfScore" value="{{ conf_score_slider_val }}" />
+			<div id="fIntFiltConfScoreSlider" title="Filters to interactions that have higher interaction score than the set threshold."></div>
 			<br />
 			
 			<input class="btn btn_submit" type="submit" name="fIntFiltSubmit" id="fIntFiltSubmit" value="Filter" title="Click 'Filter' to filter the results with the above set values." />
 			<input class="btn btn_submit" type="submit" name="fIntFiltReset" id="fIntFiltReset" value="Reset" title="Click 'Reset' to reset all filters and display the default result page." />
 		</form>
 		</div>
+	
+		<div class="clear-both"></div>
 	
 		<table class="fancy_table" id="ps-interactionStats">
 		<tr>
@@ -58,7 +61,7 @@
 		</tr>
 		</table>
 
-		<div class="clear-both"></div>
+		
 	
 		<!-- {# <div id="ps-interactionStats" class="fancy_box_body">
 			Number of <a href="#interactors" title="Jump to the interactors">Interactions</a>: {{ protein.interactionNumber }}

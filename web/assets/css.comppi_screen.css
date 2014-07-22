@@ -383,21 +383,19 @@ textarea { height: 200px; }
 }
 #ps-controlPanel td { margin: 0; border: 0; vertical-align: top; }
 #ps-interactionStats {
-	margin: 0;
-	padding: 5px;
 }
 table#ps-interactionStats.fancy_table {
-	width: 400px;
+	margin: 0;
 	margin-top: 20px;
-	margin-left: 700px;
-	float-right;
+	width: 672px;
+	text-align: left;
 }
+table#ps-interactionStats.fancy_table td { padding: 3px 10px; }
 table#ps-interactionStats.fancy_table tbody:before {
     content:"";
     color: #c0c0c0;
 	visibility: hidden;
 }
-#ps-interactionStats td { text-align: left; padding: 5px; }
 #ps-keyProtein { margin-bottom: 2em; }
 #ps-keyProtein h1 { padding: 17px 10px; }
 
