@@ -494,7 +494,7 @@ class ProteinSearchController extends Controller
 		
 		// FILTER: CONFIDENCE SCORE THRESHOLD
 		// inherit from main search form: reset to defaults
-		if (!$_SESSION['inherit_filters_checked'])
+		if (!isset($_SESSION['inherit_filters_checked']) or !$_SESSION['inherit_filters_checked'])
 		{
 			$_POST['fIntFiltReset'] = true;
 		}
