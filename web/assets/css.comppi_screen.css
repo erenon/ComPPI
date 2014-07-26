@@ -387,7 +387,7 @@ textarea { height: 200px; }
 table#ps-interactionStats.fancy_table {
 	margin: 0;
 	margin-top: 20px;
-	width: 672px;
+	width: 400px/*672px*/;
 	text-align: left;
 }
 table#ps-interactionStats.fancy_table td { padding: 3px 10px; }
