@@ -49,9 +49,13 @@
 	</div>
 	
 	<br /><br />
-	<label for="fProtSearchLocScoreSlider" title="Localization probability describes how likely it is that a protein is related to a subcellular compartment.">Localization Probability Threshold (%):</label>
+	<label for="fProtSearchLocScoreSlider" title="Localization probability describes how likely it is that a protein is localized in a subcellular compartment.">Localization Probability Threshold (%):</label>
 	<div id="fProtSearchLocScoreSlider" title="Search for proteins that have higher localization probability for at least one selected compartment than the set threshold. The threshold applies to the localizations of the query protein, not to the localizations of the interactors."></div>
 	<input type="text" name="fProtSearchLocScore" id="fProtSearchLocScore" value="{{ loc_score_slider_val }}" />
+	<br /><br /><br />
+	
+	<input type="checkbox" name="fProtSearchInheritFilters" id="fProtSearchInheritFilters" class="checkbox"{% if inherit_filters_checked %} checked="checked"{% endif %} />
+	<label for="fProtSearchInheritFilters" class="radioButtonLabel" title="If checked, all the advanced settings will be inherited to the interactors too, therefore only those interactions and localizations will be displayed that fulfill the requirements. These requirements can be modified on the results page. If not checked, the results page will display all available information.">Apply all settings to the results page</label>
 	</div>
 
 </tr></table>

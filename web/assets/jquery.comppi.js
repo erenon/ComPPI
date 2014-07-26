@@ -119,15 +119,83 @@ $(function() {
 		$("#fProtSearchLocScore").on("keyup", function(event) {
 			$("#fProtSearchLocScoreSlider").slider("value", $("#fProtSearchLocScore").val());
 		});
-		
-		
 	}
 	
+	// confidence score treshold slider for interactor filtering
+	$("#fIntFiltConfScoreSlider").slider({
+		min: 0,
+		max: 100,
+		range: "max",
+		value: $("#fIntFiltConfScore").val(),
+		slide: function( event, ui ) {
+			$("#fIntFiltConfScore" ).val( ui.value );
+		},
+		change: function(event, ui) {
+			//
+		},
+	});
+	$("#fIntFiltConfScore").val( $("#fIntFiltConfScoreSlider").slider("value") );
+	// slider should follow the typed in value
+	$("#fIntFiltConfScore").on("keyup", function(event) {
+		$("#fIntFiltConfScoreSlider").slider("value", $("#fIntFiltConfScore").val());
+	});
+	
+	// localization score treshold slider for interactor filtering
+	$("#fIntFiltLocScoreSlider").slider({
+		min: 0,
+		max: 100,
+		range: "max",
+		value: $("#fIntFiltLocScore").val(),
+		slide: function( event, ui ) {
+			$("#fIntFiltLocScore" ).val( ui.value );
+		},
+		change: function(event, ui) {
+			//
+		},
+	});
+	$("#fIntFiltLocScore").val( $("#fIntFiltLocScoreSlider").slider("value") );
+	// slider should follow the typed in value
+	$("#fIntFiltLocScore").on("keyup", function(event) {
+		$("#fIntFiltLocScoreSlider").slider("value", $("#fIntFiltLocScore").val());
+	});
+	
 	// show/hide protein interaction details
+	display_all_details = false;
+	$("#ps-allDetailsOpener").click(function() {
+		display_all_details = !display_all_details;
+		
+		if (display_all_details) {
+			$(".ps-actorBDetails").show();
+		} else {
+			$(".ps-actorBDetails").hide();
+		}
+		
+		return false;
+	});
+	
 	$(".ps-actorBDetails").hide();
 	$(".ps-detailsOpener").click(function() {
 		$(this).siblings(".ps-actorBDetails:first").slideToggle();
 		return false;
+	});
+
+	function longSearchWarning() {
+
+	}
+	
+	// display warning if protein search lasts too long
+	$("#fProtSearchSubmit").click(function(){
+		setTimeout(
+			function() {
+				$.magnificPopup.open({
+					items: {
+						src: '<div class="white-popup">Exceptionally this search lasts longer than 3 seconds, the results will appear soon on the screen.</div>',
+						type: 'inline'
+					}
+				});
+			},
+			3000 // time of the timeout
+		)
 	});
 });
 

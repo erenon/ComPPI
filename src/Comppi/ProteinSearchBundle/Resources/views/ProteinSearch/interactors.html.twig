@@ -12,18 +12,56 @@
 	<h1>{{ protein.name }}</h1>
 	<div class="fancy_box_body">
 		{% if protein.fullname is defined %}
-		<span class="ps-detailLabel"> {{ protein.fullname }} </span>&nbsp;&nbsp;&nbsp;//&nbsp;&nbsp;&nbsp;<a href="{{ protein.uniprot_link }}" title="Find more information about {{ protein.name }} in the UniProt database">UniProt Profile</a>&nbsp;<img src="{{ asset('assets/linkout.png') }}" />
-	{% endif %}
+		<span class="ps-detailLabel"> {{ protein.fullname }} </span>&nbsp;&nbsp;&nbsp;//&nbsp;&nbsp;&nbsp;<a href="{{ protein.uniprot_link }}" title="Find more information about {{ protein.name }} in the UniProt database">UniProt Profile</a>&nbsp;<img src="{{ asset('assets/linkout.png') }}" /><br />
+		{% endif %}
+		
+		<div class="fancy_box_body" id="ps-interactorFilter">
+		<p class="help"><span class="ps-detailLabel">Custom Settings:</span> Use these controls to filter the data displayed on this page. The parameters apply to both the query protein and its interactors. <a href="{{ path('ComppiDescriptionBundle_help') }}/tutorial#interactor_filtering">Details</a></p>
+		<form action="{{ comppi_id }}" method="post">
+			
+			<label id="fIntFiltLocLabel">Localizations:</label>
+			<div id="fIntFiltLocContainer">
+			{% for ml in majorloc_list %}
+			<input type="checkbox" name="fIntFiltLoc[{{ ml.code }}]" id="fIntFiltLoc{{ ml.code }}" class="checkbox" value="{{ ml.code }}"{% if ml.checked %} checked="checked"{% endif %} />
+			<label for="fIntFiltLoc{{ ml.code }}" class="radioButtonLabel" title="Click on a cell compartment to toggle it, proteins from the checked compartments are included in the search results.">{{ ml.name }}</label>
+				
+			{% if loop.index%3==0 %}<br />{% endif %}
+			{% endfor %}
+			</div>
+			<br />
+			
+			<label for="fIntFiltLocScoreSlider" title="Localization probability describes how likely it is that a protein is localized in a subcellular compartment.">Localization Probability Threshold (%):</label>
+			<input type="text" name="fIntFiltLocScore" id="fIntFiltLocScore" value="{{ loc_score_slider_val }}" />
+			<div id="fIntFiltLocScoreSlider" title="Filters to query proteins and interactors that have higher localization probability than the set threshold."></div>
+			<br /><br />
+			
+			<label for="fIntFiltConfScoreSlider" title="Interaction score describes how likely it is that two proteins are interacting if their subcellular compartment are considered.">Interaction Score Threshold (%):</label>
+			<input type="text" name="fIntFiltConfScore" id="fIntFiltConfScore" value="{{ conf_score_slider_val }}" />
+			<div id="fIntFiltConfScoreSlider" title="Filters to interactions that have higher interaction score than the set threshold."></div>
+			<br />
+			
+			<input class="btn btn_submit" type="submit" name="fIntFiltSubmit" id="fIntFiltSubmit" value="Filter" title="Click 'Filter' to filter the results with the above set values." />
+			<input class="btn btn_submit" type="submit" name="fIntFiltReset" id="fIntFiltReset" value="Reset" title="Click 'Reset' to reset all filters and display the default result page." />
+		</form>
+		</div>
 	
-		<table class="fancy_table" id="ps-interactionStats" width="400">
+		<div class="clear-both"></div>
+	
+		<table class="fancy_table" id="ps-interactionStats">
+		<tr>
+			<td><h3 class="ps-detailLabel">Species</h3></td>
+			<td class="taxonomic_name">{{ protein.species }}</td>
+		</tr>
 		<tr>
 			<td><h3 class="ps-detailLabel">Number of <a href="#interactors" title="Jump to the interactors">Interactions</a></h3></td>
-			<td>{{ protein.interactionNumber }}</td>
+			<td>{{ protein.interactionNumber }} / {{ all_interactors_count }}</td>
 		</tr><tr>
 			<td><h3 class="ps-detailLabel">Average Interaction Score</h3></td>
 			<td>{% if protein.avgConfScore is empty %} N/A {% else %} {{ protein.avgConfScore }}% {% endif %}</td>
 		</tr>
 		</table>
+
+		
 	
 		<!-- {# <div id="ps-interactionStats" class="fancy_box_body">
 			Number of <a href="#interactors" title="Jump to the interactors">Interactions</a>: {{ protein.interactionNumber }}
@@ -57,7 +95,7 @@
 			</tbody>
 		</table>
 		{% else %}
-			Not available.
+			Not available or custom settings are stricter.
 		{% endif %}
 
 		{% if protein.synonyms is defined %}
@@ -85,7 +123,10 @@
 	<table class="fancy_table striped_table">
 	<thead>
 	<tr>
-		<th colspan="2" class="ps-resultsHeader">Interactions</th>
+		<th colspan="2" class="ps-resultsHeader">
+		<h1>Interactions</h1>
+		<a href="#" id="ps-allDetailsOpener" class="ps-detailsOpener" title="Click to display the details of all the interactors. Click again to close all Details panels.">All Details</a>
+		</th>
 	</tr>
 	</thead>
 	<tbody>
@@ -112,7 +153,7 @@
 			<div class="ps-actorBDetails">
 
 				<p><h3 class="ps-detailLabel">Localizations:</h3>
-				{% if p['locs'] is defined %}
+				{% if p['locs'] is not empty %}
 				<table class="fancy_table hovered_list">
 					<thead>
 					<tr>
@@ -138,7 +179,7 @@
 					</tbody>
 				</table></p>
 				{% else %}
-				Not available.
+				Not available or filtering requirements are stricter.
 				{% endif %}
 				
 				{% if p.synonyms is defined %}
@@ -149,6 +190,22 @@
 				</p>
 				{% endif %}
 
+				<p>
+				{% if p.int_source_db is not empty %}
+				<h3 class="ps-detailLabel">Interaction Source Database:</h3>
+				{% for sdb in p.int_source_db %}
+					{{ sdb }}{% if not loop.last %}, {% endif %}
+				{% endfor %}
+				{% endif %}
+				
+				{% if p.int_pubmed_link is not empty %}
+				<br /><h3 class="ps-detailLabel">Interaction Source Publication:</h3>
+				{% for l in p.int_pubmed_link %}
+					<a href="{{ l }}" target="_blank">PubMed&nbsp;<img src="{{ asset('assets/linkout.png') }}" /></a>{% if not loop.last %}, {% endif %}
+				{% endfor %}
+				{% endif %}
+				</p>
+				
 			</div>
 		</td>
 	</tr>
