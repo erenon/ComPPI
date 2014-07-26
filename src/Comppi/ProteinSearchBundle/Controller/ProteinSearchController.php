@@ -117,7 +117,7 @@ class ProteinSearchController extends Controller
             'ls' => array(),
 			'keyword' => '',
 			'result_msg' => '',
-			'loc_treshold' => 0.0,
+			'loc_threshold' => 0.0,
 			'uniprot_root' => $this->uniprot_root,
 			'form_error_messages' => '',
         );
@@ -150,9 +150,13 @@ class ProteinSearchController extends Controller
 				'name' => $mloc_name,
 				'checked' => true
 			);
+			$_SESSION['majorloc_list'][$mloc_code] = true;
+			
 			if ($request_m=='POST' and !isset($_POST['fProtSearchLoc'][(string)$mloc_code]))
 			{
-				$T['majorloc_list'][$mloc_code]['checked'] = false;
+				$T['majorloc_list'][$mloc_code]['checked']
+					= $_SESSION['majorloc_list'][$mloc_code]
+					= false;
 			}
 			// protein name from URL hooked on protein search
 			if (!empty($get_keyword))
@@ -161,14 +165,28 @@ class ProteinSearchController extends Controller
 			}
 		}
 		
-		// loc treshold in the form
+		// loc threshold in the form
 		if (!empty($_POST['fProtSearchLocScore']) && 0<(int)$_POST['fProtSearchLocScore'] && (int)$_POST['fProtSearchLocScore']<=100)
 		{
-			$T['loc_score_slider_val'] = (int)$_POST['fProtSearchLocScore'];
+			$T['loc_score_slider_val']
+				= $_SESSION['loc_score_slider_val']
+				= (int)$_POST['fProtSearchLocScore'];
 		} else {
-			$T['loc_score_slider_val'] = 0;
+			$T['loc_score_slider_val']
+				= $_SESSION['loc_score_slider_val']
+				= 0;
 		}
-
+		
+		// inherit to interactors
+		$T['inherit_filters_checked']
+			= $_SESSION['inherit_filters_checked']
+			= true;
+		if (isset($_POST['fProtSearchSubmit']) && !isset($_POST['fProtSearchInheritFilters']))
+		{
+			$T['inherit_filters_checked']
+				= $_SESSION['inherit_filters_checked']
+				= false;
+			}
 		
 		// PROTEIN SEARCH SUBMITTED
 		if ($request_m=='POST' or !empty($get_keyword)) {
@@ -245,12 +263,12 @@ class ProteinSearchController extends Controller
 				$err[] = 'Please select at least one subcellular compartment.';
 			}
 			
-			# SQL parameters: localization treshold
-			$loc_treshold = 0.0;
+			# SQL parameters: localization threshold
+			$loc_threshold = 0.0;
 			if (!empty($_POST['fProtSearchLocScore']))
 			{
-				$T['loc_treshold'] = (int)$_POST['fProtSearchLocScore'];
-				$loc_treshold = $_POST['fProtSearchLocScore']/100;
+				$T['loc_threshold'] = (int)$_POST['fProtSearchLocScore'];
+				$loc_threshold = $_POST['fProtSearchLocScore']/100;
 			}
 			
 			// check for validation errors
@@ -343,11 +361,11 @@ class ProteinSearchController extends Controller
 					$sql_cond_type_lf[]	= \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
 				}
 				
-				// filter for localization score treshold
-				if ($loc_treshold>0.0)
+				// filter for localization score threshold
+				if ($loc_threshold>0.0)
 				{
 					$sql_cond_lf[]		= 'score > ?';
-					$sql_cond_val_lf[]	= strval($loc_treshold);
+					$sql_cond_val_lf[]	= strval($loc_threshold);
 					$sql_cond_type_lf[]	= \PDO::PARAM_STR;
 				}
 				
@@ -430,6 +448,8 @@ class ProteinSearchController extends Controller
 					die("Protein IDs are missing for the full name query of the result selector!");
 				}
 				
+				$T['found_num'] = count($T['ls']);
+				
 				return $this->render(
 					'ComppiProteinSearchBundle:ProteinSearch:middlepage.html.twig',
 					$T
@@ -438,7 +458,7 @@ class ProteinSearchController extends Controller
 			// no proteins were found
 			else
 			{
-				$T['result_msg'] = 'No proteins were found.';
+				$T['result_msg'] = 'No proteins were found with the current settings.';
 			}
 		}
 		
@@ -446,43 +466,194 @@ class ProteinSearchController extends Controller
 	}
 
 
+	/* QUERY PROTEIN AND ITS INTERACTORS
+	 *
+	 * Display the details of a query protein and its interactors.
+	 * For the interactors a "skeleton" is built, and the details are
+	 * appended to that skeleton.
+	 *
+	 * Many ugly workarounds are needed because the server is an old PC,
+	 * for example the interactor details are fetched together and
+	 * appended piece by piece, or the filtering of the details are done
+	 * mostly in PHP.
+	 * @TODO: merge all queries if a proper new server arrives.
+	*/
 	public function interactorsAction($comppi_id, $get_interactions)
 	{
 		$DB = $this->getDbConnection();
 		$sp = $this->getSpeciesProvider();
 		$spDescriptors = $sp->getDescriptors();
+		$request_m = $this->get('request')->getMethod();
 		$comppi_id = intval($comppi_id);
 		$protein_ids = []; // collect the interactor IDs
-
+		
 		$T = array(
 			'comppi_id' => $comppi_id,
 			'ls' => array()
 		);
+		
+		// FILTER: CONFIDENCE SCORE THRESHOLD
+		// inherit from main search form: reset to defaults
+		if (isset($_SESSION['inherit_filters_checked']) and !$_SESSION['inherit_filters_checked'])
+		{
+			$_POST['fIntFiltReset'] = true;
+		}
+		
+		// set default value if the form was reset
+		if (isset($_POST['fIntFiltReset']))
+		{
+			$T['conf_score_slider_val']
+				= $_SESSION['conf_score_slider_val']
+				= 0;
+		}
+		// set the requested value if the form was posted
+		elseif (
+			isset($_POST['fIntFiltConfScore']) &&
+			0<=(int)$_POST['fIntFiltConfScore'] &&
+			(int)$_POST['fIntFiltConfScore']<=100
+		) {
+			$T['conf_score_slider_val']
+				= $_SESSION['conf_score_slider_val']
+				= (int)$_POST['fIntFiltConfScore'];
+		}
+		// set from session
+		elseif (isset($_SESSION['conf_score_slider_val'])) 
+		{
+			$T['conf_score_slider_val'] = $_SESSION['conf_score_slider_val'];
+		}
+		// set form and session to default
+		else
+		{
+			$T['conf_score_slider_val']
+				= $_SESSION['conf_score_slider_val']
+				= 0;
+		}
+		
+		// FILTER: MAJOR LOCALIZATIONS
+		foreach ($this->majorloc_list as $mloc_code => $mloc_name)
+		{
+			// the defaults are always set = always "reset"
+			$T['majorloc_list'][$mloc_code] = array(
+				'code' => $mloc_code,
+				'name' => $mloc_name,
+				'checked' => true
+			);
+			// set the requested value if the form was posted
+			if ($request_m=='POST' && !isset($_POST['fIntFiltReset'])) {
+				if (isset($_POST['fIntFiltLoc'][(string)$mloc_code])) {
+					$_SESSION['majorloc_list'][$mloc_code] = true;
+				}
+				else
+				{
+					$T['majorloc_list'][$mloc_code]['checked']
+						= $_SESSION['majorloc_list'][$mloc_code]
+						= false;
+				}
+			}
+			// set from session
+			elseif (
+				!isset($_POST['fIntFiltReset']) &&
+				isset($_SESSION['majorloc_list'][$mloc_code])
+			) {
+				$T['majorloc_list'][$mloc_code]['checked'] = $_SESSION['majorloc_list'][$mloc_code];
+			}
+			// else would be the default, already set above
+		}
+		$requested_major_locs = [];
+		foreach ($T['majorloc_list'] as $mloc_name => $mloc_d)
+		{
+			if ($mloc_d['checked']) {
+				$requested_major_locs[$mloc_name] = $mloc_name;
+			}
+		}
+		$filter_by_mlocs = (count($requested_major_locs)==count($this->majorloc_list)
+			? false : true);
 
-		// details of the requested protein
-		$T['protein'] = $this->getProteinDetails($comppi_id);
+		// FILTER: LOC SCORE THRESHOLD
+		// set default value if the form was reset
+		if (isset($_POST['fIntFiltReset']))
+		{
+			$T['loc_score_slider_val']
+				= $_SESSION['loc_score_slider_val']
+				= 0;
+		}
+		// set the requested value if the form was posted
+		elseif (
+			isset($_POST['fIntFiltLocScore']) &&
+			0<=(int)$_POST['fIntFiltLocScore'] &&
+			(int)$_POST['fIntFiltLocScore']<=100
+		) {
+			$T['loc_score_slider_val']
+				= $_SESSION['loc_score_slider_val']
+				= (int)$_POST['fIntFiltLocScore'];
+		}
+		// set from session
+		elseif (isset($_SESSION['loc_score_slider_val']))
+		{
+			$T['loc_score_slider_val'] = $_SESSION['loc_score_slider_val'];
+		}
+		// set form and session to default
+		else
+		{
+			$T['loc_score_slider_val']
+				= $_SESSION['loc_score_slider_val']
+				= 0;
+		}
 
-		// interactors
-		$r_interactors = $DB->executeQuery("SELECT DISTINCT
+		// DETAILS OF THE REQUESTED PROTEIN
+		$T['protein'] = $this->getProteinDetails(
+			$comppi_id,
+			($filter_by_mlocs ? $requested_major_locs : array()),
+			$T['loc_score_slider_val']
+		);
+		// convert species ID to name
+		$T['protein']['species'] = $this->species_list[$T['protein']['species']];
+		
+		// INTERACTORS
+		// The threshold sliders operate in the [0,100] range with integers (for user conveninence),
+		// but the confidence score (CS) is stored in the [0,1] range with floats.
+		// Therefore a 100% CS on the front-end may mean anything from 0.99 to 1.0.
+		// To address this, the threshold is lowered by 0.001,
+		// therefore the error range of 0.01 is compressed to 0.001.
+		$conf_score_cond = round($T['conf_score_slider_val']/100, 3, PHP_ROUND_HALF_DOWN);
+		$conf_score_cond = (float)$conf_score_cond;
+		if ($conf_score_cond>0.001) {
+			$conf_score_cond = $conf_score_cond-0.001;
+		}
+		
+		// number of all interactors of the protein
+		$r_all_int_count = $DB->executeQuery(
+			"SELECT COUNT(DISTINCT actorAId, actorBId) AS row_count
+			FROM Interaction
+			WHERE (actorAId = $comppi_id OR actorBId = $comppi_id)"
+		);
+		$T['all_interactors_count'] = $r_all_int_count->fetch(\PDO::FETCH_OBJ)->row_count;
+		
+		// interactors according to the current settings
+		$r_interactors = $DB->executeQuery(
+			"SELECT DISTINCT
 				i.id AS iid, i.sourceDb, i.pubmedId,
 				cs.score as confScore,
 				p.id as pid, p.proteinName as name, p.proteinNamingConvention as namingConvention
 			FROM Interaction i
 			LEFT JOIN Protein p ON p.id=IF(actorAId = $comppi_id, i.actorBId, i.actorAId)
 			LEFT JOIN ConfidenceScore cs ON i.id=cs.interactionId
-			WHERE actorAId = $comppi_id OR actorBId = $comppi_id
-			ORDER BY cs.score DESC");
+			WHERE (actorAId = $comppi_id OR actorBId = $comppi_id)
+			" . (!empty($T['conf_score_slider_val'])
+				? " AND cs.score >= ".$conf_score_cond // safe from SQL injection
+				: '')
+			. "
+			ORDER BY cs.score DESC"
+		);
 		//	LIMIT ".$this->search_result_per_page);
 		if (!$r_interactors)
-			throw new \ErrorException('Interactor query failed!');
+			die('Interactor query failed!');
 
+		// there may be multiple interactions between the same interactors
 		$confScoreAvg = 0.0;
-		// there may be a significant difference between
-		// the number of proteins and the number of cycles (one protein multiple times?)
-		// therefore a separate counter is needed
 		$confCounter = 0;
 
-		// interactors skeleton
+		// interactors skeleton: data keyed by the ComPPI ID of the interactor protein
 		while ($i = $r_interactors->fetch(\PDO::FETCH_OBJ))
 		{
 			$T['ls'][$i->pid]['prot_id'] = $i->pid;
@@ -490,48 +661,73 @@ class ProteinSearchController extends Controller
 			$T['ls'][$i->pid]['prot_naming'] = $i->namingConvention;
 			//if ($i->namingConvention=='UniProtKB-AC')
 			$T['ls'][$i->pid]['uniprot_outlink'] = $this->uniprot_root.$i->name;
-			$T['ls'][$i->pid]['confScore'] = round($i->confScore, 2)*100;
-			$confScoreAvg += (float)$i->confScore;
-			$confCounter++;
+			$T['ls'][$i->pid]['orig_conf_score'] = $i->confScore;
+			$T['ls'][$i->pid]['confScore'] = round($i->confScore, 3)*100;
+			// note that there may be multiple source DBs and PubMed IDs
+			$T['ls'][$i->pid]['int_source_db'][$i->sourceDb] = $i->sourceDb;
+			$pml = $this->linkToPubmed($i->pubmedId);
+			$T['ls'][$i->pid]['int_pubmed_link'][$pml] = $pml;
 
 			$protein_ids[$i->pid] = $i->pid;
-			$interaction_ids[$i->iid] = $i->iid;
+			//$interaction_ids[$i->iid] = $i->iid;
 		}
 
 		// @TODO: letölthető dataset
-		if ($get_interactions) {
-			return $this->forward(
-				'DownloadCenterBundle:DownloadCenter:serveInteractions',
-				array('species' => array('abbr' => 'all', 'id' => -1),
-					  'interaction_ids' => $interaction_ids)
-			);
-		}
+		//if ($get_interactions) {
+		//	return $this->forward(
+		//		'DownloadCenterBundle:DownloadCenter:serveInteractions',
+		//		array('species' => array('abbr' => 'all', 'id' => -1),
+		//			  'interaction_ids' => $interaction_ids)
+		//	);
+		//}
 
 		if (!empty($protein_ids)) {
 			// localizations for the interactor
-			$protein_locs = $this->getProteinLocalizations($protein_ids);
+			$protein_locs = $this->getProteinLocalizations(
+				$protein_ids,
+				($filter_by_mlocs ? $requested_major_locs : array()),
+				$T['loc_score_slider_val']
+			);		
 
 			// synonyms for the interactor
 			$protein_synonyms = $this->getProteinSynonyms($protein_ids);
 
-			// update the existing skeleton (therefore reference is needed)
+			// interactors: update the existing skeleton (therefore reference is needed)
 			foreach($T['ls'] as $pid => &$actor)
 			{
-				// localizations to interactors
-				if (!empty($protein_locs[$pid]))
+				// keep the interaction e if no filtering is set, or
+				// 
+				if ($filter_by_mlocs and empty($protein_locs[$pid]))
+				{
+					unset($T['ls'][$pid]);
+				}
+				else
+				{
+					if (empty($protein_locs[$pid])) {
+						$protein_locs[$pid] = array();
+					}
+					
+					// attach localizations to interactors
 					$actor['locs'] = $protein_locs[$pid];
-				// synonyms to interactors
-				if (!empty($protein_synonyms[$pid]['syn_fullname']))
-					$actor['syn_fullname'] =  $protein_synonyms[$pid]['syn_fullname'];
-				if (!empty($protein_synonyms[$pid]['synonyms']))
-					$actor['synonyms'] = $protein_synonyms[$pid]['synonyms'];
-				//$actor['syn_namings'] = (empty($protein_synonyms[$pid]['syn_namings']) ? array() : $protein_synonyms[$pid]['syn_namings']);
+					
+					// synonyms to interactors
+					if (!empty($protein_synonyms[$pid]['syn_fullname']))
+						$actor['syn_fullname'] =  $protein_synonyms[$pid]['syn_fullname'];
+					if (!empty($protein_synonyms[$pid]['synonyms']))
+						$actor['synonyms'] = $protein_synonyms[$pid]['synonyms'];
+					//$actor['syn_namings'] = (empty($protein_synonyms[$pid]['syn_namings']) ? array() : $protein_synonyms[$pid]['syn_namings']);
+					
+					// add the confidence score to the average
+					// only if interaction is kept
+					$confScoreAvg += (float)$actor['orig_conf_score'];
+					$confCounter++;
+				}
 			}
 		}
 
-		$T['protein']['interactionNumber'] = count($protein_ids);
+		$T['protein']['interactionNumber'] = count($T['ls']);
 		if ($T['protein']['interactionNumber']) {
-			$T['protein']['avgConfScore'] = round($confScoreAvg/$confCounter, 2)*100;
+			$T['protein']['avgConfScore'] = round($confScoreAvg/$confCounter, 3)*100;
 		} else {
 			$T['protein']['avgConfScore'] = false;
 		}
@@ -560,7 +756,7 @@ class ProteinSearchController extends Controller
 	}
 
 
-	private function getProteinDetails($comppi_id)
+	private function getProteinDetails($comppi_id, $requested_major_locs = array(), $loc_prob = 0)
 	{
 		$DB = $this->getDbConnection();
 		$r_p = $DB->executeQuery("SELECT proteinName AS name, proteinNamingConvention AS naming, specieId FROM Protein WHERE id=?", array($comppi_id));
@@ -568,7 +764,7 @@ class ProteinSearchController extends Controller
 
 		$prot_details = $r_p->fetch(\PDO::FETCH_ASSOC);
 		$prot_details['species'] = $prot_details['specieId']; // @TODO: map name to id
-		$prot_details['locs'] = $this->getProteinLocalizations(array($comppi_id));
+		$prot_details['locs'] = $this->getProteinLocalizations(array($comppi_id), $requested_major_locs, $loc_prob);
 		$prot_details['locs'] = (!empty($prot_details['locs'][$comppi_id]) ? $prot_details['locs'][$comppi_id] : array());
 
 		$syns = $this->getProteinSynonyms(array($comppi_id));
@@ -580,16 +776,48 @@ class ProteinSearchController extends Controller
 	}
 
 
-	// @var array The list of comppi ids
-	private function getProteinLocalizations($comppi_ids)
-	{
+	/* PROTEIN LOCALIZATIONS */
+	private function getProteinLocalizations(
+		$comppi_ids,
+		$requested_major_locs = array(),
+		$loc_score_threshold = 0
+	) {
 		$DB = $this->getDbConnection();
+		
+		if (!empty($requested_major_locs)) {
+			foreach ($requested_major_locs as $mloc)
+			{
+				$requested_major_locs[$mloc] = $mloc; // convert to speed up: isset is faster than in_array
+				$mloc_cond[] = $DB->quote($mloc);
+			}
+		}
+		
+		// The threshold sliders operate in the [0,100] range with integers (for user conveninence),
+		// but the loc. score is stored in the [0,1] range with floats.
+		// Therefore a 100% loc on the front-end may mean anything from 0.99 to 1.0.
+		// To address this, the threshold is lowered by 0.001,
+		// therefore the error range of 0.01 is compressed to 0.001.
+		$loc_prob = round($loc_score_threshold/100, 3, PHP_ROUND_HALF_DOWN);
+		$loc_prob = (float)$loc_prob;
+		// we need to lower a bit the threshold,
+		// otherwise locs with 100% loc score won't appear
+		if ($loc_prob>0.0) {
+			$loc_prob = $loc_prob-0.001;
+		}
 
 		$sql_ls = 'SELECT
 				proteinId as pid, majorLocName, score
 			FROM LocalizationScore
 			WHERE
 				proteinId IN ('.join(',', $comppi_ids).')';
+		if (!empty($requested_major_locs))
+		{
+			$sql_ls .= " AND majorLocName IN (".join(',', $mloc_cond).")";
+		}
+		if (!empty($loc_score_threshold))
+		{
+			$sql_ls .= " AND score >= ".$loc_prob;
+		}
 		$this->verbose ? $this->verbose_log[] = $sql_ls : '';
 
 		if (!$r_ls = $DB->executeQuery($sql_ls))
@@ -601,12 +829,21 @@ class ProteinSearchController extends Controller
 			$loc_scores[$ls->pid][$ls->majorLocName] = $ls->score;
 		}
 
-		$sql_pl = 'SELECT
-				ptl.proteinId as pid, ptl.localizationId AS locId, ptl.sourceDb, ptl.pubmedId,
+		// do NOT use protein IDs from the 'LocalizationScore' query above
+		// it breaks the behavior of displaying localizations
+		// with partially missing data
+		$sql_pl = '
+			SELECT
+				ptl.proteinId as pid, ptl.localizationId AS locId,
+				ptl.sourceDb, ptl.pubmedId,
 				lt.name as minorLocName, lt.goCode, lt.majorLocName,
 				st.name AS exp_sys, st.confidenceType AS exp_sys_type
-			FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
-			LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
+			FROM
+				ProtLocToSystemType pltst,
+				SystemType st,
+				ProteinToLocalization ptl
+			LEFT JOIN
+				Loctree lt ON ptl.localizationId=lt.id
 			WHERE ptl.id=pltst.protLocId
 				AND pltst.systemTypeId=st.id
 				AND ptl.proteinId IN ('.join(',', $comppi_ids).')';
@@ -620,9 +857,12 @@ class ProteinSearchController extends Controller
 		{
 			$i++;
 			$mnlrc = 0; // minor loc replacement count
+			$tmp = array(); // buffer
+			$add = false; // flag determining if the row will be kept
 
-			$pl[$p->pid][$i]['source_db'] = $p->sourceDb;
-			$pl[$p->pid][$i]['pubmed_link'] = $this->linkToPubmed($p->pubmedId);
+			// assemble the current localization data
+			$tmp['source_db'] = $p->sourceDb;
+			$tmp['pubmed_link'] = $this->linkToPubmed($p->pubmedId);
 			// loc exp sys type replacement: IPI -> IPI: Inferred From Physical Interaction
 			$loc_exp_sys = str_replace(
 				$this->minor_loc_abbr_patterns,
@@ -631,35 +871,70 @@ class ProteinSearchController extends Controller
 				$mnlrc
 			);
 			if ($mnlrc) {
-				$pl[$p->pid][$i]['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
+				$tmp['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
 					.': '.$p->exp_sys
 					.' <span class="infobtn" title="'
 					.$p->exp_sys.': '.$loc_exp_sys.
 					'"> ? </span>';
 			} else {
-				$pl[$p->pid][$i]['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
+				$tmp['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
 					.': '.$p->exp_sys;
 			}
-			$pl[$p->pid][$i]['loc_exp_sys_type'] = $p->exp_sys_type;
+			$tmp['loc_exp_sys_type'] = $p->exp_sys_type;
 			if (!empty($p->minorLocName)) {
-				$pl[$p->pid][$i]['small_loc'] = ucfirst($p->minorLocName);
-				$pl[$p->pid][$i]['go_code'] = ucfirst($p->goCode);
+				$tmp['small_loc'] = ucfirst($p->minorLocName);
+				$tmp['go_code'] = ucfirst($p->goCode);
 			} else {
-				$pl[$p->pid][$i]['small_loc'] = 'N/A';
-				$pl[$p->pid][$i]['go_code'] = 'N/A';
+				$tmp['small_loc'] = 'N/A';
+				$tmp['go_code'] = 'N/A';
 			}
 			if (!empty($p->majorLocName)) {
-				$pl[$p->pid][$i]['large_loc'] = ucfirst($p->majorLocName);
+				$tmp['large_loc'] = ucfirst($p->majorLocName) /*. '['.$p->locId.']'*/;
 				if (!empty($loc_scores[$p->pid][$p->majorLocName])) {
-					$pl[$p->pid][$i]['loc_score'] = round($loc_scores[$p->pid][$p->majorLocName], 2)*100;
+					$tmp['loc_score'] = round($loc_scores[$p->pid][$p->majorLocName], 3)*100;
 				} else {
-					$pl[$p->pid][$i]['loc_score'] = 0;
+					$tmp['loc_score'] = 0;
 				}
 			} else {
-				$pl[$p->pid][$i]['large_loc'] = 'N/A';
-				$pl[$p->pid][$i]['loc_score'] = 0;
+				$tmp['large_loc'] = 'N/A';
+				$tmp['loc_score'] = 0;
 			}
+
+			// filter the results if needed
+			if (empty($requested_major_locs) && empty($loc_score_threshold))
+			{
+				// no filtering requirements -> add
+				$add = true;
+			}
+			elseif (empty($loc_score_threshold) && isset($requested_major_locs[$p->majorLocName])) // isset is faster than in_array
+			{
+				// no loc score, but major loc is set -> add
+				$add = true;
+			}
+			elseif (empty($requested_major_locs) && $tmp['loc_score']>$loc_prob)
+			{
+				// no major loc, but loc score is set -> add
+				$add = true;
+			}
+			elseif (
+				!empty($requested_major_locs) &&
+				!empty($loc_score_threshold) &&
+				isset($requested_major_locs[$p->majorLocName]) &&
+				$tmp['loc_score']>$loc_prob
+			) {
+				// both major loc and loc score requirements are fulfilled
+				$add = true;
+			}
+			
+			// add the final assembled localization row
+			if ($add)
+			{
+				$pl[$p->pid][$i] = $tmp;
+			}
+			
+			unset($tmp);
 		}
+
 		$this->verbose ? $this->verbose_log[] = count($pl).' protein locations found' : '';
 
 		return (!empty($pl) ? $pl : array());
