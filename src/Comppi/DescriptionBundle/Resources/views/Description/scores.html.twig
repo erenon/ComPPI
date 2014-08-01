@@ -9,27 +9,27 @@
 	<h2>Summary of the ComPPI scoring system</h2>
 	
 	<p align="justify">The ComPPI scoring system is designed as a subcellular localization-based measure to score the reliablity of the interaction between two proteins.
-	In the first part we calculated the <a href="#locscore">localization score</a> for all the proteins with at least one major localization.
-	The localization score is calculated based on the type of the <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#origin">subcellular localization</a> data
+	In the first part we calculated the <a href="#locscore">Localization Score</a> for all the proteins with at least one major localization.
+	The Localization Score is calculated based on the type of the <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#origin">subcellular localization</a> data
         for all major localizations where the given protein can be found.
 	With this method the localization score incorporates a) the quality of the localization (experimental, predicted, or unknown),
 	and b) the quantity of the data which is coming from the number of sources, because of the integrated dataset.
-	In the second part we use the previously calculated localization score of the interactors to <a href="#intscore">score the interaction</a>
+	In the second part we use the previously calculated Localization Score of the interactors to <a href="#intscore">score the interaction</a>
          in a compartment dependent manner.</p>
 	
-	<p align="justify">In summary, the ComPPI <b>localization score</b> gives the probability if the <b>protein</b> is present in the certain major localization,
-	while the <b>interaction score</b> is a measure for the <b>interaction</b> between the interactors based on the localization score.</p>
+	<p align="justify">In summary, the ComPPI <b>Localization Score</b> gives the probability if the <b>protein</b> is present in the certain major localization,
+	while the <b>Interaction Score</b> is a measure for the <b>interaction</b> between the interactors based on the Localization Score.</p>
 	
-	<p align="justify"><b>Note</b> that the interaction score is <b>0</b>, if there was no localization information for one, or both of the interactors.</p>
+	<p align="justify"><b>Note</b> that the Interaction Score is <b>0</b>, if there was no localization information for one, or both of the interactors.</p>
 	
 	<h2>Detailed description of the ComPPI scoring system</h2>
 	<ol>
 		<li><a href="#basics">Basics of the ComPPI scoring system</a></li>
-		<li><a href="#locscore">Localization score</a></li>
-		<li><a href="#intscore">Interaction score</a></li>
-		<!--<li><a href="#scoreopt">Optimalization</a></li>-->
-		<!--<li><a href="#locdist">Distribution of the localization score</a></li>-->
-		<!--<li><a href="#intdist">Distribution of the interaction score</a></li>-->
+		<li><a href="#locscore">Localization Score</a></li>
+		<li><a href="#intscore">Interaction Score</a></li>
+		<li><a href="#scoreopt">Optimization</a></li>
+		<!--<li><a href="#locdist">Distribution of the Localization Score</a></li>-->
+		<!--<li><a href="#intdist">Distribution of the Interaction Score</a></li>-->
 	</ol>
 	<br/>
         
@@ -41,22 +41,22 @@
 		<li>OR (Ⓥ) [aⓋb = 1-(1-a)*(1-b)]</li>
 	</ul>
 	The ComPPI scoring system works with the major localizations of the proteins, described <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs">here</a>.
-	The localization and interaction scores are calculated using a PHP script, while the scores are stored in the SQL-based database.</p></p>
+	The Localization and Interaction Scores are calculated using a PHP script, while the scores are stored in the SQL-based database.</p></p>
 
 
 	<br /><a name="locscore"></a>
-	<h3>2. Localization score</h3>	
+	<h3>2. Localization Score</h3>	
 	<p align="justify">Because of the different types of <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#origin">subcellular localization</a>
-	data we use the following propabilities as the parameters of the calculation: 
+	data we use the following propabilities as the parameters of the calculation after the <a href="#scoreopt">optimization</a>: 
 		<ul>
-			<li>p=0.95 experimentally verified</li>
-			<li>p=0.66 unknown interaction type</li>
-			<li>p=0.33 predicted evidence</li>
+			<li>p=0.8 experimentally verified</li>
+			<li>p=0.6 unknown interaction type</li>
+			<li>p=0.4 predicted evidence</li>
 		</ul>
 	</p>
 	
-	<p align="justify">The localization score gives the probability of the protein being in a certain compartment.
-	The localization score is computed for all the proteins with at least one major localization
+	<p align="justify">The Localization Score gives the probability of the protein being in a certain compartment.
+	The Localization Score is computed for all the proteins with at least one major localization
 	for all the 6 compartments by OR-ing together the localization entries (since every entry is added evidence):
 	
 	<br /><img src="http://www.linkgroup.hu/pic/score_1.png" alt="loc_score" height="118" width="212" />
@@ -64,8 +64,8 @@
         
 	
 	<br /><a name="intscore"></a>
-	<h3>3. Interaction score</h3>
-	<p align="justify">The ComPPI interaction score is calculated using the probability of the two proteins meeting in any compartment.
+	<h3>3. Interaction Score</h3>
+	<p align="justify">The ComPPI Interaction Score is calculated using the probability of the two proteins meeting in any compartment.
         Matching elements (localization probabilities of two proteins in the same localization) are AND-ed together (since both proteins must be present for the interaction):
 
 	<br /><img src="http://www.linkgroup.hu/pic/score_2.png" alt="matching_loc" height="51" width="212" /></p>
@@ -74,11 +74,18 @@
 
 	<br /><img src="http://www.linkgroup.hu/pic/score_3.png" alt="loc_sum" height="123" width="212" /></p>
 	
-	<!--<p align="justify">The full equation of the interaction score is the following:
-	
-	<br /><img src="http://www.linkgroup.hu/pic/score_4.png" alt="loc_sum" height="248" width="765" /></p>-->
+       
+	<a name="scoreopt"><h3>4. Optimization</h3></a>
         
-	<!--<a name="scoreopt"><h3>Optimalization</h3></a>-->
+        <p align="justify">To decide which evidence scores would be optimal, we have maximized the number of high-confidence interactions in the positive-control dataset
+        (interactions with at least one common localization from the experimental Human Protein Atlas source database),
+        while simultaneously maximizing the number of low-confidence interactions in the baseline dataset.
+        We have conducted the tests with a granurality of 0.1, testing all possible values where the experimental evidence > unknown if experimental or predicted evidence > predicted evidence inequality held
+        (see all possible solutions on the video below),
+        and have obtained 0.8, 0.6, and 0.4 as the optimal values, respectively.</p>
+        
+        <iframe width="420" height="315" src="//www.youtube.com/embed/MYKIAfH9YIA" frameborder="0" allowfullscreen></iframe>
+        
 	<!--
 	<p></p>
         
