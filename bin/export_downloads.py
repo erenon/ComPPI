@@ -282,24 +282,37 @@ class ComppiInterface(object):
 			return graph
 
 
-	def filterGraph(self, graph, loc, species_id):
-		self.logging.debug("filterGraph() started, loc: '{}', species_id: '{}'".format(loc, species_id))
+	def filterGraph(self, input_graph, loc, species_id, in_place = True):
+		""" Current filterGraph ALWAYS filters out nodes without localizations.
+			Use the original graph for an unfiltered dataset.
+		"""
+		self.logging.debug("filterGraph() started, in_place: '{}', loc: '{}', species_id: '{}'".format(in_place, loc, species_id))
+
+		# warning: graph copy can be terribly slow
+		if in_place:
+			graph = input_graph
+		else:
+			graph = input_graph.copy()
 
 		# get protein IDs by loc, IDs by species, intersect, and get the graph containing only those nodes
 		loc_node_ids = None
-		if loc in self.loc_opts and species_id in self.specii:
+		spec_node_ids = None
+		sp_keys = self.specii.keys()
+		sp_id = int(species_id)
+		
+		if loc in self.loc_opts and sp_id in sp_keys:
 			loc_node_ids = self.getNodeIdsByMajorLoc(loc)
 			spec_node_ids = self.getNodeIdsBySpeciesId(species_id)
 			node_ids = set.intersection(loc_node_ids, spec_node_ids)
 			del loc_node_ids
 			del spec_node_ids
-			self.logging.debug("filterGraph(): graph filtered for loc and species")
-		elif loc in self.loc_opts:
+			self.logging.debug("filterGraph(): graph filtered for loc '{}' and species '{}'".format(loc, sp_id))
+		elif loc in self.loc_opts and sp_id not in sp_keys:
 			node_ids = self.getNodeIdsByMajorLoc(loc)
-			self.logging.debug("filterGraph(): graph filtered for loc")
-		elif species_id in self.specii:
+			self.logging.debug("filterGraph(): graph filtered for loc '{}'".format(loc))
+		elif loc not in self.loc_opts and species_id in self.specii.keys():
 			node_ids = self.getNodeIdsBySpeciesId(species_id)
-			self.logging.debug("filterGraph(): graph filtered for species")
+			self.logging.debug("filterGraph(): graph filtered for species '{}'".format(sp_id))
 		else:
 			self.logging.debug("filterGraph() returns with the original graph")
 			return graph
@@ -857,18 +870,21 @@ if __name__ == '__main__':
 				# the script is much faster if ComppiInterface is always re-created and destroyed
 				# (the reason may be the garbage collection?)
 				ci = ComppiInterface()
+				# it is much faster to always reload the whole graph from cache
+				# instead of deep-copying it in filterGraph
+				# it must be reloaded, otherwise wrong filtered graph will be re-used!
+				comppi = ci.buildGlobalComppi()
 
 				# the original graph is always re-loaded, because
-				# the graph filtering is done in-place (orig. graph is overwritten) to fit into 2 GB of server RAM
-				comppi = ci.buildGlobalComppi()
-				filtered_comppi = ci.filterGraph(comppi, loc, sp_id) # note the sp_id
+				# the graph filtering is done in-place (orig. graph is overwritten) to fit into lower RAM
+				comppi = ci.filterGraph(comppi, loc, sp_id) # note the sp_id
 
 				# various types of networks
 				if args.type=='proteinloc' or args.type=='all':
 					print("Type 'proteinloc', loc '{}', tax '{}' started... ".format(loc, sp), end="")
 					
 					ci.exportNodesToCsv(
-						filtered_comppi,
+						comppi,
 						os.path.join(ci.output_dir, 'comppi--proteins_locs--tax_{}_loc_{}.txt.gz'.format(sp, loc)),
 						('name', 'naming_conv', 'synonyms', 'loc_scores', 'minor_locs', 'loc_exp_sys', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
 						('Protein Name', 'Naming Convention', 'Synonyms', 'Major Loc With Loc Score', 'Minor Loc', 'Experimental System Type', 'Localization Source Database', 'PubmedID', 'TaxID'),
@@ -884,7 +900,7 @@ if __name__ == '__main__':
 					# some proteins may not have localization data
 					# -> all locs for compartments is not the same as all locs for interaction
 					ci.exportCompartmentToCsv(
-						filtered_comppi,
+						comppi,
 						os.path.join(ci.output_dir, 'comppi--compartments--tax_{}_loc_{}.txt.gz'.format(sp, loc)),
 						('name', 'naming_conv', 'loc_scores', 'minor_locs', 'loc_exp_sys', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
 						('weight', 'int_exp_sys', 'source_dbs', 'pubmed_ids'),
@@ -902,9 +918,12 @@ if __name__ == '__main__':
 					
 					# "all locs" for interactions == filtering by localization is completely turned off
 					if loc=='all':
-						out_graph = comppi
+						# the comppi graph is already filtered in_place,
+						# therefore we have to reload the global graph to avoid filtering
+						out_graph = ci.buildGlobalComppi()
+						ci.logging.info("Interactions, loc 'all' => Unfiltered (original) graph is used for interactions instead of the last logged filtered one.")
 					else:
-						out_graph = filtered_comppi
+						out_graph = comppi # already filtered instance
 					
 					ci.exportNetworkToCsv(
 						out_graph,
