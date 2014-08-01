@@ -138,7 +138,7 @@ class ComppiInterface(object):
 						'source_dbs': [i_src_db],
 						'pubmed_ids': [i_pubmed],
 						'edge_ids': [iid],
-						'exp_system_type_ids': [i_exp_sys_t]
+						'int_exp_system_type_ids': [i_exp_sys_t]
 					}
 				
 				# aggregate data per edge if the edge already exists
@@ -149,7 +149,7 @@ class ComppiInterface(object):
 					d['source_dbs'].append(i_src_db)
 					d['pubmed_ids'].append(i_pubmed)
 					d['edge_ids'].append(iid)
-					d['exp_system_type_ids'].append(i_exp_sys_t)
+					d['int_exp_system_type_ids'].append(i_exp_sys_t)
 			
 			# convert the much faster et_buffer to the required edge table format
 			et = [(actors[0], actors[1], attribs) for actors, attribs in et_buffer.items()]
@@ -243,6 +243,7 @@ class ComppiInterface(object):
 				ps	= prot_syns.get(n, {})
 				lc	= locs.get(n, {})
 
+				# these are the node properties
 				d['name']			= pd.get('name')
 				d['naming_conv']	= pd.get('naming_conv')
 				d['taxonomy_id']	= pd.get('taxonomy_id')
@@ -252,8 +253,7 @@ class ComppiInterface(object):
 				d['loc_scores']		= lc.get('loc_scores')
 				d['loc_source_dbs']	= lc.get('source_dbs')
 				d['loc_pubmed_ids']	= lc.get('pubmed_ids')
-				d['loc_exp_sys']	= lc.get('exp_sys')
-				d['loc_exp_sys_types']	= lc.get('exp_sys_types')
+				d['loc_exp_sys']	= lc.get('loc_exp_sys_merged')
 
 			del prot_dtls
 			del prot_syns
@@ -264,12 +264,12 @@ class ComppiInterface(object):
 
 			for n1, n2, e_attr in graph.edges_iter(data=True):
 				# experimental system type edge attribute
-				e_attr['exp_sys_types'] = [] # create it
+				e_attr['int_exp_sys'] = [] # create it
 				
-				est_ids = e_attr.get('exp_system_type_ids') # fill it if available
+				est_ids = e_attr.get('int_exp_system_type_ids') # fill it if available
 				if isinstance(est_ids, list):
 					for est_id in est_ids:
-						e_attr['exp_sys_types'].append(exp_sys.get(est_id))
+						e_attr['int_exp_sys'].append(exp_sys.get(est_id))
 
 			del exp_sys
 
@@ -418,18 +418,18 @@ class ComppiInterface(object):
 				SELECT
 					ptl.proteinId as pid, ptl.sourceDb, ptl.pubmedId,
 					lt.goCode, lt.majorLocName,
-					st.name AS exp_sys, st.confidenceType AS exp_sys_type
-				FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
+					pltst.systemTypeId AS exp_sys_id
+				FROM ProtLocToSystemType pltst, ProteinToLocalization ptl
 				LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
 				WHERE ptl.id=pltst.protLocId
-					AND pltst.systemTypeId=st.id
 			"""
 			self.logging.debug(sql)
 			cur.execute(sql)
 
-			all_exp_sys_types = self.getExperimentalSystemTypes()
+			all_exp_sys = self.getExperimentalSystemTypes()
 			d = {}
-			for pid, source_db, pubmed, go_code, major_loc, exp_sys, exp_sys_type in cur:
+			# dict of localization data, keyed by protein ID
+			for pid, source_db, pubmed, go_code, major_loc, exp_sys_id in cur:
 				curr_p = d.setdefault(pid, {})
 
 				curr_p.setdefault('source_dbs', [])
@@ -445,11 +445,9 @@ class ComppiInterface(object):
 				if major_loc not in curr_p['major_locs']:
 					curr_p['major_locs'].append(major_loc)
 
-				curr_p.setdefault('exp_sys', [])
-				curr_p['exp_sys'].append(exp_sys)
-
-				curr_p.setdefault('exp_sys_types', [])
-				curr_p['exp_sys_types'].append(all_exp_sys_types.get(exp_sys_type))
+				# concatenated name + type, such as 'SVM decision tree (Predicted)'
+				curr_p.setdefault('loc_exp_sys_merged', [])
+				curr_p['loc_exp_sys_merged'].append(all_exp_sys.get(exp_sys_id))
 
 				# record one major loc only once
 				# example: loc_scores: {'cytoplasm': 0.9, 'nucleus': 0.5}
@@ -457,6 +455,8 @@ class ComppiInterface(object):
 				curr_ls = loc_scores.get(pid, {})
 				for curr_maj_loc, curr_score in curr_ls.items():
 					curr_p['loc_scores'][curr_maj_loc] = curr_score
+
+			del all_exp_sys
 
 			self.logging.debug("getLocalizations() returns with {} protein ID and localization data".format(len(d)))
 			return d
@@ -477,14 +477,14 @@ class ComppiInterface(object):
 		cursor = self.connect()
 		with closing(cursor) as cur:
 			sql = """
-				SELECT st.id, st.name AS exp_sys, st.confidenceType AS exp_sys_type FROM SystemType st
+				SELECT st.id, st.name, st.confidenceType FROM SystemType st
 			"""
 			self.logging.debug(sql)
 			cur.execute(sql)
 
 			d = {}
-			for stid, exp_sys, exp_sys_type in cur:
-				est = self.exp_system_types.get(exp_sys_type)
+			for stid, exp_sys, conf_type in cur:
+				est = self.exp_system_types.get(conf_type)
 				if est is not None:
 					d[stid] = exp_sys + '(' + est + ')'
 				else:
@@ -859,7 +859,7 @@ if __name__ == '__main__':
 					ci.exportNodesToCsv(
 						filtered_comppi,
 						os.path.join(ci.output_dir, 'comppi--proteins_locs--tax_{}_loc_{}.txt.gz'.format(sp, loc)),
-						('name', 'naming_conv', 'synonyms', 'loc_scores', 'minor_locs', 'loc_exp_sys_types', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
+						('name', 'naming_conv', 'synonyms', 'loc_scores', 'minor_locs', 'loc_exp_sys', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
 						('Protein Name', 'Naming Convention', 'Synonyms', 'Major Loc With Loc Score', 'Minor Loc', 'Experimental System Type', 'Localization Source Database', 'PubmedID', 'TaxID'),
 						skip_none_lines = False
 					)
@@ -871,11 +871,11 @@ if __name__ == '__main__':
 					ci.exportCompartmentToCsv(
 						filtered_comppi,
 						os.path.join(ci.output_dir, 'comppi--compartments--tax_{}_loc_{}.txt.gz'.format(sp, loc)),
-						('name', 'naming_conv', 'loc_scores', 'minor_locs', 'loc_exp_sys_types', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
-						('weight', 'exp_sys_types', 'source_dbs', 'pubmed_ids'),
-						(	'Interactor A', 'Naming Convention A', 'Major Loc A With Loc Score', 'Minor Loc A', 'Loc Experimental System Type A', 'Loc Source DB A', 'Loc PubMed ID A', 'Taxonomy ID A',
-							'Interactor B', 'Naming Convention B', 'Major Loc B With Loc Score', 'Minor Loc B', 'Loc Experimental System Type B', 'Loc Source DB B', 'Loc PubMed ID B', 'Taxonomy ID B',
-							'Interaction Score', 'Interaction Experimental System Type', 'Interaction Source Database', 'Interaction PubMed ID'
+						('name', 'naming_conv', 'loc_scores', 'minor_locs', 'loc_exp_sys', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
+						('weight', 'int_exp_sys', 'source_dbs', 'pubmed_ids'),
+						('Interactor A', 'Naming Convention A', 'Major Loc A With Loc Score', 'Minor Loc A', 'Loc Experimental System Type A', 'Loc Source DB A', 'Loc PubMed ID A', 'Taxonomy ID A',
+						'Interactor B', 'Naming Convention B', 'Major Loc B With Loc Score', 'Minor Loc B', 'Loc Experimental System Type B', 'Loc Source DB B', 'Loc PubMed ID B', 'Taxonomy ID B',
+						'Interaction Score', 'Interaction Experimental System Type', 'Interaction Source Database', 'Interaction PubMed ID'
 						),
 						skip_none_lines = False
 					)
@@ -891,7 +891,7 @@ if __name__ == '__main__':
 						out_graph,
 						os.path.join(ci.output_dir, 'comppi--interactions--tax_{}_loc_{}.txt.gz'.format(sp, loc)),
 						('name', 'naming_conv', 'synonyms', 'taxonomy_id'),
-						('weight', 'exp_sys_types', 'source_dbs', 'pubmed_ids'),
+						('weight', 'int_exp_sys', 'source_dbs', 'pubmed_ids'),
 						('Protein A', 'Naming Convention A', 'Synonyms A', 'Taxonomy ID A', 'Protein B', 'Naming Convention B', 'Synonyms B', 'Taxonomy ID B', 'Interaction Score', 'Interaction Experimental System Type', 'Interaction Source Database', 'Interaction PubMed ID'),
 						skip_none_lines = False
 					)
