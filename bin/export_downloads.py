@@ -580,6 +580,7 @@ class ComppiInterface(object):
 				""".format(node_columns, edge_columns, header))
 
 		row_count = 0
+		empty_row_count = 0
 		with gzip.open(filename, 'w') as fp:
 			csvw = csv.writer(
 				io.TextIOWrapper(fp, newline="", write_through=True), # text into binary file
@@ -621,8 +622,10 @@ class ComppiInterface(object):
 					if curr_node1_cells and curr_node2_cells and curr_edge_cells:
 						csvw.writerow(curr_node1_cells + curr_node2_cells + curr_edge_cells)
 						row_count += 1
+					else:
+						empty_row_count += 1
 
-		self.logging.debug("exportNetworkToCsv() returns with {} rows + header".format(row_count))
+		self.logging.debug("exportNetworkToCsv() returns with {} rows + header, {} empty rows have been thrown away".format(row_count, empty_row_count))
 
 
 	def exportNetworkToCsv(self, graph, filename, node_columns, edge_columns, header = tuple(), flatten = True, skip_none_lines = True):
@@ -656,6 +659,7 @@ class ComppiInterface(object):
 				""".format(node_columns, edge_columns, header))
 
 		row_count = 0
+		empty_row_count = 0
 		with gzip.open(filename, 'w') as fp:
 			csvw = csv.writer(
 				io.TextIOWrapper(fp, newline="", write_through=True), # text into binary file
@@ -686,8 +690,10 @@ class ComppiInterface(object):
 				if curr_node1_cells and curr_node2_cells and curr_edge_cells:
 					csvw.writerow(curr_node1_cells + curr_node2_cells + curr_edge_cells)
 					row_count += 1
+				else:
+					empty_row_count += 1
 
-		self.logging.debug("exportNetworkToCsv() returns with {} rows + header".format(row_count))
+		self.logging.debug("exportNetworkToCsv() returns with {} rows + header, {} empty rows have been thrown away".format(row_count, empty_row_count))
 
 
 	def exportNodesToCsv(self, graph, filename, node_columns, header = tuple(), flatten = True, skip_none_lines = True):
@@ -703,6 +709,7 @@ class ComppiInterface(object):
 			raise ValueError("exportNetworkToCsv(): length of header is not the same as length of node columns!")
 
 		row_count = 0
+		empty_row_count = 0
 		with gzip.open(filename, 'w') as fp:
 			csvw = csv.writer(
 				io.TextIOWrapper(fp, newline="", write_through=True), # text into binary file
@@ -722,8 +729,10 @@ class ComppiInterface(object):
 				if curr_row:
 					csvw.writerow(curr_row)
 					row_count += 1
+				else:
+					empty_row_count += 1
 
-		self.logging.debug("exportNodesToCsv() returns with {} rows + header".format(row_count))
+		self.logging.debug("exportNodesToCsv() returns with {} rows + header, {} empty rows have been thrown away".format(row_count, empty_row_count))
 
 
 	def _aggregateCsvCells(self, data, cells, flatten = True, skip_none_lines = True):
@@ -856,6 +865,8 @@ if __name__ == '__main__':
 
 				# various types of networks
 				if args.type=='proteinloc' or args.type=='all':
+					print("Type 'proteinloc', loc '{}', tax '{}' started... ".format(loc, sp), end="")
+					
 					ci.exportNodesToCsv(
 						filtered_comppi,
 						os.path.join(ci.output_dir, 'comppi--proteins_locs--tax_{}_loc_{}.txt.gz'.format(sp, loc)),
@@ -863,8 +874,12 @@ if __name__ == '__main__':
 						('Protein Name', 'Naming Convention', 'Synonyms', 'Major Loc With Loc Score', 'Minor Loc', 'Experimental System Type', 'Localization Source Database', 'PubmedID', 'TaxID'),
 						skip_none_lines = False
 					)
+					
+					print("[ OK ]")
 
 				if args.type=='compartment' or args.type=='all':
+					print("Type 'proteinloc', loc '{}', tax '{}' started... ".format(loc, sp), end="")
+					
 					# all locs for compartments == all proteins that belong to all compartments
 					# some proteins may not have localization data
 					# -> all locs for compartments is not the same as all locs for interaction
@@ -879,8 +894,12 @@ if __name__ == '__main__':
 						),
 						skip_none_lines = False
 					)
+					
+					print("[ OK ]")
 
 				if args.type=='interaction' or args.type=='all':
+					print("Type 'proteinloc', loc '{}', tax '{}' started... ".format(loc, sp), end="")
+					
 					# "all locs" for interactions == filtering by localization is completely turned off
 					if loc=='all':
 						out_graph = comppi
@@ -895,6 +914,8 @@ if __name__ == '__main__':
 						('Protein A', 'Naming Convention A', 'Synonyms A', 'Taxonomy ID A', 'Protein B', 'Naming Convention B', 'Synonyms B', 'Taxonomy ID B', 'Interaction Score', 'Interaction Experimental System Type', 'Interaction Source Database', 'Interaction PubMed ID'),
 						skip_none_lines = False
 					)
+					
+					print("[ OK ]")
 
 				del ci
 
