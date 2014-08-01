@@ -878,7 +878,7 @@ if __name__ == '__main__':
 					print("[ OK ]")
 
 				if args.type=='compartment' or args.type=='all':
-					print("Type 'proteinloc', loc '{}', tax '{}' started... ".format(loc, sp), end="")
+					print("Type 'compartment', loc '{}', tax '{}' started... ".format(loc, sp), end="")
 					
 					# all locs for compartments == all proteins that belong to all compartments
 					# some proteins may not have localization data
@@ -898,7 +898,7 @@ if __name__ == '__main__':
 					print("[ OK ]")
 
 				if args.type=='interaction' or args.type=='all':
-					print("Type 'proteinloc', loc '{}', tax '{}' started... ".format(loc, sp), end="")
+					print("Type 'interaction', loc '{}', tax '{}' started... ".format(loc, sp), end="")
 					
 					# "all locs" for interactions == filtering by localization is completely turned off
 					if loc=='all':
