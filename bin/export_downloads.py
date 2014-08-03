@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-sudo apt-get install python3-mysql.connector python3-pip
+sudo apt-get install python3-mysql.connector python3-pip python3-scipy
 sudo pip3 install networkx
 sudo pip3 install numpy
 
@@ -302,7 +302,7 @@ class ComppiInterface(object):
 		
 		if loc in self.loc_opts and sp_id in sp_keys:
 			loc_node_ids = self.getNodeIdsByMajorLoc(loc)
-			spec_node_ids = self.getNodeIdsBySpeciesId(species_id)
+			spec_node_ids = self.getNodeIdsBySpeciesId(sp_id)
 			node_ids = set.intersection(loc_node_ids, spec_node_ids)
 			del loc_node_ids
 			del spec_node_ids
@@ -310,8 +310,8 @@ class ComppiInterface(object):
 		elif loc in self.loc_opts and sp_id not in sp_keys:
 			node_ids = self.getNodeIdsByMajorLoc(loc)
 			self.logging.debug("filterGraph(): graph filtered for loc '{}'".format(loc))
-		elif loc not in self.loc_opts and species_id in self.specii.keys():
-			node_ids = self.getNodeIdsBySpeciesId(species_id)
+		elif loc not in self.loc_opts and sp_id in sp_keys:
+			node_ids = self.getNodeIdsBySpeciesId(sp_id)
 			self.logging.debug("filterGraph(): graph filtered for species '{}'".format(sp_id))
 		else:
 			self.logging.debug("filterGraph() returns with the original graph")
@@ -572,8 +572,25 @@ class ComppiInterface(object):
 			self.logging.debug("getNodeIdsBySpeciesId() returns with {} node IDs".format(len(n_ids)))
 
 			return n_ids
-		
 	
+	
+	def getNodeSourceDbs(self):
+		self.logging.info("getNodeSourceDbs() started")
+		
+		cursor = self.connect()
+		with closing(cursor) as cur:
+			cur.execute("SELECT proteinId, sourceDb FROM ProteinToDatabase")
+
+			source_dbs = {}
+			for pid, sdb in cur:
+				source_dbs.setdefault(pid, [])
+				source_dbs[pid].append(sdb)
+			
+			self.logging.debug("getNodeSourceDbs() returns with {} nodes and their source databases".format(len(source_dbs)))
+
+			return source_dbs
+
+
 	def exportCompartmentToCsv(self, graph, filename, node_columns, edge_columns, header = tuple(), flatten = True, skip_none_lines = True):
 
 		self.logging.info("""exportCompartmentToCsv() started,
@@ -921,7 +938,8 @@ if __name__ == '__main__':
 						# the comppi graph is already filtered in_place,
 						# therefore we have to reload the global graph to avoid filtering
 						out_graph = ci.buildGlobalComppi()
-						ci.logging.info("Interactions, loc 'all' => Unfiltered (original) graph is used for interactions instead of the last logged filtered one.")
+						out_graph = ci.filterGraph(out_graph, None, sp_id) # note the None and sp_id
+						ci.logging.info("Interactions, loc 'all', tax '{}' => Re-filtered from original) graph".format(sp_id))
 					else:
 						out_graph = comppi # already filtered instance
 					
