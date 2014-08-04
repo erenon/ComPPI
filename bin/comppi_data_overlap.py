@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
 #from matplotlib_venn import venn3
-#import matplotlib.pyplot as plt
 import networkx as nx
 import itertools
-import pprint
+import matplotlib.pyplot as plt
 from export_downloads import ComppiInterface
 
 # filter to species: -1: disabled, 0 (human), 1 (drosi), 2 (c.elegans), 3 (yeast)
-species_filter = 3
+species_filter = -1
 
 # group of custom sources, currently set to protein-protein interaction databases
 custom_source_group = ['MINT', 'IntAct', 'MIPS', 'DroID', 'MatrixDB', 'BioGRID', 'HPRD', 'HomoMINT', 'DIP', 'CCSB']
@@ -23,7 +22,8 @@ if species_filter >= 0:
 	print("Filtering to species: {}".format(species_filter))
 	comppi_graph = c.filterGraph(comppi_graph, None, species_filter)
 
-print("Number of all nodes: {}".format(comppi_graph.number_of_nodes()))
+comppi_number_of_all_nodes = comppi_graph.number_of_nodes()
+print("Number of all nodes: {}".format(comppi_number_of_all_nodes))
 print()
 
 # collect the proteins per source databases and localizations per source databases
@@ -198,3 +198,34 @@ nx.write_gml(loc_src_overlaps, "comppi_loc_source_overlap.gml")
 #
 #plt.axis('off')
 #plt.savefig("comppi_data_overlap.png")
+
+# overlaps on figure
+Y = list(prot_source_nums.values())
+Y.append(all_common_prots_len)
+Y.append(comppi_number_of_all_nodes)
+
+X = [i for i in range( (len(prot_source_nums) + 2) )] # +2: common, comppi
+X_labels = list(prot_source_nums.keys())
+X_labels.append('Common In All')
+X_labels.append('ComPPI')
+X_labels = tuple(X_labels)
+
+fig, axes = plt.subplots(figsize=(10,12), dpi=300)
+plt.grid(True)
+axes.set_title('Number of Proteins Per Source')
+
+#axes.set_xlabel('Source Databases')
+#plt.xticks(X, X_labels)
+
+axes.set_xticks(X)
+axes.set_xticklabels(X_labels, rotation=45)
+
+#axes.set_xticklabels( X_labels )
+#axes.get_xaxis().set_ticks([])
+
+#axes.get_xaxis().set_visible(False)
+axes.set_ylabel('Number of Proteins')
+axes.tick_params(axis='both', which='major', labelsize=10)
+axes.tick_params(axis='both', which='minor', labelsize=8)
+axes.bar(X, Y, align='center', color='#F2AE6E', edgecolor='#ffffff', alpha=1, linewidth=1)
+fig.savefig('number_of_proteins_per_source.png')
