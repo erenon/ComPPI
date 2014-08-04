@@ -7,13 +7,21 @@ import itertools
 import pprint
 from export_downloads import ComppiInterface
 
+# filter to species: -1: disabled, 0 (human), 1 (drosi), 2 (c.elegans), 3 (yeast)
+species_filter = 3
+
 # group of custom sources, currently set to protein-protein interaction databases
-custom_source_group = ['MINT', 'IntAct', 'MIPS', 'MatrixDB', 'BioGRID', 'HPRD', 'HomoMINT', 'DIP', 'CCSB'] #'DroID', 
+custom_source_group = ['MINT', 'IntAct', 'MIPS', 'DroID', 'MatrixDB', 'BioGRID', 'HPRD', 'HomoMINT', 'DIP', 'CCSB']
 # all proteins from ANY source DB (not intersection, but union!!)
 # SELECT COUNT(DISTINCT id) FROM Protein WHERE id IN ( SELECT proteinId FROM ProteinToDatabase WHERE sourceDb IN ('MINT', 'IntAct', 'MIPS', 'MatrixDB', 'DroID', 'BioGRID', 'HPRD', 'HomoMINT', 'DIP', 'CCSB') );
 
 c = ComppiInterface()
 comppi_graph = c.buildGlobalComppi()
+
+# filter to species if needed
+if species_filter >= 0:
+	print("Filtering to species: {}".format(species_filter))
+	comppi_graph = c.filterGraph(comppi_graph, None, species_filter)
 
 print("Number of all nodes: {}".format(comppi_graph.number_of_nodes()))
 print()
