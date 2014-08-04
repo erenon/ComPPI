@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-sudo apt-get install python3-mysql.connector python3-pip
+sudo apt-get install python3-mysql.connector python3-pip python3-scipy
 sudo pip3 install networkx
 sudo pip3 install numpy
 
@@ -138,7 +138,7 @@ class ComppiInterface(object):
 						'source_dbs': [i_src_db],
 						'pubmed_ids': [i_pubmed],
 						'edge_ids': [iid],
-						'exp_system_type_ids': [i_exp_sys_t]
+						'int_exp_system_type_ids': [i_exp_sys_t]
 					}
 				
 				# aggregate data per edge if the edge already exists
@@ -149,7 +149,7 @@ class ComppiInterface(object):
 					d['source_dbs'].append(i_src_db)
 					d['pubmed_ids'].append(i_pubmed)
 					d['edge_ids'].append(iid)
-					d['exp_system_type_ids'].append(i_exp_sys_t)
+					d['int_exp_system_type_ids'].append(i_exp_sys_t)
 			
 			# convert the much faster et_buffer to the required edge table format
 			et = [(actors[0], actors[1], attribs) for actors, attribs in et_buffer.items()]
@@ -243,6 +243,7 @@ class ComppiInterface(object):
 				ps	= prot_syns.get(n, {})
 				lc	= locs.get(n, {})
 
+				# these are the node properties
 				d['name']			= pd.get('name')
 				d['naming_conv']	= pd.get('naming_conv')
 				d['taxonomy_id']	= pd.get('taxonomy_id')
@@ -252,8 +253,7 @@ class ComppiInterface(object):
 				d['loc_scores']		= lc.get('loc_scores')
 				d['loc_source_dbs']	= lc.get('source_dbs')
 				d['loc_pubmed_ids']	= lc.get('pubmed_ids')
-				d['loc_exp_sys']	= lc.get('exp_sys')
-				d['loc_exp_sys_types']	= lc.get('exp_sys_types')
+				d['loc_exp_sys']	= lc.get('loc_exp_sys_merged')
 
 			del prot_dtls
 			del prot_syns
@@ -264,12 +264,12 @@ class ComppiInterface(object):
 
 			for n1, n2, e_attr in graph.edges_iter(data=True):
 				# experimental system type edge attribute
-				e_attr['exp_sys_types'] = [] # create it
+				e_attr['int_exp_sys'] = [] # create it
 				
-				est_ids = e_attr.get('exp_system_type_ids') # fill it if available
+				est_ids = e_attr.get('int_exp_system_type_ids') # fill it if available
 				if isinstance(est_ids, list):
 					for est_id in est_ids:
-						e_attr['exp_sys_types'].append(exp_sys.get(est_id))
+						e_attr['int_exp_sys'].append(exp_sys.get(est_id))
 
 			del exp_sys
 
@@ -282,24 +282,37 @@ class ComppiInterface(object):
 			return graph
 
 
-	def filterGraph(self, graph, loc, species_id):
-		self.logging.debug("filterGraph() started, loc: '{}', species_id: '{}'".format(loc, species_id))
+	def filterGraph(self, input_graph, loc, species_id, in_place = True):
+		""" Current filterGraph ALWAYS filters out nodes without localizations.
+			Use the original graph for an unfiltered dataset.
+		"""
+		self.logging.debug("filterGraph() started, in_place: '{}', loc: '{}', species_id: '{}'".format(in_place, loc, species_id))
+
+		# warning: graph copy can be terribly slow
+		if in_place:
+			graph = input_graph
+		else:
+			graph = input_graph.copy()
 
 		# get protein IDs by loc, IDs by species, intersect, and get the graph containing only those nodes
 		loc_node_ids = None
-		if loc in self.loc_opts and species_id in self.specii:
+		spec_node_ids = None
+		sp_keys = self.specii.keys()
+		sp_id = int(species_id)
+		
+		if loc in self.loc_opts and sp_id in sp_keys:
 			loc_node_ids = self.getNodeIdsByMajorLoc(loc)
-			spec_node_ids = self.getNodeIdsBySpeciesId(species_id)
+			spec_node_ids = self.getNodeIdsBySpeciesId(sp_id)
 			node_ids = set.intersection(loc_node_ids, spec_node_ids)
 			del loc_node_ids
 			del spec_node_ids
-			self.logging.debug("filterGraph(): graph filtered for loc and species")
-		elif loc in self.loc_opts:
+			self.logging.debug("filterGraph(): graph filtered for loc '{}' and species '{}'".format(loc, sp_id))
+		elif loc in self.loc_opts and sp_id not in sp_keys:
 			node_ids = self.getNodeIdsByMajorLoc(loc)
-			self.logging.debug("filterGraph(): graph filtered for loc")
-		elif species_id in self.specii:
-			node_ids = self.getNodeIdsBySpeciesId(species_id)
-			self.logging.debug("filterGraph(): graph filtered for species")
+			self.logging.debug("filterGraph(): graph filtered for loc '{}'".format(loc))
+		elif loc not in self.loc_opts and sp_id in sp_keys:
+			node_ids = self.getNodeIdsBySpeciesId(sp_id)
+			self.logging.debug("filterGraph(): graph filtered for species '{}'".format(sp_id))
 		else:
 			self.logging.debug("filterGraph() returns with the original graph")
 			return graph
@@ -418,18 +431,18 @@ class ComppiInterface(object):
 				SELECT
 					ptl.proteinId as pid, ptl.sourceDb, ptl.pubmedId,
 					lt.goCode, lt.majorLocName,
-					st.name AS exp_sys, st.confidenceType AS exp_sys_type
-				FROM ProtLocToSystemType pltst, SystemType st, ProteinToLocalization ptl
+					pltst.systemTypeId AS exp_sys_id
+				FROM ProtLocToSystemType pltst, ProteinToLocalization ptl
 				LEFT JOIN Loctree lt ON ptl.localizationId=lt.id
 				WHERE ptl.id=pltst.protLocId
-					AND pltst.systemTypeId=st.id
 			"""
 			self.logging.debug(sql)
 			cur.execute(sql)
 
-			all_exp_sys_types = self.getExperimentalSystemTypes()
+			all_exp_sys = self.getExperimentalSystemTypes()
 			d = {}
-			for pid, source_db, pubmed, go_code, major_loc, exp_sys, exp_sys_type in cur:
+			# dict of localization data, keyed by protein ID
+			for pid, source_db, pubmed, go_code, major_loc, exp_sys_id in cur:
 				curr_p = d.setdefault(pid, {})
 
 				curr_p.setdefault('source_dbs', [])
@@ -445,11 +458,9 @@ class ComppiInterface(object):
 				if major_loc not in curr_p['major_locs']:
 					curr_p['major_locs'].append(major_loc)
 
-				curr_p.setdefault('exp_sys', [])
-				curr_p['exp_sys'].append(exp_sys)
-
-				curr_p.setdefault('exp_sys_types', [])
-				curr_p['exp_sys_types'].append(all_exp_sys_types.get(exp_sys_type))
+				# concatenated name + type, such as 'SVM decision tree (Predicted)'
+				curr_p.setdefault('loc_exp_sys_merged', [])
+				curr_p['loc_exp_sys_merged'].append(all_exp_sys.get(exp_sys_id))
 
 				# record one major loc only once
 				# example: loc_scores: {'cytoplasm': 0.9, 'nucleus': 0.5}
@@ -457,6 +468,8 @@ class ComppiInterface(object):
 				curr_ls = loc_scores.get(pid, {})
 				for curr_maj_loc, curr_score in curr_ls.items():
 					curr_p['loc_scores'][curr_maj_loc] = curr_score
+
+			del all_exp_sys
 
 			self.logging.debug("getLocalizations() returns with {} protein ID and localization data".format(len(d)))
 			return d
@@ -477,14 +490,14 @@ class ComppiInterface(object):
 		cursor = self.connect()
 		with closing(cursor) as cur:
 			sql = """
-				SELECT st.id, st.name AS exp_sys, st.confidenceType AS exp_sys_type FROM SystemType st
+				SELECT st.id, st.name, st.confidenceType FROM SystemType st
 			"""
 			self.logging.debug(sql)
 			cur.execute(sql)
 
 			d = {}
-			for stid, exp_sys, exp_sys_type in cur:
-				est = self.exp_system_types.get(exp_sys_type)
+			for stid, exp_sys, conf_type in cur:
+				est = self.exp_system_types.get(conf_type)
 				if est is not None:
 					d[stid] = exp_sys + '(' + est + ')'
 				else:
@@ -559,8 +572,25 @@ class ComppiInterface(object):
 			self.logging.debug("getNodeIdsBySpeciesId() returns with {} node IDs".format(len(n_ids)))
 
 			return n_ids
-		
 	
+	
+	def getNodeSourceDbs(self):
+		self.logging.info("getNodeSourceDbs() started")
+		
+		cursor = self.connect()
+		with closing(cursor) as cur:
+			cur.execute("SELECT proteinId, sourceDb FROM ProteinToDatabase")
+
+			source_dbs = {}
+			for pid, sdb in cur:
+				source_dbs.setdefault(pid, [])
+				source_dbs[pid].append(sdb)
+			
+			self.logging.debug("getNodeSourceDbs() returns with {} nodes and their source databases".format(len(source_dbs)))
+
+			return source_dbs
+
+
 	def exportCompartmentToCsv(self, graph, filename, node_columns, edge_columns, header = tuple(), flatten = True, skip_none_lines = True):
 
 		self.logging.info("""exportCompartmentToCsv() started,
@@ -580,6 +610,7 @@ class ComppiInterface(object):
 				""".format(node_columns, edge_columns, header))
 
 		row_count = 0
+		empty_row_count = 0
 		with gzip.open(filename, 'w') as fp:
 			csvw = csv.writer(
 				io.TextIOWrapper(fp, newline="", write_through=True), # text into binary file
@@ -621,8 +652,10 @@ class ComppiInterface(object):
 					if curr_node1_cells and curr_node2_cells and curr_edge_cells:
 						csvw.writerow(curr_node1_cells + curr_node2_cells + curr_edge_cells)
 						row_count += 1
+					else:
+						empty_row_count += 1
 
-		self.logging.debug("exportNetworkToCsv() returns with {} rows + header".format(row_count))
+		self.logging.debug("exportNetworkToCsv() returns with {} rows + header, {} empty rows have been thrown away".format(row_count, empty_row_count))
 
 
 	def exportNetworkToCsv(self, graph, filename, node_columns, edge_columns, header = tuple(), flatten = True, skip_none_lines = True):
@@ -656,6 +689,7 @@ class ComppiInterface(object):
 				""".format(node_columns, edge_columns, header))
 
 		row_count = 0
+		empty_row_count = 0
 		with gzip.open(filename, 'w') as fp:
 			csvw = csv.writer(
 				io.TextIOWrapper(fp, newline="", write_through=True), # text into binary file
@@ -686,8 +720,10 @@ class ComppiInterface(object):
 				if curr_node1_cells and curr_node2_cells and curr_edge_cells:
 					csvw.writerow(curr_node1_cells + curr_node2_cells + curr_edge_cells)
 					row_count += 1
+				else:
+					empty_row_count += 1
 
-		self.logging.debug("exportNetworkToCsv() returns with {} rows + header".format(row_count))
+		self.logging.debug("exportNetworkToCsv() returns with {} rows + header, {} empty rows have been thrown away".format(row_count, empty_row_count))
 
 
 	def exportNodesToCsv(self, graph, filename, node_columns, header = tuple(), flatten = True, skip_none_lines = True):
@@ -703,6 +739,7 @@ class ComppiInterface(object):
 			raise ValueError("exportNetworkToCsv(): length of header is not the same as length of node columns!")
 
 		row_count = 0
+		empty_row_count = 0
 		with gzip.open(filename, 'w') as fp:
 			csvw = csv.writer(
 				io.TextIOWrapper(fp, newline="", write_through=True), # text into binary file
@@ -722,8 +759,10 @@ class ComppiInterface(object):
 				if curr_row:
 					csvw.writerow(curr_row)
 					row_count += 1
+				else:
+					empty_row_count += 1
 
-		self.logging.debug("exportNodesToCsv() returns with {} rows + header".format(row_count))
+		self.logging.debug("exportNodesToCsv() returns with {} rows + header, {} empty rows have been thrown away".format(row_count, empty_row_count))
 
 
 	def _aggregateCsvCells(self, data, cells, flatten = True, skip_none_lines = True):
@@ -848,53 +887,72 @@ if __name__ == '__main__':
 				# the script is much faster if ComppiInterface is always re-created and destroyed
 				# (the reason may be the garbage collection?)
 				ci = ComppiInterface()
+				# it is much faster to always reload the whole graph from cache
+				# instead of deep-copying it in filterGraph
+				# it must be reloaded, otherwise wrong filtered graph will be re-used!
+				comppi = ci.buildGlobalComppi()
 
 				# the original graph is always re-loaded, because
-				# the graph filtering is done in-place (orig. graph is overwritten) to fit into 2 GB of server RAM
-				comppi = ci.buildGlobalComppi()
-				filtered_comppi = ci.filterGraph(comppi, loc, sp_id) # note the sp_id
+				# the graph filtering is done in-place (orig. graph is overwritten) to fit into lower RAM
+				comppi = ci.filterGraph(comppi, loc, sp_id) # note the sp_id
 
 				# various types of networks
 				if args.type=='proteinloc' or args.type=='all':
+					print("Type 'proteinloc', loc '{}', tax '{}' started... ".format(loc, sp), end="")
+					
 					ci.exportNodesToCsv(
-						filtered_comppi,
+						comppi,
 						os.path.join(ci.output_dir, 'comppi--proteins_locs--tax_{}_loc_{}.txt.gz'.format(sp, loc)),
-						('name', 'naming_conv', 'synonyms', 'loc_scores', 'minor_locs', 'loc_exp_sys_types', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
+						('name', 'naming_conv', 'synonyms', 'loc_scores', 'minor_locs', 'loc_exp_sys', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
 						('Protein Name', 'Naming Convention', 'Synonyms', 'Major Loc With Loc Score', 'Minor Loc', 'Experimental System Type', 'Localization Source Database', 'PubmedID', 'TaxID'),
 						skip_none_lines = False
 					)
+					
+					print("[ OK ]")
 
 				if args.type=='compartment' or args.type=='all':
+					print("Type 'compartment', loc '{}', tax '{}' started... ".format(loc, sp), end="")
+					
 					# all locs for compartments == all proteins that belong to all compartments
 					# some proteins may not have localization data
 					# -> all locs for compartments is not the same as all locs for interaction
 					ci.exportCompartmentToCsv(
-						filtered_comppi,
+						comppi,
 						os.path.join(ci.output_dir, 'comppi--compartments--tax_{}_loc_{}.txt.gz'.format(sp, loc)),
-						('name', 'naming_conv', 'loc_scores', 'minor_locs', 'loc_exp_sys_types', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
-						('weight', 'exp_sys_types', 'source_dbs', 'pubmed_ids'),
-						(	'Interactor A', 'Naming Convention A', 'Major Loc A With Loc Score', 'Minor Loc A', 'Loc Experimental System Type A', 'Loc Source DB A', 'Loc PubMed ID A', 'Taxonomy ID A',
-							'Interactor B', 'Naming Convention B', 'Major Loc B With Loc Score', 'Minor Loc B', 'Loc Experimental System Type B', 'Loc Source DB B', 'Loc PubMed ID B', 'Taxonomy ID B',
-							'Interaction Score', 'Interaction Experimental System Type', 'Interaction Source Database', 'Interaction PubMed ID'
+						('name', 'naming_conv', 'loc_scores', 'minor_locs', 'loc_exp_sys', 'loc_source_dbs', 'loc_pubmed_ids', 'taxonomy_id'),
+						('weight', 'int_exp_sys', 'source_dbs', 'pubmed_ids'),
+						('Interactor A', 'Naming Convention A', 'Major Loc A With Loc Score', 'Minor Loc A', 'Loc Experimental System Type A', 'Loc Source DB A', 'Loc PubMed ID A', 'Taxonomy ID A',
+						'Interactor B', 'Naming Convention B', 'Major Loc B With Loc Score', 'Minor Loc B', 'Loc Experimental System Type B', 'Loc Source DB B', 'Loc PubMed ID B', 'Taxonomy ID B',
+						'Interaction Score', 'Interaction Experimental System Type', 'Interaction Source Database', 'Interaction PubMed ID'
 						),
 						skip_none_lines = False
 					)
+					
+					print("[ OK ]")
 
 				if args.type=='interaction' or args.type=='all':
+					print("Type 'interaction', loc '{}', tax '{}' started... ".format(loc, sp), end="")
+					
 					# "all locs" for interactions == filtering by localization is completely turned off
 					if loc=='all':
-						out_graph = comppi
+						# the comppi graph is already filtered in_place,
+						# therefore we have to reload the global graph to avoid filtering
+						out_graph = ci.buildGlobalComppi()
+						out_graph = ci.filterGraph(out_graph, None, sp_id) # note the None and sp_id
+						ci.logging.info("Interactions, loc 'all', tax '{}' => Re-filtered from original) graph".format(sp_id))
 					else:
-						out_graph = filtered_comppi
+						out_graph = comppi # already filtered instance
 					
 					ci.exportNetworkToCsv(
 						out_graph,
 						os.path.join(ci.output_dir, 'comppi--interactions--tax_{}_loc_{}.txt.gz'.format(sp, loc)),
 						('name', 'naming_conv', 'synonyms', 'taxonomy_id'),
-						('weight', 'exp_sys_types', 'source_dbs', 'pubmed_ids'),
+						('weight', 'int_exp_sys', 'source_dbs', 'pubmed_ids'),
 						('Protein A', 'Naming Convention A', 'Synonyms A', 'Taxonomy ID A', 'Protein B', 'Naming Convention B', 'Synonyms B', 'Taxonomy ID B', 'Interaction Score', 'Interaction Experimental System Type', 'Interaction Source Database', 'Interaction PubMed ID'),
 						skip_none_lines = False
 					)
+					
+					print("[ OK ]")
 
 				del ci
 

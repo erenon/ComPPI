@@ -21,15 +21,20 @@
         <!---->
         <p align="justify">Using the <b>Advanced Search</b> option the user may set the filtration of the query protein for the available species and subcellular localizations.
         Localization probability can be set numerically or by moving the slider.
-        The advanced parameters apply only to the query protein, and not to its interactors.
+        The advanced parameters apply only to the query protein, and not to its interactors, but the settings could be inherited to the interactors as well by check in the "Apply all settings to the results page" box.
         Once the <b>Advanced Search</b> is executed, that (those) version(s) of the query protein will appear on the screen, which fulfill(s) the parameters of the <b>Advanced Search</b> query.
         The search is permissive and not restrictive, therefore,
-        in the final interaction page of the query protein you may see other localizations or lower localization probabilities than the customized parameters.</p> 
+        in the final interaction page of the query protein you may see other localizations or lower localization probabilities than the customized parameters
+        unless the "Apply all settings to the results page" box is checked in, when the applied setting are inherited to the interactors as well.</p> 
 
         <p align="justify">If a single protein was found, the page of interactors is shown immediately.
         If there are multiple search results for a given protein name (or fragment), an intermediate page displays the available options.
         The final interaction page displays the <a href="#intA">properties of the query protein</a> and the <a href="#int">interactions</a> as well.
         All interactions contain information about the <a href="#intB">properties of the interacting partners</a> and the interaction score of a certain interaction.</p>
+        
+        <p align="justify">On the results page the user could filter the interactions by the <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#structure">6 major subcellular localizations</a>,
+        <a href="{{ path('ComppiDescriptionBundle_help') }}/scores#locscore">localization probability thresholds</a> 
+        and <a href="{{ path('ComppiDescriptionBundle_help') }}/scores#intscore">interaction probability thresholds</a> of the interacting partners.</p>        
 
         <p align="justify">A <b>Direct Protein ID Search</b> option is also available using the following URL format:
         http://comppi.linkgroup.hu/protein_search/{protein ID, such as the requested UniProtKB accesison}.
@@ -46,6 +51,8 @@
         <p align="justify">On the top of the result page the following properties are listed regarding the query protein:
         <ol>
             <li>the <b>Full Name</b> of the protein from the UniProt database and link to the <b>UniProt Profile</b></li>
+            <li><b>Custom Settings</b> options to filter the interactions displayed on the results page</li>
+            <li>the <b>Species</b> for the given query protein</li>
             <li>the <b>Number of Interactions</b> gives the number of the existing interactions for the given protein</li>
             <li>the <b>Average Interaction Score</b> gives the average of all the interactions for the given protein</li>
             <li>the <b>Localizations</b> table contains the following properties for the subcellular localization of the protein:
@@ -73,7 +80,7 @@
             <li>the <b>UniProt accession</b> and the <b>Full Name</b> of the interactor protein</li>
             <li>the <b>ComPPI Interactors</b> link navigates directly to the interactions of the certain interactor protein</li>
             <li>the <b>UniProtKB Profile</b> is directly available for the interactors</li>
-            <li>the <b>Details</b> show the <a href="#intB">properties of the interactor protein</a> after clicking</li>
+            <li>the <b>Details</b> show the <a href="#intB">properties of the interactor protein</a> after clicking. The <b>ALl Details</b> option shows the properties of all interactor proteins.</li>
         </ol>
         </p>
         
@@ -96,7 +103,8 @@
             </ul>
             Experimental localizations are highlighted.</li>
             <li>the <b>Synonyms</b> of the query protein contain all the protein names stored in the ComPPI database</li>
-
+            <li>the <b>Interaction Source Database</b> lists the source databases for the given interaction</li>
+            <li>the <b>Interaction Source Publication</b> lists the publications of the sources for the given interaction</li>
         </ol></p>
 
 	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Help Table of Contents</a>
