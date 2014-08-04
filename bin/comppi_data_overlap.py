@@ -7,6 +7,11 @@ import itertools
 import pprint
 from export_downloads import ComppiInterface
 
+# group of custom sources, currently set to protein-protein interaction databases
+custom_source_group = ['MINT', 'IntAct', 'MIPS', 'MatrixDB', 'BioGRID', 'HPRD', 'HomoMINT', 'DIP', 'CCSB'] #'DroID', 
+# all proteins from ANY source DB (not intersection, but union!!)
+# SELECT COUNT(DISTINCT id) FROM Protein WHERE id IN ( SELECT proteinId FROM ProteinToDatabase WHERE sourceDb IN ('MINT', 'IntAct', 'MIPS', 'MatrixDB', 'DroID', 'BioGRID', 'HPRD', 'HomoMINT', 'DIP', 'CCSB') );
+
 c = ComppiInterface()
 comppi_graph = c.buildGlobalComppi()
 
@@ -82,6 +87,7 @@ for src_db1, src_db2 in itertools.combinations(prot_source_nums.keys(), 2):
 # common proteins in all source databases
 all_prot_sets = []
 all_prot_sets_5k = [] # source DBs with more than 5'000 proteins
+all_prot_sets_custom = []
 all_prot_dbs = []
 for db_name, node_id_set in prot_sources.items():
 	if db_name != 'No Protein Source':
@@ -90,6 +96,9 @@ for db_name, node_id_set in prot_sources.items():
 		
 		if prot_source_nums[db_name] > 5000:
 			all_prot_sets_5k.append(node_id_set)
+		
+		if db_name in custom_source_group:
+			all_prot_sets_custom.append(node_id_set)
 		
 all_common_prots = set.intersection(*all_prot_sets)
 all_common_prots_len = len(all_common_prots)
@@ -104,6 +113,16 @@ print("\nCommon proteins in all source databases with at least 5'000 proteins: {
 	all_common_prots_len_5k,
 	','.join(all_prot_dbs)
 ))
+
+all_common_prots_custom = set.intersection(*all_prot_sets_custom)
+all_common_prots_len_custom = len(all_common_prots_custom)
+print("\nCommon proteins in all PPI source databases: {}\n(Sources: {})".format(
+	all_common_prots_len_custom,
+	','.join(custom_source_group)
+))
+if all_common_prots_len_custom < 100:
+	print("These protein IDs are: ")
+	print(all_common_prots_custom)
 
 
 # export
