@@ -75,23 +75,27 @@
 	<br /><img src="http://www.linkgroup.hu/pic/score_3.png" alt="loc_sum" height="123" width="212" /></p>
 	
        
-	<a name="scoreopt"><h3>4. Optimization</h3></a>
+	<br /><a name="scoreopt"></a>
+        <h3>4. Optimization</h3>
         
-        <p align="justify">Localization evidence type can be experimental, unknown or predicted.
-        Each of these is described by a parameter called the evidence type weight, and the ratio of these weights to each other has to be determined to achieve a unified scoring system applicable to the diverse data sources.
+        <p align="justify">Localization <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#expsystype">evidence type</a> can be experimental, unknown or predicted.
+        Each of these is described by a parameter called the evidence type weight, and the ratio of these weights to each other has to be determined to achieve a unified scoring system
+        applicable to the diverse data sources.
         We performed therefore data-driven optimization of the localization evidence type weights.
         Considering the ComPPI dataset the only requirement of the optimization was formalized as experimental>unknown≥predicted.
         This requirement is based on the fact that experimental entries are the most reliable, while localization entries coming from unknown origin could be experimental or predicted as well.
-        We chose the Human Protein Atlas (HPA) database containing only experimentally verified subcellular localizations in order to build a positive control dataset,
-        where the interactros have at least one common localization according to HPA. 
-        Our goal was to find a specific ratio of the experimental, unknown and predicted evidence type weight parameters that maximizes the number of high confidence interactions
+        We chose the <a href="http://www.proteinatlas.org/">Human Protein Atlas (HPA)</a> database containing only experimentally verified subcellular localizations in order to build a positive
+        control dataset, where the interactros have at least one common localization according to HPA.</p>
+        
+        <p align="justify">Our goal was to find a specific ratio of the experimental, unknown and predicted evidence type weight parameters that maximizes the number of high confidence interactions
         in the positive control dataset (HPA) and simultaneously maximizes the number of low confidence interactions in the ComPPI dataset not containing HPA data.
         These ensure that the quality of data marked as high confidence will match the quality of experimentally verified data.
         All combinations of the experimental, unknown and predicted evidence type weights were set up from 0 to 1 with 0.1 increments.
-        The kernel density of the interactions were calculated with all these settings, which gave us the ratio of interactions belonging to a given confidence level compared to the distribution of
+        The <a href="http://en.wikipedia.org/wiki/Kernel_density_estimation">kernel density</a> of the interactions were calculated with all these settings, which gave us the ratio of interactions belonging to a given confidence level compared to the distribution of
         all the interactions. Lastly, the 167 possible kernel density solutions were tested (see all possible solutions on the video below) to find the parameter combination that maximizes 
-        he number of both the low and high confidence interactions as described above.
-        This resulted in 0.7, 0.5, and 0.5 as the relative evidence type weights for experimental, unknown and predicted data types, respectively. </p>
+        he number of both the low and high confidence interactions as described above.</p>
+        
+        <p align="justify">This resulted in 0.7, 0.5, and 0.5 as the relative evidence type weights for experimental, unknown and predicted data types, respectively. </p>
         
         <iframe width="420" height="315" src="//www.youtube.com/embed/kekB0_YU494" frameborder="0" allowfullscreen></iframe>
         

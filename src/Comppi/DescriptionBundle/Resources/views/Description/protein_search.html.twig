@@ -20,11 +20,11 @@
 
         <!---->
         <p align="justify">Using the <b>Advanced Search</b> option the user may set the filtration of the query protein for the available species and subcellular localizations.
-        Localization probability can be set numerically or by moving the slider.
+        Localization score can be set numerically or by moving the slider.
         The advanced parameters apply only to the query protein, and not to its interactors, but the settings could be inherited to the interactors as well by check in the "Apply all settings to the results page" box.
         Once the <b>Advanced Search</b> is executed, that (those) version(s) of the query protein will appear on the screen, which fulfill(s) the parameters of the <b>Advanced Search</b> query.
         The search is permissive and not restrictive, therefore,
-        in the final interaction page of the query protein you may see other localizations or lower localization probabilities than the customized parameters
+        in the final interaction page of the query protein you may see other localizations or lower localization scores than the customized parameters
         unless the "Apply all settings to the results page" box is checked in, when the applied setting are inherited to the interactors as well.</p> 
 
         <p align="justify">If a single protein was found, the page of interactors is shown immediately.
@@ -33,8 +33,8 @@
         All interactions contain information about the <a href="#intB">properties of the interacting partners</a> and the interaction score of a certain interaction.</p>
         
         <p align="justify">On the results page the user could filter the interactions by the <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#structure">6 major subcellular localizations</a>,
-        <a href="{{ path('ComppiDescriptionBundle_help') }}/scores#locscore">localization probability thresholds</a> 
-        and <a href="{{ path('ComppiDescriptionBundle_help') }}/scores#intscore">interaction probability thresholds</a> of the interacting partners.</p>        
+        <a href="{{ path('ComppiDescriptionBundle_help') }}/scores#locscore">localization score thresholds</a> 
+        and <a href="{{ path('ComppiDescriptionBundle_help') }}/scores#intscore">interaction score thresholds</a> of the interacting partners.</p>        
 
         <p align="justify">A <b>Direct Protein ID Search</b> option is also available using the following URL format:
         http://comppi.linkgroup.hu/protein_search/{protein ID, such as the requested UniProtKB accesison}.
