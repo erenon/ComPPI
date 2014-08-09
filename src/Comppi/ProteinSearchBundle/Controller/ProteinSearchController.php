@@ -662,7 +662,7 @@ class ProteinSearchController extends Controller
 			//if ($i->namingConvention=='UniProtKB-AC')
 			$T['ls'][$i->pid]['uniprot_outlink'] = $this->uniprot_root.$i->name;
 			$T['ls'][$i->pid]['orig_conf_score'] = $i->confScore;
-			$T['ls'][$i->pid]['confScore'] = round($i->confScore, 3)*100;
+			$T['ls'][$i->pid]['confScore'] = round($i->confScore, 3);//*100;
 			// note that there may be multiple source DBs and PubMed IDs
 			$T['ls'][$i->pid]['int_source_db'][$i->sourceDb] = $i->sourceDb;
 			$pml = $this->linkToPubmed($i->pubmedId);
@@ -727,7 +727,7 @@ class ProteinSearchController extends Controller
 
 		$T['protein']['interactionNumber'] = count($T['ls']);
 		if ($T['protein']['interactionNumber']) {
-			$T['protein']['avgConfScore'] = round($confScoreAvg/$confCounter, 3)*100;
+			$T['protein']['avgConfScore'] = round($confScoreAvg/$confCounter, 3);//*100;
 		} else {
 			$T['protein']['avgConfScore'] = false;
 		}
@@ -891,7 +891,7 @@ class ProteinSearchController extends Controller
 			if (!empty($p->majorLocName)) {
 				$tmp['large_loc'] = ucfirst($p->majorLocName) /*. '['.$p->locId.']'*/;
 				if (!empty($loc_scores[$p->pid][$p->majorLocName])) {
-					$tmp['loc_score'] = round($loc_scores[$p->pid][$p->majorLocName], 3)*100;
+					$tmp['loc_score'] = round($loc_scores[$p->pid][$p->majorLocName], 3);//*100;
 				} else {
 					$tmp['loc_score'] = 0;
 				}
