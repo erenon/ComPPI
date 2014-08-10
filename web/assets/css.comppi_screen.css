@@ -339,8 +339,8 @@ textarea { height: 200px; }
 	display: block;
 	float: left;
 }
-#fProtSearchLocScoreSlider { width: 180px; float: left; margin-top: 20px; }
-#fProtSearchLocScore { width: 36px; height: 24px; float: left; margin-top: 10px; text-align: center; }
+#fProtSearchLocScoreSlider { width: 170px; float: left; margin-top: 20px; }
+#fProtSearchLocScore { width: 45px; height: 24px; float: left; margin-top: 10px; text-align: center; }
 .ui-slider { margin: 10px 20px 10px 5px; border: 1px solid #707070; } 
 .ui-slider .ui-slider-handle {
     color: #fff;
@@ -406,7 +406,7 @@ table#ps-interactionStats.fancy_table tbody:before {
 #fIntFiltSubmit { margin-left: 110px; }
 #fIntFiltReset { margin-left: 20px; }
 #fIntFiltConfScoreSlider, #fIntFiltLocScoreSlider { width: 150px; float: right; margin-top: 8px; }
-#fIntFiltConfScore, #fIntFiltLocScore { width: 35px; height: 25px; margin-top: -2px; text-align: center; float: right; }
+#fIntFiltConfScore, #fIntFiltLocScore { width: 45px; height: 25px; margin-top: -2px; text-align: center; float: right; }
 label#fIntFiltLocLabel { width: 120px; }
 #fIntFiltLocContainer { float: right; margin: 2px 0 25px 0; }
 

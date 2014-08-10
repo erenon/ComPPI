@@ -103,8 +103,9 @@ $(function() {
 		
 		// localization score treshold slider for protein search
 		$("#fProtSearchLocScoreSlider").slider({
-			min: 0,
-			max: 100,
+			min: 0.00,
+			max: 1.00,
+			step: 0.1,
 			range: "max",
 			value: $("#fProtSearchLocScore").val(),
 			slide: function( event, ui ) {
@@ -123,8 +124,9 @@ $(function() {
 	
 	// confidence score treshold slider for interactor filtering
 	$("#fIntFiltConfScoreSlider").slider({
-		min: 0,
-		max: 100,
+		min: 0.00,
+		max: 1.00,
+		step: 0.1,
 		range: "max",
 		value: $("#fIntFiltConfScore").val(),
 		slide: function( event, ui ) {
@@ -142,8 +144,9 @@ $(function() {
 	
 	// localization score treshold slider for interactor filtering
 	$("#fIntFiltLocScoreSlider").slider({
-		min: 0,
-		max: 100,
+		min: 0.00,
+		max: 1.00,
+		step: 0.1,
 		range: "max",
 		value: $("#fIntFiltLocScore").val(),
 		slide: function( event, ui ) {

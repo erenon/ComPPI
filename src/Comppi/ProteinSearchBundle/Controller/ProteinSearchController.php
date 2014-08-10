@@ -166,11 +166,11 @@ class ProteinSearchController extends Controller
 		}
 		
 		// loc threshold in the form
-		if (!empty($_POST['fProtSearchLocScore']) && 0<(int)$_POST['fProtSearchLocScore'] && (int)$_POST['fProtSearchLocScore']<=100)
+		if (!empty($_POST['fProtSearchLocScore']) && 0<(float)$_POST['fProtSearchLocScore'] && (float)$_POST['fProtSearchLocScore']<=100)
 		{
 			$T['loc_score_slider_val']
 				= $_SESSION['loc_score_slider_val']
-				= (int)$_POST['fProtSearchLocScore'];
+				= (float)$_POST['fProtSearchLocScore'];
 		} else {
 			$T['loc_score_slider_val']
 				= $_SESSION['loc_score_slider_val']
@@ -267,8 +267,8 @@ class ProteinSearchController extends Controller
 			$loc_threshold = 0.0;
 			if (!empty($_POST['fProtSearchLocScore']))
 			{
-				$T['loc_threshold'] = (int)$_POST['fProtSearchLocScore'];
-				$loc_threshold = $_POST['fProtSearchLocScore']/100;
+				$T['loc_threshold'] = $loc_threshold = (float)$_POST['fProtSearchLocScore'];
+				//$loc_threshold = $_POST['fProtSearchLocScore']/100;
 			}
 			
 			// check for validation errors
@@ -491,7 +491,7 @@ class ProteinSearchController extends Controller
 			'comppi_id' => $comppi_id,
 			'ls' => array()
 		);
-		
+
 		// FILTER: CONFIDENCE SCORE THRESHOLD
 		// inherit from main search form: reset to defaults
 		if (isset($_SESSION['inherit_filters_checked']) and !$_SESSION['inherit_filters_checked'])
@@ -504,17 +504,17 @@ class ProteinSearchController extends Controller
 		{
 			$T['conf_score_slider_val']
 				= $_SESSION['conf_score_slider_val']
-				= 0;
+				= 0.0;
 		}
 		// set the requested value if the form was posted
 		elseif (
 			isset($_POST['fIntFiltConfScore']) &&
-			0<=(int)$_POST['fIntFiltConfScore'] &&
-			(int)$_POST['fIntFiltConfScore']<=100
+			0.0<=(float)$_POST['fIntFiltConfScore'] &&
+			(float)$_POST['fIntFiltConfScore']<=1.00
 		) {
 			$T['conf_score_slider_val']
 				= $_SESSION['conf_score_slider_val']
-				= (int)$_POST['fIntFiltConfScore'];
+				= (float)$_POST['fIntFiltConfScore'];
 		}
 		// set from session
 		elseif (isset($_SESSION['conf_score_slider_val'])) 
@@ -526,9 +526,9 @@ class ProteinSearchController extends Controller
 		{
 			$T['conf_score_slider_val']
 				= $_SESSION['conf_score_slider_val']
-				= 0;
+				= 0.0;
 		}
-		
+
 		// FILTER: MAJOR LOCALIZATIONS
 		foreach ($this->majorloc_list as $mloc_code => $mloc_name)
 		{
@@ -575,17 +575,17 @@ class ProteinSearchController extends Controller
 		{
 			$T['loc_score_slider_val']
 				= $_SESSION['loc_score_slider_val']
-				= 0;
+				= 0.0;
 		}
 		// set the requested value if the form was posted
 		elseif (
 			isset($_POST['fIntFiltLocScore']) &&
-			0<=(int)$_POST['fIntFiltLocScore'] &&
-			(int)$_POST['fIntFiltLocScore']<=100
+			0<=(float)$_POST['fIntFiltLocScore'] &&
+			(float)$_POST['fIntFiltLocScore']<=1.00
 		) {
 			$T['loc_score_slider_val']
 				= $_SESSION['loc_score_slider_val']
-				= (int)$_POST['fIntFiltLocScore'];
+				= (float)$_POST['fIntFiltLocScore'];
 		}
 		// set from session
 		elseif (isset($_SESSION['loc_score_slider_val']))
@@ -597,7 +597,7 @@ class ProteinSearchController extends Controller
 		{
 			$T['loc_score_slider_val']
 				= $_SESSION['loc_score_slider_val']
-				= 0;
+				= 0.0;
 		}
 
 		// DETAILS OF THE REQUESTED PROTEIN
@@ -615,8 +615,8 @@ class ProteinSearchController extends Controller
 		// Therefore a 100% CS on the front-end may mean anything from 0.99 to 1.0.
 		// To address this, the threshold is lowered by 0.001,
 		// therefore the error range of 0.01 is compressed to 0.001.
-		$conf_score_cond = round($T['conf_score_slider_val']/100, 3, PHP_ROUND_HALF_DOWN);
-		$conf_score_cond = (float)$conf_score_cond;
+		// $conf_score_cond = round($T['conf_score_slider_val'], 3, PHP_ROUND_HALF_DOWN);
+		$conf_score_cond = (float)$T['conf_score_slider_val'];
 		if ($conf_score_cond>0.001) {
 			$conf_score_cond = $conf_score_cond-0.001;
 		}
@@ -797,8 +797,8 @@ class ProteinSearchController extends Controller
 		// Therefore a 100% loc on the front-end may mean anything from 0.99 to 1.0.
 		// To address this, the threshold is lowered by 0.001,
 		// therefore the error range of 0.01 is compressed to 0.001.
-		$loc_prob = round($loc_score_threshold/100, 3, PHP_ROUND_HALF_DOWN);
-		$loc_prob = (float)$loc_prob;
+		// $loc_prob = round($loc_score_threshold, 3, PHP_ROUND_HALF_DOWN);
+		$loc_prob = (float)$loc_score_threshold;
 		// we need to lower a bit the threshold,
 		// otherwise locs with 100% loc score won't appear
 		if ($loc_prob>0.0) {
@@ -893,11 +893,11 @@ class ProteinSearchController extends Controller
 				if (!empty($loc_scores[$p->pid][$p->majorLocName])) {
 					$tmp['loc_score'] = round($loc_scores[$p->pid][$p->majorLocName], 3);//*100;
 				} else {
-					$tmp['loc_score'] = 0;
+					$tmp['loc_score'] = 0.0;
 				}
 			} else {
 				$tmp['large_loc'] = 'N/A';
-				$tmp['loc_score'] = 0;
+				$tmp['loc_score'] = 0.0;
 			}
 
 			// filter the results if needed

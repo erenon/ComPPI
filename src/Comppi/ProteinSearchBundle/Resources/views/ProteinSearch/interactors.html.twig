@@ -86,7 +86,7 @@
 			<tr class="ps-sysType{{ l.loc_exp_sys_type }}">
 			<td>{{ l.large_loc }}</td>
 			<td>{{ l.small_loc }} ({{ l.go_code }})</td>
-			<td>{{ l.loc_score }}%</td>
+			<td>{{ l.loc_score }}</td>
 			<td>{{ l.loc_exp_sys|raw }}</td>
 			<td>{% if l.source_db %} {{ l.source_db }} {% endif %}</td>
 			<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank" title="Direct link to the publication that relates the protein to the localization.">PubMed&nbsp;<img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
@@ -134,7 +134,7 @@
 	<tr class="{% if loop.index is odd %}ps-stripeEven{% else %}ps-stripeOdd{% endif %}">
 		<td class="ps-actorA">
 			<h1>{{ protein.name }}</h1>
-			<div class="ps-CS" title="Interaction score based on the subcellular localization of the interacting partners. It reflects the probability of the interaction taking into account the localization of the interactors.">Interaction Score <div>{{ p.confScore }}%</div></div>
+			<div class="ps-CS" title="Interaction score based on the subcellular localization of the interacting partners. It reflects the probability of the interaction taking into account the localization of the interactors.">Interaction Score <div>{{ p.confScore }}</div></div>
 		</td>
 		<td class="ps-actorB">
 			<h1>{{ p.prot_name }}</h1> ({{ p.prot_naming }})
@@ -170,7 +170,7 @@
 					<tr class="ps-sysType{{ l.loc_exp_sys_type }}">
 					<td>{{ l.large_loc }}</td>
 					<td>{{ l.small_loc }} ({{ l.go_code }})</td>
-					<td>{{ l.loc_score }}%</td>
+					<td>{{ l.loc_score }}</td>
 					<td>{{ l.loc_exp_sys|raw }}</td>
 					<td>{% if l.source_db %} {{ l.source_db }} {% endif %}</td>
 					<td>{% if l.pubmed_link %} <a href="{{ l.pubmed_link }}" target="_blank" title="Direct link to the publication or database that relates the protein to the localization.">PubMed&nbsp;<img src="{{ asset('assets/linkout.png') }}" /></a> {% endif %}</td>
