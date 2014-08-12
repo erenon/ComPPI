@@ -9,18 +9,18 @@
 	<h2>Summary of the ComPPI scoring system</h2>
 	
 	<p align="justify">The ComPPI scoring system is designed as a subcellular localization-based measure to score the reliablity of the interaction between two proteins.
-	In the first part we calculated the <a href="#locscore">Localization Score</a> for all the proteins with at least one major localization.
-	The Localization Score is calculated based on the type of the <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#origin">subcellular localization</a> data
+	In the first step the <a href="#locscore">Localization Score</a> is calculated for all proteins that have at least one major localization.
+	The Localization Score calculation is based on the <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#origin">subcellular localization evidence types</a>
         for all major localizations where the given protein can be found.
-	With this method the localization score incorporates a) the quality of the localization (experimental, predicted, or unknown),
-	and b) the quantity of the data which is coming from the number of sources, because of the integrated dataset.
-	In the second part we use the previously calculated Localization Score of the interactors to <a href="#intscore">score the interaction</a>
-         in a compartment dependent manner.</p>
+	This approach ensures that both a) the quality of the localization (experimental, predicted, or unknown),
+	and b) the quantity of the data (the number of sources from the integrated dataset) are considered.
+	In the second step the previously calculated Localization Score of the interactors is used to <a href="#intscore">score the interaction</a>
+         in a compartment-dependent manner.</p>
 	
-	<p align="justify">In summary, the ComPPI <b>Localization Score</b> gives the probability if the <b>protein</b> is present in the certain major localization,
+	<p align="justify">In summary, the ComPPI <b>Localization Score</b> gives the probability of a given <b>protein</b> to be found in a certain major localization,
 	while the <b>Interaction Score</b> is a measure for the <b>interaction</b> between the interactors based on the Localization Score.</p>
 	
-	<p align="justify"><b>Note</b> that the Interaction Score is <b>0</b>, if there was no localization information for one, or both of the interactors.</p>
+	<p align="justify"><b>Note</b> that the Interaction Score is <b>0</b> if there were no localization data for one or both of the interactors.</p>
 	
 	<h2>Detailed description of the ComPPI scoring system</h2>
 	<ol>
@@ -35,19 +35,19 @@
         
     <br /><a name="basics"></a>
 	<h3>1. Basics of the ComPPI scoring system</h3>
-	<p align="justify">We assumed that the different localization entries are independent. Thus we have used the following two basic operations:
+	<p align="justify">We assumed that the different localization entries are independent, thus the following two basic operations have been used:
 	<ul>
 		<li>AND (⊕) [standard multiplication, a⊕b=a*b]</li>
 		<li>OR (Ⓥ) [aⓋb = 1-(1-a)*(1-b)]</li>
 	</ul>
-	The ComPPI scoring system works with the major localizations of the proteins, described <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs">here</a>.
-	The Localization and Interaction Scores are calculated using a PHP script, while the scores are stored in the SQL-based database.</p></p>
+	The ComPPI scoring system works with the major localizations of the proteins as it is described <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs">here</a>.
+	The Localization and Interaction Scores are calculated with a PHP script, the scores are stored in an SQL-based database.</p></p>
 
 
 	<br /><a name="locscore"></a>
 	<h3>2. Localization Score</h3>	
-	<p align="justify">Because of the different types of <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#origin">subcellular localization</a>
-	data we use the following propabilities as the parameters of the calculation after the <a href="#scoreopt">optimization</a>: 
+	<p align="justify"><a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#origin">Subcellular localization</a>
+	data contains diverse evidence types, therefore the evidence type weights were <a href="#scoreopt">optimized</a> as: 
 		<ul>
 			<li>p=0.7 experimentally verified</li>
 			<li>p=0.5 unknown interaction type</li>
@@ -55,9 +55,9 @@
 		</ul>
 	</p>
 	
-	<p align="justify">The Localization Score gives the probability of the protein being in a certain compartment.
-	The Localization Score is computed for all the proteins with at least one major localization
-	for all the 6 compartments by OR-ing together the localization entries (since every entry is added evidence):
+	<p align="justify">The Localization Score gives the probability of a given protein to be found in a certain compartment.
+	A Localization Score was computed
+	for all 6 compartments for each protein with at least one major localization by OR-ing together the localization entries (since every entry is an additional evidence):
 	
 	<br /><img src="http://www.linkgroup.hu/pic/score_1.png" alt="loc_score" height="118" width="212" />
 	</p>
@@ -65,7 +65,7 @@
 	
 	<br /><a name="intscore"></a>
 	<h3>3. Interaction Score</h3>
-	<p align="justify">The ComPPI Interaction Score is calculated using the probability of the two proteins meeting in any compartment.
+	<p align="justify">The ComPPI Interaction Score describes how likely it is for two proteins to interact in any compartment.
         Matching elements (localization probabilities of two proteins in the same localization) are AND-ed together (since both proteins must be present for the interaction):
 
 	<br /><img src="http://www.linkgroup.hu/pic/score_2.png" alt="matching_loc" height="51" width="212" /></p>
@@ -79,10 +79,9 @@
         <h3>4. Optimization</h3>
         
         <p align="justify">Localization <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#expsystype">evidence type</a> can be experimental, unknown or predicted.
-        Each of these is described by a parameter called the evidence type weight, and the ratio of these weights to each other has to be determined to achieve a unified scoring system
-        applicable to the diverse data sources.
+        Each of these is described by a parameter called the evidence type weight, and the ratio of these weights to each other has to be determined to achieve a unified scoring system applicable to the diverse data sources.
         We performed therefore data-driven optimization of the localization evidence type weights.
-        Considering the ComPPI dataset the only requirement of the optimization was formalized as experimental>unknown≥predicted.
+        Considering the ComPPI dataset the only requirement of the optimization was formalized as experimental&nbsp;>&nbsp;unknown&nbsp;≥&nbsp;predicted.
         This requirement is based on the fact that experimental entries are the most reliable, while localization entries coming from unknown origin could be experimental or predicted as well.
         We chose the <a href="http://www.proteinatlas.org/">Human Protein Atlas (HPA)</a> database containing only experimentally verified subcellular localizations in order to build a positive
         control dataset, where the interactros have at least one common localization according to HPA.</p>
@@ -91,9 +90,7 @@
         in the positive control dataset (HPA) and simultaneously maximizes the number of low confidence interactions in the ComPPI dataset not containing HPA data.
         These ensure that the quality of data marked as high confidence will match the quality of experimentally verified data.
         All combinations of the experimental, unknown and predicted evidence type weights were set up from 0 to 1 with 0.1 increments.
-        The <a href="http://en.wikipedia.org/wiki/Kernel_density_estimation">kernel density</a> of the interactions were calculated with all these settings, which gave us the ratio of interactions belonging to a given confidence level compared to the distribution of
-        all the interactions. Lastly, the 167 possible kernel density solutions were tested (see all possible solutions on the video below) to find the parameter combination that maximizes 
-        he number of both the low and high confidence interactions as described above.</p>
+        The <a href="http://en.wikipedia.org/wiki/Kernel_density_estimation">kernel density</a> of the interactions were calculated with all these settings, which gave us the ratio of interactions belonging to a given confidence level compared to the distribution of all the interactions. Lastly, the 167 possible kernel density solutions were tested (see all possible solutions on the video below) to find the parameter combination that maximizes the number of both the low and high confidence interactions as described above.</p>
         
         <p align="justify">This resulted in 0.7, 0.5, and 0.5 as the relative evidence type weights for experimental, unknown and predicted data types, respectively. </p>
         
