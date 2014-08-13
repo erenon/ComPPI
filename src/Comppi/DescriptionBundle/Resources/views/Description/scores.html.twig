@@ -17,8 +17,7 @@
 	In the second step the previously calculated Localization Score of the interactors is used to <a href="#intscore">score the interaction</a>
          in a compartment-dependent manner.</p>
 	
-	<p align="justify">In summary, the ComPPI <b>Localization Score</b> gives the probability of a given <b>protein</b> to be found in a certain major localization,
-	while the <b>Interaction Score</b> is a measure for the <b>interaction</b> between the interactors based on the Localization Score.</p>
+	<p align="justify">In summary, the ComPPI <b>Localization Score</b> gives the probability of a given <b>protein</b> to be found in a certain major localization, while the <b>Interaction Score</b> is a measure for the <b>interaction</b> between the interactors based on the Localization Score.</p>
 	
 	<p align="justify"><b>Note</b> that the Interaction Score is <b>0</b> if there were no localization data for one or both of the interactors.</p>
 	
@@ -27,7 +26,7 @@
 		<li><a href="#basics">Basics of the ComPPI scoring system</a></li>
 		<li><a href="#locscore">Localization Score</a></li>
 		<li><a href="#intscore">Interaction Score</a></li>
-		<li><a href="#scoreopt">Optimization</a></li>
+		<li><a href="#scoreopt">Subcellular localization evidence type weight optimization</a></li>
 		<!--<li><a href="#locdist">Distribution of the Localization Score</a></li>-->
 		<!--<li><a href="#intdist">Distribution of the Interaction Score</a></li>-->
 	</ol>
@@ -56,19 +55,21 @@
 	</p>
 	
 	<p align="justify">The Localization Score gives the probability of a given protein to be found in a certain compartment.
-	A Localization Score was computed
-	for all 6 compartments for each protein with at least one major localization by OR-ing together the localization entries (since every entry is an additional evidence):
+	A Localization Score was computed for all 6 compartments for each protein with at least one major localization using probabilistic disjunction (marked with operator V) among the different localization evidence types and the number of ComPPI localization data entries of the respective evidence type (since every entry is an additional evidence):
 	
-	<br /><img src="http://www.linkgroup.hu/pic/score_1.png" alt="loc_score" height="118" width="212" />
+	<br /><img src="http://www.linkgroup.hu/pic/score_1.png" alt="loc_score" height="35" style="margin-top: 20px;" /> (Eq. 1)
+	
+	<br /><br />Where φLocX and pLocX are the Localization Score and the localization evidence type (experimental, unknown or predicted) for protein X and localization Loc, respectively, while res is the number of available ComPPI localization data entries for protein X.
 	</p>
         
 	
 	<br /><a name="intscore"></a>
 	<h3>3. Interaction Score</h3>
-	<p align="justify">The ComPPI Interaction Score describes how likely it is for two proteins to interact in any compartment.
-        Matching elements (localization probabilities of two proteins in the same localization) are AND-ed together (since both proteins must be present for the interaction):
+	<p align="justify">As the first step of Interaction Score calculation, compartment-specific Interaction Scores are obtained by multiplying the Localization Scores of the two interactors for each of the 6 major compartments. Finally, the Interaction Score is calculated as the probabilistic disjunction (marked with operator V)  of the Compartment-specific Interaction Scores of all major localizations available for the interacting pair from the maximal number of 6 major localizations (Eq. 2, see bottom panel of Figure 2 for details).
 
-	<br /><img src="http://www.linkgroup.hu/pic/score_2.png" alt="matching_loc" height="51" width="212" /></p>
+	<br /><img src="http://www.linkgroup.hu/pic/score_2.png" alt="matching_loc" height="43" style="margin-top: 20px;" /> (Eq. 2)
+	
+	<br /><br />Where φInt is the Interaction Score, while φLocA and φLocB are the Compartment-specific Localization Scores of interacting proteins A and B, respectively.</p>
 	
 	<p align="justify">Applying OR to all the 6 locations yields <img src="http://www.linkgroup.hu/pic/score_5.png" alt="p_loc" height="30" width="30" /> (because it does not matter in which location do the two proteins connect).
 
@@ -76,7 +77,7 @@
 	
        
 	<br /><a name="scoreopt"></a>
-        <h3>4. Optimization</h3>
+        <h3>4. Subcellular localization evidence type weight optimization</h3>
         
         <p align="justify">Localization <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#expsystype">evidence type</a> can be experimental, unknown or predicted.
         Each of these is described by a parameter called the evidence type weight, and the ratio of these weights to each other has to be determined to achieve a unified scoring system applicable to the diverse data sources.
