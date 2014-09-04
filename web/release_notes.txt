@@ -1,0 +1,14 @@
+Release 2014-06-30
+==================
+ComPPI version 1.0
+- updated localization and interaction score optimization, evidence type weight values: experimental=.7, unknown=.5, predicted=.5
+- data overlap python script
+- generate egographs by the export python script
+- new protein search options on the website
+- help, tutorials and main page text updates
+- various bugfixes
+
+
+Release 2014-06-01
+==================
+First beta version of ComPPI.

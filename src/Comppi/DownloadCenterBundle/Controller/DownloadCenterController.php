@@ -15,7 +15,7 @@ class DownloadCenterController extends Controller
 	private $zipped_outputs = false; // UNTESTED WITH TRUE!
 	private $demo_mode = false; // limit output to the first 1000 rows
 	private $locs = array(
-		'0' => 'cytoplasm',
+		'0' => 'cytosol',
 		'1' => 'mitochondrion',
 		'2' => 'nucleus',
 		'3' => 'extracellular',

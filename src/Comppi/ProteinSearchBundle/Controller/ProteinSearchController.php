@@ -17,7 +17,7 @@ class ProteinSearchController extends Controller
 		3 => 'S. cerevisiae'
 	);
 	private $majorloc_list = array (
-		'cytoplasm' => 'Cytoplasm',
+		'cytoplasm' => 'Cytosol',
 		'mitochondrion' => 'Mitochondrion',
 		'nucleus' => 'Nucleus',
 		'extracellular' => 'Extracellular',
