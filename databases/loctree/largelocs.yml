@@ -1,5 +1,5 @@
 largelocs:
-    cytoplasm:
+    cytosol:
         childrenIncluded:
             - GO:0032994
             - GO:0002189
