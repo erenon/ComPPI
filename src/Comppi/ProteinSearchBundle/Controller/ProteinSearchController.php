@@ -489,7 +489,8 @@ class ProteinSearchController extends Controller
 		
 		$T = array(
 			'comppi_id' => $comppi_id,
-			'ls' => array()
+			'ls' => array(),
+			'protein_search_network_json' => array()
 		);
 
 		// FILTER: CONFIDENCE SCORE THRESHOLD
@@ -692,7 +693,9 @@ class ProteinSearchController extends Controller
 			// synonyms for the interactor
 			$protein_synonyms = $this->getProteinSynonyms($protein_ids);
 
-			// interactors: update the existing skeleton (therefore reference is needed)
+			// interactors: update the existing skeleton (therefore reference is needed),
+			// also create the nodes array for visualization
+			$json_nodes = array();
 			foreach($T['ls'] as $pid => &$actor)
 			{
 				// keep the interaction e if no filtering is set, or
@@ -721,8 +724,36 @@ class ProteinSearchController extends Controller
 					// only if interaction is kept
 					$confScoreAvg += (float)$actor['orig_conf_score'];
 					$confCounter++;
+					
+					// network visualization: collect node data
+					$json_nodes[] = array(
+						'comppi_id' => $pid,
+						'name' => $T['ls'][$pid]['prot_name']
+					);
 				}
 			}
+			
+			// network visualization: assemble network
+			$json_links = array();
+			$key_node_id = count($json_nodes);
+			foreach ($json_nodes as $nid => $nd) {
+				//$json_nodes[$nid]['index'] = $nid;
+				$json_links[] = array(
+					'source' => $key_node_id, // source is always the key protein
+					'target' => $nid, // target is an interactor
+					'weight' => $T['ls'][$nd['comppi_id']]['confScore'] // weight: confidence score from 'interactors skeleton'
+				);
+			}
+			// add the requested (key) protein only now to prevent self-loop
+			$json_nodes[$key_node_id] = array(
+				'comppi_id' => $comppi_id, // ID of the key protein
+				'name' => $T['protein']['name']
+			);
+			
+			$T['protein_search_network_json'] = json_encode(array(
+				'nodes' => $json_nodes,
+				'links' => $json_links
+			));
 		}
 
 		$T['protein']['interactionNumber'] = count($T['ls']);

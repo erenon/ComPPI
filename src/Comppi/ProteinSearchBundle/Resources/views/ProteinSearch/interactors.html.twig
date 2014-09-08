@@ -118,6 +118,25 @@
 
 	<p class="center"><a href="{{ url('ComppiProteinSearchBundle_interactors', {'comppi_id': comppi_id, 'get_interactions': 1}) }}" class="btn btn_submit">Download The Interactions</a></p> #}
 
+	<a name="protein_search_network"></a>
+	{% if protein_search_network_json %}
+	<script type="">
+		graph = {{ protein_search_network_json|raw }}
+	</script>
+	<div class="fancy_box">
+		<h1>Network Visualization</h1>
+		<div id="ps-networkVis" class="fancy_box_body">
+		{% if protein_search_network_json %}
+		<div id="ps-networkVisContainer"></div>
+		{% endif %}
+		</div>
+	</div>
+	{% else %}
+	<script type="">
+		graph = {"nodes": [], "links": []}
+	</script>
+	{% endif %}
+	
 	{% if ls %}
 	<a name="interactors"></a>
 	<table class="fancy_table striped_table">
