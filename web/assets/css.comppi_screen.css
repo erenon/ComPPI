@@ -410,6 +410,9 @@ table#ps-interactionStats.fancy_table tbody:before {
 label#fIntFiltLocLabel { width: 120px; }
 #fIntFiltLocContainer { float: right; margin: 2px 0 25px 0; }
 
+#ps-download { width: 650px; margin-top: 20px; text-align: center; }
+#ps-download a.btn { display: block; width: 410px; height: 25px; margin: 1em auto 0 auto; padding: 10px 10px; }
+
 .ps-resultsHeader { text-align: left; }
 .ps-resultsHeader h1 { float: left; width: 300px; margin: 0; text-align: left; font-weight: 200;  }
 .ps-actorA { padding: 10px 20px; width: 80px; border-top: 1px dotted #909090; height:  100%; text-align: center !important; }

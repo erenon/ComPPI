@@ -733,6 +733,124 @@ class ProteinSearchController extends Controller
 				}
 			}
 			
+			// downloadable dataset
+			if ($get_interactions=='download') {
+				$dl_filename = 'comppi--interactors_of_' . $T['protein']['name'] . '.csv';
+				session_cache_limiter('none');
+				
+				$response = new Response();
+				$response->headers->set('Content-Description', 'File Transfer');
+				$response->headers->set('Cache-Control', 'no-cache');
+				$response->headers->set('Pragma', 'public');
+				$response->headers->set('Content-Type', 'application/octet-stream');
+				$response->headers->set('Content-Transfer-Encoding', 'binary');
+				$response->headers->set('Expires', '0');
+				$response->headers->set('Content-Disposition', 'attachment; filename="'.$dl_filename.'"');
+				// stream_copy_to_stream() or file_get_contents() would be nicer, but that is a memory hog
+				// Symfony2.1's StreamedResponse is not available in 2.0
+				$response->sendHeaders();
+				ob_clean();
+				flush();
+				
+				// @see http://comppi.linkgroup.hu/help/downloads
+				// header
+				echo 'name'. "\t"
+					.'canonical_name' . "\t"
+					.'naming_convention' . "\t"
+					.'localization_major' . "\t"
+					.'localization_go(score)' . "\t"
+					.'localization_exp_sys_types' . "\t"
+					.'localization_source_dbs' . "\t"
+					//.'localization_pubmed_id' . "\t"
+					.'taxonomy_id'
+					."\n";
+				
+				// key protein
+				$tax_id = $this->species_list[$T['protein']['specieId']];
+				if (!empty($T['protein']['locs'])) {
+					$major_locs = array();
+					$minor_locs = array();
+					$exp_sys_type = array();
+					$source_dbs = array();
+					//$pubmed_ids = array();
+					
+					foreach ($T['protein']['locs'] as $l) {
+						$major_locs[] = $l['large_loc'];
+						$minor_locs[] = $l['go_code'] . '('.$l['loc_score'].')';
+						$exp_sys_type[] = $l['loc_exp_sys'];
+						$source_dbs[] = $l['source_db'];
+						//$pubmed_ids[] = $l['loc_exp_sys_type'];
+					}
+					
+					$major_locs = implode('|', array_unique($major_locs));
+					$minor_locs = implode('|', $minor_locs);
+					$exp_sys_type = implode('|', $exp_sys_type);
+					$source_dbs = implode('|', $source_dbs);
+					//$pubmed_ids = implode('|', $pubmed_ids);
+				} else {
+					$major_locs = '';
+					$minor_locs = '';
+					$exp_sys_type = '';
+					$source_dbs = '';
+					//$pubmed_ids = '';
+				}
+				
+				echo $T['protein']['name'] . "\t"
+					.(!empty($T['protein']['full_name']) ? $T['protein']['full_name'] : '') . "\t"
+					.$T['protein']['naming'] . "\t"
+					.$major_locs . "\t"
+					.$minor_locs . "\t"
+					.$exp_sys_type . "\t"
+					.$source_dbs . "\t"
+					//.$pubmed_ids . "\t"
+					.$tax_id
+					."\n";
+
+				// interactors
+				foreach ($T['ls'] as $pid => $d) {
+					if (!empty($d['locs'])) {
+						$major_locs = array();
+						$minor_locs = array();
+						$exp_sys_type = array();
+						$source_dbs = array();
+						//$pubmed_ids = array();
+						
+						foreach ($d['locs'] as $l) {
+							$major_locs[] = $l['large_loc'];
+							$minor_locs[] = $l['go_code'] . '('.$l['loc_score'].')';
+							$exp_sys_type[] = $l['loc_exp_sys'];
+							$source_dbs[] = $l['source_db'];
+							//$pubmed_ids[] = $l['loc_exp_sys_type'];
+						}
+						
+						$major_locs = implode('|', array_unique($major_locs));
+						$minor_locs = implode('|', $minor_locs);
+						$exp_sys_type = implode('|', $exp_sys_type);
+						$source_dbs = implode('|', $source_dbs);
+						//$pubmed_ids = implode('|', $pubmed_ids);
+					} else {
+						$major_locs = '';
+						$minor_locs = '';
+						$exp_sys_type = '';
+						$source_dbs = '';
+						//$pubmed_ids = '';
+					}
+					
+					echo $d['prot_name'] . "\t"
+						.(!empty($d['syn_fullname']) ? $d['syn_fullname'] : '') . "\t"
+						.$d['prot_naming'] . "\t"
+						.$major_locs . "\t"
+						.$minor_locs . "\t"
+						.$exp_sys_type . "\t"
+						.$source_dbs . "\t"
+						//.$pubmed_ids . "\t"
+						.$tax_id
+						."\n";
+				}
+				
+				exit();
+			}
+			
 			// network visualization: assemble network
 			$json_links = array();
 			$key_node_id = count($json_nodes);
@@ -1041,7 +1159,7 @@ class ProteinSearchController extends Controller
 
 	/**
 	 * Current test protein: P04637 = ComPPI ID: 17387
-	 * Gets the first neighbours of a node with their connections to earch other (or optionally all of their interactions). Writes a tab-separated text file with rows like: "locA.nodeA\tlocB.nodeB\n".
+	 * Gets the first neighbours of a node with their connections to earch other (or optionally all of their interactions). Writes a tab-separated text file with rows like: "locA.nodeA'. "\t" .'locB.nodeB\n".
 	 * @param int $comppi_id The ComPPI ID of the starting node */
 	public function subgraphAction($comppi_id)
 	{
