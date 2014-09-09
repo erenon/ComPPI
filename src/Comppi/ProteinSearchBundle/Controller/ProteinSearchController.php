@@ -24,56 +24,6 @@ class ProteinSearchController extends Controller
 		'secretory-pathway' => 'Secretory Pathway',
 		'membrane' => 'Membrane',
 	);
-	private $minor_loc_abbr_patterns = array(
-		'EXP',
-		'IDA',
-		'IPI',
-		'IMP',
-		'IGI',
-		'IEP',
-		'ISS',
-		'ISO',
-		'ISA',
-		'ISM',
-		'IGC',
-		'IBA',
-		'IBD',
-		'IKR',
-		'IRD',
-		'RCA',
-		'TAS',
-		'NAS',
-		'IC',
-		'ND',
-		'IEA',
-		'NR',
-		'SVM'
-	);
-	private $minor_loc_abbr_replacements = array(
-		'Inferred from Experiment',
-		'Inferred from Direct Assay',
-		'Inferred from Physical Interaction',
-		'Inferred from Mutant Phenotype',
-		'Inferred from Genetic Interaction',
-		'Inferred from Expression Pattern',
-		'Inferred from Sequence or Structural Similarity',
-		'Inferred from Sequence Orthology',
-		'Inferred from Sequence Alignment',
-		'Inferred from Sequence Model',
-		'Inferred from Genomic Context',
-		'Inferred from Biological aspect of Ancestor',
-		'Inferred from Biological aspect of Descendant',
-		'Inferred from Key Residues',
-		'Inferred from Rapid Divergence',
-		'inferred from Reviewed Computational Analysis',
-		'Traceable Author Statement',
-		'Non-traceable Author Statement',
-		'Inferred by Curator',
-		'No biological Data available',
-		'Inferred from Electronic Annotation',
-		'Not Recorded',
-		'Support Vector Machine'
-	);
 	private $verbose = false;
 	//private $verbose_log = array();
 	private $uniprot_root = 'http://www.uniprot.org/uniprot/';
@@ -1005,30 +955,13 @@ class ProteinSearchController extends Controller
 		while ($p = $r_pl->fetch(\PDO::FETCH_OBJ))
 		{
 			$i++;
-			$mnlrc = 0; // minor loc replacement count
 			$tmp = array(); // buffer
 			$add = false; // flag determining if the row will be kept
 
 			// assemble the current localization data
 			$tmp['source_db'] = $p->sourceDb;
 			$tmp['pubmed_link'] = $this->linkToPubmed($p->pubmedId);
-			// loc exp sys type replacement: IPI -> IPI: Inferred From Physical Interaction
-			$loc_exp_sys = str_replace(
-				$this->minor_loc_abbr_patterns,
-				$this->minor_loc_abbr_replacements,
-				$p->exp_sys,
-				$mnlrc
-			);
-			if ($mnlrc) {
-				$tmp['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
-					.': '.$p->exp_sys
-					.' <span class="infobtn" title="'
-					.$p->exp_sys.': '.$loc_exp_sys.
-					'"> ? </span>';
-			} else {
-				$tmp['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
-					.': '.$p->exp_sys;
-			}
+			$tmp['loc_exp_sys'] = $this->exptype[$p->exp_sys_type] . ': ' . $p->exp_sys;
 			$tmp['loc_exp_sys_type'] = $p->exp_sys_type;
 			if (!empty($p->minorLocName)) {
 				$tmp['small_loc'] = ucfirst($p->minorLocName);
