@@ -24,56 +24,6 @@ class ProteinSearchController extends Controller
 		'secretory-pathway' => 'Secretory Pathway',
 		'membrane' => 'Membrane',
 	);
-	private $minor_loc_abbr_patterns = array(
-		'EXP',
-		'IDA',
-		'IPI',
-		'IMP',
-		'IGI',
-		'IEP',
-		'ISS',
-		'ISO',
-		'ISA',
-		'ISM',
-		'IGC',
-		'IBA',
-		'IBD',
-		'IKR',
-		'IRD',
-		'RCA',
-		'TAS',
-		'NAS',
-		'IC',
-		'ND',
-		'IEA',
-		'NR',
-		'SVM'
-	);
-	private $minor_loc_abbr_replacements = array(
-		'Inferred from Experiment',
-		'Inferred from Direct Assay',
-		'Inferred from Physical Interaction',
-		'Inferred from Mutant Phenotype',
-		'Inferred from Genetic Interaction',
-		'Inferred from Expression Pattern',
-		'Inferred from Sequence or Structural Similarity',
-		'Inferred from Sequence Orthology',
-		'Inferred from Sequence Alignment',
-		'Inferred from Sequence Model',
-		'Inferred from Genomic Context',
-		'Inferred from Biological aspect of Ancestor',
-		'Inferred from Biological aspect of Descendant',
-		'Inferred from Key Residues',
-		'Inferred from Rapid Divergence',
-		'inferred from Reviewed Computational Analysis',
-		'Traceable Author Statement',
-		'Non-traceable Author Statement',
-		'Inferred by Curator',
-		'No biological Data available',
-		'Inferred from Electronic Annotation',
-		'Not Recorded',
-		'Support Vector Machine'
-	);
 	private $verbose = false;
 	//private $verbose_log = array();
 	private $uniprot_root = 'http://www.uniprot.org/uniprot/';
@@ -489,7 +439,8 @@ class ProteinSearchController extends Controller
 		
 		$T = array(
 			'comppi_id' => $comppi_id,
-			'ls' => array()
+			'ls' => array(),
+			'protein_search_network_json' => array()
 		);
 
 		// FILTER: CONFIDENCE SCORE THRESHOLD
@@ -692,7 +643,9 @@ class ProteinSearchController extends Controller
 			// synonyms for the interactor
 			$protein_synonyms = $this->getProteinSynonyms($protein_ids);
 
-			// interactors: update the existing skeleton (therefore reference is needed)
+			// interactors: update the existing skeleton (therefore reference is needed),
+			// also create the nodes array for visualization
+			$json_nodes = array();
 			foreach($T['ls'] as $pid => &$actor)
 			{
 				// keep the interaction e if no filtering is set, or
@@ -721,8 +674,154 @@ class ProteinSearchController extends Controller
 					// only if interaction is kept
 					$confScoreAvg += (float)$actor['orig_conf_score'];
 					$confCounter++;
+					
+					// network visualization: collect node data
+					$json_nodes[] = array(
+						'comppi_id' => $pid,
+						'name' => $T['ls'][$pid]['prot_name']
+					);
 				}
 			}
+			
+			// downloadable dataset
+			if ($get_interactions=='download') {
+				$dl_filename = 'comppi--interactors_of_' . $T['protein']['name'] . '.txt';
+				session_cache_limiter('none');
+				
+				$response = new Response();
+				$response->headers->set('Content-Description', 'File Transfer');
+				$response->headers->set('Cache-Control', 'no-cache');
+				$response->headers->set('Pragma', 'public');
+				$response->headers->set('Content-Type', 'application/octet-stream');
+				$response->headers->set('Content-Transfer-Encoding', 'binary');
+				$response->headers->set('Expires', '0');
+				$response->headers->set('Content-Disposition', 'attachment; filename="'.$dl_filename.'"');
+				// stream_copy_to_stream() or file_get_contents() would be nicer, but that is a memory hog
+				// Symfony2.1's StreamedResponse is not available in 2.0
+				$response->sendHeaders();
+				ob_clean();
+				flush();
+				
+				// @see http://comppi.linkgroup.hu/help/downloads
+				// header
+				echo 'Interactor'. "\t"
+					.'Canonical Name' . "\t"
+					.'Naming Convention' . "\t"
+					.'Major Loc With Loc Score' . "\t"
+					.'Minor Loc' . "\t"
+					.'Loc Experimental System Type' . "\t"
+					.'Loc Source DB' . "\t"
+					//.'localization_pubmed_id' . "\t"
+					.'Taxonomy ID'
+					."\n";
+				
+				// key protein
+				$tax_id = $this->species_list[$T['protein']['specieId']];
+				if (!empty($T['protein']['locs'])) {
+					$major_locs = array();
+					$minor_locs = array();
+					$exp_sys_type = array();
+					$source_dbs = array();
+					//$pubmed_ids = array();
+					
+					foreach ($T['protein']['locs'] as $l) {
+						$major_locs[] = $l['large_loc'] . '('.$l['loc_score'].')';
+						$minor_locs[] = $l['go_code'];
+						$exp_sys_type[] = $l['loc_exp_sys'];
+						$source_dbs[] = $l['source_db'];
+						//$pubmed_ids[] = $l['loc_exp_sys_type'];
+					}
+					
+					$major_locs = implode('|', array_unique($major_locs));
+					$minor_locs = implode('|', $minor_locs);
+					$exp_sys_type = implode('|', $exp_sys_type);
+					$source_dbs = implode('|', $source_dbs);
+					//$pubmed_ids = implode('|', $pubmed_ids);
+				} else {
+					$major_locs = '';
+					$minor_locs = '';
+					$exp_sys_type = '';
+					$source_dbs = '';
+					//$pubmed_ids = '';
+				}
+				
+				echo $T['protein']['name'] . "\t"
+					.(!empty($T['protein']['fullname']) ? $T['protein']['fullname'] : '') . "\t"
+					.$T['protein']['naming'] . "\t"
+					.$major_locs . "\t"
+					.$minor_locs . "\t"
+					.$exp_sys_type . "\t"
+					.$source_dbs . "\t"
+					//.$pubmed_ids . "\t"
+					.$tax_id
+					."\n";
+
+				// interactors
+				foreach ($T['ls'] as $pid => $d) {
+					if (!empty($d['locs'])) {
+						$major_locs = array();
+						$minor_locs = array();
+						$exp_sys_type = array();
+						$source_dbs = array();
+						//$pubmed_ids = array();
+						
+						foreach ($d['locs'] as $l) {
+							$major_locs[] = $l['large_loc'] . '('.$l['loc_score'].')';
+							$minor_locs[] = $l['go_code'];
+							$exp_sys_type[] = $l['loc_exp_sys'];
+							$source_dbs[] = $l['source_db'];
+							//$pubmed_ids[] = $l['loc_exp_sys_type'];
+						}
+						
+						$major_locs = implode('|', array_unique($major_locs));
+						$minor_locs = implode('|', $minor_locs);
+						$exp_sys_type = implode('|', $exp_sys_type);
+						$source_dbs = implode('|', $source_dbs);
+						//$pubmed_ids = implode('|', $pubmed_ids);
+					} else {
+						$major_locs = '';
+						$minor_locs = '';
+						$exp_sys_type = '';
+						$source_dbs = '';
+						//$pubmed_ids = '';
+					}
+					
+					echo $d['prot_name'] . "\t"
+						.(!empty($d['syn_fullname']) ? $d['syn_fullname'] : '') . "\t"
+						.$d['prot_naming'] . "\t"
+						.$major_locs . "\t"
+						.$minor_locs . "\t"
+						.$exp_sys_type . "\t"
+						.$source_dbs . "\t"
+						//.$pubmed_ids . "\t"
+						.$tax_id
+						."\n";
+				}
+				
+				exit();
+			}
+			
+			// network visualization: assemble network
+			$json_links = array();
+			$key_node_id = count($json_nodes);
+			foreach ($json_nodes as $nid => $nd) {
+				//$json_nodes[$nid]['index'] = $nid;
+				$json_links[] = array(
+					'source' => $key_node_id, // source is always the key protein
+					'target' => $nid, // target is an interactor
+					'weight' => $T['ls'][$nd['comppi_id']]['confScore'] // weight: confidence score from 'interactors skeleton'
+				);
+			}
+			// add the requested (key) protein only now to prevent self-loop
+			$json_nodes[$key_node_id] = array(
+				'comppi_id' => $comppi_id, // ID of the key protein
+				'name' => $T['protein']['name']
+			);
+			
+			$T['protein_search_network_json'] = json_encode(array(
+				'nodes' => $json_nodes,
+				'links' => $json_links
+			));
 		}
 
 		$T['protein']['interactionNumber'] = count($T['ls']);
@@ -856,30 +955,13 @@ class ProteinSearchController extends Controller
 		while ($p = $r_pl->fetch(\PDO::FETCH_OBJ))
 		{
 			$i++;
-			$mnlrc = 0; // minor loc replacement count
 			$tmp = array(); // buffer
 			$add = false; // flag determining if the row will be kept
 
 			// assemble the current localization data
 			$tmp['source_db'] = $p->sourceDb;
 			$tmp['pubmed_link'] = $this->linkToPubmed($p->pubmedId);
-			// loc exp sys type replacement: IPI -> IPI: Inferred From Physical Interaction
-			$loc_exp_sys = str_replace(
-				$this->minor_loc_abbr_patterns,
-				$this->minor_loc_abbr_replacements,
-				$p->exp_sys,
-				$mnlrc
-			);
-			if ($mnlrc) {
-				$tmp['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
-					.': '.$p->exp_sys
-					.' <span class="infobtn" title="'
-					.$p->exp_sys.': '.$loc_exp_sys.
-					'"> ? </span>';
-			} else {
-				$tmp['loc_exp_sys'] = $this->exptype[$p->exp_sys_type]
-					.': '.$p->exp_sys;
-			}
+			$tmp['loc_exp_sys'] = $this->exptype[$p->exp_sys_type] . ': ' . $p->exp_sys;
 			$tmp['loc_exp_sys_type'] = $p->exp_sys_type;
 			if (!empty($p->minorLocName)) {
 				$tmp['small_loc'] = ucfirst($p->minorLocName);
@@ -1010,7 +1092,7 @@ class ProteinSearchController extends Controller
 
 	/**
 	 * Current test protein: P04637 = ComPPI ID: 17387
-	 * Gets the first neighbours of a node with their connections to earch other (or optionally all of their interactions). Writes a tab-separated text file with rows like: "locA.nodeA\tlocB.nodeB\n".
+	 * Gets the first neighbours of a node with their connections to earch other (or optionally all of their interactions). Writes a tab-separated text file with rows like: "locA.nodeA'. "\t" .'locB.nodeB\n".
 	 * @param int $comppi_id The ComPPI ID of the starting node */
 	public function subgraphAction($comppi_id)
 	{

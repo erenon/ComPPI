@@ -410,6 +410,9 @@ table#ps-interactionStats.fancy_table tbody:before {
 label#fIntFiltLocLabel { width: 120px; }
 #fIntFiltLocContainer { float: right; margin: 2px 0 25px 0; }
 
+#ps-download { width: 650px; margin-top: 20px; text-align: center; }
+#ps-download a.btn { display: block; width: 410px; height: 25px; margin: 1em auto 0 auto; padding: 10px 10px; }
+
 .ps-resultsHeader { text-align: left; }
 .ps-resultsHeader h1 { float: left; width: 300px; margin: 0; text-align: left; font-weight: 200;  }
 .ps-actorA { padding: 10px 20px; width: 80px; border-top: 1px dotted #909090; height:  100%; text-align: center !important; }
@@ -446,6 +449,31 @@ label#fIntFiltLocLabel { width: 120px; }
 .ps-actorB table tr td:last-child, #ps-keyProtein table tr td:last-child { text-align: center; }
 
 .white-popup { text-align: center; font-weight: bold; font-size: 1.2em; color: #fff; }
+
+/* NETWORK VISUALIZATION */
+#ps-networkVis { text-align: center; }
+#ps-networkVisContainer { background-color: #fff; }
+.node {
+	fill: rgb(239, 113, 23);
+	stroke: rgb(240, 88, 23);
+	stroke-width: 1.5px;
+}
+.link {
+	stroke: rgb(107,110,114);
+	stroke-opacity: .5;
+}
+.label {
+	stroke: #505050;
+	stroke-width: 0.5px;
+	fill:  #505050;
+	/*fill-opacity: .6;*/
+	fill-width: 2;
+	stroke-opacity: 1;
+	stroke-linecap: butt;
+	stroke-linejoin: miter;
+	font-size: 12px;
+	font-family: "Arial", sans-serif;
+}
 
 
 /* DOWNLOADS */

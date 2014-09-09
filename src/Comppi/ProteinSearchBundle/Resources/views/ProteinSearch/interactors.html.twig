@@ -47,6 +47,11 @@
 	
 		<div class="clear-both"></div>
 	
+		<div class="fancy_box_body" id="ps-download">
+			The (filtered) results are available for download, see <a href="{{ path('ComppiDescriptionBundle_help') }}/tutorial#protein_search_download">the help for details</a>.
+			<a href="{{ comppi_id }}/download" class="btn" title="Click on the button to download a CSV file containing the key details of the searched protein and its interactors. The above set filtering parameters apply to the exported CSV too.">Download The Results</a>
+		</div>
+	
 		<table class="fancy_table" id="ps-interactionStats">
 		<tr>
 			<td><h3 class="ps-detailLabel">Species</h3></td>
@@ -118,6 +123,25 @@
 
 	<p class="center"><a href="{{ url('ComppiProteinSearchBundle_interactors', {'comppi_id': comppi_id, 'get_interactions': 1}) }}" class="btn btn_submit">Download The Interactions</a></p> #}
 
+	<a name="protein_search_network"></a>
+	{% if protein_search_network_json %}
+	<script type="">
+		graph = {{ protein_search_network_json|raw }}
+	</script>
+	<div class="fancy_box">
+		<h1>Network Visualization</h1>
+		<div id="ps-networkVis" class="fancy_box_body">
+		{% if protein_search_network_json %}
+		<div id="ps-networkVisContainer"></div>
+		{% endif %}
+		</div>
+	</div>
+	{% else %}
+	<script type="">
+		graph = {"nodes": [], "links": []}
+	</script>
+	{% endif %}
+	
 	{% if ls %}
 	<a name="interactors"></a>
 	<table class="fancy_table striped_table">
