@@ -754,15 +754,15 @@ class ProteinSearchController extends Controller
 				
 				// @see http://comppi.linkgroup.hu/help/downloads
 				// header
-				echo 'name'. "\t"
-					.'canonical_name' . "\t"
-					.'naming_convention' . "\t"
-					.'localization_major' . "\t"
-					.'localization_go(score)' . "\t"
-					.'localization_exp_sys_types' . "\t"
-					.'localization_source_dbs' . "\t"
+				echo 'Interactor'. "\t"
+					.'Canonical Name' . "\t"
+					.'Naming Convention' . "\t"
+					.'Major Loc With Loc Score' . "\t"
+					.'Minor Loc' . "\t"
+					.'Loc Experimental System Type' . "\t"
+					.'Loc Source DB' . "\t"
 					//.'localization_pubmed_id' . "\t"
-					.'taxonomy_id'
+					.'Taxonomy ID'
 					."\n";
 				
 				// key protein
@@ -775,8 +775,8 @@ class ProteinSearchController extends Controller
 					//$pubmed_ids = array();
 					
 					foreach ($T['protein']['locs'] as $l) {
-						$major_locs[] = $l['large_loc'];
-						$minor_locs[] = $l['go_code'] . '('.$l['loc_score'].')';
+						$major_locs[] = $l['large_loc'] . '('.$l['loc_score'].')';
+						$minor_locs[] = $l['go_code'];
 						$exp_sys_type[] = $l['loc_exp_sys'];
 						$source_dbs[] = $l['source_db'];
 						//$pubmed_ids[] = $l['loc_exp_sys_type'];
@@ -796,7 +796,7 @@ class ProteinSearchController extends Controller
 				}
 				
 				echo $T['protein']['name'] . "\t"
-					.(!empty($T['protein']['full_name']) ? $T['protein']['full_name'] : '') . "\t"
+					.(!empty($T['protein']['fullname']) ? $T['protein']['fullname'] : '') . "\t"
 					.$T['protein']['naming'] . "\t"
 					.$major_locs . "\t"
 					.$minor_locs . "\t"
@@ -816,8 +816,8 @@ class ProteinSearchController extends Controller
 						//$pubmed_ids = array();
 						
 						foreach ($d['locs'] as $l) {
-							$major_locs[] = $l['large_loc'];
-							$minor_locs[] = $l['go_code'] . '('.$l['loc_score'].')';
+							$major_locs[] = $l['large_loc'] . '('.$l['loc_score'].')';
+							$minor_locs[] = $l['go_code'];
 							$exp_sys_type[] = $l['loc_exp_sys'];
 							$source_dbs[] = $l['source_db'];
 							//$pubmed_ids[] = $l['loc_exp_sys_type'];
