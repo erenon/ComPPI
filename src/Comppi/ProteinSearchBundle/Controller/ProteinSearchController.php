@@ -685,7 +685,7 @@ class ProteinSearchController extends Controller
 			
 			// downloadable dataset
 			if ($get_interactions=='download') {
-				$dl_filename = 'comppi--interactors_of_' . $T['protein']['name'] . '.csv';
+				$dl_filename = 'comppi--interactors_of_' . $T['protein']['name'] . '.txt';
 				session_cache_limiter('none');
 				
 				$response = new Response();
