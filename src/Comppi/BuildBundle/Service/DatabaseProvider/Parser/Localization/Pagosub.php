@@ -49,6 +49,9 @@ class Pagosub extends AbstractLocalizationParser
             // EOF
             return;
         }
+        
+        // each line contains 44 localizations
+        $this->unfilteredEntryCount += 44;
 
         $recordArray = explode(", ", $line);
         $this->checkRecordFieldCount($recordArray, 46);

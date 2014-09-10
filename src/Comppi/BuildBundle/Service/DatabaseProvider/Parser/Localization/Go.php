@@ -26,6 +26,8 @@ class Go extends AbstractLocalizationParser
             // EOF
             return;
         }
+        
+        $this->unfilteredEntryCount++;
 
         /**
 		 * 0123456789

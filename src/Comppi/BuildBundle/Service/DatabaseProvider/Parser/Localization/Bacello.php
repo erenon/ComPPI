@@ -30,6 +30,8 @@ class Bacello extends AbstractLocalizationParser
         if ($line == '') {
             return $this->readRecord();
         }
+        
+        $this->unfilteredEntryCount++;
 
         $recordArray = preg_split('/ +/', $line);
         $this->checkRecordFieldCount($recordArray, 2);

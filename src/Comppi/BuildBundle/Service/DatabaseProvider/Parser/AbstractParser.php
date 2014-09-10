@@ -19,6 +19,8 @@ abstract class AbstractParser
 
     protected $currentIdx;
     protected $currentRecord;
+    
+    protected $unfilteredEntryCount = 0;
 
     public function __construct($fileName) {
         $this->fileName = $fileName;
@@ -116,5 +118,9 @@ abstract class AbstractParser
         }
 
         return $valid;
+    }
+    
+    public function getUnfilteredEntryCount() {
+    	return $this->unfilteredEntryCount;
     }
 }

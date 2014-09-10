@@ -20,6 +20,7 @@ class CcsbSc extends AbstractInteractionParser
             return;
         }
 
+        $this->unfilteredEntryCount++;
 
         $recordArray = explode("\t", $line);
         $this->checkRecordFieldCount($recordArray, 2);

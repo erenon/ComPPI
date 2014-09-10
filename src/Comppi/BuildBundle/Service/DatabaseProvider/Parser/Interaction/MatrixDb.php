@@ -22,6 +22,8 @@ class MatrixDb extends AbstractInteractionParser
                 // EOF
                 return;
             }
+            
+            $this->unfilteredEntryCount++;
 
             $recordArray = explode("\t", $line);
             $this->checkRecordFieldCount($recordArray, 24);

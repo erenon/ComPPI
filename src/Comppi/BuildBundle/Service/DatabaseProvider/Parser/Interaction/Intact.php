@@ -31,6 +31,8 @@ class Intact extends AbstractInteractionParser
                 // EOF
                 return;
             }
+            
+            $this->unfilteredEntryCount++;
 
             $recordArray = explode("\t", $line);
             $this->checkRecordFieldCount($recordArray, 42);

@@ -25,6 +25,8 @@ class Biogrid extends AbstractInteractionParser
                 // EOF
                 return;
             }
+            
+            $this->unfilteredEntryCount++;
 
             $recordArray = explode("\t", $line);
 

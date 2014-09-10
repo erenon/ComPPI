@@ -76,6 +76,8 @@ class Organelle extends AbstractLocalizationParser
             // EOF
             return;
         }
+        
+        $this->unfilteredEntryCount++;
 
         $recordArray = explode("\t", $line);
 

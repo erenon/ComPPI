@@ -65,6 +65,9 @@ class Ptarget extends AbstractLocalizationParser
             // EOF
             return;
         }
+        
+        $this->unfilteredEntryCount++;
+        
         /**
          * 0 => proteinId
          * 1 => localization

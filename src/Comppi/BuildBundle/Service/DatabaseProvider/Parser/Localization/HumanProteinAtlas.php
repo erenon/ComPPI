@@ -77,6 +77,7 @@ class HumanProteinAtlas extends AbstractLocalizationParser
         // skip if not relaiable or no localization presented
         if ($recordArray[4] === 'Non-supportive' || $recordArray[1] === '') {
             // skip this record
+        	$this->unfilteredEntryCount++;
             return $this->readRecord();
         }
 
@@ -86,6 +87,8 @@ class HumanProteinAtlas extends AbstractLocalizationParser
         }
 
         $locals = explode(';', $recordArray[1]);
+        
+        $this->unfilteredEntryCount += count($locals);
 
         $this->currentLine = array(
             'localization' => $locals

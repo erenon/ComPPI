@@ -86,6 +86,7 @@ class Mips extends AbstractInteractionParser
                 } elseif ($this->status == self::ST_XREF) {
                     if (!isset($attributes['id'])) {
                         // participant not specified, drop interaction
+                    	$this->unfilteredEntryCount++;
                         $this->status = self::ST_START;
                         break;
                     }
@@ -129,6 +130,7 @@ class Mips extends AbstractInteractionParser
 
                     // 9606: Human taxonomy id
                     if ($specieId != '9606') {
+                    	$this->unfilteredEntryCount++;
                         // interspecie interaction, drop record
                         $this->status = self::ST_START;
                     }
@@ -207,6 +209,7 @@ class Mips extends AbstractInteractionParser
     protected function readRecord() {
         while (count($this->interactionStack) == 0 && !feof($this->fileHandle)) {
             $this->readInteraction();
+            $this->unfilteredEntryCount += count($this->interactionStack);
         }
 
         if (count($this->interactionStack) > 0) {
