@@ -81,7 +81,10 @@ class ComppiStandard implements CalculatorInterface
 	  $foundloc=true;
 	 }
 	 if($foundloc==false) //no localization information, empty set received
-	 {echo("Warning: No localization information for protein #".$protein['id']."!\n"); continue;}
+	 {
+	 	//echo("Warning: No localization information for protein #".$protein['id']."!\n"); 
+	 	continue;
+	 }
 
 	 foreach($entries as $ProteinLocalization => $pla)
 	 {
