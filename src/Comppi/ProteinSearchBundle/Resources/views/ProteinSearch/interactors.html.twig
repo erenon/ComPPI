@@ -129,11 +129,12 @@
 		graph = {{ protein_search_network_json|raw }}
 	</script>
 	<div class="fancy_box">
-		<h1>Network Visualization</h1>
+		<h1>First Neighbor Network Visualization</h1>
 		<div id="ps-networkVis" class="fancy_box_body">
 		{% if protein_search_network_json %}
 		<div id="ps-networkVisContainer"></div>
 		{% endif %}
+		<p>The first neighbor network shows the interaction map after the filtration (if there was any). Edge-widths are proportional to the respective interaction score.</p>
 		</div>
 	</div>
 	{% else %}
