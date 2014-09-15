@@ -88,7 +88,9 @@
 	
 	<p>The Gene Ontology subcellular localization data is a major data source for ComPPI.
 	It classifies the GO cellular component annotations by <a href="http://www.geneontology.org/GO.evidence.shtml">evidence level</a>,
-	which allows us to deal with a more detailed subcellular localization dataset.</p>
+	which allows us to deal with a more detailed subcellular localization dataset. One exeption of the classification in ComPPI compared to GO is the
+	<a href="http://geneontology.org/page/ipi-inferred-physical-interaction">Inferred from Physical Interaction (IPI)</a>,
+	which is treated as a predicted evidence, according to its origin from interaction detection experiments.</p>
 	
 	<p>The structure of the GO evidence levels and the resolved abbreviations in the source data:
 	<ul>
@@ -115,7 +117,7 @@
 				<li>RCA: inferred from Reviewed Computational Analysis</li>
 			</ul>
 		<li>Unknown</li>
-			<ul>f
+			<ul>
 				<li>TAS: Traceable Author Statement</li>
 				<li>NAS: Non-traceable Author Statement</li>
 				<li>IC: Inferred by Curator</li>
