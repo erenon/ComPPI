@@ -49,7 +49,7 @@
 	
 		<div class="fancy_box_body" id="ps-download">
 			The (filtered) results are available for download, see <a href="{{ path('ComppiDescriptionBundle_help') }}/tutorial#protein_search_download">the help for details</a>.
-			<a href="{{ comppi_id }}/download" class="btn" title="Click on the button to download a CSV file containing the key details of the searched protein and its interactors. The above set filtering parameters apply to the exported CSV too.">Download The Results</a>
+			<a href="{{ comppi_id }}/download" class="btn" title="Click on the button to download a TXT file containing the key details of the searched protein and its interactors. The above set filtering parameters apply to the exported TXT too.">Download The Results</a>
 		</div>
 	
 		<table class="fancy_table" id="ps-interactionStats">
@@ -129,12 +129,12 @@
 		graph = {{ protein_search_network_json|raw }}
 	</script>
 	<div class="fancy_box">
-		<h1>First Neighbor Network Visualization</h1>
+		<h1>First-Neighbour Network Visualization</h1>
 		<div id="ps-networkVis" class="fancy_box_body">
 		{% if protein_search_network_json %}
 		<div id="ps-networkVisContainer"></div>
 		{% endif %}
-		<p>The first neighbor network shows the interaction map after the filtration (if there was any). Edge-widths are proportional to the respective interaction score.</p>
+		<p>The first-neighbour network shows the interaction map after the filtration (if there was any). Edge-widths are proportional to the respective Interaction Score.</p>
 		</div>
 	</div>
 	{% else %}

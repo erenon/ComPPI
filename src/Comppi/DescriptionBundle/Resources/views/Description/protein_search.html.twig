@@ -34,8 +34,13 @@
         
         <p align="justify">On the results page the user could filter the interactions by the <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#structure">6 major subcellular localizations</a>,
         <a href="{{ path('ComppiDescriptionBundle_help') }}/scores#locscore">localization score thresholds</a> 
-        and <a href="{{ path('ComppiDescriptionBundle_help') }}/scores#intscore">interaction score thresholds</a> of the interacting partners.</p>        
-
+        and <a href="{{ path('ComppiDescriptionBundle_help') }}/scores#intscore">interaction score thresholds</a> of the interacting partners.
+	The (filtered) results are available for <a href="#export">download</a> in Tab-limited Text format.
+	
+	<p align="justify">Network visualization of the interactome is also available on the results page.
+	The first-neighbour network shows the interaction map after the filtration (if there was any).
+	Edge-widths are proportional to the respective <a href="{{ path('ComppiDescriptionBundle_help') }}/scores#intscore">Interaction Score</a>.</p>
+	
         <p align="justify">A <b>Direct Protein ID Search</b> option is also available using the following URL format:
         http://comppi.linkgroup.hu/protein_search/{protein ID, such as the requested UniProtKB accesison}.
         Try this example to explore the interactions of the Polyductin protein: <a href="http://comppi.linkgroup.hu/protein_search/P08F94">http://comppi.linkgroup.hu/protein_search/P08F94</a></p>
@@ -105,6 +110,23 @@
             <li>the <b>Synonyms</b> of the query protein contain all the protein names stored in the ComPPI database</li>
             <li>the <b>Interaction Source Database</b> lists the source databases for the given interaction</li>
             <li>the <b>Interaction Source Publication</b> lists the publications of the sources for the given interaction</li>
+        </ol></p>
+	
+	<a name="export"></a>
+		<h2>Properties of the downloadable data</h2>
+        
+        <p align="justify">The structure of the properties of the query protein and its interacting partners is the following:
+        <ol>
+            <li><b>Interactor</b>: UniProt accession of the query protein in the first rao, and of its interactors in the following rows</li>
+            <li><b>Canonical Name</b>: UniProt full and short names of the proteins</li>
+            <li><b>Naming Convention</b>: Swiss-Prot or TrEmbl UniProt accession</li>
+            <li><b>Major Loc With Loc Score</b>: list of the major cellular components and the relevant Localization Scores</li>
+            <li><b>Minor Loc</b>: list of the GO terms of the minor cellular components</li>
+	    <li><b>Loc Experimental System Type</b>: contains the system type of the localization data: experimental, predicted, or unknown with more detailed name if it was available</li>
+            <li><b>Loc Source DB</b>: list of the source databases of the given entry</li>
+	    <!--<li><b>Taxonomy ID</b>: the taxonomy ID gives the species</li>
+	    <li><b>Interaction Source Database</b>: list of the source databases for the given interaction</li>
+            <li><b>Interaction Source Publication</b> list of the publications of the sources for the given interaction</li>-->
         </ol></p>
 
 	<p class="backToTOC"><a href="{{ path('ComppiDescriptionBundle_help') }}">&#x21e6; Back to Help Table of Contents</a>
