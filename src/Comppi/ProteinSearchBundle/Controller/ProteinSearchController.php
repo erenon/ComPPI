@@ -16,6 +16,12 @@ class ProteinSearchController extends Controller
 		2 => 'C. elegans',
 		3 => 'S. cerevisiae'
 	);
+	private $tax_ids = array(
+		0 => '9606', # H. sapiens
+		1 => '7227', # D. melanogaster
+		2 => '6239', # C. elegans
+		3 => '4932' # S. cerevisiae
+	);
 	private $majorloc_list = array (
 		'cytoplasm' => 'Cytosol',
 		'mitochondrion' => 'Mitochondrion',
@@ -712,11 +718,12 @@ class ProteinSearchController extends Controller
 					.'Loc Experimental System Type' . "\t"
 					.'Loc Source DB' . "\t"
 					//.'localization_pubmed_id' . "\t"
+					.'Interaction Source DB' . "\t"
 					.'Taxonomy ID'
 					."\n";
 				
 				// key protein
-				$tax_id = $this->species_list[$T['protein']['specieId']];
+				$tax_id = $this->tax_ids[(int)$T['protein']['specieId']];
 				if (!empty($T['protein']['locs'])) {
 					$major_locs = array();
 					$minor_locs = array();
@@ -752,6 +759,7 @@ class ProteinSearchController extends Controller
 					.$minor_locs . "\t"
 					.$exp_sys_type . "\t"
 					.$source_dbs . "\t"
+					.'' . "\t"
 					//.$pubmed_ids . "\t"
 					.$tax_id
 					."\n";
@@ -793,6 +801,7 @@ class ProteinSearchController extends Controller
 						.$minor_locs . "\t"
 						.$exp_sys_type . "\t"
 						.$source_dbs . "\t"
+						.(!empty($d['int_source_db']) ? join('|', $d['int_source_db']) : '') . "\t"
 						//.$pubmed_ids . "\t"
 						.$tax_id
 						."\n";
