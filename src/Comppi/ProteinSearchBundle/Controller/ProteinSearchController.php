@@ -23,7 +23,7 @@ class ProteinSearchController extends Controller
 		3 => '4932' # S. cerevisiae
 	);
 	private $majorloc_list = array (
-		'cytoplasm' => 'Cytosol',
+		'cytosol' => 'Cytosol',
 		'mitochondrion' => 'Mitochondrion',
 		'nucleus' => 'Nucleus',
 		'extracellular' => 'Extracellular',
@@ -495,13 +495,10 @@ class ProteinSearchController extends Controller
 				'name' => $mloc_name,
 				'checked' => true
 			);
+			$_SESSION['majorloc_list'][$mloc_code] = true;
 			// set the requested value if the form was posted
 			if ($request_m=='POST' && !isset($_POST['fIntFiltReset'])) {
-				if (isset($_POST['fIntFiltLoc'][(string)$mloc_code])) {
-					$_SESSION['majorloc_list'][$mloc_code] = true;
-				}
-				else
-				{
+				if (!isset($_POST['fIntFiltLoc'][(string)$mloc_code])) {
 					$T['majorloc_list'][$mloc_code]['checked']
 						= $_SESSION['majorloc_list'][$mloc_code]
 						= false;
@@ -516,6 +513,7 @@ class ProteinSearchController extends Controller
 			}
 			// else would be the default, already set above
 		}
+		var_dump($_SESSION['majorloc_list']);
 		$requested_major_locs = [];
 		foreach ($T['majorloc_list'] as $mloc_name => $mloc_d)
 		{
