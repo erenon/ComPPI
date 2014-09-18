@@ -82,8 +82,8 @@
         <p align="justify">Localization <a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#expsystype">evidence type</a> can be experimental, unknown or predicted.
         Each of these is described by a parameter called the evidence type weight, and the ratio of these weights to each other has to be determined to achieve a unified scoring system applicable to the diverse data sources.
         We performed therefore data-driven optimization of the localization evidence type weights.
-        Considering the ComPPI dataset the only requirement of the optimization was formalized as experimental&nbsp;>&nbsp;unknown&nbsp;≥&nbsp;predicted.
-        This requirement is based on the fact that experimental entries are the most reliable, while localization entries coming from unknown origin could be experimental or predicted as well.
+        Based on the fact that experimentally validated entries are the most reliable, while localization entries coming from unknown or predicted origin are less reliable,
+	we set the following order of evidence type weights: experimental > predicted AND experimental > unknown as the two requirements of the optimization process. 
         We chose the <a href="http://www.proteinatlas.org/">Human Protein Atlas (HPA)</a> database containing only experimentally verified subcellular localizations in order to build a positive
         control dataset, where the interactros have at least one common localization according to HPA.</p>
         

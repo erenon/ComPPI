@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# usage:
+# python3 comppi_data_overlap.py
+
 #from matplotlib_venn import venn3
 import networkx as nx
 import itertools
@@ -10,7 +13,7 @@ from export_downloads import ComppiInterface
 species_filter = -1
 
 # group of custom sources, currently set to protein-protein interaction databases
-custom_source_group = ['MINT', 'IntAct', 'MIPS', 'DroID', 'MatrixDB', 'BioGRID', 'HPRD', 'HomoMINT', 'DIP', 'CCSB']
+custom_source_group = ['MINT', 'IntAct', 'MIPS', 'DroID', 'MatrixDB', 'BioGRID', 'HPRD', 'DIP', 'CCSB']
 # all proteins from ANY source DB (not intersection, but union!!)
 # SELECT COUNT(DISTINCT id) FROM Protein WHERE id IN ( SELECT proteinId FROM ProteinToDatabase WHERE sourceDb IN ('MINT', 'IntAct', 'MIPS', 'MatrixDB', 'DroID', 'BioGRID', 'HPRD', 'HomoMINT', 'DIP', 'CCSB') );
 

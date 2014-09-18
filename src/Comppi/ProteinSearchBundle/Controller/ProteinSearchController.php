@@ -16,8 +16,14 @@ class ProteinSearchController extends Controller
 		2 => 'C. elegans',
 		3 => 'S. cerevisiae'
 	);
+	private $tax_ids = array(
+		0 => '9606', # H. sapiens
+		1 => '7227', # D. melanogaster
+		2 => '6239', # C. elegans
+		3 => '4932' # S. cerevisiae
+	);
 	private $majorloc_list = array (
-		'cytoplasm' => 'Cytosol',
+		'cytosol' => 'Cytosol',
 		'mitochondrion' => 'Mitochondrion',
 		'nucleus' => 'Nucleus',
 		'extracellular' => 'Extracellular',
@@ -489,13 +495,10 @@ class ProteinSearchController extends Controller
 				'name' => $mloc_name,
 				'checked' => true
 			);
+			$_SESSION['majorloc_list'][$mloc_code] = true;
 			// set the requested value if the form was posted
 			if ($request_m=='POST' && !isset($_POST['fIntFiltReset'])) {
-				if (isset($_POST['fIntFiltLoc'][(string)$mloc_code])) {
-					$_SESSION['majorloc_list'][$mloc_code] = true;
-				}
-				else
-				{
+				if (!isset($_POST['fIntFiltLoc'][(string)$mloc_code])) {
 					$T['majorloc_list'][$mloc_code]['checked']
 						= $_SESSION['majorloc_list'][$mloc_code]
 						= false;
@@ -510,6 +513,7 @@ class ProteinSearchController extends Controller
 			}
 			// else would be the default, already set above
 		}
+		var_dump($_SESSION['majorloc_list']);
 		$requested_major_locs = [];
 		foreach ($T['majorloc_list'] as $mloc_name => $mloc_d)
 		{
@@ -712,11 +716,12 @@ class ProteinSearchController extends Controller
 					.'Loc Experimental System Type' . "\t"
 					.'Loc Source DB' . "\t"
 					//.'localization_pubmed_id' . "\t"
+					.'Interaction Source DB' . "\t"
 					.'Taxonomy ID'
 					."\n";
 				
 				// key protein
-				$tax_id = $this->species_list[$T['protein']['specieId']];
+				$tax_id = $this->tax_ids[(int)$T['protein']['specieId']];
 				if (!empty($T['protein']['locs'])) {
 					$major_locs = array();
 					$minor_locs = array();
@@ -752,6 +757,7 @@ class ProteinSearchController extends Controller
 					.$minor_locs . "\t"
 					.$exp_sys_type . "\t"
 					.$source_dbs . "\t"
+					.'' . "\t"
 					//.$pubmed_ids . "\t"
 					.$tax_id
 					."\n";
@@ -793,6 +799,7 @@ class ProteinSearchController extends Controller
 						.$minor_locs . "\t"
 						.$exp_sys_type . "\t"
 						.$source_dbs . "\t"
+						.(!empty($d['int_source_db']) ? join('|', $d['int_source_db']) : '') . "\t"
 						//.$pubmed_ids . "\t"
 						.$tax_id
 						."\n";
