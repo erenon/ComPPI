@@ -48,9 +48,9 @@
 	<p align="justify"><a href="{{ path('ComppiDescriptionBundle_help') }}/subcell_locs#origin">Subcellular localization</a>
 	data contains diverse evidence types, therefore the evidence type weights were <a href="#scoreopt">optimized</a> as: 
 		<ul>
-			<li>p=0.7 experimentally verified</li>
-			<li>p=0.5 unknown interaction type</li>
-			<li>p=0.5 predicted evidence</li>
+			<li>p=0.8 experimentally verified</li>
+			<li>p=0.7 predicted evidence</li>
+			<li>p=0.3 unknown interaction type</li>
 		</ul>
 	</p>
 	
@@ -91,11 +91,12 @@
         in the positive control dataset (HPA) and simultaneously maximizes the number of low confidence interactions in the ComPPI dataset not containing HPA data.
         These ensure that the quality of data marked as high confidence will match the quality of experimentally verified data.
         All combinations of the experimental, unknown and predicted evidence type weights were set up from 0 to 1 with 0.1 increments.
-        The <a href="http://en.wikipedia.org/wiki/Kernel_density_estimation">kernel density</a> of the interactions were calculated with all these settings, which gave us the ratio of interactions belonging to a given confidence level compared to the distribution of all the interactions. Lastly, the 167 possible kernel density solutions were tested (see all possible solutions on the video below) to find the parameter combination that maximizes the number of both the low and high confidence interactions as described above.</p>
+        The <a href="http://en.wikipedia.org/wiki/Kernel_density_estimation">kernel density</a> of the interactions were calculated with all these settings, which gave us the ratio of interactions belonging to a given confidence level compared to the distribution of all the interactions.
+	Lastly, the 285 possible kernel density solutions were tested (see all possible solutions on the video below) to find the parameter combination that maximizes the number of both the low and high confidence interactions as described above.</p>
         
-        <p align="justify">This resulted in 0.7, 0.5, and 0.5 as the relative evidence type weights for experimental, unknown and predicted data types, respectively. </p>
+        <p align="justify">This resulted in 0.8, 0.7, and 0.3 as the relative evidence type weights for experimental, predicted and unknown data types, respectively. </p>
         
-        <iframe width="420" height="315" src="//www.youtube.com/embed/kekB0_YU494" frameborder="0" allowfullscreen></iframe>
+        <iframe width="420" height="315" src="//www.youtube.com/embed/uAt8_IsjkgQ" frameborder="0" allowfullscreen></iframe>
 		
 		<img src="http://www.linkgroup.hu/pic/score_optimum.jpg" height="315" alt="The kernel density distribution with evidence type weight parameters experimental: 0.7, unknown: 0.5, predicted: 0.5." />
         

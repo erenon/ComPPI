@@ -7,14 +7,25 @@
 	<h1><ul class="NavMenu"><li><a href="{{ path('ComppiDescriptionBundle_help') }}">Help</a></li><li>Protein Naming Conventions</li></ul></h1>
 	
         <br />
-	<p align='justify'>Source databases use different protein naming conventions.
-        To ensure maximal connectivity of data we translate each protein name found in the input sources to the most appropriate naming convention available.
+        <p align='justify'>Integration of source databases which use different protein naming conventions is challenging.
+        To ensure maximal connectivity of data we translate each protein name found in the input sources to the most appropriate naming convention available using protein name maps.
         Naming conventions used throughout the sources form a total order, the strongest one is the primary <a href="http://www.uniprot.org/faq/7">UniProtKB Swiss-Prot</a> accession <i><b>(30% of the proteins)</b></i>.
         If Swiss-Prot name not found we provide <a href="http://www.uniprot.org/faq/7">UniProtKB TrEMBL</a> accessions <i><b>(70% of the proteins)</b></i>. The <a href="ftp://ftp.uniprot.org/pub/databases/uniprot/previous_releases/release-2014_04/">2014_04 release</a> of UniProtKB was used.
         To learn more about the UniProtKB database click <a href="http://www.uniprot.org/help/uniprotkb">here</a>.</p>
         
-        <p align='justify'>The total order ensures we can efficiently map the maximal amount of protein names possible to a common convention.
-        This mechanism also provides us a way to connect various synonyms to each protein name.</p>
+        <p align='justify'>Naming conventions are ordered and available maps form a tree, as the example image shows below:</p>
+
+        <img src="http://www.linkgroup.hu/pic/mapping.png" height="315" alt="Protein name mapping example." />
+
+        <p align='justify'>Each time the system encounters a new protein name, it tries to move it as high in the tree as possible, as far the available maps allow it.
+        This method exhaustively travels the mapping information available and provides the best possible integration.</p>
+
+        <p align='justify'><b>Example</b>: assume a protein-protein interaction source mentions a RefSeq name `NP_005205`. Using the tree of maps, first, it will be translated to its EnsembleGeneId name, `ENSG00000163599`,
+        then comes UniProtKB-AC (which is `P16410`) and at last, the UniProtKB/Swiss-Prot name: P16410. Assume some other protein localization source uses UniProtFull names.
+        Following the same method, `Cytotoxic T-lymphocyte protein 4 precursor` will be translated to P16410, and at the end the two different sources match.</p>
+
+        <p align='justify'>Aside its great performance, this protein name search tree also provides a way to search for synonyms, by traversing the tree top to bottom.
+        ComPPI takes advantage of this and lists several synonyms for each protein.</p>
 
         <p align='justify'>During this process we used protein ID mapping tables from the <a href="ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/">UniProtKB</a>
         and the <a href="http://www.hprd.org/download">Human Protein Reference Database</a>
