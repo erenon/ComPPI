@@ -52,8 +52,8 @@ class ComppiInterface(object):
 		'scerevisiae': 3, # S. cerevisiae
 		'all': 4
 	}
-	locs = ['cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane']
-	loc_opts = ['cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane', 'all']
+	locs = ['cytosol', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane']
+	loc_opts = ['cytosol', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane', 'all']
 	exp_system_types = {
 		0: 'Unknown',
 		1: 'Experimental',
@@ -463,7 +463,7 @@ class ComppiInterface(object):
 				curr_p['loc_exp_sys_merged'].append(all_exp_sys.get(exp_sys_id))
 
 				# record one major loc only once
-				# example: loc_scores: {'cytoplasm': 0.9, 'nucleus': 0.5}
+				# example: loc_scores: {'cytosol': 0.9, 'nucleus': 0.5}
 				curr_p.setdefault('loc_scores', {})
 				curr_ls = loc_scores.get(pid, {})
 				for curr_maj_loc, curr_score in curr_ls.items():
@@ -842,7 +842,7 @@ if __name__ == '__main__':
 	main_parser.add_argument(
 		'-l',
 		'--loc',
-		choices=['cytoplasm', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane', 'all'],
+		choices=['cytosol', 'extracellular', 'mitochondrion', 'secretory-pathway', 'nucleus', 'membrane', 'all'],
 		help="Major localization.")
 	main_parser.add_argument(
 		'-n',
