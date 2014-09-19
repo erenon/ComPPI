@@ -489,13 +489,16 @@ class ProteinSearchController extends Controller
 		// FILTER: MAJOR LOCALIZATIONS
 		foreach ($this->majorloc_list as $mloc_code => $mloc_name)
 		{
-			// the defaults are always set = always "reset"
-			$T['majorloc_list'][$mloc_code] = array(
-				'code' => $mloc_code,
-				'name' => $mloc_name,
-				'checked' => true
-			);
-			$_SESSION['majorloc_list'][$mloc_code] = true;
+			if (!isset($get_interactions) or $get_interactions!='download') {
+				// the defaults are always set = always "reset"
+				$T['majorloc_list'][$mloc_code] = array(
+					'code' => $mloc_code,
+					'name' => $mloc_name,
+					'checked' => true
+				);
+				$_SESSION['majorloc_list'][$mloc_code] = true;
+			}
+			
 			// set the requested value if the form was posted
 			if ($request_m=='POST' && !isset($_POST['fIntFiltReset'])) {
 				if (!isset($_POST['fIntFiltLoc'][(string)$mloc_code])) {
@@ -521,6 +524,7 @@ class ProteinSearchController extends Controller
 				$requested_major_locs[$mloc_name] = $mloc_name;
 			}
 		}
+
 		$filter_by_mlocs = (count($requested_major_locs)==count($this->majorloc_list)
 			? false : true);
 
@@ -626,15 +630,6 @@ class ProteinSearchController extends Controller
 			$protein_ids[$i->pid] = $i->pid;
 			//$interaction_ids[$i->iid] = $i->iid;
 		}
-
-		// @TODO: letölthető dataset
-		//if ($get_interactions) {
-		//	return $this->forward(
-		//		'DownloadCenterBundle:DownloadCenter:serveInteractions',
-		//		array('species' => array('abbr' => 'all', 'id' => -1),
-		//			  'interaction_ids' => $interaction_ids)
-		//	);
-		//}
 
 		if (!empty($protein_ids)) {
 			// localizations for the interactor
