@@ -513,7 +513,7 @@ class ProteinSearchController extends Controller
 			}
 			// else would be the default, already set above
 		}
-		var_dump($_SESSION['majorloc_list']);
+
 		$requested_major_locs = [];
 		foreach ($T['majorloc_list'] as $mloc_name => $mloc_d)
 		{
