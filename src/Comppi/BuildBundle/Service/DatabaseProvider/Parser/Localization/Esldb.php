@@ -77,6 +77,7 @@ class Esldb extends AbstractLocalizationParser
             // No experimental annotation, use prediction
             if ($recordArray[3] == 'None') {
                 // no prediction, skip record
+            	$this->unfilteredEntryCount++;
                 return $this->readRecord();
             }
             $recordArray[2] = $recordArray[3];
@@ -88,6 +89,8 @@ class Esldb extends AbstractLocalizationParser
         $this->currentLine = array(
             'localization' => explode(', ', $recordArray[2])
         );
+        
+        $this->unfilteredEntryCount += count($this->currentLine['localization']);
 
         try {
             $local = $this->getGoCodeByLocalizationName($this->currentLine['localization'][0]);

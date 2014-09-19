@@ -20,6 +20,7 @@ class CcsbCe extends AbstractInteractionParser
             return;
         }
 
+        $this->unfilteredEntryCount++;
 
         $recordArray = explode("\t", $line);
 

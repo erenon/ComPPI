@@ -35,6 +35,8 @@ class HumanProteinpedia extends AbstractLocalizationParser
             // EOF
             return;
         }
+        
+        $this->unfilteredEntryCount++;
 
         $recordArray = explode("\t", $line);
         $this->checkRecordFieldCount($recordArray, 6);

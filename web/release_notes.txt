@@ -1,9 +1,9 @@
-Release 2014-09-15
+Release 2014-09-19
 ==================
 ComPPI version 1.1
 - HomoMint input database has been removed (MINT as an input database contains it)
 - BaCelLo input database has been removed (not updated anymore, eSLDB as an input database contains it)
-- updated localization and interaction score optimization, evidence type weight values: experimental=.7, unknown=.5, predicted=.5
+- updated localization and interaction score optimization, evidence type weight values: experimental=.8, predicted=.7, unknown=.3
 - cytoplasm major cellular component were renamed to cytosol
 - GeneOntology IPI evidence was changed from experimental to predicted
 - new network visualization and export feature on the Search page

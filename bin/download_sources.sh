@@ -42,12 +42,12 @@ fi
 cd ./localization
 
 # Bacello
-if [ ! -f pred_homo ]
-then
-    wget http://gpcr.biocomp.unibo.it/bacello/datasets/H.sapiens_annotations.zip -O ./bacello.zip
-    unzip ./bacello.zip
-    rm bacello.zip
-fi   
+#if [ ! -f pred_homo ]
+#then
+#    wget http://gpcr.biocomp.unibo.it/bacello/datasets/H.sapiens_annotations.zip -O ./bacello.zip
+#    unzip ./bacello.zip
+#    rm bacello.zip
+#fi   
 
 # eSLDB
 if [ ! -f eSLDB_Homo_sapiens.txt ]
@@ -142,10 +142,10 @@ fi
 # @see at the end of this file
 
 # HomoMINT
-if [ ! -f homomint-full.mitab25.txt-binary.mitab26.txt ]
-then
-    wget ftp://mint.bio.uniroma2.it/pub/release/homomint/homomint-full.mitab25.txt-binary.mitab26.txt
-fi
+#if [ ! -f homomint-full.mitab25.txt-binary.mitab26.txt ]
+#then
+#    wget ftp://mint.bio.uniroma2.it/pub/release/homomint/homomint-full.mitab25.txt-binary.mitab26.txt
+#fi
 
 # HPRD
 if [ ! -f BINARY_PROTEIN_PROTEIN_INTERACTIONS.txt ]
@@ -431,12 +431,12 @@ fi
 cd ./localization
 
 # Bacello
-if [ ! -f pred_cel ]
-then
-    wget http://gpcr.biocomp.unibo.it/bacello/datasets/C.elegans_annotations.zip -O ./bacello.zip
-    unzip ./bacello.zip
-    rm bacello.zip
-fi
+#if [ ! -f pred_cel ]
+#then
+#    wget http://gpcr.biocomp.unibo.it/bacello/datasets/C.elegans_annotations.zip -O ./bacello.zip
+#    unzip ./bacello.zip
+#    rm bacello.zip
+#fi
 
 # eSLDB
 if [ ! -f eSLDB_Caenorhabditis_elegans.txt ]
@@ -573,12 +573,12 @@ fi
 cd ./localization
 
 # Bacello
-if [ ! -f pred_sce ]
-then
-    wget http://gpcr.biocomp.unibo.it/bacello/datasets/S.cerevisiae_annotations.zip -O ./bacello.zip
-    unzip ./bacello.zip
-    rm bacello.zip
-fi
+#if [ ! -f pred_sce ]
+#then
+#    wget http://gpcr.biocomp.unibo.it/bacello/datasets/S.cerevisiae_annotations.zip -O ./bacello.zip
+#    unzip ./bacello.zip
+#    rm bacello.zip
+#fi
 
 # eSLDB
 if [ ! -f eSLDB_Saccharomyces_cerevisiae.txt ]

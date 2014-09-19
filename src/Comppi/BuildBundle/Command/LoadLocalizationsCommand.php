@@ -102,19 +102,23 @@ class LoadLocalizationsCommand extends AbstractLoadCommand
 
                         // flush transaction
                         $recordIdx++;
-                        if ($recordIdx == $recordsPerTransaction) {
-                            $recordIdx = 0;
-
+                        if ($recordIdx % $recordsPerTransaction == 0) { // flush transaction
                             $connection->commit();
                             $connection->beginTransaction();
 
-                            $output->writeln('  > ' . $recordsPerTransaction . ' records loaded');
+                            if ($recordIdx % 5000 == 0) {
+	                            $output->writeln('  > 5000 records loaded');
+                            }
                         }
                     } // else ON DUPLICATE KEY => update
                 }
             }
 
             $connection->commit();
+            
+            // stats
+            $output->writeln("  = " . $recordIdx . ' records loaded (unfiltered total: ' .
+                $database->getUnfilteredEntryCount() . ')');
         }
 
         $this->closeConnection();

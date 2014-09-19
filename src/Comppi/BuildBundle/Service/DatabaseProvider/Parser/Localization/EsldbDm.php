@@ -36,6 +36,8 @@ class EsldbDm extends AbstractLocalizationParser
             // EOF
             return;
         }
+        
+        $this->unfilteredEntryCount++;
 
         $recordArray = explode("\t", $line);
 

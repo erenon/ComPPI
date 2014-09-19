@@ -73,6 +73,8 @@ class ConsensusPathDb extends AbstractInteractionParser
         $systemTypes = explode(',', $recordArray[0]);
 
         $this->currentLine['proteinPair'] = $proteinPairArray;
+        
+        $this->unfilteredEntryCount += count($proteinPairArray);
 
         $this->currentRecord = array(
             'proteinANamingConvention' => 'UniProtKB-ID',

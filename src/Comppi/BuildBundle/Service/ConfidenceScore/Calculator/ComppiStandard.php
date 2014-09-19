@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\IntegerType as IntegerParameter;
 class ComppiStandard implements CalculatorInterface
 {
     /*0 - unknown, 1 - experimental, 2 - predicted*/
-    private $weights=array('0'=>0.5,'1'=>0.7,'2'=>0.5);
+    private $weights=array('0'=>0.3,'1'=>0.8,'2'=>0.7);
 
 
     /**
@@ -81,7 +81,10 @@ class ComppiStandard implements CalculatorInterface
 	  $foundloc=true;
 	 }
 	 if($foundloc==false) //no localization information, empty set received
-	 {echo("Warning: No localization information for protein #".$protein['id']."!\n"); continue;}
+	 {
+	 	//echo("Warning: No localization information for protein #".$protein['id']."!\n"); 
+	 	continue;
+	 }
 
 	 foreach($entries as $ProteinLocalization => $pla)
 	 {

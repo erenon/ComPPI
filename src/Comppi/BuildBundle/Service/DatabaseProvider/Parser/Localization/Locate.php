@@ -208,6 +208,8 @@ class Locate extends AbstractLocalizationParser
             $nextLocalization = each($this->nextProtein['locals']);
 
             if ($nextLocalization !== false) {
+            	$this->unfilteredEntryCount++;
+            	
                 $nextLocalizedProtein['proteinId'] = $this->nextProtein['proteinId'];
                 $nextLocalizedProtein['namingConvention'] = $this->nextProtein['namingConvention'];
                 $nextLocalizedProtein['pubmedId'] = 17986452;

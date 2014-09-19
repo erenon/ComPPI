@@ -44,6 +44,8 @@ class MatrixDb extends AbstractLocalizationParser
             // EOF
             return;
         }
+        
+        $this->unfilteredEntryCount++;
 
         $recordArray = explode("\t", $line);
         $this->checkRecordFieldCount($recordArray, 2);
