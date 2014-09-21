@@ -84,6 +84,8 @@
 <a name="releases"></a>
 <h1>Current and Previous Releases in SQL format</h1>
 
+<p>The changelog of the releases is available in the <a href="./release_notes.txt">release notes</a>.</p>
+
 {% if releases_ls|length > 0 %}
 	<ul id="dlCenterReleases">{% for f in releases_ls %}
 		<li>{% if loop.index==1 %}<b>Current Release: </b>{% endif %}<a href="{{ path('DownloadCenterBundle_getrelease', {'file': f.file }) }}" title="Click on the link to download the specific version of the full database in SQL format.">{{ f.file }} ({{ f.mtime }}, {{ f.size }} MB)</a></li>
