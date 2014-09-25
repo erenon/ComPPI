@@ -434,6 +434,8 @@ label#fIntFiltLocLabel { width: 120px; }
 	margin-top: 5px;
 	text-align: right;
 	text-transform: uppercase;
+	font-size: 1.3em;
+	font-weight: 600;
 }
 #ps-networkVisContainer { background-color: #fff; }
 .node {
