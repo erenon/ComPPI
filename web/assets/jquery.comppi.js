@@ -211,29 +211,10 @@ $(function() {
 // visualization of the protein search result network
 $(document).ready(function(){
 	// graph = see the embedded graph in interactors.html.twig
-	w = 950,
-	h = 600;
-	
-	
-	var initNetworkVis = function(graph) {
-		var vis = d3.select("#ps-networkVisContainer")
-			.append("svg:svg")
-				.attr("width", w)
-				.attr("height", h)
-				.attr("pointer-events", "all")
-			.append("svg:g")
-				/*.call(d3.behavior.zoom().on("zoom", redraw))*/;
-		
-		// graph will be drawn on a canvas instead of the root svg object to be scalable
-		vis.append('svg:rect')
-			.attr("class", "network_canvas")
-			.attr("width", w)
-			.attr("height", h)
-			.attr("fill", $("#ps-networkVisContainer").css("background-color"));
-			
-		return vis;
-	}
-	
+	width = 950,
+	height = 600,
+	tick_count = 100;
+
 	// scale the nodes according to their scores
 	/*var nodescale = d3.scale.linear()
 		.domain([
@@ -249,23 +230,45 @@ $(document).ready(function(){
 		])
 		.range([1, 7]);
 	
-	function redraw(vis) {
-		vis.attr("transform",
-			"translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")"
-		);
-	}
-	
-	var draw = function(graph) {
-		vis = initNetworkVis(graph);
-		
+	var draw = function() {
 		var force = d3.layout.force()
-			.charge(-500)
-			.linkDistance(80)
-			.linkStrength(0.2)
-			.nodes(graph.nodes)
-			.links(graph.links)
-			.size([w, h])
-			.start();
+					.charge(-170)
+					.linkDistance(50)
+					.linkStrength(0.2)
+					.nodes(graph.nodes)
+					.links(graph.links)
+					.size([width, height]);
+		
+		var vis = d3.select("#ps-networkVisContainer")
+			.append("svg:svg")
+			.attr("width", width)
+			.attr("height", height)
+			.attr("pointer-events", "all")
+			.append("svg:g")
+			.call(d3.behavior.zoom().on("zoom", redraw));
+		
+		// graph will be drawn on a canvas instead of the root svg object to be scalable
+		vis.append('svg:rect')
+				.attr("class", "network_canvas")
+				.attr("width", width)
+				.attr("height", height)
+				.attr("fill", $("#ps-networkVisContainer").css("background-color"));
+		 
+		vis.style("opacity", 1e-6)
+			.transition()
+			.duration(1000)
+			.style("opacity", 1);
+		 
+		var loading = vis.append("text")
+			.attr("x", width / 2)
+			.attr("y", height / 2)
+			.attr("dy", ".35em")
+			.style("text-anchor", "middle")
+			.text("Loading, please wait…");
+		
+		force.start();
+		for (var i = tick_count * tick_count; i > 0; --i) force.tick();
+		force.stop();
 		
 		var link = vis.selectAll(".link")
 			.data(graph.links)
@@ -277,41 +280,42 @@ $(document).ready(function(){
 				.attr("x2", function(d) { return d.target.x; })
 				.attr("y2", function(d) { return d.target.y; });
 		
-		link.append("title").text(function(d) { return d.weight; });
-		
 		var node = vis.selectAll(".node")
 			.data(graph.nodes)
 			.enter().append("g")
-				.attr("class", "node")
-				.call(force.drag);
+			.attr("class", "node");
 		
 		node.append("circle")
-			.attr("r", 10/*function(d) { return nodescale(d.score) }*/);
+			.attr("cx", function(d) { return d.x; })
+			.attr("cy", function(d) { return d.y; })
+			.attr("r", 10);
 		
 		node.append("text")
 			.attr("x", 12)
-			/*.attr("dy", ".5em")*/
 			.attr("class", "label")
+			.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 			.text(function(d) { return d.name; });
 		
-		vis.style("opacity", 1e-6)
-			.transition()
-			.duration(1000)
-			.style("opacity", 1);
+		function redraw() {
+			vis.attr(
+				"transform",
+				"translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")"
+			);
+		}
 		
-		force.on("tick", function() {
-			link.attr("x1", function(d) { return d.source.x; })
-				.attr("y1", function(d) { return d.source.y; })
-				.attr("x2", function(d) { return d.target.x; })
-				.attr("y2", function(d) { return d.target.y; });
-			
-			node.attr("transform", function(d) {
-				return "translate(" + d.x + "," + d.y + ")";
-			});
-		});
+		loading.remove();
 		
-		return vis;
-	};
+		//	force.on("tick", function() {
+		//		link.attr("x1", function(d) { return d.source.x; })
+		//			.attr("y1", function(d) { return d.source.y; })
+		//			.attr("x2", function(d) { return d.target.x; })
+		//			.attr("y2", function(d) { return d.target.y; });
+		//		
+		//		node.attr("transform", function(d) {
+		//			return "translate(" + d.x + "," + d.y + ")";
+		//		});
+		//	});
+	}
 	
 	var showNotice = function() {
 		$("#ps-networkVisBody").append(
@@ -324,7 +328,7 @@ $(document).ready(function(){
 		$("#ps-networkVisBodyLargeNetworkNote").remove();
 	}
 	
-	if (graph.nodes.length>200) {
+	if (graph.nodes.length>100) {
 		showNotice();
 		$("#ps-networkVisHelp").hide();
 	} else {
