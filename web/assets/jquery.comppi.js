@@ -8,7 +8,7 @@ $(document).ready(function(){
 		show: {delay: 250}
 	});
 	
-	// first input autofokus
+	// first input autofocus
 	//$("input[type='text']:eq(0)").focus();
 
 	// striped tables
@@ -181,10 +181,6 @@ $(function() {
 		$(this).siblings(".ps-actorBDetails:first").slideToggle();
 		return false;
 	});
-
-	function longSearchWarning() {
-
-	}
 	
 	// display warning if protein search lasts too long
 	$("#fProtSearchSubmit").click(function(){
@@ -215,25 +211,28 @@ $(function() {
 // visualization of the protein search result network
 $(document).ready(function(){
 	// graph = see the embedded graph in interactors.html.twig
-
-	var w = 950,
-		h = 600,
-		fill = d3.scale.category20();
+	w = 950,
+	h = 600;
 	
-	var vis = d3.select("#ps-networkVisContainer")
-		.append("svg:svg")
+	
+	var initNetworkVis = function(graph) {
+		var vis = d3.select("#ps-networkVisContainer")
+			.append("svg:svg")
+				.attr("width", w)
+				.attr("height", h)
+				.attr("pointer-events", "all")
+			.append("svg:g")
+				/*.call(d3.behavior.zoom().on("zoom", redraw))*/;
+		
+		// graph will be drawn on a canvas instead of the root svg object to be scalable
+		vis.append('svg:rect')
+			.attr("class", "network_canvas")
 			.attr("width", w)
 			.attr("height", h)
-			.attr("pointer-events", "all")
-		.append("svg:g")
-			.call(d3.behavior.zoom().on("zoom", redraw));
-	
-	// graph will be drawn on a canvas instead of the root svg object to be scalable
-	vis.append('svg:rect')
-		.attr("class", "network_canvas")
-		.attr("width", w)
-		.attr("height", h)
-		.attr("fill", $("#ps-networkVisContainer").css("background-color"));
+			.attr("fill", $("#ps-networkVisContainer").css("background-color"));
+			
+		return vis;
+	}
 	
 	// scale the nodes according to their scores
 	/*var nodescale = d3.scale.linear()
@@ -250,13 +249,15 @@ $(document).ready(function(){
 		])
 		.range([1, 7]);
 	
-	function redraw() {
+	function redraw(vis) {
 		vis.attr("transform",
 			"translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")"
 		);
 	}
 	
 	var draw = function(graph) {
+		vis = initNetworkVis(graph);
+		
 		var force = d3.layout.force()
 			.charge(-500)
 			.linkDistance(80)
@@ -308,8 +309,39 @@ $(document).ready(function(){
 				return "translate(" + d.x + "," + d.y + ")";
 			});
 		});
-	};
 		
-	draw(graph)
+		return vis;
+	};
 	
+	var showNotice = function() {
+		$("#ps-networkVisBody").append(
+			"<p class=\"center\" id=\"ps-networkVisBodyLargeNetworkNote\">The network contains "
+			+ graph.nodes.length
+			+ " nodes, its rendering may slow down or temporarily hang your browser. <br><b>Click on 'Toggle Display' to start the rendering.</b></p>");
+	}
+	
+	var removeNotice = function() {
+		$("#ps-networkVisBodyLargeNetworkNote").remove();
+	}
+	
+	if (graph.nodes.length>200) {
+		showNotice();
+		$("#ps-networkVisHelp").hide();
+	} else {
+		removeNotice();
+		draw(graph);
+	}
+	
+	// toggle network visualization
+	$(".ps-networkVisOpener").click(function() {
+		if ( $("svg").length == 0 ) {
+			removeNotice();
+			draw(graph);
+			$("#ps-networkVisContainer, #ps-networkVisHelp").show();
+		} else {
+			$("#ps-networkVisBody").slideToggle();
+		}
+		
+		return false;
+	});
 });
