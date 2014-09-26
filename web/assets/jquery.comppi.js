@@ -237,7 +237,8 @@ $(document).ready(function(){
 					.linkStrength(0.2)
 					.nodes(graph.nodes)
 					.links(graph.links)
-					.size([width, height]);
+					.size([width, height])
+					.start();
 		
 		var vis = d3.select("#ps-networkVisContainer")
 			.append("svg:svg")
@@ -266,9 +267,34 @@ $(document).ready(function(){
 			.style("text-anchor", "middle")
 			.text("Loading, please wait…");
 		
-		force.start();
-		for (var i = tick_count * tick_count; i > 0; --i) force.tick();
-		force.stop();
+		//force.start();
+		//for (var i = tick_count * tick_count; i > 0; --i) force.tick();
+		//force.stop();
+		
+		// draggable, yet sticky nodes by norrs
+		// http://bl.ocks.org/norrs/2883411
+		var node_drag = d3.behavior.drag()
+			.on("dragstart", dragstart)
+			.on("drag", dragmove)
+			.on("dragend", dragend);
+		
+		function dragstart(d, i) {
+			force.stop() // stops the force auto positioning before you start dragging
+		}
+		
+		function dragmove(d, i) {
+			d.px += d3.event.dx;
+			d.py += d3.event.dy;
+			d.x += d3.event.dx;
+			d.y += d3.event.dy; 
+			tick(); // this is the key to make it work together with updating both px,py,x,y on d !
+		}
+		
+		function dragend(d, i) {
+			d.fixed = true; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
+			tick();
+			force.resume();
+		}
 		
 		var link = vis.selectAll(".link")
 			.data(graph.links)
@@ -283,7 +309,8 @@ $(document).ready(function(){
 		var node = vis.selectAll(".node")
 			.data(graph.nodes)
 			.enter().append("g")
-			.attr("class", "node");
+			.attr("class", "node")
+			.call(node_drag);
 		
 		node.append("circle")
 			.attr("cx", function(d) { return d.x; })
@@ -293,7 +320,7 @@ $(document).ready(function(){
 		node.append("text")
 			.attr("x", 12)
 			.attr("class", "label")
-			.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+			//.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 			.text(function(d) { return d.name; });
 		
 		function redraw() {
@@ -303,18 +330,20 @@ $(document).ready(function(){
 			);
 		}
 		
-		loading.remove();
+		force.on("tick", tick);
 		
-		//	force.on("tick", function() {
-		//		link.attr("x1", function(d) { return d.source.x; })
-		//			.attr("y1", function(d) { return d.source.y; })
-		//			.attr("x2", function(d) { return d.target.x; })
-		//			.attr("y2", function(d) { return d.target.y; });
-		//		
-		//		node.attr("transform", function(d) {
-		//			return "translate(" + d.x + "," + d.y + ")";
-		//		});
-		//	});
+		function tick() {
+			link.attr("x1", function(d) { return d.source.x; })
+				.attr("y1", function(d) { return d.source.y; })
+				.attr("x2", function(d) { return d.target.x; })
+				.attr("y2", function(d) { return d.target.y; });
+		
+			node.attr("transform", function(d) {
+				return "translate(" + d.x + "," + d.y + ")";
+			});
+		};
+		
+		loading.remove();
 	}
 	
 	var showNotice = function() {
