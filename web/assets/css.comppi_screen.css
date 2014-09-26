@@ -441,7 +441,8 @@ label#fIntFiltLocLabel { width: 120px; }
 .node {
 	fill: rgb(239, 113, 23);
 	stroke: rgb(240, 88, 23);
-	stroke-width: 1.5px;
+	stroke-width: 1px;
+	fill-opacity: .7;
 }
 .link {
 	stroke: rgb(107,110,114);

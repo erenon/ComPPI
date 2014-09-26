@@ -213,8 +213,16 @@ $(document).ready(function(){
 	// graph = see the embedded graph in interactors.html.twig
 	width = 950,
 	height = 600,
-	tick_count = 100;
-
+	tick_count = 300;
+	
+	var force = d3.layout.force()
+		.charge(-170)
+		.linkDistance(50)
+		.linkStrength(0.2)
+		.nodes(graph.nodes)
+		.links(graph.links)
+		.size([width, height]);
+	
 	// scale the nodes according to their scores
 	/*var nodescale = d3.scale.linear()
 		.domain([
@@ -222,23 +230,19 @@ $(document).ready(function(){
 			d3.max(graph.nodes, function(d) { return d.score; })
 		])
 		.range([5, 25]);*/
+	
 	// scale the edges according to their weights
 	var weightscale = d3.scale.linear()
 		.domain([
 			d3.min(graph.links, function(d) { return d.weight; }),
 			d3.max(graph.links, function(d) { return d.weight; })
 		])
-		.range([1, 7]);
+		.range([1, 5]);
 	
 	var draw = function() {
-		var force = d3.layout.force()
-					.charge(-170)
-					.linkDistance(50)
-					.linkStrength(0.2)
-					.nodes(graph.nodes)
-					.links(graph.links)
-					.size([width, height])
-					.start();
+		force
+			.nodes(graph.nodes)
+			.links(graph.links);
 		
 		var vis = d3.select("#ps-networkVisContainer")
 			.append("svg:svg")
@@ -250,16 +254,16 @@ $(document).ready(function(){
 		
 		// graph will be drawn on a canvas instead of the root svg object to be scalable
 		vis.append('svg:rect')
-				.attr("class", "network_canvas")
-				.attr("width", width)
-				.attr("height", height)
-				.attr("fill", $("#ps-networkVisContainer").css("background-color"));
-		 
+			.attr("class", "network_canvas")
+			.attr("width", width)
+			.attr("height", height)
+			.attr("fill", $("#ps-networkVisContainer").css("background-color"));
+		
 		vis.style("opacity", 1e-6)
 			.transition()
 			.duration(1000)
 			.style("opacity", 1);
-		 
+		
 		var loading = vis.append("text")
 			.attr("x", width / 2)
 			.attr("y", height / 2)
@@ -267,60 +271,34 @@ $(document).ready(function(){
 			.style("text-anchor", "middle")
 			.text("Loading, please wait…");
 		
-		//force.start();
-		//for (var i = tick_count * tick_count; i > 0; --i) force.tick();
-		//force.stop();
-		
-		// draggable, yet sticky nodes by norrs
-		// http://bl.ocks.org/norrs/2883411
-		var node_drag = d3.behavior.drag()
-			.on("dragstart", dragstart)
-			.on("drag", dragmove)
-			.on("dragend", dragend);
-		
-		function dragstart(d, i) {
-			force.stop() // stops the force auto positioning before you start dragging
-		}
-		
-		function dragmove(d, i) {
-			d.px += d3.event.dx;
-			d.py += d3.event.dy;
-			d.x += d3.event.dx;
-			d.y += d3.event.dy; 
-			tick(); // this is the key to make it work together with updating both px,py,x,y on d !
-		}
-		
-		function dragend(d, i) {
-			d.fixed = true; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
-			tick();
-			force.resume();
-		}
+		force.start();
+		for (var i = tick_count * tick_count; i > 0; --i) force.tick();
+		force.stop();
 		
 		var link = vis.selectAll(".link")
 			.data(graph.links)
 			.enter().append("svg:line")
-				.attr("class", "link")
+			.attr("class", "link")
 			.style("stroke-width", function(d) { return weightscale(d.weight); })
-				.attr("x1", function(d) { return d.source.x; })
-				.attr("y1", function(d) { return d.source.y; })
-				.attr("x2", function(d) { return d.target.x; })
-				.attr("y2", function(d) { return d.target.y; });
+			.attr("x1", function(d) { return d.source.x; })
+			.attr("y1", function(d) { return d.source.y; })
+			.attr("x2", function(d) { return d.target.x; })
+			.attr("y2", function(d) { return d.target.y; });
 		
 		var node = vis.selectAll(".node")
 			.data(graph.nodes)
 			.enter().append("g")
-			.attr("class", "node")
-			.call(node_drag);
+			.attr("class", "node");
 		
 		node.append("circle")
 			.attr("cx", function(d) { return d.x; })
 			.attr("cy", function(d) { return d.y; })
-			.attr("r", 10);
+			.attr("r", 7);
 		
 		node.append("text")
-			.attr("x", 12)
+			.attr("x", 7)
 			.attr("class", "label")
-			//.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+			.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 			.text(function(d) { return d.name; });
 		
 		function redraw() {
@@ -330,8 +308,9 @@ $(document).ready(function(){
 			);
 		}
 		
+		// tick has to be customized to allow dragging
 		force.on("tick", tick);
-		
+
 		function tick() {
 			link.attr("x1", function(d) { return d.source.x; })
 				.attr("y1", function(d) { return d.source.y; })
@@ -344,7 +323,7 @@ $(document).ready(function(){
 		};
 		
 		loading.remove();
-	}
+	};
 	
 	var showNotice = function() {
 		$("#ps-networkVisBody").append(
