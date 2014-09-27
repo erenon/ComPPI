@@ -8,7 +8,7 @@ $(document).ready(function(){
 		show: {delay: 250}
 	});
 	
-	// first input autofokus
+	// first input autofocus
 	//$("input[type='text']:eq(0)").focus();
 
 	// striped tables
@@ -181,10 +181,6 @@ $(function() {
 		$(this).siblings(".ps-actorBDetails:first").slideToggle();
 		return false;
 	});
-
-	function longSearchWarning() {
-
-	}
 	
 	// display warning if protein search lasts too long
 	$("#fProtSearchSubmit").click(function(){
@@ -215,25 +211,17 @@ $(function() {
 // visualization of the protein search result network
 $(document).ready(function(){
 	// graph = see the embedded graph in interactors.html.twig
-
-	var w = 950,
-		h = 600,
-		fill = d3.scale.category20();
+	width = 950,
+	height = 600,
+	tick_count = 300;
 	
-	var vis = d3.select("#ps-networkVisContainer")
-		.append("svg:svg")
-			.attr("width", w)
-			.attr("height", h)
-			.attr("pointer-events", "all")
-		.append("svg:g")
-			.call(d3.behavior.zoom().on("zoom", redraw));
-	
-	// graph will be drawn on a canvas instead of the root svg object to be scalable
-	vis.append('svg:rect')
-		.attr("class", "network_canvas")
-		.attr("width", w)
-		.attr("height", h)
-		.attr("fill", $("#ps-networkVisContainer").css("background-color"));
+	var force = d3.layout.force()
+		.charge(-170)
+		.linkDistance(50)
+		.linkStrength(0.2)
+		.nodes(graph.nodes)
+		.links(graph.links)
+		.size([width, height]);
 	
 	// scale the nodes according to their scores
 	/*var nodescale = d3.scale.linear()
@@ -242,74 +230,130 @@ $(document).ready(function(){
 			d3.max(graph.nodes, function(d) { return d.score; })
 		])
 		.range([5, 25]);*/
+	
 	// scale the edges according to their weights
 	var weightscale = d3.scale.linear()
 		.domain([
 			d3.min(graph.links, function(d) { return d.weight; }),
 			d3.max(graph.links, function(d) { return d.weight; })
 		])
-		.range([1, 7]);
+		.range([1, 5]);
 	
-	function redraw() {
-		vis.attr("transform",
-			"translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")"
-		);
-	}
-	
-	var draw = function(graph) {
-		var force = d3.layout.force()
-			.charge(-500)
-			.linkDistance(80)
-			.linkStrength(0.2)
+	var draw = function() {
+		force
 			.nodes(graph.nodes)
-			.links(graph.links)
-			.size([w, h])
-			.start();
+			.links(graph.links);
 		
-		var link = vis.selectAll(".link")
-			.data(graph.links)
-			.enter().append("svg:line")
-				.attr("class", "link")
-			.style("stroke-width", function(d) { return weightscale(d.weight); })
-				.attr("x1", function(d) { return d.source.x; })
-				.attr("y1", function(d) { return d.source.y; })
-				.attr("x2", function(d) { return d.target.x; })
-				.attr("y2", function(d) { return d.target.y; });
+		var vis = d3.select("#ps-networkVisContainer")
+			.append("svg:svg")
+			.attr("width", width)
+			.attr("height", height)
+			.attr("pointer-events", "all")
+			.append("svg:g")
+			.call(d3.behavior.zoom().on("zoom", redraw));
 		
-		link.append("title").text(function(d) { return d.weight; });
-		
-		var node = vis.selectAll(".node")
-			.data(graph.nodes)
-			.enter().append("g")
-				.attr("class", "node")
-				.call(force.drag);
-		
-		node.append("circle")
-			.attr("r", 10/*function(d) { return nodescale(d.score) }*/);
-		
-		node.append("text")
-			.attr("x", 12)
-			/*.attr("dy", ".5em")*/
-			.attr("class", "label")
-			.text(function(d) { return d.name; });
+		// graph will be drawn on a canvas instead of the root svg object to be scalable
+		vis.append('svg:rect')
+			.attr("class", "network_canvas")
+			.attr("width", width)
+			.attr("height", height)
+			.attr("fill", $("#ps-networkVisContainer").css("background-color"));
 		
 		vis.style("opacity", 1e-6)
 			.transition()
 			.duration(1000)
 			.style("opacity", 1);
 		
-		force.on("tick", function() {
+		var loading = vis.append("text")
+			.attr("x", width / 2)
+			.attr("y", height / 2)
+			.attr("dy", ".35em")
+			.style("text-anchor", "middle")
+			.text("Loading, please wait…");
+		
+		force.start();
+		for (var i = tick_count * tick_count; i > 0; --i) force.tick();
+		force.stop();
+		
+		var link = vis.selectAll(".link")
+			.data(graph.links)
+			.enter().append("svg:line")
+			.attr("class", "link")
+			.style("stroke-width", function(d) { return weightscale(d.weight); })
+			.attr("x1", function(d) { return d.source.x; })
+			.attr("y1", function(d) { return d.source.y; })
+			.attr("x2", function(d) { return d.target.x; })
+			.attr("y2", function(d) { return d.target.y; });
+		
+		var node = vis.selectAll(".node")
+			.data(graph.nodes)
+			.enter().append("g")
+			.attr("class", "node");
+		
+		node.append("circle")
+			.attr("cx", function(d) { return d.x; })
+			.attr("cy", function(d) { return d.y; })
+			.attr("r", 7);
+		
+		node.append("text")
+			.attr("x", 7)
+			.attr("class", "label")
+			.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+			.text(function(d) { return d.name; });
+		
+		function redraw() {
+			vis.attr(
+				"transform",
+				"translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")"
+			);
+		}
+		
+		// tick has to be customized to allow dragging
+		force.on("tick", tick);
+
+		function tick() {
 			link.attr("x1", function(d) { return d.source.x; })
 				.attr("y1", function(d) { return d.source.y; })
 				.attr("x2", function(d) { return d.target.x; })
 				.attr("y2", function(d) { return d.target.y; });
-			
+		
 			node.attr("transform", function(d) {
 				return "translate(" + d.x + "," + d.y + ")";
 			});
-		});
-	};
+		};
 		
-	draw(graph)
+		loading.remove();
+	};
 	
+	var showNotice = function() {
+		$("#ps-networkVisBody").append(
+			"<p class=\"center\" id=\"ps-networkVisBodyLargeNetworkNote\">The network contains "
+			+ graph.nodes.length
+			+ " nodes, its rendering may slow down or temporarily hang your browser. <br><b>Click on 'Toggle Display' to start the rendering.</b></p>");
+	}
+	
+	var removeNotice = function() {
+		$("#ps-networkVisBodyLargeNetworkNote").remove();
+	}
+	
+	if (graph.nodes.length>100) {
+		showNotice();
+		$("#ps-networkVisHelp").hide();
+	} else {
+		removeNotice();
+		draw(graph);
+	}
+	
+	// toggle network visualization
+	$(".ps-networkVisOpener").click(function() {
+		if ( $("svg").length == 0 ) {
+			removeNotice();
+			draw(graph);
+			$("#ps-networkVisContainer, #ps-networkVisHelp").show();
+		} else {
+			$("#ps-networkVisBody").slideToggle();
+		}
+		
+		return false;
+	});
 });

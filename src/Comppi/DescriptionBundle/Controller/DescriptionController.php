@@ -28,6 +28,9 @@ class DescriptionController extends Controller
             case 'downloads':
                 $t = 'ComppiDescriptionBundle:Description:download.html.twig';
                 break;
+            case 'plans':
+                $t = 'ComppiDescriptionBundle:Description:plans.html.twig';
+                break;
             case 'input_databases':
                 $t = 'ComppiDescriptionBundle:Description:input_databases.html.twig';
                 break;
