@@ -59,7 +59,7 @@ class LoadNameCleanCommand extends AbstractLoadCommand
         $stmt = $connection->executeQuery(
         	"DELETE FROM Protein" .
         	" WHERE proteinNamingConvention" .
-        	" NOT IN ('UniProtKB/TrEmbl', 'UniProtKB/Swiss-Prot')"
+        	" NOT IN ('UniProtKB/TrEmbl/P', 'UniProtKB/Swiss-Prot/P')"
         );
 
         $output->writeln('  > ' . $stmt->rowCount() . ' records removed');
